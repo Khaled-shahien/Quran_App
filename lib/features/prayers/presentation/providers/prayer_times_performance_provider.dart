@@ -3,6 +3,8 @@ import 'package:quran_app/features/prayers/domain/Entities/'
     'prayer_times_entity.dart';
 import 'package:quran_app/features/prayers/domain/repositories/'
     'prayer_times_repository.dart';
+import 'package:quran_app/features/prayers/domain/services/'
+    'prayer_notification_scheduler.dart';
 import 'package:quran_app/core/utils/value_notifier_mixin.dart';
 
 import 'prayer_times_provider.dart';
@@ -15,6 +17,7 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
     with SelectiveNotifyMixin {
   final PrayerTimesRepository _repository;
   final PrayerTimesClock _clock;
+  final PrayerNotificationScheduler _notificationScheduler;
 
   // Use separate ValueNotifiers for granular updates
   final _prayerTimesNotifier = ValueNotifier<PrayerTimesEntity?>(null);
@@ -24,8 +27,11 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
   PrayerTimesPerformanceProvider({
     required PrayerTimesRepository repository,
     PrayerTimesClock? clock,
+    PrayerNotificationScheduler? notificationScheduler,
   }) : _repository = repository,
-       _clock = clock ?? SystemPrayerTimesClock();
+       _clock = clock ?? SystemPrayerTimesClock(),
+       _notificationScheduler =
+           notificationScheduler ?? const NoopPrayerNotificationScheduler();
 
   // Getters with direct notifier access for better performance
   PrayerTimesEntity? get prayerTimes => _prayerTimesNotifier.value;
@@ -51,6 +57,8 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
       notifyForField('errorMessage');
     }
 
+    PrayerTimesEntity? loadedPrayerTimes;
+
     try {
       final prayerTimes = await _repository.getPrayerTimes(
         date,
@@ -61,6 +69,7 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
 
       // Update data
       _prayerTimesNotifier.value = prayerTimes;
+      loadedPrayerTimes = prayerTimes;
       notifyForField('prayerTimes');
     } catch (e) {
       _errorMessageNotifier.value = e.toString();
@@ -69,6 +78,24 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
       // Always update loading state last
       _isLoadingNotifier.value = false;
       notifyForField('isLoading');
+    }
+
+    if (loadedPrayerTimes != null) {
+      await _schedulePrayerNotifications(loadedPrayerTimes, date);
+    }
+  }
+
+  Future<void> _schedulePrayerNotifications(
+    PrayerTimesEntity prayerTimes,
+    DateTime date,
+  ) async {
+    try {
+      await _notificationScheduler.schedulePrayerNotifications(
+        prayerTimes: prayerTimes,
+        date: date,
+      );
+    } catch (e) {
+      debugPrint('Prayer notification scheduling failed: $e');
     }
   }
 

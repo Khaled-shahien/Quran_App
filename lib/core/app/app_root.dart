@@ -12,6 +12,7 @@ import 'package:quran_app/core/providers/settings_provider.dart';
 import 'package:quran_app/features/prayers/presentation/providers/prayer_times_provider.dart';
 import 'package:quran_app/features/prayers/presentation/providers/prayer_times_performance_provider.dart';
 import 'package:quran_app/features/prayers/domain/repositories/prayer_times_repository.dart';
+import 'package:quran_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:quran_app/features/quran/domain/repositories/surah_repository.dart';
 import 'package:quran_app/features/quran/presentation/providers/bookmark_provider.dart';
 import 'package:quran_app/features/hadeath/domain/repositories/hadeath_repository.dart';
@@ -42,6 +43,7 @@ class AppRoot extends StatefulWidget {
 class _AppRootState extends State<AppRoot> {
   late final SharedPreferences _prefs;
   late final PrayerTimesRepository _prayerTimesRepository;
+  late final PrayerNotificationScheduler _prayerNotificationScheduler;
   late final SurahRepository _surahRepository;
   late final HadeathRepository _hadeathRepository;
   late final PrayerTimesProvider _prayerTimesProvider;
@@ -71,6 +73,7 @@ class _AppRootState extends State<AppRoot> {
 
     // Get repositories from service locator
     _prayerTimesRepository = getIt<PrayerTimesRepository>();
+    _prayerNotificationScheduler = getIt<PrayerNotificationScheduler>();
     _surahRepository = getIt<SurahRepository>();
     _hadeathRepository = getIt<HadeathRepository>();
     _azkarRepository = getIt<AzkarRepository>();
@@ -80,10 +83,12 @@ class _AppRootState extends State<AppRoot> {
     // Initialize providers with repositories
     _prayerTimesProvider = PrayerTimesProvider(
       repository: _prayerTimesRepository,
+      notificationScheduler: _prayerNotificationScheduler,
     );
 
     _prayerTimesPerformanceProvider = PrayerTimesPerformanceProvider(
       repository: _prayerTimesRepository,
+      notificationScheduler: _prayerNotificationScheduler,
     );
 
     _hadeathProvider = HadeathProvider(repository: _hadeathRepository);

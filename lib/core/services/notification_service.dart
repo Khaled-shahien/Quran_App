@@ -19,6 +19,8 @@ import '../navigation/notification_router.dart';
 /// - Surah Al-Baqarah alarm (8:30 PM)
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
+  static NotificationService get instance => _instance;
+
   factory NotificationService() => _instance;
   NotificationService._internal();
 
@@ -30,27 +32,42 @@ class NotificationService {
   static const int _eveningAdhkarNotificationId = 1002;
   static const int _mulkNotificationId = 1003;
   static const int _baqarahNotificationId = 1004;
+  static const int _fajrPrayerNotificationId = 2001;
+  static const int _dhuhrPrayerNotificationId = 2002;
+  static const int _asrPrayerNotificationId = 2003;
+  static const int _maghribPrayerNotificationId = 2004;
+  static const int _ishaPrayerNotificationId = 2005;
   static const List<int> _managedNotificationIds = <int>[
     _morningAdhkarNotificationId,
     _eveningAdhkarNotificationId,
     _mulkNotificationId,
     _baqarahNotificationId,
   ];
+  static const Map<String, int> _prayerNotificationIdsByName = <String, int>{
+    'الفجر': _fajrPrayerNotificationId,
+    'الظهر': _dhuhrPrayerNotificationId,
+    'العصر': _asrPrayerNotificationId,
+    'المغرب': _maghribPrayerNotificationId,
+    'العشاء': _ishaPrayerNotificationId,
+  };
 
   static const String _defaultChannelId = 'quran_app_channel';
-  static const String _defaultChannelName = 'Quran App Notifications';
+  static const String _defaultChannelName = 'إشعارات تطبيق القرآن';
   static const String _defaultChannelDescription =
-      'Notifications for Quran App reminders';
+      'إشعارات عامة من تطبيق القرآن';
 
   static const String _alarmsChannelId = 'quran_alarms_channel';
-  static const String _alarmsChannelName = 'Quran App Alarms';
+  static const String _alarmsChannelName = 'تذكيرات القرآن والأذكار';
   static const String _alarmsChannelDescription =
-      'Daily alarms for adhkar and surah reminders';
+      'تذكيرات يومية للأذكار والسور';
+
+  static const String _prayerChannelId = 'prayer_times_channel';
+  static const String _prayerChannelName = 'مواقيت الصلاة';
+  static const String _prayerChannelDescription = 'إشعارات أوقات الصلاة الخمس';
 
   static const String _testChannelId = 'test_channel';
-  static const String _testChannelName = 'Test Notifications';
-  static const String _testChannelDescription =
-      'For testing notification system';
+  static const String _testChannelName = 'إشعارات الاختبار';
+  static const String _testChannelDescription = 'إشعارات اختبار التطبيق';
 
   // Alarm time keys
   static const String _morningAlarmHourKey = 'morning_alarm_hour';
@@ -93,7 +110,6 @@ class NotificationService {
   }
 
   Future<void> _doInitialize(bool requestPermissions) async {
-
     try {
       tzdata.initializeTimeZones();
       await _configureLocalTimezone();
@@ -185,6 +201,18 @@ class NotificationService {
         _alarmsChannelName,
         description: _alarmsChannelDescription,
         importance: Importance.max,
+      ),
+    );
+
+    await androidImplementation.createNotificationChannel(
+      const AndroidNotificationChannel(
+        _prayerChannelId,
+        _prayerChannelName,
+        description: _prayerChannelDescription,
+        importance: Importance.max,
+        sound: RawResourceAndroidNotificationSound('adhan'),
+        playSound: true,
+        enableVibration: true,
       ),
     );
 
@@ -346,6 +374,13 @@ class NotificationService {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
 
+    final ({String title, String body}) localizedContent =
+        _resolveDailyNotificationContent(
+          title: title,
+          body: body,
+          payload: payload,
+        );
+
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate = tz.TZDateTime(
       tz.local,
@@ -419,8 +454,8 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
-      title,
-      body,
+      localizedContent.title,
+      localizedContent.body,
       scheduledDate,
       notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
@@ -434,6 +469,37 @@ class NotificationService {
       'Daily notification $id scheduled for $formattedTime',
       name: 'quran_app.notifications',
     );
+  }
+
+  ({String title, String body}) _resolveDailyNotificationContent({
+    required String title,
+    required String body,
+    String? payload,
+  }) {
+    switch (payload) {
+      case 'morning_adhkar':
+        return (
+          title: 'تذكير أذكار الصباح',
+          body: 'حان وقت أذكار الصباح. افتح التطبيق للقراءة والمتابعة.',
+        );
+      case 'evening_adhkar':
+        return (
+          title: 'تذكير أذكار المساء',
+          body: 'حان وقت أذكار المساء. افتح التطبيق للقراءة والمتابعة.',
+        );
+      case 'mulk_surah':
+        return (
+          title: 'تذكير سورة الملك',
+          body: 'حان وقت قراءة سورة الملك. افتح التطبيق للقراءة والمتابعة.',
+        );
+      case 'baqarah_surah':
+        return (
+          title: 'تذكير سورة البقرة',
+          body: 'حان وقت قراءة سورة البقرة. افتح التطبيق للقراءة والمتابعة.',
+        );
+      default:
+        return (title: title, body: body);
+    }
   }
 
   /// Schedule a one-time notification at a fixed DateTime.
@@ -505,6 +571,108 @@ class NotificationService {
     );
   }
 
+  /// Schedule a one-time notification for a prayer time.
+  Future<void> schedulePrayerNotification({
+    required int id,
+    required String prayerName,
+    required DateTime prayerTime,
+  }) async {
+    await initialize(requestPermissions: false);
+    if (!_isPluginAvailable) return;
+
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    final tz.TZDateTime scheduledDate = tz.TZDateTime.from(
+      prayerTime,
+      tz.local,
+    );
+
+    if (!scheduledDate.isAfter(now.add(const Duration(seconds: 5)))) {
+      developer.log(
+        'Skipping past prayer notification $id for $prayerName at $prayerTime',
+        name: 'quran_app.notifications',
+      );
+      return;
+    }
+
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+          _prayerChannelId,
+          _prayerChannelName,
+          channelDescription: _prayerChannelDescription,
+          importance: Importance.max,
+          priority: Priority.high,
+          icon: '@drawable/ic_notification',
+          sound: RawResourceAndroidNotificationSound('adhan'),
+          playSound: true,
+          enableVibration: true,
+          fullScreenIntent: true,
+          category: AndroidNotificationCategory.alarm,
+        );
+
+    const DarwinNotificationDetails iosNotificationDetails =
+        DarwinNotificationDetails(
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+          interruptionLevel: InterruptionLevel.timeSensitive,
+        );
+
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: iosNotificationDetails,
+    );
+
+    final String serializedPayload = jsonEncode({
+      'type': 'prayer_time',
+      'data': <String, dynamic>{
+        'prayerName': prayerName,
+        'scheduledAt': prayerTime.toIso8601String(),
+      },
+    });
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      'حان وقت صلاة $prayerName',
+      'اضغط لفتح التطبيق ومتابعة وردك',
+      scheduledDate,
+      notificationDetails,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      payload: serializedPayload,
+    );
+
+    developer.log(
+      'Prayer notification $id scheduled for $prayerName at $scheduledDate',
+      name: 'quran_app.notifications',
+    );
+  }
+
+  /// Schedule all prayer notifications for the provided day.
+  Future<void> scheduleAllPrayersToday({
+    required Map<String, DateTime> prayerTimes,
+  }) async {
+    await cancelAllPrayerNotifications();
+
+    for (final MapEntry<String, DateTime> entry in prayerTimes.entries) {
+      final int? id = _prayerNotificationIdsByName[entry.key];
+      if (id == null) {
+        developer.log(
+          'Skipping unknown prayer notification key: ${entry.key}',
+          name: 'quran_app.notifications',
+          level: 900,
+        );
+        continue;
+      }
+
+      await schedulePrayerNotification(
+        id: id,
+        prayerName: entry.key,
+        prayerTime: entry.value,
+      );
+    }
+  }
+
   String _formatTimeHHmm(int hour, int minute) {
     final String h = hour.toString().padLeft(2, '0');
     final String m = minute.toString().padLeft(2, '0');
@@ -531,6 +699,21 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.cancelAll();
     developer.log(
       'Cancelled all notifications',
+      name: 'quran_app.notifications',
+    );
+  }
+
+  /// Cancel all prayer time notifications.
+  Future<void> cancelAllPrayerNotifications() async {
+    await initialize(requestPermissions: false);
+    if (!_isPluginAvailable) return;
+
+    for (final int id in _prayerNotificationIdsByName.values) {
+      await flutterLocalNotificationsPlugin.cancel(id);
+    }
+
+    developer.log(
+      'Cancelled all prayer notifications',
       name: 'quran_app.notifications',
     );
   }
