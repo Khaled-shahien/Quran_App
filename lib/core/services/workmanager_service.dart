@@ -37,7 +37,7 @@ void callbackDispatcher() {
           );
       }
 
-      return Future.value(true);
+      return true;
     } catch (e) {
       developer.log(
         'Error in background task',
@@ -45,7 +45,7 @@ void callbackDispatcher() {
         level: 1000,
         error: e,
       );
-      return Future.value(false);
+      return false;
     }
   });
 }

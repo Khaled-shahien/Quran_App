@@ -5,8 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:quran_app/core/constants/api_keys.dart';
 import 'package:quran_app/core/services/cached_api_service.dart';
+import 'package:quran_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
 import 'package:quran_app/features/prayers/data/data_sources/prayer_times_api_service.dart';
 import 'package:quran_app/features/prayers/domain/repositories/prayer_times_repository.dart';
+import 'package:quran_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:quran_app/features/prayers/data/repositories/prayer_times_repository_impl.dart';
 
 import 'package:quran_app/features/quran/data/data_sources/local_surah_data_source.dart';
@@ -176,6 +178,15 @@ Future<void> setupServiceLocator() async {
 
     getIt.registerLazySingleton<NotificationService>(
       () => NotificationService(),
+    );
+
+    getIt.registerLazySingleton<PrayerNotificationScheduler>(
+      () => LocalPrayerNotificationScheduler(
+        prefs: getIt<SharedPreferences>(),
+        notificationGateway: NotificationServicePrayerNotificationGateway(
+          notificationService: getIt<NotificationService>(),
+        ),
+      ),
     );
 
     getIt.registerLazySingleton<FirebaseMessagingService>(

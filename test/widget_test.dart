@@ -24,6 +24,7 @@ void main() {
     await tester.pump();
 
     expect(find.byType(OnboardingScreen), findsOneWidget);
-    expect(find.byType(OutlinedButton), findsOneWidget);
+    expect(find.text('أهلًا بك في سكينة'), findsOneWidget);
+    expect(find.text('التالي'), findsOneWidget);
   });
 }

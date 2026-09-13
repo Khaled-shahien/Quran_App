@@ -188,7 +188,7 @@ void main() {
     await tester.pumpWidget(await buildHome());
     await tester.pumpAndSettle();
 
-    expect(find.text('القرآن الكريم'), findsOneWidget);
+    expect(find.text('سكينة'), findsOneWidget);
     expect(find.text('الورد الحالي'), findsOneWidget);
     expect(find.byIcon(Icons.segment), findsOneWidget);
   });

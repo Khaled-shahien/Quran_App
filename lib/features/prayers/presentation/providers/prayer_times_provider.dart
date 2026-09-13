@@ -3,6 +3,8 @@ import 'package:quran_app/features/prayers/domain/Entities/'
     'prayer_times_entity.dart';
 import 'package:quran_app/features/prayers/domain/repositories/'
     'prayer_times_repository.dart';
+import 'package:quran_app/features/prayers/domain/services/'
+    'prayer_notification_scheduler.dart';
 
 typedef Coordinates = ({double latitude, double longitude});
 
@@ -42,6 +44,7 @@ class PrayerTimesProvider extends ChangeNotifier {
   final PrayerTimesRepository _repository;
   final PrayerTimesClock _clock;
   final PrayerLocationService _locationService;
+  final PrayerNotificationScheduler _notificationScheduler;
 
   PrayerTimesEntity? _prayerTimes;
   bool _isLoading = false;
@@ -51,9 +54,12 @@ class PrayerTimesProvider extends ChangeNotifier {
     required PrayerTimesRepository repository,
     PrayerTimesClock? clock,
     PrayerLocationService? locationService,
+    PrayerNotificationScheduler? notificationScheduler,
   }) : _repository = repository,
        _clock = clock ?? SystemPrayerTimesClock(),
-       _locationService = locationService ?? const FixedPrayerLocationService();
+       _locationService = locationService ?? const FixedPrayerLocationService(),
+       _notificationScheduler =
+           notificationScheduler ?? const NoopPrayerNotificationScheduler();
 
   /// Get current prayer times
   PrayerTimesEntity? get prayerTimes => _prayerTimes;
@@ -88,6 +94,8 @@ class PrayerTimesProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
+    PrayerTimesEntity? loadedPrayerTimes;
+
     try {
       final prayerTimes = await _repository.getPrayerTimes(
         date,
@@ -97,12 +105,31 @@ class PrayerTimesProvider extends ChangeNotifier {
       );
 
       _prayerTimes = prayerTimes;
+      loadedPrayerTimes = prayerTimes;
       _isLoading = false;
       notifyListeners();
     } catch (e) {
       _isLoading = false;
       _errorMessage = e.toString();
       notifyListeners();
+    }
+
+    if (loadedPrayerTimes != null) {
+      await _schedulePrayerNotifications(loadedPrayerTimes, date);
+    }
+  }
+
+  Future<void> _schedulePrayerNotifications(
+    PrayerTimesEntity prayerTimes,
+    DateTime date,
+  ) async {
+    try {
+      await _notificationScheduler.schedulePrayerNotifications(
+        prayerTimes: prayerTimes,
+        date: date,
+      );
+    } catch (e) {
+      debugPrint('Prayer notification scheduling failed: $e');
     }
   }
 

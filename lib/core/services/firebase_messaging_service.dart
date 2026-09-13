@@ -26,11 +26,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 
   // Show notification even when app is in background
-  final NotificationService notificationService = NotificationService();
+  final NotificationService notificationService = NotificationService.instance;
   await notificationService.initialize(requestPermissions: false);
   await notificationService.showNotification(
     id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
-    title: message.notification?.title ?? 'Notification',
+    title: message.notification?.title ?? 'إشعار جديد',
     body: message.notification?.body ?? '',
     payload: message.data['type'] ?? 'general',
     payloadData: Map<String, dynamic>.from(message.data),
@@ -49,6 +49,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 class FirebaseMessagingService {
   static final FirebaseMessagingService _instance =
       FirebaseMessagingService._internal();
+  static FirebaseMessagingService get instance => _instance;
 
   factory FirebaseMessagingService() => _instance;
   FirebaseMessagingService._internal();
@@ -237,10 +238,11 @@ class FirebaseMessagingService {
   /// Handle foreground message
   void _handleForegroundMessage(RemoteMessage message) {
     // Show local notification for foreground message
-    final NotificationService notificationService = NotificationService();
+    final NotificationService notificationService =
+        NotificationService.instance;
     notificationService.showNotification(
       id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
-      title: message.notification?.title ?? 'New Notification',
+      title: message.notification?.title ?? 'إشعار جديد',
       body: message.notification?.body ?? '',
       payload: message.data['type'] ?? 'general',
       payloadData: Map<String, dynamic>.from(message.data),
