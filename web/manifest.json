@@ -1,6 +1,6 @@
 {
-    "name": "quran_app",
-    "short_name": "quran_app",
+    "name": "سكينة",
+    "short_name": "سكينة",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -8,8 +8,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/theme_provider.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../../core/widgets/animated_entrance.dart';
-import '../../../../core/providers/notification_provider.dart';
 import '../../../../core/providers/settings_provider.dart';
 import '../../../khatma/domain/models/khatma_model.dart';
 import '../../../khatma/domain/services/khatma_quran_locator.dart';
@@ -38,6 +38,16 @@ class _HomeScreenState extends State<HomeScreen> {
   int drawerSubTab = 0; // 0 للمزيد، 1 للمفضلة
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final KhatmaQuranLocator _quranLocator = KhatmaQuranLocator();
+  OverlayEntry? _messageEntry;
+
+  @override
+  void dispose() {
+    final messageEntry = _messageEntry;
+    _messageEntry = null;
+    messageEntry?.remove();
+    messageEntry?.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -125,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
           bottom: AppSpacing.md,
         ),
         title: Text(
-          'القرآن الكريم',
+          AppStrings.appName,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.textTheme.titleMedium?.copyWith(
@@ -183,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Expanded(
                     child: Text(
-                      'القرآن الكريم',
+                      AppStrings.appName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
@@ -404,17 +414,65 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showFeatureMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: GoogleFonts.cairo(),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: AppColors.primary,
-        duration: const Duration(seconds: 2),
-      ),
+    _showOverlayMessage(message);
+  }
+
+  void _showOverlayMessage(
+    String message, {
+    Color backgroundColor = AppColors.primary,
+  }) {
+    _messageEntry?.remove();
+    _messageEntry?.dispose();
+
+    final overlay = Overlay.of(context, rootOverlay: true);
+    late final OverlayEntry entry;
+    entry = OverlayEntry(
+      builder: (context) {
+        final bottomPadding = MediaQuery.of(context).padding.bottom;
+        return Positioned(
+          left: 16,
+          right: 16,
+          bottom: bottomPadding + 16,
+          child: IgnorePointer(
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 14,
+                ),
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 8,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  message,
+                  style: GoogleFonts.cairo(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
+    _messageEntry = entry;
+    overlay.insert(entry);
+
+    Future<void>.delayed(const Duration(seconds: 2), () {
+      if (_messageEntry == entry) {
+        entry.remove();
+        entry.dispose();
+        _messageEntry = null;
+      }
+    });
   }
 
   void _showKhatmaWirdSheet({required bool showCompleted}) {
@@ -677,17 +735,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = themeProvider.isDarkMode;
 
     void showComingSoon() {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'هذه الميزة ستتوفر '
-            'قريباً إن شاء الله',
-            style: GoogleFonts.cairo(),
-            textAlign: TextAlign.center,
-          ),
-          backgroundColor: AppColors.primary,
-          duration: const Duration(seconds: 2),
-        ),
+      _showOverlayMessage(
+        'هذه الميزة ستتوفر '
+        'قريباً إن شاء الله',
       );
     }
 
@@ -815,162 +865,9 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         _buildMoreMenuItem(
-          title: 'المنبه اليومي',
-          leadingIcon: Icon(Icons.notifications, color: iconColor),
-          onTap: () => context.push('/settings/notification-test'),
-        ),
-        _buildMoreMenuItem(
           title: 'بدء ختمة جديدة',
           leadingIcon: Icon(Icons.add, color: iconColor),
           onTap: () => context.push('/khatma/location'),
-        ),
-        const Divider(height: 1),
-
-        // 5.1 اختبار الإشعارات
-        _buildSectionHeader('اختبار الإشعارات'),
-        Consumer<NotificationProvider>(
-          builder: (context, provider, child) {
-            return Column(
-              children: [
-                _buildMoreMenuItem(
-                  title: 'إشعار فوري',
-                  leadingIcon: Icon(
-                    Icons.notifications_active,
-                    color: iconColor,
-                  ),
-                  onTap: () async {
-                    try {
-                      await provider.scheduleTestNotification(
-                        id: DateTime.now().millisecondsSinceEpoch.remainder(
-                          100000,
-                        ),
-                        title: 'اختبار فوري',
-                        body: 'هذا إشعار اختبار فوري ناجح',
-                      );
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('تم إظهار الإشعار بنجاح'),
-                            backgroundColor: Colors.green,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('فشل الاختبار: $e'),
-                            backgroundColor: Colors.red,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                ),
-                const SizedBox(height: 4),
-                _buildMoreMenuItem(
-                  title: 'إشعار بعد دقيقة',
-                  leadingIcon: Icon(Icons.schedule, color: iconColor),
-                  onTap: () async {
-                    try {
-                      await provider.scheduleDelayedNotification(
-                        id: DateTime.now().millisecondsSinceEpoch.remainder(
-                          100000,
-                        ),
-                        title: 'اختبار مؤجل',
-                        body: 'سيظهر هذا الإشعار بعد دقيقة من الآن',
-                      );
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('تم جدولة الإشعار بعد دقيقة'),
-                            backgroundColor: Colors.blue,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('فشل الجدولة: $e'),
-                            backgroundColor: Colors.red,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                ),
-                const SizedBox(height: 4),
-                _buildMoreMenuItem(
-                  title: 'إشعار بعد 5 دقائق',
-                  leadingIcon: Icon(Icons.timer, color: iconColor),
-                  onTap: () async {
-                    try {
-                      await provider.scheduleTestAlarmAfter5Minutes(
-                        id: DateTime.now().millisecondsSinceEpoch.remainder(
-                          100000,
-                        ),
-                        title: 'اختبار 5 دقائق',
-                        body: 'سيظهر هذا الإشعار بعد 5 دقائق من الآن',
-                      );
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('تم جدولة الإشعار بعد 5 دقائق'),
-                            backgroundColor: Colors.orange,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('فشل الجدولة: $e'),
-                            backgroundColor: Colors.red,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                ),
-                const SizedBox(height: 4),
-                _buildMoreMenuItem(
-                  title: 'إلغاء جميع الإشعارات',
-                  leadingIcon: Icon(Icons.cancel, color: iconColor),
-                  onTap: () async {
-                    try {
-                      await provider.cancelAllNotifications();
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('تم إلغاء جميع الإشعارات'),
-                            backgroundColor: Colors.green,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('فشل الإلغاء: $e'),
-                            backgroundColor: Colors.red,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    }
-                  },
-                ),
-              ],
-            );
-          },
         ),
         const Divider(height: 1),
 
@@ -1101,7 +998,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SharePlus.instance.share(
               ShareParams(
                 text:
-                    'تطبيق القرآن الكريم - '
+                    'تطبيق سكينة - '
                     'تطبيق إسلامي شامل. '
                     'حمل الآن! \n(رابط التطبيق قريباً)',
               ),
@@ -1109,7 +1006,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         _buildMoreMenuItem(
-          title: 'قيم تطبيق ختمة',
+          title: 'قيم تطبيق سكينة',
           leadingIcon: Icon(Icons.thumb_up_alt_outlined, color: iconColor),
           onTap: () => launchMyUrl(
             'https://play.google.com/store/apps/details?id=com.quranapp',

@@ -1,4 +1,4 @@
-# 🚀 Quran App
+# 🚀 Sakina App
 
 A modern Islamic Flutter application for Quran reading, prayer times, adhkar/duas, hadith, and daily worship tools.
 

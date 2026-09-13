@@ -52,9 +52,8 @@ class NotificationService {
   };
 
   static const String _defaultChannelId = 'quran_app_channel';
-  static const String _defaultChannelName = 'إشعارات تطبيق القرآن';
-  static const String _defaultChannelDescription =
-      'إشعارات عامة من تطبيق القرآن';
+  static const String _defaultChannelName = 'إشعارات سكينة';
+  static const String _defaultChannelDescription = 'إشعارات عامة من سكينة';
 
   static const String _alarmsChannelId = 'quran_alarms_channel';
   static const String _alarmsChannelName = 'تذكيرات القرآن والأذكار';

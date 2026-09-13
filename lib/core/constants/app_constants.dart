@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 abstract class AppConstants {
   // App Info
-  static const String appName = 'Quran App';
+  static const String appName = 'سكينة';
   static const String appVersion = '1.0.0';
 
   // Dimensions

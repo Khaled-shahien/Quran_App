@@ -1,12 +1,12 @@
 abstract class AppStrings {
   // App Names
-  static const String appName = 'تطبيق القرآن';
+  static const String appName = 'سكينة';
   static const String appSubtitle =
       'التطبيق الشامل '
       'للقرآن الكريم';
 
   // Onboarding Screen
-  static const String onboardingTitle = 'تطبيق العبادات';
+  static const String onboardingTitle = 'تطبيق سكينة';
   static const String onboardingDescription =
       'تعلم الدين الاسلامي عن طريق '
       'تصنيفات وملفات وشروحات '
@@ -23,7 +23,7 @@ abstract class AppStrings {
   static const String homeScreenTitle = 'الصفحة الرئيسية';
   static const String welcomeMessage =
       'مرحباً بك في '
-      'تطبيق القرآن الكريم!';
+      'سكينة!';
 
   // Common Strings
   static const String ok = 'حسناً';
