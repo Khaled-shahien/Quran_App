@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Animated splash screen that displays the Sakina logo
@@ -45,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _navigateAfterDelay() async {
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await Future.delayed(const Duration(milliseconds: 10000));
     if (!mounted) return;
 
     final prefs = await SharedPreferences.getInstance();
@@ -69,62 +70,58 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bgColor = isDark ? const Color(0xFF0A1F1F) : const Color(0xFF0D3B3B);
+    const backgroundColor = Color(0xFF5E3B29);
+    const logoGold = Color(0xFFE7C37A);
 
     return Scaffold(
-      backgroundColor: bgColor,
-      body: Center(
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: ScaleTransition(
-            scale: _scaleAnimation,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Sakina logo
-                Container(
-                  width: 200,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(32),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFD4AF37).withValues(alpha: 0.3),
-                        blurRadius: 40,
-                        spreadRadius: 5,
+      backgroundColor: backgroundColor,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+            'assets/images/logo.png',
+            fit: BoxFit.contain,
+          ),
+          SafeArea(
+            child: IgnorePointer(
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: Column(
+                    children: [
+                      const Spacer(flex: 3),
+                      const Spacer(flex: 2),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Text(
+                          'تطبيقك للطمأنينة والهدوء',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.cairo(
+                            color: logoGold,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            height: 1.4,
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(32),
-                    child: Image.asset(
-                      'assets/images/sakina.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                // App name
-                Text(
-                  'سكينة',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFFD4AF37),
-                    letterSpacing: 2,
-                    shadows: [
-                      Shadow(
-                        color: const Color(0xFFD4AF37).withValues(alpha: 0.5),
-                        blurRadius: 20,
+                      const SizedBox(height: 24),
+                      const SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          color: logoGold,
+                        ),
                       ),
+                      const Spacer(),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
