@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_app/core/di/service_locator.dart';
-import 'package:quran_app/core/theme/app_theme.dart';
-import 'package:quran_app/core/theme/noise_background.dart';
-import 'package:quran_app/core/theme/theme_provider.dart';
-import 'package:quran_app/core/navigation/app_router.dart';
-import 'package:quran_app/core/navigation/notification_handler.dart';
-import 'package:quran_app/core/navigation/notification_router.dart';
-import 'package:quran_app/core/providers/notification_provider.dart';
-import 'package:quran_app/core/providers/settings_provider.dart';
-import 'package:quran_app/features/prayers/presentation/providers/prayer_times_provider.dart';
-import 'package:quran_app/features/prayers/presentation/providers/prayer_times_performance_provider.dart';
-import 'package:quran_app/features/prayers/domain/repositories/prayer_times_repository.dart';
-import 'package:quran_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
-import 'package:quran_app/features/quran/domain/repositories/surah_repository.dart';
-import 'package:quran_app/features/quran/presentation/providers/bookmark_provider.dart';
-import 'package:quran_app/features/hadeath/domain/repositories/hadeath_repository.dart';
-import 'package:quran_app/features/hadeath/presentation/providers/hadeath_provider.dart';
-import 'package:quran_app/features/duas/data/repositories/azkar_repository.dart';
-import 'package:quran_app/features/duas/presentation/providers/azkar_provider.dart';
-import 'package:quran_app/features/duas/data/repositories/duas_repository.dart';
-import 'package:quran_app/features/duas/presentation/providers/duas_provider.dart';
-import 'package:quran_app/features/onboarding/presentation/providers/favorites_provider.dart';
-import 'package:quran_app/features/khatma/data/repositories/khatma_repository.dart';
-import 'package:quran_app/features/khatma/presentation/providers/khatma_provider.dart';
+import 'package:sakina_app/core/di/service_locator.dart';
+import 'package:sakina_app/core/theme/app_theme.dart';
+import 'package:sakina_app/core/theme/noise_background.dart';
+import 'package:sakina_app/core/theme/theme_provider.dart';
+import 'package:sakina_app/core/navigation/app_router.dart';
+import 'package:sakina_app/core/navigation/notification_handler.dart';
+import 'package:sakina_app/core/navigation/notification_router.dart';
+import 'package:sakina_app/core/providers/notification_provider.dart';
+import 'package:sakina_app/core/providers/settings_provider.dart';
+import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
+import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_performance_provider.dart';
+import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
+import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
+import 'package:sakina_app/features/quran/domain/repositories/surah_repository.dart';
+import 'package:sakina_app/features/quran/presentation/providers/bookmark_provider.dart';
+import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_repository.dart';
+import 'package:sakina_app/features/hadeath/presentation/providers/hadeath_provider.dart';
+import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
+import 'package:sakina_app/features/duas/presentation/providers/azkar_provider.dart';
+import 'package:sakina_app/features/duas/data/repositories/duas_repository.dart';
+import 'package:sakina_app/features/duas/presentation/providers/duas_provider.dart';
+import 'package:sakina_app/features/onboarding/presentation/providers/favorites_provider.dart';
+import 'package:sakina_app/features/khatma/data/repositories/khatma_repository.dart';
+import 'package:sakina_app/features/khatma/presentation/providers/khatma_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Root widget that sets up all providers and theming
@@ -156,7 +156,7 @@ class _AppRootState extends State<AppRoot> {
         builder: (context, themeProvider, child) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            title: 'Quran App',
+            title: 'Sakina',
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,

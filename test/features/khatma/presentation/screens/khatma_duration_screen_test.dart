@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_app/features/khatma/presentation/providers/khatma_provider.dart';
-import 'package:quran_app/features/khatma/presentation/screens/khatma_duration_screen.dart';
+import 'package:sakina_app/features/khatma/presentation/providers/khatma_provider.dart';
+import 'package:sakina_app/features/khatma/presentation/screens/khatma_duration_screen.dart';
 
 class MockKhatmaProvider extends Mock implements KhatmaProvider {}
 

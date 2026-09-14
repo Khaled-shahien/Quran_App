@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/features/duas/data/models/azkar_model.dart';
-import 'package:quran_app/features/duas/data/repositories/duas_repository.dart';
-import 'package:quran_app/features/duas/presentation/providers/duas_provider.dart';
+import 'package:sakina_app/features/duas/data/models/azkar_model.dart';
+import 'package:sakina_app/features/duas/data/repositories/duas_repository.dart';
+import 'package:sakina_app/features/duas/presentation/providers/duas_provider.dart';
 
 class FakeDuasRepository implements DuasRepository {
   final List<AzkarCategoryModel> data;

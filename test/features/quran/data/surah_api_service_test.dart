@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'package:quran_app/features/quran/data/data_sources/local_surah_data_source.dart';
-import 'package:quran_app/features/quran/data/repositories/surah_repository.dart';
-import 'package:quran_app/features/quran/data/models/surah_model.dart';
-import 'package:quran_app/core/errors/api_exception.dart';
+import 'package:sakina_app/features/quran/data/data_sources/local_surah_data_source.dart';
+import 'package:sakina_app/features/quran/data/repositories/surah_repository.dart';
+import 'package:sakina_app/features/quran/data/models/surah_model.dart';
+import 'package:sakina_app/core/errors/api_exception.dart';
 
 // Mock Local Data Source that throws errors
 class MockLocalDataSource extends LocalSurahDataSource {

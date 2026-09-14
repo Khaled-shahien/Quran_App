@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:quran_app/features/prayers/domain/Entities/'
+import 'package:sakina_app/features/prayers/domain/Entities/'
     'prayer_times_entity.dart';
-import 'package:quran_app/features/prayers/domain/repositories/'
+import 'package:sakina_app/features/prayers/domain/repositories/'
     'prayer_times_repository.dart';
-import 'package:quran_app/features/prayers/domain/services/'
+import 'package:sakina_app/features/prayers/domain/services/'
     'prayer_notification_scheduler.dart';
-import 'package:quran_app/core/utils/value_notifier_mixin.dart';
+import 'package:sakina_app/core/utils/value_notifier_mixin.dart';
 
 import 'prayer_times_provider.dart';
 

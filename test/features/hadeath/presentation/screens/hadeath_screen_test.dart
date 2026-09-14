@@ -6,11 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import 'package:quran_app/core/widgets/pulse_loader.dart';
-import 'package:quran_app/features/hadeath/domain/entities/hadeath_entity.dart';
-import 'package:quran_app/features/hadeath/domain/repositories/hadeath_repository.dart';
-import 'package:quran_app/features/hadeath/presentation/providers/hadeath_provider.dart';
-import 'package:quran_app/features/hadeath/presentation/screens/hadeath_screen.dart';
+import 'package:sakina_app/core/widgets/pulse_loader.dart';
+import 'package:sakina_app/features/hadeath/domain/entities/hadeath_entity.dart';
+import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_repository.dart';
+import 'package:sakina_app/features/hadeath/presentation/providers/hadeath_provider.dart';
+import 'package:sakina_app/features/hadeath/presentation/screens/hadeath_screen.dart';
 
 import '../../../../helpers/router_test_helper.dart';
 

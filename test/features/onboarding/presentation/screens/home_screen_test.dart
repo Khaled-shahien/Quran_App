@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quran_app/core/providers/settings_provider.dart';
-import 'package:quran_app/core/services/alarm_reschedule_task_service.dart';
-import 'package:quran_app/core/services/alarm_scheduler.dart';
-import 'package:quran_app/core/theme/theme_provider.dart';
-import 'package:quran_app/features/hadeath/domain/repositories/hadeath_repository.dart';
-import 'package:quran_app/features/hadeath/presentation/providers/hadeath_provider.dart';
-import 'package:quran_app/features/duas/data/models/azkar_model.dart';
-import 'package:quran_app/features/duas/data/repositories/azkar_repository.dart';
-import 'package:quran_app/features/duas/data/repositories/duas_repository.dart';
-import 'package:quran_app/features/duas/presentation/providers/azkar_provider.dart';
-import 'package:quran_app/features/duas/presentation/providers/duas_provider.dart';
-import 'package:quran_app/features/hadeath/domain/entities/hadeath_entity.dart';
-import 'package:quran_app/features/khatma/data/repositories/khatma_repository.dart';
-import 'package:quran_app/features/khatma/presentation/providers/khatma_provider.dart';
-import 'package:quran_app/features/onboarding/presentation/providers/favorites_provider.dart';
-import 'package:quran_app/features/onboarding/presentation/screens/home_screen.dart';
-import 'package:quran_app/features/prayers/domain/Entities/prayer_times_entity.dart';
-import 'package:quran_app/features/prayers/domain/repositories/prayer_times_repository.dart';
-import 'package:quran_app/features/prayers/presentation/providers/prayer_times_performance_provider.dart';
-import 'package:quran_app/features/prayers/presentation/providers/prayer_times_provider.dart';
-import 'package:quran_app/features/quran/domain/entities/surah_entity.dart';
-import 'package:quran_app/features/quran/domain/repositories/surah_repository.dart';
-import 'package:quran_app/features/quran/presentation/providers/bookmark_provider.dart';
+import 'package:sakina_app/core/providers/settings_provider.dart';
+import 'package:sakina_app/core/services/alarm_reschedule_task_service.dart';
+import 'package:sakina_app/core/services/alarm_scheduler.dart';
+import 'package:sakina_app/core/theme/theme_provider.dart';
+import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_repository.dart';
+import 'package:sakina_app/features/hadeath/presentation/providers/hadeath_provider.dart';
+import 'package:sakina_app/features/duas/data/models/azkar_model.dart';
+import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
+import 'package:sakina_app/features/duas/data/repositories/duas_repository.dart';
+import 'package:sakina_app/features/duas/presentation/providers/azkar_provider.dart';
+import 'package:sakina_app/features/duas/presentation/providers/duas_provider.dart';
+import 'package:sakina_app/features/hadeath/domain/entities/hadeath_entity.dart';
+import 'package:sakina_app/features/khatma/data/repositories/khatma_repository.dart';
+import 'package:sakina_app/features/khatma/presentation/providers/khatma_provider.dart';
+import 'package:sakina_app/features/onboarding/presentation/providers/favorites_provider.dart';
+import 'package:sakina_app/features/onboarding/presentation/screens/home_screen.dart';
+import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
+import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
+import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_performance_provider.dart';
+import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
+import 'package:sakina_app/features/quran/domain/entities/surah_entity.dart';
+import 'package:sakina_app/features/quran/domain/repositories/surah_repository.dart';
+import 'package:sakina_app/features/quran/presentation/providers/bookmark_provider.dart';
 
 class FakeAlarmScheduler implements AlarmScheduler {
   @override
@@ -134,7 +135,7 @@ class FakeHadeathRepository implements HadeathRepository {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<Widget> buildHome() async {
+  Future<Widget> buildHome({GoRouter? router}) async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
 
@@ -180,7 +181,9 @@ void main() {
         ),
         Provider<SurahRepository>(create: (_) => FakeSurahRepository()),
       ],
-      child: const MaterialApp(home: HomeScreen()),
+      child: router == null
+          ? const MaterialApp(home: HomeScreen())
+          : MaterialApp.router(routerConfig: router),
     );
   }
 
@@ -191,6 +194,27 @@ void main() {
     expect(find.text('سكينة'), findsOneWidget);
     expect(find.text('الورد الحالي'), findsOneWidget);
     expect(find.byIcon(Icons.segment), findsOneWidget);
+  });
+
+  testWidgets('Qibla drawer item closes drawer and opens the in-app route', (tester) async {
+    final router = GoRouter(initialLocation: '/home', routes: [
+      GoRoute(path: '/home', builder: (_, _) => const HomeScreen()),
+      GoRoute(path: '/qibla', builder: (_, _) => const Scaffold(body: Text('Qibla route'))),
+    ]);
+    addTearDown(router.dispose);
+    await tester.pumpWidget(await buildHome(router: router));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.segment));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('اتجاه القبلة'), 300,
+      scrollable: find.descendant(of: find.byType(Drawer), matching: find.byType(Scrollable)));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('اتجاه القبلة'));
+    await tester.pumpAndSettle();
+    expect(find.text('Qibla route'), findsOneWidget);
+    router.pop();
+    await tester.pumpAndSettle();
+    expect(tester.state<ScaffoldState>(find.byType(Scaffold).first).isEndDrawerOpen, isFalse);
   });
 
   testWidgets('HomeScreen opens drawer and shows settings sections', (

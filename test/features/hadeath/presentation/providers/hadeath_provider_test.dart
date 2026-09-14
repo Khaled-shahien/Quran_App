@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:quran_app/features/hadeath/domain/entities/hadeath_entity.dart';
-import 'package:quran_app/features/hadeath/domain/repositories/hadeath_repository.dart';
-import 'package:quran_app/features/hadeath/presentation/providers/hadeath_provider.dart';
+import 'package:sakina_app/features/hadeath/domain/entities/hadeath_entity.dart';
+import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_repository.dart';
+import 'package:sakina_app/features/hadeath/presentation/providers/hadeath_provider.dart';
 
 class FakeHadeathRepository implements HadeathRepository {
   final List<HadeathEntity> data;

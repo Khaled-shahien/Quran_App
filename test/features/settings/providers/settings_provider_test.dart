@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:quran_app/core/services/alarm_reschedule_task_service.dart';
-import 'package:quran_app/core/services/alarm_scheduler.dart';
-import 'package:quran_app/core/providers/settings_provider.dart';
+import 'package:sakina_app/core/services/alarm_reschedule_task_service.dart';
+import 'package:sakina_app/core/services/alarm_scheduler.dart';
+import 'package:sakina_app/core/providers/settings_provider.dart';
 
 class FakeAlarmScheduler implements AlarmScheduler {
   int initializeCalls = 0;

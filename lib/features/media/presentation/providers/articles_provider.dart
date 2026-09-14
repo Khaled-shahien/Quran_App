@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:quran_app/features/media/domain/entities/article.dart';
-import 'package:quran_app/features/media/domain/errors/media_exception.dart';
-import 'package:quran_app/features/media/domain/usecases/get_articles.dart';
+import 'package:sakina_app/features/media/domain/entities/article.dart';
+import 'package:sakina_app/features/media/domain/errors/media_exception.dart';
+import 'package:sakina_app/features/media/domain/usecases/get_articles.dart';
 
 class ArticlesProvider extends ChangeNotifier {
   ArticlesProvider({required GetArticles getArticles})

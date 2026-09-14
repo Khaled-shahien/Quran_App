@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quran_app/core/providers/notification_provider.dart';
-import 'package:quran_app/core/services/notification_facades.dart';
+import 'package:sakina_app/core/providers/notification_provider.dart';
+import 'package:sakina_app/core/services/notification_facades.dart';
 
 class FakeLocalNotificationGateway implements LocalNotificationGateway {
   FakeLocalNotificationGateway({

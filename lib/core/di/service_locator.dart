@@ -3,41 +3,41 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quran_app/core/constants/api_keys.dart';
-import 'package:quran_app/core/services/cached_api_service.dart';
-import 'package:quran_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
-import 'package:quran_app/features/prayers/data/data_sources/prayer_times_api_service.dart';
-import 'package:quran_app/features/prayers/domain/repositories/prayer_times_repository.dart';
-import 'package:quran_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
-import 'package:quran_app/features/prayers/data/repositories/prayer_times_repository_impl.dart';
+import 'package:sakina_app/core/constants/api_keys.dart';
+import 'package:sakina_app/core/services/cached_api_service.dart';
+import 'package:sakina_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
+import 'package:sakina_app/features/prayers/data/data_sources/prayer_times_api_service.dart';
+import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
+import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
+import 'package:sakina_app/features/prayers/data/repositories/prayer_times_repository_impl.dart';
 
-import 'package:quran_app/features/quran/data/data_sources/local_surah_data_source.dart';
-import 'package:quran_app/features/quran/domain/repositories/surah_repository.dart';
-import 'package:quran_app/features/quran/data/repositories/surah_repository.dart';
+import 'package:sakina_app/features/quran/data/data_sources/local_surah_data_source.dart';
+import 'package:sakina_app/features/quran/domain/repositories/surah_repository.dart';
+import 'package:sakina_app/features/quran/data/repositories/surah_repository.dart';
 
-import 'package:quran_app/features/hadeath/data/data_sources/local_hadeath_data_source.dart';
-import 'package:quran_app/features/hadeath/domain/repositories/hadeath_repository.dart';
-import 'package:quran_app/features/hadeath/data/repositories/hadeath_repository_impl.dart';
+import 'package:sakina_app/features/hadeath/data/data_sources/local_hadeath_data_source.dart';
+import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_repository.dart';
+import 'package:sakina_app/features/hadeath/data/repositories/hadeath_repository_impl.dart';
 
-import 'package:quran_app/features/duas/data/repositories/azkar_repository.dart';
-import 'package:quran_app/features/duas/data/repositories/duas_repository.dart';
-import 'package:quran_app/features/khatma/data/repositories/khatma_repository.dart';
-import 'package:quran_app/features/media/data/datasources/articles_remote_datasource.dart';
-import 'package:quran_app/features/media/data/datasources/audio_remote_datasource.dart';
-import 'package:quran_app/features/media/data/datasources/video_remote_datasource.dart';
-import 'package:quran_app/features/media/data/repositories/media_repository_impl.dart';
-import 'package:quran_app/features/media/domain/repositories/media_repository.dart';
-import 'package:quran_app/features/media/domain/usecases/get_articles.dart';
-import 'package:quran_app/features/media/domain/usecases/get_islamic_videos.dart';
-import 'package:quran_app/features/media/domain/usecases/get_reciters.dart';
-import 'package:quran_app/features/media/domain/usecases/get_surah_audios.dart';
-import 'package:quran_app/features/media/presentation/providers/articles_provider.dart';
-import 'package:quran_app/features/media/presentation/providers/audio_provider.dart';
-import 'package:quran_app/features/media/presentation/providers/video_provider.dart';
+import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
+import 'package:sakina_app/features/duas/data/repositories/duas_repository.dart';
+import 'package:sakina_app/features/khatma/data/repositories/khatma_repository.dart';
+import 'package:sakina_app/features/media/data/datasources/articles_remote_datasource.dart';
+import 'package:sakina_app/features/media/data/datasources/audio_remote_datasource.dart';
+import 'package:sakina_app/features/media/data/datasources/video_remote_datasource.dart';
+import 'package:sakina_app/features/media/data/repositories/media_repository_impl.dart';
+import 'package:sakina_app/features/media/domain/repositories/media_repository.dart';
+import 'package:sakina_app/features/media/domain/usecases/get_articles.dart';
+import 'package:sakina_app/features/media/domain/usecases/get_islamic_videos.dart';
+import 'package:sakina_app/features/media/domain/usecases/get_reciters.dart';
+import 'package:sakina_app/features/media/domain/usecases/get_surah_audios.dart';
+import 'package:sakina_app/features/media/presentation/providers/articles_provider.dart';
+import 'package:sakina_app/features/media/presentation/providers/audio_provider.dart';
+import 'package:sakina_app/features/media/presentation/providers/video_provider.dart';
 
-import 'package:quran_app/core/services/notification_service.dart';
-import 'package:quran_app/core/services/firebase_messaging_service.dart';
-import 'package:quran_app/core/services/workmanager_service.dart';
+import 'package:sakina_app/core/services/notification_service.dart';
+import 'package:sakina_app/core/services/firebase_messaging_service.dart';
+import 'package:sakina_app/core/services/workmanager_service.dart';
 
 /// Global instance for dependency injection based on GetIt.
 final GetIt getIt = GetIt.instance;
@@ -197,7 +197,7 @@ Future<void> setupServiceLocator() async {
   } catch (e) {
     developer.log(
       'Service Locator setup failed',
-      name: 'quran_app.di',
+      name: 'sakina_app.di',
       error: e,
       level: 1000,
     );

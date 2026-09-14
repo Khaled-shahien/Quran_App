@@ -1,5 +1,5 @@
-﻿import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/features/duas/presentation/screens/duas_screen.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:sakina_app/features/duas/presentation/screens/duas_screen.dart';
 
 void main() {
   group('DuasScreen Widget Tests', () {

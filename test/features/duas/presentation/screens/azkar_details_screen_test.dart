@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_app/core/widgets/pulse_loader.dart';
-import 'package:quran_app/features/duas/data/models/azkar_model.dart';
-import 'package:quran_app/features/duas/data/repositories/azkar_repository.dart';
-import 'package:quran_app/features/duas/presentation/providers/azkar_provider.dart';
-import 'package:quran_app/features/duas/presentation/screens/azkar_details_screen.dart';
+import 'package:sakina_app/core/widgets/pulse_loader.dart';
+import 'package:sakina_app/features/duas/data/models/azkar_model.dart';
+import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
+import 'package:sakina_app/features/duas/presentation/providers/azkar_provider.dart';
+import 'package:sakina_app/features/duas/presentation/screens/azkar_details_screen.dart';
 
 class _DummyAzkarRepository implements AzkarRepository {
   @override

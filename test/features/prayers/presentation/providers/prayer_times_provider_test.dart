@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/features/prayers/domain/Entities/prayer_times_entity.dart';
-import 'package:quran_app/features/prayers/domain/repositories/prayer_times_repository.dart';
-import 'package:quran_app/features/prayers/presentation/providers/prayer_times_provider.dart';
+import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
+import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
+import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
 
 class FakePrayerTimesRepository implements PrayerTimesRepository {
   DateTime? lastDate;

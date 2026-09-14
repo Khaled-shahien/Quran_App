@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quran_app/core/theme/app_radius.dart';
-import 'package:quran_app/core/theme/app_spacing.dart';
-import 'package:quran_app/features/media/domain/entities/reciter.dart';
-import 'package:quran_app/features/media/domain/entities/surah_audio.dart';
+import 'package:sakina_app/core/theme/app_radius.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/features/media/domain/entities/reciter.dart';
+import 'package:sakina_app/features/media/domain/entities/surah_audio.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AudioPlayerSheet extends StatelessWidget {

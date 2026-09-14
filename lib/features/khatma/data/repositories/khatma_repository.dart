@@ -25,7 +25,7 @@ class KhatmaRepository {
       } catch (e, stackTrace) {
         developer.log(
           'Failed to parse stored khatma plan',
-          name: 'quran_app.khatma',
+          name: 'sakina_app.khatma',
           level: 1000,
           error: e,
           stackTrace: stackTrace,
@@ -55,7 +55,7 @@ class KhatmaRepository {
     } catch (e, stackTrace) {
       developer.log(
         'Failed to parse stored wird reading position',
-        name: 'quran_app.khatma',
+        name: 'sakina_app.khatma',
         level: 1000,
         error: e,
         stackTrace: stackTrace,

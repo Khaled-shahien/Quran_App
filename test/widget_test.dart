@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:quran_app/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:sakina_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

@@ -104,7 +104,7 @@ class LocalQuranDataSource {
         } catch (e) {
           developer.log(
             'Could not load verses for Surah $surahNumber',
-            name: 'quran_app.quran_data',
+            name: 'sakina_app.quran_data',
             level: 900,
             error: e,
           );

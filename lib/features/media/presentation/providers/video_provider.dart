@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:quran_app/features/media/domain/entities/video.dart';
-import 'package:quran_app/features/media/domain/entities/video_channel.dart';
-import 'package:quran_app/features/media/domain/errors/media_exception.dart';
-import 'package:quran_app/features/media/domain/usecases/get_islamic_videos.dart';
+import 'package:sakina_app/features/media/domain/entities/video.dart';
+import 'package:sakina_app/features/media/domain/entities/video_channel.dart';
+import 'package:sakina_app/features/media/domain/errors/media_exception.dart';
+import 'package:sakina_app/features/media/domain/usecases/get_islamic_videos.dart';
 
 class VideoProvider extends ChangeNotifier {
   VideoProvider({required GetIslamicVideos getIslamicVideos})

@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:quran_app/core/navigation/app_router.dart';
+import 'package:sakina_app/core/navigation/app_router.dart';
 
 /// Handles navigation triggered by notification taps
 ///

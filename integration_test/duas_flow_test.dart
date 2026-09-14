@@ -5,11 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
-import 'package:quran_app/features/duas/data/models/azkar_model.dart';
-import 'package:quran_app/features/duas/data/repositories/azkar_repository.dart';
-import 'package:quran_app/features/duas/presentation/providers/azkar_provider.dart';
-import 'package:quran_app/features/duas/presentation/screens/azkar_details_screen.dart';
-import 'package:quran_app/features/duas/presentation/screens/azkar_screen.dart';
+import 'package:sakina_app/features/duas/data/models/azkar_model.dart';
+import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
+import 'package:sakina_app/features/duas/presentation/providers/azkar_provider.dart';
+import 'package:sakina_app/features/duas/presentation/screens/azkar_details_screen.dart';
+import 'package:sakina_app/features/duas/presentation/screens/azkar_screen.dart';
 
 class FakeAzkarRepository implements AzkarRepository {
   @override

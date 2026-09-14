@@ -3,7 +3,7 @@ import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:quran_app/core/utils/security_utils.dart';
+import 'package:sakina_app/core/utils/security_utils.dart';
 import 'app_exceptions.dart';
 
 /// Enhanced Error Handler with Context and Recovery Options
@@ -366,7 +366,7 @@ class ErrorReportingService {
       if (kDebugMode) {
         developer.log(
           'Error Report',
-          name: 'quran_app.error_reporting',
+          name: 'sakina_app.error_reporting',
           level: 1000,
           error: report,
         );
@@ -378,7 +378,7 @@ class ErrorReportingService {
       // Don't let error reporting fail
       developer.log(
         'Failed to report error',
-        name: 'quran_app.error_reporting',
+        name: 'sakina_app.error_reporting',
         level: 1000,
         error: e,
       );

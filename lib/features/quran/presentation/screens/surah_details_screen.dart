@@ -403,7 +403,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
       });
       developer.log(
         'Error loading verses',
-        name: 'quran_app.quran_screen',
+        name: 'sakina_app.quran_screen',
         level: 1000,
         error: e,
       );

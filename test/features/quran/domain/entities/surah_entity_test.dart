@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:quran_app/features/quran/domain/entities/surah_entity.dart';
+import 'package:sakina_app/features/quran/domain/entities/surah_entity.dart';
 
 void main() {
   test('SurahEntity exposes Arabic revelation labels and flags', () {

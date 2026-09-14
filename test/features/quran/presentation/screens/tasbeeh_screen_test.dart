@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/features/quran/presentation/screens/tasbeeh_screen.dart';
+import 'package:sakina_app/features/quran/presentation/screens/tasbeeh_screen.dart';
 
 void main() {
   testWidgets('Tasbeeh screen supports swipe interactions', (

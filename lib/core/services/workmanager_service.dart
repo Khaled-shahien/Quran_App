@@ -21,7 +21,7 @@ void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     developer.log(
       'Background task executed: $task',
-      name: 'quran_app.workmanager',
+      name: 'sakina_app.workmanager',
     );
 
     try {
@@ -32,7 +32,7 @@ void callbackDispatcher() {
         default:
           developer.log(
             'Unknown task: $task',
-            name: 'quran_app.workmanager',
+            name: 'sakina_app.workmanager',
             level: 900,
           );
       }
@@ -41,7 +41,7 @@ void callbackDispatcher() {
     } catch (e) {
       developer.log(
         'Error in background task',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
         level: 1000,
         error: e,
       );
@@ -54,7 +54,7 @@ void callbackDispatcher() {
 Future<void> _handleRescheduleAlarms({Map<String, dynamic>? inputData}) async {
   developer.log(
     'Rescheduling alarms after boot/update',
-    name: 'quran_app.workmanager',
+    name: 'sakina_app.workmanager',
   );
 
   try {
@@ -66,7 +66,7 @@ Future<void> _handleRescheduleAlarms({Map<String, dynamic>? inputData}) async {
     if (nowMs - lastRunMs < _kBackgroundRescheduleThrottleMs) {
       developer.log(
         'Skipping duplicate background reschedule execution',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
       );
       return;
     }
@@ -86,12 +86,12 @@ Future<void> _handleRescheduleAlarms({Map<String, dynamic>? inputData}) async {
 
     developer.log(
       'Alarms rescheduled successfully',
-      name: 'quran_app.workmanager',
+      name: 'sakina_app.workmanager',
     );
   } catch (e) {
     developer.log(
       'Error rescheduling alarms',
-      name: 'quran_app.workmanager',
+      name: 'sakina_app.workmanager',
       level: 1000,
       error: e,
     );
@@ -121,7 +121,7 @@ class WorkManagerService {
 
       developer.log(
         'WorkManager initialized successfully',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
       );
       _isInitialized = true;
 
@@ -130,7 +130,7 @@ class WorkManagerService {
     } catch (e) {
       developer.log(
         'Error initializing WorkManager',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
         level: 1000,
         error: e,
       );
@@ -160,12 +160,12 @@ class WorkManagerService {
 
       developer.log(
         'Reschedule task registered',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
       );
     } catch (e) {
       developer.log(
         'Error registering reschedule task',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
         level: 1000,
         error: e,
       );
@@ -194,12 +194,12 @@ class WorkManagerService {
       );
       developer.log(
         'Boot reschedule task registered',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
       );
     } catch (e) {
       developer.log(
         'Error registering boot reschedule task',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
         level: 1000,
         error: e,
       );
@@ -221,12 +221,12 @@ class WorkManagerService {
       );
       developer.log(
         'Immediate reschedule task registered',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
       );
     } catch (e) {
       developer.log(
         'Error registering immediate reschedule task',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
         level: 1000,
         error: e,
       );
@@ -240,11 +240,11 @@ class WorkManagerService {
         kRescheduleAlarmsPeriodicUniqueName,
       );
       await _workmanager.cancelByUniqueName(kRescheduleAlarmsOneOffUniqueName);
-      developer.log('Reschedule task cancelled', name: 'quran_app.workmanager');
+      developer.log('Reschedule task cancelled', name: 'sakina_app.workmanager');
     } catch (e) {
       developer.log(
         'Error cancelling reschedule task',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
         level: 1000,
         error: e,
       );
@@ -257,12 +257,12 @@ class WorkManagerService {
       await _workmanager.cancelAll();
       developer.log(
         'All WorkManager tasks cancelled',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
       );
     } catch (e) {
       developer.log(
         'Error cancelling all tasks',
-        name: 'quran_app.workmanager',
+        name: 'sakina_app.workmanager',
         level: 1000,
         error: e,
       );

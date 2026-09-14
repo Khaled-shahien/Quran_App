@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_app/core/theme/app_colors.dart';
-import 'package:quran_app/core/widgets/pulse_loader.dart';
-import 'package:quran_app/features/prayers/presentation/providers/'
+import 'package:sakina_app/core/theme/app_colors.dart';
+import 'package:sakina_app/core/widgets/pulse_loader.dart';
+import 'package:sakina_app/features/prayers/presentation/providers/'
     'prayer_times_performance_provider.dart';
 
 /// Performance-optimized Prayer Times Widget

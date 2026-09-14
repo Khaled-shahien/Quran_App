@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:quran_app/features/duas/data/models/azkar_model.dart';
+import 'package:sakina_app/features/duas/data/models/azkar_model.dart';
 
 /// Contract for loading Quran duas categories from a data source.
 abstract class DuasRepository {

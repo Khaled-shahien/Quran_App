@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:quran_app/features/prayers/domain/Entities/prayer_times_entity.dart';
+import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
 
 void main() {
   test('PrayerTimesEntity returns main prayers and complete data flag', () {

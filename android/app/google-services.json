@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:139097045866:android:ec96f94566e1d4eb268313",
+        "mobilesdk_app_id": "1:139097045866:android:42f7267e096a7124268313",
         "android_client_info": {
-          "package_name": "com.example.quran_app"
+          "package_name": "com.example.sakina_app"
         }
       },
       "oauth_client": [],

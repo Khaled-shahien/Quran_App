@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
-import 'package:quran_app/features/prayers/domain/Entities/prayer_times_entity.dart';
+import 'package:sakina_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
+import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FakePrayerNotificationGateway implements PrayerNotificationGateway {

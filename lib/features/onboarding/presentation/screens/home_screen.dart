@@ -887,7 +887,10 @@ class _HomeScreenState extends State<HomeScreen> {
             color: isDark ? Colors.white : null,
             errorBuilder: (c, e, s) => Icon(Icons.explore, color: iconColor),
           ),
-          onTap: () => launchMyUrl('https://qiblafinder.withgoogle.com/'),
+          onTap: () {
+            Navigator.pop(context);
+            context.push('/qibla');
+          },
         ),
         const Divider(height: 1),
 

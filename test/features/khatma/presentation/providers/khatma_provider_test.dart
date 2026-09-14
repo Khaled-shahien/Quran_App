@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quran_app/features/khatma/data/repositories/khatma_repository.dart';
-import 'package:quran_app/features/khatma/domain/models/khatma_model.dart';
-import 'package:quran_app/features/khatma/domain/services/khatma_reminder_service.dart';
-import 'package:quran_app/features/khatma/presentation/providers/khatma_provider.dart';
+import 'package:sakina_app/features/khatma/data/repositories/khatma_repository.dart';
+import 'package:sakina_app/features/khatma/domain/models/khatma_model.dart';
+import 'package:sakina_app/features/khatma/domain/services/khatma_reminder_service.dart';
+import 'package:sakina_app/features/khatma/presentation/providers/khatma_provider.dart';
 
 class FakeKhatmaReminderService implements KhatmaReminderService {
   int scheduleCount = 0;

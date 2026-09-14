@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/features/media/data/models/reciter_model.dart';
+import 'package:sakina_app/features/media/data/models/reciter_model.dart';
 
 void main() {
   group('ReciterModel', () {

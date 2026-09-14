@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:quran_app/core/theme/app_spacing.dart';
-import 'package:quran_app/features/media/presentation/providers/articles_provider.dart';
-import 'package:quran_app/features/media/presentation/widgets/article_card.dart';
-import 'package:quran_app/features/media/presentation/widgets/media_state_views.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/features/media/presentation/providers/articles_provider.dart';
+import 'package:sakina_app/features/media/presentation/widgets/article_card.dart';
+import 'package:sakina_app/features/media/presentation/widgets/media_state_views.dart';
 
 class ArticlesScreen extends StatefulWidget {
   const ArticlesScreen({super.key});

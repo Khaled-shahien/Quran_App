@@ -6,9 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quran_app/core/providers/notification_provider.dart';
-import 'package:quran_app/core/services/notification_facades.dart';
-import 'package:quran_app/features/settings/presentation/screens/notification_test_screen.dart';
+import 'package:sakina_app/core/providers/notification_provider.dart';
+import 'package:sakina_app/core/services/notification_facades.dart';
+import 'package:sakina_app/features/settings/presentation/screens/notification_test_screen.dart';
 
 class FakeLocalNotificationGateway implements LocalNotificationGateway {
   FakeLocalNotificationGateway({

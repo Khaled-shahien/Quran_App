@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quran_app/core/theme/app_spacing.dart';
-import 'package:quran_app/core/widgets/pulse_loader.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/core/widgets/pulse_loader.dart';
 
 class MediaLoadingView extends StatelessWidget {
   const MediaLoadingView({super.key});

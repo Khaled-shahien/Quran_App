@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quran_app/core/theme/app_radius.dart';
-import 'package:quran_app/core/theme/app_spacing.dart';
-import 'package:quran_app/features/media/domain/entities/video.dart';
-import 'package:quran_app/features/media/domain/entities/video_channel.dart';
+import 'package:sakina_app/core/theme/app_radius.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/features/media/domain/entities/video.dart';
+import 'package:sakina_app/features/media/domain/entities/video_channel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VideoCard extends StatelessWidget {

@@ -6,11 +6,11 @@ import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quran_app/features/quran/domain/entities/surah_entity.dart';
-import 'package:quran_app/features/quran/domain/repositories/surah_repository.dart';
-import 'package:quran_app/features/quran/presentation/providers/bookmark_provider.dart';
-import 'package:quran_app/features/quran/presentation/screens/quran_screen.dart';
-import 'package:quran_app/features/quran/presentation/screens/surah_details_screen.dart';
+import 'package:sakina_app/features/quran/domain/entities/surah_entity.dart';
+import 'package:sakina_app/features/quran/domain/repositories/surah_repository.dart';
+import 'package:sakina_app/features/quran/presentation/providers/bookmark_provider.dart';
+import 'package:sakina_app/features/quran/presentation/screens/quran_screen.dart';
+import 'package:sakina_app/features/quran/presentation/screens/surah_details_screen.dart';
 
 class FakeSurahRepository implements SurahRepository {
   FakeSurahRepository(this._surahs);

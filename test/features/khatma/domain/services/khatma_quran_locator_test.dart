@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/features/khatma/domain/models/khatma_model.dart';
-import 'package:quran_app/features/khatma/domain/services/khatma_quran_locator.dart';
+import 'package:sakina_app/features/khatma/domain/models/khatma_model.dart';
+import 'package:sakina_app/features/khatma/domain/services/khatma_quran_locator.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

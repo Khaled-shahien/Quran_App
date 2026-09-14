@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/core/errors/api_exception.dart';
-import 'package:quran_app/core/errors/network_exception.dart';
-import 'package:quran_app/features/prayers/data/data_sources/prayer_times_api_service.dart';
-import 'package:quran_app/features/prayers/data/models/prayer_times_response.dart';
-import 'package:quran_app/features/prayers/data/repositories/prayer_times_repository_impl.dart';
+import 'package:sakina_app/core/errors/api_exception.dart';
+import 'package:sakina_app/core/errors/network_exception.dart';
+import 'package:sakina_app/features/prayers/data/data_sources/prayer_times_api_service.dart';
+import 'package:sakina_app/features/prayers/data/models/prayer_times_response.dart';
+import 'package:sakina_app/features/prayers/data/repositories/prayer_times_repository_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FakePrayerTimesApiService extends PrayerTimesApiService {

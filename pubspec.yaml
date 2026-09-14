@@ -1,4 +1,4 @@
-name: quran_app
+name: sakina_app
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -66,6 +66,7 @@ dependencies:
   go_router: ^17.1.0
   get_it: ^7.6.0
   dartz: ^0.10.1
+  geolocator: 14.0.2
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +85,15 @@ dev_dependencies:
   build_runner: ^2.4.7
   # Mocking for testing
   mockito: ^5.4.4
+  # App icon generation
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/sakina.png"
+  adaptive_icon_background: "#0D3B3B"
+  adaptive_icon_foreground: "assets/images/sakina.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

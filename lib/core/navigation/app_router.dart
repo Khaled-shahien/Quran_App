@@ -24,6 +24,8 @@ import '../../features/media/presentation/screens/video_screen.dart';
 import '../../features/onboarding/presentation/screens/home_screen.dart';
 import '../../features/onboarding/presentation/screens/media_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/splash/presentation/screens/splash_screen.dart';
+import '../../features/qibla/presentation/screens/qibla_screen.dart';
 import '../../features/prayers/presentation/screens/prayer_times_screen.dart';
 import '../../features/quran/domain/entities/surah_entity.dart';
 import '../../features/quran/domain/repositories/surah_repository.dart';
@@ -42,10 +44,15 @@ Page<void> _fadePage(GoRouterState state, Widget child) {
 
 final GoRouter appRouter = GoRouter(
   navigatorKey: appNavigatorKey,
-  initialLocation: '/',
+  initialLocation: '/splash',
   routes: <RouteBase>[
     GoRoute(
-      path: '/',
+      path: '/splash',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const SplashScreen()),
+    ),
+    GoRoute(
+      path: '/onboarding',
       pageBuilder: (context, state) =>
           _fadePage(state, const OnboardingScreen()),
     ),
@@ -122,6 +129,10 @@ final GoRouter appRouter = GoRouter(
       path: '/prayers',
       pageBuilder: (context, state) =>
           _fadePage(state, const PrayerTimesScreen()),
+    ),
+    GoRoute(
+      path: '/qibla',
+      pageBuilder: (context, state) => _fadePage(state, const QiblaScreen()),
     ),
     GoRoute(
       path: '/duas',

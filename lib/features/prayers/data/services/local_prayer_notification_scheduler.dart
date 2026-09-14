@@ -1,8 +1,8 @@
 import 'dart:developer' as developer;
 
-import 'package:quran_app/core/services/notification_service.dart';
-import 'package:quran_app/features/prayers/domain/Entities/prayer_times_entity.dart';
-import 'package:quran_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
+import 'package:sakina_app/core/services/notification_service.dart';
+import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
+import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class PrayerNotificationGateway {
@@ -64,7 +64,7 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
       await _notificationGateway.cancelAllPrayerNotifications();
       developer.log(
         'Prayer notifications disabled by user preference',
-        name: 'quran_app.prayer_notifications',
+        name: 'sakina_app.prayer_notifications',
       );
       return;
     }
@@ -78,7 +78,7 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
       await _notificationGateway.cancelAllPrayerNotifications();
       developer.log(
         'No valid prayer times available for notification scheduling',
-        name: 'quran_app.prayer_notifications',
+        name: 'sakina_app.prayer_notifications',
         level: 900,
       );
       return;
@@ -98,7 +98,7 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
       if (parsed == null) {
         developer.log(
           'Unable to parse prayer time for $arabicName: $rawTime',
-          name: 'quran_app.prayer_notifications',
+          name: 'sakina_app.prayer_notifications',
           level: 900,
         );
         return;

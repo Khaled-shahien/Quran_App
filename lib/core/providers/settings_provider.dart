@@ -127,14 +127,14 @@ class SettingsProvider extends ChangeNotifier {
       'Setting $type alarm to '
       '${hour.toString().padLeft(2, '0')}:'
       '${minute.toString().padLeft(2, '0')}',
-      name: 'quran_app.settings',
+      name: 'sakina_app.settings',
     );
 
     // Save the new time
     await _alarmScheduler.saveAlarmTime(type: type, hour: hour, minute: minute);
     developer.log(
       'Saved alarm time to preferences',
-      name: 'quran_app.settings',
+      name: 'sakina_app.settings',
     );
 
     // Reschedule only the selected alarm to avoid unnecessary work.
@@ -148,7 +148,7 @@ class SettingsProvider extends ChangeNotifier {
         );
         developer.log(
           'Rescheduled morning adhkar alarm',
-          name: 'quran_app.settings',
+          name: 'sakina_app.settings',
         );
         break;
       case 'evening':
@@ -160,7 +160,7 @@ class SettingsProvider extends ChangeNotifier {
         );
         developer.log(
           'Rescheduled evening adhkar alarm',
-          name: 'quran_app.settings',
+          name: 'sakina_app.settings',
         );
         break;
       case 'mulk':
@@ -170,7 +170,7 @@ class SettingsProvider extends ChangeNotifier {
           hour: hour,
           minute: minute,
         );
-        developer.log('Rescheduled mulk alarm', name: 'quran_app.settings');
+        developer.log('Rescheduled mulk alarm', name: 'sakina_app.settings');
         break;
       case 'baqarah':
         await _alarmScheduler.rescheduleSingleAlarm(
@@ -179,7 +179,7 @@ class SettingsProvider extends ChangeNotifier {
           hour: hour,
           minute: minute,
         );
-        developer.log('Rescheduled baqarah alarm', name: 'quran_app.settings');
+        developer.log('Rescheduled baqarah alarm', name: 'sakina_app.settings');
         break;
     }
 
@@ -190,7 +190,7 @@ class SettingsProvider extends ChangeNotifier {
     );
 
     notifyListeners();
-    developer.log('Alarm time set completed', name: 'quran_app.settings');
+    developer.log('Alarm time set completed', name: 'sakina_app.settings');
   }
 
   /// Get saved alarm time

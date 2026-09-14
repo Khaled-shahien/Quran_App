@@ -51,11 +51,11 @@ class NotificationService {
     'العشاء': _ishaPrayerNotificationId,
   };
 
-  static const String _defaultChannelId = 'quran_app_channel';
+  static const String _defaultChannelId = 'sakina_app_channel';
   static const String _defaultChannelName = 'إشعارات سكينة';
   static const String _defaultChannelDescription = 'إشعارات عامة من سكينة';
 
-  static const String _alarmsChannelId = 'quran_alarms_channel';
+  static const String _alarmsChannelId = 'sakina_alarms_channel';
   static const String _alarmsChannelName = 'تذكيرات القرآن والأذكار';
   static const String _alarmsChannelDescription =
       'تذكيرات يومية للأذكار والسور';
@@ -138,13 +138,13 @@ class NotificationService {
       _isPluginAvailable = true;
       developer.log(
         'Notification Service initialized successfully',
-        name: 'quran_app.notifications',
+        name: 'sakina_app.notifications',
       );
     } catch (e) {
       _isPluginAvailable = false;
       developer.log(
         'Notification Service unavailable on this platform/context: $e',
-        name: 'quran_app.notifications',
+        name: 'sakina_app.notifications',
         level: 1000,
         error: e,
       );
@@ -163,14 +163,14 @@ class NotificationService {
       tz.setLocalLocation(tz.getLocation('Africa/Cairo'));
       developer.log(
         'Failed to resolve local timezone, falling back to Africa/Cairo',
-        name: 'quran_app.notifications',
+        name: 'sakina_app.notifications',
         level: 900,
         error: e,
       );
     }
     developer.log(
       'Notification timezone configured. Final selected timezone: ${tz.local.name}',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -226,7 +226,7 @@ class NotificationService {
 
     developer.log(
       'Android notification channels ensured',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -247,7 +247,7 @@ class NotificationService {
           .requestNotificationsPermission();
       developer.log(
         'Android notification permission granted: $granted',
-        name: 'quran_app.notifications',
+        name: 'sakina_app.notifications',
       );
 
       try {
@@ -255,12 +255,12 @@ class NotificationService {
             .requestExactAlarmsPermission();
         developer.log(
           'Android exact alarm permission granted: $exactAlarmPermission',
-          name: 'quran_app.notifications',
+          name: 'sakina_app.notifications',
         );
       } catch (e) {
         developer.log(
           'Exact alarm permission request unavailable',
-          name: 'quran_app.notifications',
+          name: 'sakina_app.notifications',
           level: 900,
           error: e,
         );
@@ -404,16 +404,16 @@ class NotificationService {
 
     developer.log(
       'Scheduling notification $id for $formattedTime at $scheduledDate',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
-    developer.log('Current time: $now', name: 'quran_app.notifications');
+    developer.log('Current time: $now', name: 'sakina_app.notifications');
     developer.log(
       'Two minutes from now: $twoMinutesFromNow',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
     developer.log(
       'Will trigger at: $triggerTime',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
 
     const AndroidNotificationDetails androidNotificationDetails =
@@ -466,7 +466,7 @@ class NotificationService {
 
     developer.log(
       'Daily notification $id scheduled for $formattedTime',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -566,7 +566,7 @@ class NotificationService {
 
     developer.log(
       'One-time notification $id scheduled for $scheduleAtLocal',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -588,7 +588,7 @@ class NotificationService {
     if (!scheduledDate.isAfter(now.add(const Duration(seconds: 5)))) {
       developer.log(
         'Skipping past prayer notification $id for $prayerName at $prayerTime',
-        name: 'quran_app.notifications',
+        name: 'sakina_app.notifications',
       );
       return;
     }
@@ -643,7 +643,7 @@ class NotificationService {
 
     developer.log(
       'Prayer notification $id scheduled for $prayerName at $scheduledDate',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -658,7 +658,7 @@ class NotificationService {
       if (id == null) {
         developer.log(
           'Skipping unknown prayer notification key: ${entry.key}',
-          name: 'quran_app.notifications',
+          name: 'sakina_app.notifications',
           level: 900,
         );
         continue;
@@ -686,7 +686,7 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.cancel(id);
     developer.log(
       'Cancelled notification $id',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -698,7 +698,7 @@ class NotificationService {
     await flutterLocalNotificationsPlugin.cancelAll();
     developer.log(
       'Cancelled all notifications',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -713,7 +713,7 @@ class NotificationService {
 
     developer.log(
       'Cancelled all prayer notifications',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -861,7 +861,7 @@ class NotificationService {
     if (_lastAppliedAlarmStateSignature == newSignature) {
       developer.log(
         'Skipping alarm update: state unchanged',
-        name: 'quran_app.notifications',
+        name: 'sakina_app.notifications',
       );
       return;
     }
@@ -887,7 +887,7 @@ class NotificationService {
       'Updated all alarms. Morning: $isMorningEnabled, '
       'Evening: $isEveningEnabled, '
       'Mulk: $isMulkEnabled, Baqarah: $isBaqarahEnabled',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -927,7 +927,7 @@ class NotificationService {
       default:
         developer.log(
           'Unknown alarm type for reschedule: $type',
-          name: 'quran_app.notifications',
+          name: 'sakina_app.notifications',
           level: 900,
         );
     }
@@ -962,7 +962,7 @@ class NotificationService {
 
     developer.log(
       'Saved $type alarm time: ${_formatTimeHHmm(hour, minute)}',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -1003,8 +1003,8 @@ class NotificationService {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
 
-    developer.log('TEST NOTIFICATION: $title', name: 'quran_app.notifications');
-    developer.log('Body: $body', name: 'quran_app.notifications');
+    developer.log('TEST NOTIFICATION: $title', name: 'sakina_app.notifications');
+    developer.log('Body: $body', name: 'sakina_app.notifications');
 
     const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
@@ -1040,7 +1040,7 @@ class NotificationService {
 
     developer.log(
       'Test notification shown successfully',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
   }
 
@@ -1054,12 +1054,12 @@ class NotificationService {
 
     developer.log(
       'Pending notifications: ${pending.length}',
-      name: 'quran_app.notifications',
+      name: 'sakina_app.notifications',
     );
     for (final PendingNotificationRequest notification in pending) {
       developer.log(
         'ID: ${notification.id}, Title: ${notification.title}',
-        name: 'quran_app.notifications',
+        name: 'sakina_app.notifications',
       );
     }
 

@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quran_app/core/theme/app_colors.dart';
-import 'package:quran_app/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:quran_app/features/onboarding/presentation/widgets/notification_permission_dialog.dart';
-import 'package:quran_app/features/onboarding/presentation/widgets/onboarding_page.dart';
+import 'package:sakina_app/core/theme/app_colors.dart';
+import 'package:sakina_app/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:sakina_app/features/onboarding/presentation/widgets/notification_permission_dialog.dart';
+import 'package:sakina_app/features/onboarding/presentation/widgets/onboarding_page.dart';
 
 void main() {
   setUp(() {

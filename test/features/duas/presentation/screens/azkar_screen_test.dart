@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/features/duas/presentation/screens/azkar_screen.dart';
+import 'package:sakina_app/features/duas/presentation/screens/azkar_screen.dart';
 
 void main() {
   group('AzkarScreen Widget Tests', () {

@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quran_app/features/quran/domain/entities/surah_entity.dart';
-import 'package:quran_app/features/quran/presentation/providers/bookmark_provider.dart';
-import 'package:quran_app/features/quran/presentation/screens/surah_details_screen.dart';
+import 'package:sakina_app/features/quran/domain/entities/surah_entity.dart';
+import 'package:sakina_app/features/quran/presentation/providers/bookmark_provider.dart';
+import 'package:sakina_app/features/quran/presentation/screens/surah_details_screen.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

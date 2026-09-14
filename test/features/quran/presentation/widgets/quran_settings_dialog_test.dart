@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:quran_app/core/theme/theme_provider.dart';
-import 'package:quran_app/features/quran/presentation/widgets/quran_settings_dialog.dart';
+import 'package:sakina_app/core/theme/theme_provider.dart';
+import 'package:sakina_app/features/quran/presentation/widgets/quran_settings_dialog.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

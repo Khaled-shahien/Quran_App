@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:quran_app/core/services/cached_api_service.dart';
-import 'package:quran_app/features/media/data/datasources/articles_remote_datasource.dart';
+import 'package:sakina_app/core/services/cached_api_service.dart';
+import 'package:sakina_app/features/media/data/datasources/articles_remote_datasource.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

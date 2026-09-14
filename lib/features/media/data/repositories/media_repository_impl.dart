@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:quran_app/features/media/data/datasources/articles_remote_datasource.dart';
-import 'package:quran_app/features/media/data/datasources/audio_remote_datasource.dart';
-import 'package:quran_app/features/media/data/datasources/video_remote_datasource.dart';
-import 'package:quran_app/features/media/data/models/surah_audio_model.dart';
-import 'package:quran_app/features/media/domain/entities/article.dart';
-import 'package:quran_app/features/media/domain/entities/reciter.dart';
-import 'package:quran_app/features/media/domain/entities/surah_audio.dart';
-import 'package:quran_app/features/media/domain/entities/video.dart';
-import 'package:quran_app/features/media/domain/errors/media_exception.dart';
-import 'package:quran_app/features/media/domain/repositories/media_repository.dart';
+import 'package:sakina_app/features/media/data/datasources/articles_remote_datasource.dart';
+import 'package:sakina_app/features/media/data/datasources/audio_remote_datasource.dart';
+import 'package:sakina_app/features/media/data/datasources/video_remote_datasource.dart';
+import 'package:sakina_app/features/media/data/models/surah_audio_model.dart';
+import 'package:sakina_app/features/media/domain/entities/article.dart';
+import 'package:sakina_app/features/media/domain/entities/reciter.dart';
+import 'package:sakina_app/features/media/domain/entities/surah_audio.dart';
+import 'package:sakina_app/features/media/domain/entities/video.dart';
+import 'package:sakina_app/features/media/domain/errors/media_exception.dart';
+import 'package:sakina_app/features/media/domain/repositories/media_repository.dart';
 
 class MediaRepositoryImpl implements MediaRepository {
   MediaRepositoryImpl({

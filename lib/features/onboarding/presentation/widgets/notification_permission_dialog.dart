@@ -56,7 +56,7 @@ class NotificationPermissionDialog extends StatelessWidget {
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: 56,
               child: ElevatedButton(
                 onPressed: () async {
                   await _handlePermissionRequest(context, true);
@@ -69,9 +69,10 @@ class NotificationPermissionDialog extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'تفعيل السماح',
+                  'السماح بالإشعارات',
                   style: GoogleFonts.cairo(
                     fontSize: 16,
+                    height: 1.4,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

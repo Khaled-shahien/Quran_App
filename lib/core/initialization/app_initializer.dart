@@ -2,11 +2,11 @@ import 'dart:developer' as developer;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:quran_app/firebase_options.dart';
-import 'package:quran_app/core/di/service_locator.dart';
-import 'package:quran_app/core/services/notification_service.dart';
-import 'package:quran_app/core/services/firebase_messaging_service.dart';
-import 'package:quran_app/core/services/workmanager_service.dart';
+import 'package:sakina_app/firebase_options.dart';
+import 'package:sakina_app/core/di/service_locator.dart';
+import 'package:sakina_app/core/services/notification_service.dart';
+import 'package:sakina_app/core/services/firebase_messaging_service.dart';
+import 'package:sakina_app/core/services/workmanager_service.dart';
 
 /// AppInitializer is responsible for orchestrating the app's boot sequence.
 /// It establishes Firebase, sets up Dependency Injection, and launches
@@ -20,7 +20,7 @@ class AppInitializer {
   /// Entry point for all initialization logic.
   static Future<void> initialize() async {
     if (_isInitialized) {
-      developer.log('App already initialized', name: 'quran_app.init');
+      developer.log('App already initialized', name: 'sakina_app.init');
       return;
     }
 
@@ -30,7 +30,7 @@ class AppInitializer {
     await _initializeBackgroundServices();
 
     _isInitialized = true;
-    developer.log('App initialization complete', name: 'quran_app.init');
+    developer.log('App initialization complete', name: 'sakina_app.init');
   }
 
   /// Initializes the Firebase app instance.
@@ -43,12 +43,12 @@ class AppInitializer {
       }
       developer.log(
         'Firebase Core initialized successfully',
-        name: 'quran_app.init',
+        name: 'sakina_app.init',
       );
     } catch (e) {
       developer.log(
         'Firebase Core initialization failed',
-        name: 'quran_app.init',
+        name: 'sakina_app.init',
         error: e,
         level: 1000,
       );
@@ -61,12 +61,12 @@ class AppInitializer {
       await setupServiceLocator();
       developer.log(
         'Dependency Injection configured successfully',
-        name: 'quran_app.init',
+        name: 'sakina_app.init',
       );
     } catch (e) {
       developer.log(
         'Dependency Injection failed',
-        name: 'quran_app.init',
+        name: 'sakina_app.init',
         error: e,
         level: 1000,
       );
@@ -80,12 +80,12 @@ class AppInitializer {
       FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
       developer.log(
         'FCM background handler registered',
-        name: 'quran_app.init',
+        name: 'sakina_app.init',
       );
     } catch (e) {
       developer.log(
         'Failed to register FCM background handler',
-        name: 'quran_app.init',
+        name: 'sakina_app.init',
         error: e,
         level: 1000,
       );
@@ -105,7 +105,7 @@ class AppInitializer {
       } catch (error) {
         developer.log(
           'Notification initialization error',
-          name: 'quran_app.init',
+          name: 'sakina_app.init',
           level: 1000,
           error: error,
         );
@@ -116,11 +116,11 @@ class AppInitializer {
       await workManagerService.initialize();
       await workManagerService.registerBootRescheduleTask();
 
-      developer.log('Background services initialized', name: 'quran_app.init');
+      developer.log('Background services initialized', name: 'sakina_app.init');
     } catch (e) {
       developer.log(
         'Background services initialization error',
-        name: 'quran_app.init',
+        name: 'sakina_app.init',
         level: 1000,
         error: e,
       );

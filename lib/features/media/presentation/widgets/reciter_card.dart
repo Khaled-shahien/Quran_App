@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quran_app/core/theme/app_radius.dart';
-import 'package:quran_app/core/theme/app_spacing.dart';
-import 'package:quran_app/features/media/domain/entities/reciter.dart';
+import 'package:sakina_app/core/theme/app_radius.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/features/media/domain/entities/reciter.dart';
 
 class ReciterCard extends StatelessWidget {
   const ReciterCard({

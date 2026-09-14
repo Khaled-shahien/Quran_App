@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:quran_app/features/media/domain/entities/reciter.dart';
-import 'package:quran_app/features/media/domain/entities/surah_audio.dart';
-import 'package:quran_app/features/media/domain/errors/media_exception.dart';
-import 'package:quran_app/features/media/domain/usecases/get_reciters.dart';
-import 'package:quran_app/features/media/domain/usecases/get_surah_audios.dart';
+import 'package:sakina_app/features/media/domain/entities/reciter.dart';
+import 'package:sakina_app/features/media/domain/entities/surah_audio.dart';
+import 'package:sakina_app/features/media/domain/errors/media_exception.dart';
+import 'package:sakina_app/features/media/domain/usecases/get_reciters.dart';
+import 'package:sakina_app/features/media/domain/usecases/get_surah_audios.dart';
 
 class AudioProvider extends ChangeNotifier {
   AudioProvider({

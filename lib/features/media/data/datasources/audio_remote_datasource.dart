@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:quran_app/core/services/cached_api_service.dart';
-import 'package:quran_app/features/media/data/models/reciter_model.dart';
-import 'package:quran_app/features/media/domain/errors/media_exception.dart';
+import 'package:sakina_app/core/services/cached_api_service.dart';
+import 'package:sakina_app/features/media/data/models/reciter_model.dart';
+import 'package:sakina_app/features/media/domain/errors/media_exception.dart';
 
 class AudioRemoteDataSource {
   AudioRemoteDataSource({

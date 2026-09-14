@@ -116,7 +116,7 @@ class AyahRepositoryImpl implements AyahRepository {
           // Continue processing other Surahs even if one fails
           developer.log(
             'Could not load ayahs for Surah $surahNumber',
-            name: 'quran_app.quran_data',
+            name: 'sakina_app.quran_data',
             level: 900,
             error: e,
           );

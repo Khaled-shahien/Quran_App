@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:quran_app/features/hadeath/domain/entities/hadeath_entity.dart';
-import 'package:quran_app/features/hadeath/presentation/screens/hadeath_details_screen.dart';
+import 'package:sakina_app/features/hadeath/domain/entities/hadeath_entity.dart';
+import 'package:sakina_app/features/hadeath/presentation/screens/hadeath_details_screen.dart';
 
 void main() {
   const testHadeath = HadeathEntity(

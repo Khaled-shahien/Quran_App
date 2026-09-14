@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:quran_app/features/duas/data/models/azkar_model.dart';
-import 'package:quran_app/features/duas/data/repositories/duas_repository.dart';
+import 'package:sakina_app/features/duas/data/models/azkar_model.dart';
+import 'package:sakina_app/features/duas/data/repositories/duas_repository.dart';
 
 class DuasProvider extends ChangeNotifier {
   final DuasRepository _repository;

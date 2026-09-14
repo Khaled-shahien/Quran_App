@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:go_router/go_router.dart';
-import 'package:quran_app/core/navigation/app_router.dart';
+import 'package:sakina_app/core/navigation/app_router.dart';
 
 /// NavigationHandler provides central routing logic for out-of-band updates,
 /// mainly for resolving navigation targets from notifications.
@@ -16,7 +16,7 @@ class NavigationHandler {
     if (context == null) {
       developer.log(
         'Cannot navigate to $route: context is null',
-        name: 'quran_app.nav',
+        name: 'sakina_app.nav',
         level: 1000,
       );
       return;
@@ -25,7 +25,7 @@ class NavigationHandler {
     final destination = _resolveRoute(route, data);
     developer.log(
       'Navigating to destination: $destination',
-      name: 'quran_app.nav',
+      name: 'sakina_app.nav',
     );
     context.go(destination);
   }
