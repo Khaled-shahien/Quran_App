@@ -12,17 +12,17 @@
 | **Previous plan update** | 2026-09-28 (docs/production-fix-progress.md) |
 | **Current re-audit date** | 2026-09-28 |
 | **Original tracked tasks** | 40 (T01–T40) |
-| **STATUS A — Completed** | 17 |
-| **STATUS B — Partially Completed** | 16 |
+| **STATUS A — Completed** | 18 (T10 verified by B-02) |
+| **STATUS B — Partially Completed** | 15 |
 | **STATUS D — Needs Rework** | 1 (T11) |
 | **STATUS F — Blocked** | 3 (T34, T35, T39) |
 | **STATUS C — Not Implemented** | 0 |
 | **STATUS E — No Longer Applicable** | 0 |
 | **STATUS G — Unable to Verify** | 3 tasks have runtime/device aspects that cannot be verified statically |
 | **New findings this re-audit** | 5 (NF-001 through NF-005) |
-| **Confirmed test failures** | 3 (Quran surah name/number lookup in `quran_search_screen_test.dart`) |
+| **Confirmed test failures** | 0 — B-02 regression run on 2026-09-28 |
 | **Static analysis** | `dart analyze lib`: **no issues** |
-| **Full test suite** | **220 tests: 217 passed, 3 failed** |
+| **Full test suite** | **232 tests: 232 passed, 0 failed** (2026-09-28) |
 | **Current production blockers** | 5 categories (identity/signing, content, notifications, privacy/store, device evidence) |
 | **Production readiness** | **NOT READY** |
 
@@ -60,7 +60,7 @@
 | Quran browsing | Working offline | [quran_screen.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/quran/presentation/screens/quran_screen.dart) |
 | Quran reader | Working (extracted parts) | [surah_details_screen.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/quran/presentation/screens/surah_details_screen.dart) |
 | Quran search (verse) | Working offline with highlighting | [quran_search_screen.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/quran/presentation/screens/quran_search_screen.dart) |
-| Quran search (surah name/number) | **Code present but tests fail** | Same file — `_matchingSurahs` + `_loadSurahNames()` |
+| Quran search (surah name/number) | **VERIFIED — B-02** | Same file — `_matchingSurahs` + `_loadSurahNames()` |
 | Prayer times | Working with GPS/manual/city selection | [prayer_times_screen.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/prayers/presentation/screens/prayer_times_screen.dart) |
 | Prayer location dialog | Working with city catalog | [prayer_location_dialog.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/prayers/presentation/screens/prayer_location_dialog.dart) |
 | Qibla | Working in code; device unverified | [qibla_screen.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/qibla/presentation/screens/qibla_screen.dart) |
@@ -132,7 +132,7 @@
 | T07 | Analytics | Monitoring | P2 | B | 75% | Dashboard/retention | — | Approved Firebase project |
 | T08 | Privacy | Privacy | P0 | B | 75% | Owner/contact/public URL | — | Owner approval |
 | T09 | Settings | UI/UX | P1 | A | 100% | — | — | Maintenance |
-| T10 | Quran search | Feature | P1 | B | 75% | **3 surah lookup tests fail** | NF-003 | Fix test regression |
+| T10 | Quran search | Feature | P1 | VERIFIED | 100% | None | NF-003 resolved | Maintenance; verified 2026-09-28 via B-02 |
 | T11 | FCM decision | Architecture | P1 | D | 75% | Dormant code/dependency cleanup | — | Remove or isolate FCM |
 | T12 | Content provenance | Content | P0 | B | 75% | Sources/reviewer approval | — | Owner/scholar review |
 | T13 | Diagnostic route | Debug | P1 | A | 100% | — | — | Maintenance |
@@ -160,7 +160,7 @@
 | T35 | Device matrix | QA | P0 | F | 25% | Physical devices unavailable | — | Acquire devices |
 | T36 | Security review | Security | P0 | B | 50% | Independent review | NF-004 | Security review |
 | T37 | Profiling | Performance | P2 | B | 50% | Profile measurements | — | Profile build |
-| T38 | Final regression | QA | P0 | B | 50% | 3 test failures + physical regression | NF-003 | Fix tests + device regression |
+| T38 | Final regression | QA | P0 | B | 50% | Physical/signed regression | NF-003 resolved | Automated suite 232/232; device regression remains |
 | T39 | Store release | Release | P0 | F | 0% | All gates must close | — | All blockers |
 | T40 | Operations | Operations | P1 | B | 50% | Alerts/owners/evidence | — | Approved project |
 
@@ -175,6 +175,7 @@ The following tasks are verified complete at repository/test scope:
 | T04 | Dark component themes (navigation, sheet, dialog, input, scrollbar) | [app_theme.dart](file:///e:/Projects/01-personal/Quran-App/lib/core/theme/app_theme.dart) + tests |
 | T05 | Dedicated dark caption token with automated contrast check | app_colors.dart + test |
 | T09 | Full settings screen: theme, reading, location, notifications, monitoring, about, sources | [settings_screen.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/settings/presentation/screens/settings_screen.dart) |
+| T10 | Quran surah name/number and verse lookup verified via B-02 | Seven focused cases and full suite 232/232, 2026-09-28 |
 | T13 | Debug-only notification test route | [notification_test_screen.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/settings/presentation/screens/notification_test_screen.dart), `kDebugMode` guard |
 | T15 | 5-destination NavigationBar shell (Home, Quran, Prayer, Adhkar, Settings) | [main_navigation_shell.dart](file:///e:/Projects/01-personal/Quran-App/lib/core/navigation/main_navigation_shell.dart) |
 | T16 | Continue-reading bookmark shortcut restoring reader position | Home widget |
@@ -202,7 +203,7 @@ The following tasks are verified complete at repository/test scope:
 | T06 | Opt-in Crashlytics/Android plugin | Real Firebase project events, iOS upload, symbol verification |
 | T07 | Allowlisted events (app_open, settings_open) | Dashboard validation, retention policy |
 | T08 | Arabic draft policy, data inventory, in-app sources page | Owner contact, retention approval, public URL |
-| T10 | Verse search works + surah name/number code present | **3 surah lookup tests fail deterministically** |
+| T10 | VERIFIED via B-02: verse, surah name/number search | None at repository/test scope |
 | T12 | SHA-256 hashes, in-app disclosure, release gate | Source, edition, license, reviewer sign-off |
 | T14 | Scheduling/routing code, boot receivers | Physical delivery matrix, future-day replenishment |
 | T18 | Retry/error paths present | Full cached/stale validation for all media types |
@@ -213,7 +214,7 @@ The following tasks are verified complete at repository/test scope:
 | T33 | Arabic listing copy + screenshot requirements | Final assets, privacy URL, owner approval |
 | T36 | Local security checks (signing, .gitignore, HTTPS) | Independent security review, NF-004 |
 | T37 | Offline fonts, shorter splash | Profile-mode startup/frame/memory measurements |
-| T38 | 220 tests (217 pass) | Fix 3 failures + physical device regression |
+| T38 | 232 tests pass (2026-09-28) | Physical device regression |
 | T40 | Runbook/monitoring integration drafted | Alerts, named owners, production evidence |
 
 ---
@@ -230,8 +231,8 @@ The following tasks are verified complete at repository/test scope:
 
 ### P1 — Critical
 
-6. **NF-001:** Restore error handling in manual prayer selection
-7. **NF-003:** Fix 3 failing Quran surah lookup tests
+6. **NF-001:** VERIFIED via B-01 — manual prayer error handling
+7. **NF-003:** VERIFIED via B-02 — all lookup tests and full suite pass
 8. **T11:** Isolate or remove dormant FCM code/dependency
 9. **T06/T07:** Verify monitoring on approved Firebase project
 10. **T36:** Complete security review
@@ -296,7 +297,7 @@ The evidence below records the original finding. See progress history for implem
 **Action:** Add `tooltip: 'الرجوع'` to each back IconButton, or adopt a shared back-button component with both semantics and tooltip.  
 **Acceptance:** Back actions expose both semantic labels and hover tooltips.
 
-### NF-003 — Quran surah name/number lookup tests fail *(confirmed, carried from previous plan)*
+### NF-003 — Quran surah name/number lookup tests fail *(resolved: B-02 VERIFIED, 2026-09-28)*
 
 **Evidence:** `flutter test` output — 3 deterministic failures:
 ```
@@ -308,7 +309,7 @@ All in [quran_search_screen_test.dart](file:///e:/Projects/01-personal/Quran-App
 **Root Cause:** `_loadSurahNames()` uses `rootBundle.loadString('assets/quran_master.json')` asynchronously. The `quran_master.json` is a 2.7MB file (line 54). In the test environment, the asynchronous metadata loading race condition means `_surahs` may not be populated when the query is entered, even though `pumpAndSettle` is called. The test pre-loads the asset (line 41) but the widget's internal async state may not resolve before `_matchingSurahs` is computed.  
 **Priority:** P1  
 **Action:** Trace the async loading/rendering timing; ensure surah metadata is available before query evaluation completes; fix tests to be deterministic.  
-**Acceptance:** All 3 tests pass; the full suite is green (220/220); surah name and number queries render exactly one result.
+**Acceptance:** PASS — all three queries render exactly one result; full current suite 232/232 passed (B-02). The failure evidence above is historical.
 
 ### NF-004 — YouTube API key exposed in committed .env file *(NEW FINDING)*
 
@@ -336,7 +337,7 @@ All in [quran_search_screen_test.dart](file:///e:/Projects/01-personal/Quran-App
 |---|---|---|---|
 | NF-001: Error handling removed from `selectLocation` | Error handling | prayer_times_provider.dart | P1 |
 | NF-002: Tooltip removed from 3 back buttons | Accessibility/UX | duas/azkar screens | P2 |
-| NF-003: 3 surah lookup tests fail | Test regression | quran_search_screen_test.dart | P1 |
+| NF-003: 3 surah lookup tests fail | Resolved — B-02 VERIFIED | 7 focused tests and 232/232 full suite | P1 |
 
 No confirmed navigation, theme, RTL, Firebase, notification delivery, or data integrity regression beyond the above. Device-only regressions remain **Unable to Verify** without physical testing.
 
@@ -371,7 +372,7 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 
 | Area | Status | Evidence |
 |---|---|---|
-| Functionality | ⚠️ Needs Attention | Broad implementation; 3 test failures, prayer error handling regression |
+| Functionality | Automated checks pass; device evidence pending | B-01/B-02 verified; 232 tests pass |
 | UI | ✅ Adequate | Material 3, light/dark themes, component themes, design tokens |
 | UX | ⚠️ Needs Attention | Good settings/navigation; prayer location flow needs error handling fix |
 | Accessibility | ❌ Insufficient Evidence | Automated checks only; no device screen-reader/large-text audit |
@@ -382,7 +383,7 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | Reliability | ❌ Insufficient Evidence | No device notification/reboot/timezone/offline evidence |
 | Notifications | ❌ Blocked | Code present; no physical delivery/tap/reboot evidence |
 | Firebase | ⚠️ Needs Attention | Two projects in use; iOS is placeholder; monitoring is opt-in |
-| Testing | ⚠️ Needs Attention | 217/220 pass; 3 surah lookup failures |
+| Testing | Automated checks pass; device evidence pending | 232/232 pass; B-02 resolved |
 | Release Config | ❌ Blocked | Debug-fallback blocked; sample IDs remain; no signed artifact |
 | Store Readiness | ❌ Blocked | Draft listing; no privacy URL, screenshots, or owner approval |
 
@@ -393,7 +394,7 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 ### Phase 1 — Critical Fixes (Code)
 
 - VERIFIED B-01 / NF-001: Restored error handling in `selectLocation` (2026-09-28)
-- Fix NF-003: Resolve surah lookup test failures (make full suite green)
+- VERIFIED B-02 / NF-003: Surah lookup tests fixed; full suite 232/232 (2026-09-28)
 - Fix NF-004: Rotate YouTube API key if committed to git history; remove `.env` from any tracked state
 - Restore tooltips (NF-002)
 
@@ -498,12 +499,18 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | **Title** | Fix Quran surah lookup test failures |
 | **Category** | Quran / Testing |
 | **Priority** | P1 |
-| **Current Status** | NF-003 — 3 tests fail deterministically |
+| **Current Status** | VERIFIED |
+| **Completion** | 100% |
+| **Last Updated** | 2026-09-28 |
+| **Implementation Notes** | Test harness mounts the screen and awaits the bundled metadata in one runAsync context. Production code unchanged. Both themes, RTL, empty/no-match states and surah/ayah navigation covered. |
+| **Files Changed** | test/features/quran/presentation/screens/quran_search_screen_test.dart; updated_development_plan.md |
+| **Verification** | Seven focused cases pass; full suite 232/232; static analysis clean. See acceptance evidence in progress history. |
+| **Remaining Work** | None |
 | **Description** | `_loadSurahNames()` asynchronously loads 2.7MB `quran_master.json`. In tests, `_surahs` is not populated when query evaluation occurs despite `pumpAndSettle`. |
 | **Why Needed** | Full test suite must be green. Surah name/number lookup is an advertised feature. |
 | **Implementation Details** | Either: (a) ensure `_loadSurahNames` completes before the first build via `await` in `initState` + `FutureBuilder`, or (b) fix the test to properly await the async metadata loading. Verify the widget path produces matching `ListTile` results. |
 | **Dependencies** | None |
-| **Acceptance Criteria** | All 3 lookup tests pass (`الفاتحة`, `١`, `1`); full suite 220/220; each query renders one result with subtitle `سورة 1` |
+| **Acceptance Criteria** | All 3 lookup tests pass (`الفاتحة`, `١`, `1`); full current suite passes (232/232 verified; 220 was the audit baseline); each query renders one result with subtitle `سورة 1` |
 | **Validation Method** | `flutter test test/features/quran/presentation/screens/quran_search_screen_test.dart` and `flutter test` |
 | **Definition of Done** | Zero test failures; no production behavior change for verse search |
 
@@ -673,7 +680,7 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | Privacy | Public URL resolves; data inventory is complete; opt-out verified |
 | Accessibility | TalkBack/VoiceOver complete primary flows; large text at 360dp; touch targets ≥ 48dp |
 | Search | Surah name, number, and verse queries all work offline with deterministic test results |
-| Testing | Full suite green (220/220); no known failures |
+| Testing | Full current suite green (232/232); no known automated failures |
 | Security | No API keys in version control; no debug signing; HTTPS for all calls |
 | FCM | No unsupported push claim; dormant code removed or feature-flagged |
 
@@ -691,7 +698,7 @@ Per [RELEASE_REQUIREMENTS.md](file:///e:/Projects/01-personal/Quran-App/docs/REL
 
 1. `dart format --set-exit-if-changed lib test integration_test` — zero changes
 2. `dart analyze lib` — no issues ✅ (currently passing)
-3. `flutter test` — zero failures ❌ (currently 3 failures)
+3. `flutter test` — zero failures ✅ (232/232 passed, 2026-09-28)
 4. Integration tests pass on device
 5. `verify_content.py --require-approved` — passes ❌ (currently blocked)
 6. `verify_release.py` — identity gate passes ❌ (currently blocked)
@@ -740,8 +747,8 @@ graph TD
 ```
 
 **Immediate code actions (no owner dependency):**
-1. Fix `selectLocation` error handling (NF-001)
-2. Fix Quran surah lookup test failures (NF-003)
+1. VERIFIED: `selectLocation` error handling (NF-001 / B-01)
+2. VERIFIED: Quran surah lookup test failures (NF-003 / B-02)
 3. Restore back-button tooltips (NF-002)
 4. Verify API key git history and rotate if needed (NF-004)
 
@@ -760,16 +767,16 @@ graph TD
 14. Assemble release evidence archive
 15. Internal test → staged rollout
 
-> **The project has made substantial progress since the original audit.** 17/40 tasks are complete, and the architecture, navigation, settings, prayer configuration, dark mode, and font infrastructure are significantly improved. The remaining work is primarily owner-dependent decisions (identity, content approval, privacy), device verification (notifications, accessibility, sensors), and fixing 3 test failures + 2 minor regressions. No fundamental architecture or product problems remain.
+> **The project has made substantial progress since the original audit.** 18/40 tasks are complete at repository/test scope, and the architecture, navigation, settings, prayer configuration, dark mode, and font infrastructure are significantly improved. The remaining work is primarily owner-dependent decisions (identity, content approval, privacy), device verification (notifications, accessibility, sensors), and remaining tooltip, localization, security and FCM work. The latest automated suite passes 232/232 tests. No fundamental architecture or product problems remain.
 
 ## 23. Live Incremental Master Status Table
 
-Original audit sections above remain historical except explicit task updates. T01 still requires device verification; no additional T01–T40 task is marked complete by this focused fix. Full-suite counts above were not rerun this session.
+Historical comparison sections retain original audit observations. Live tables and the latest history entry take precedence. B-02 also closes T10 at repository/test scope; T01 and T38 still require physical verification. Latest full suite: 232/232 passed.
 
 | ID | Task | Priority | Status | Completion | Last Updated | Notes |
 |---|---|---|---|---:|---|---|
 | B-01 | Harden manual prayer failure handling | P1 | VERIFIED | 100% | 2026-09-28 | NF-001 resolved |
-| B-02 | Fix Quran surah lookup tests | P1 | NOT_STARTED | 0% | 2026-09-28 | Next actionable task |
+| B-02 | Fix Quran surah lookup tests | P1 | VERIFIED | 100% | 2026-09-28 | 7 focused tests; full suite 232/232; NF-003 resolved |
 | B-03 | Verify API key security | P1 | NOT_STARTED | 0% | 2026-09-28 | Git history check |
 | B-04 | Restore tooltips | P2 | NOT_STARTED | 0% | 2026-09-28 | NF-002 |
 | B-05 | Identity and signing | P0 | BLOCKED | 0% | 2026-09-28 | Owner credentials and approved IDs |
@@ -826,3 +833,50 @@ Notes:
 - Priority: P1
 - Reason: Next independent critical code fix in the plan, required for a green full suite.
 - Dependencies: None. Recheck failures before implementation; expected totals must include six B-01 additions.
+## 2026-09-28 — B-02 — Fix Quran surah lookup test failures
+
+Status: VERIFIED
+Completion: 100%
+
+Implemented:
+- Reproduced the three original missing-ListTile failures before editing.
+- Added a shared test helper that mounts the screen and awaits the bundled Quran asset in the same `tester.runAsync` context, then pumps pending UI frames. The prior preload completed outside fake time but left the screen's load continuation unresolved during assertions.
+- Exercised Arabic name, Arabic-Indic number and Western number searches in light/dark RTL layouts using the actual bundled metadata.
+- Checked initial empty results, unmatched-query feedback, restored matching results, and navigation to surah 1. Preserved the exact-ayah/page navigation regression test.
+- No production search implementation, assets or dependencies changed.
+
+Files Changed:
+- `test/features/quran/presentation/screens/quran_search_screen_test.dart`
+- `updated_development_plan.md`
+
+Verification:
+- Before fix: focused search file had 1 pass and 3 failures.
+- After initial async fix: all original 4 cases passed.
+- Final focused file: 7/7 passed.
+- `flutter test`: 232/232 passed, zero failures (includes existing prayer, navigation, reader, theme, RTL, settings and search coverage).
+- `dart analyze lib test/features/quran/presentation/screens/quran_search_screen_test.dart`: no issues.
+- `dart format` applied to changed test; `git diff --check` passed.
+
+| Acceptance Criterion | Result | Evidence |
+|---|---|---|
+| All three lookup queries succeed offline | PASS | الفاتحة, ١ and 1 each pass against bundled metadata in both themes |
+| Each query renders exactly one result with subtitle سورة 1 | PASS | Explicit ListTile count, subtitle and original Arabic title assertions |
+| Full suite is green | PASS | 232 passed, zero failures; current checkout count supersedes historical 220 baseline |
+| Verse search has no production behavior change | PASS | Production source untouched; exact ayah/page routing test and domain search tests pass |
+| Related navigation, empty states, themes and RTL work | PASS | Six lookup scenarios test no-match feedback and navigation; full regression suite passes |
+
+Remaining Work: None for B-02.
+
+Notes:
+- T10 is now VERIFIED at repository/test scope. T38 retains physical/signed regression work; production release blockers remain open.
+- Previous B-01 history is preserved. Its recommended B-02 task is now completed; the recommendation below is current.
+- No unrelated changes or new task implementations were made.
+
+### NEXT RECOMMENDED TASK
+
+- Task ID: B-03
+- Task Title: Rotate or verify YouTube API key security
+- Priority: P1
+- Reason: Next actionable critical backlog item; higher priority than B-04 tooltips. Owner/device-dependent P0 work remains blocked.
+- Dependencies: Git history access; rotation requires the key owner's Google Cloud access if exposure is confirmed.
+- Scope reminder: Check all tracked files as well as .env history; the existing NF-004 plan text itself contains a key value. Do not assume .gitignore establishes safety.

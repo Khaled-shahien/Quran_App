@@ -34,20 +34,68 @@ class SearchRepository implements AyahRepository {
   Future<List<AyahEntity>> searchAyahs(String query) async => [];
 }
 
+Future<void> pumpSearch(WidgetTester tester, Widget app) async {
+  // Mount and await the real asset work in the same async zone. Preloading
+  // alone leaves the widget's continuation waiting outside fake test time.
+  await tester.runAsync(() async {
+    await tester.pumpWidget(app);
+    await rootBundle.loadString('assets/quran_master.json');
+  });
+  await tester.pumpAndSettle();
+}
+
 void main() {
-  for (final query in ['الفاتحة', '١', '1']) {
-    testWidgets('surah lookup supports $query offline', (tester) async {
-      // The binding clears asset caches between tests. Decode outside fake time.
-      await tester.runAsync(() => rootBundle.loadString('assets/quran_master.json'));
-      await tester.pumpWidget(
-        MaterialApp(home: QuranSearchScreen(repository: SearchRepository())),
-      );
-      await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextField), query);
-      await tester.pumpAndSettle();
-      expect(find.byType(ListTile), findsOneWidget);
-      expect(find.text('سورة 1'), findsOneWidget);
-    });
+  for (final brightness in Brightness.values) {
+    for (final query in ['الفاتحة', '١', '1']) {
+      testWidgets('surah lookup supports $query offline in $brightness RTL', (
+        tester,
+      ) async {
+        final router = GoRouter(
+          routes: [
+            GoRoute(
+              path: '/',
+              builder: (_, _) =>
+                  QuranSearchScreen(repository: SearchRepository()),
+            ),
+            GoRoute(
+              path: '/quran/surah/:number',
+              builder: (_, state) => Scaffold(
+                body: Text('reader ${state.pathParameters['number']}'),
+              ),
+            ),
+          ],
+        );
+        addTearDown(router.dispose);
+        await pumpSearch(
+          tester,
+          MaterialApp.router(
+            routerConfig: router,
+            theme: ThemeData(brightness: brightness),
+            builder: (_, child) =>
+                Directionality(textDirection: TextDirection.rtl, child: child!),
+          ),
+        );
+        expect(find.byType(ListTile), findsNothing);
+        await tester.enterText(find.byType(TextField), query);
+        await tester.pumpAndSettle();
+        expect(find.byType(ListTile), findsOneWidget);
+        expect(find.text('سورة 1'), findsOneWidget);
+        expect(find.text('سُورَةُ ٱلْفَاتِحَةِ'), findsOneWidget);
+        await tester.enterText(find.byType(TextField), 'no matching surah');
+        await tester.pumpAndSettle();
+        expect(find.byType(ListTile), findsNothing);
+        expect(
+          find.text('لا توجد نتائج. جرّب تعديل كلمات البحث'),
+          findsOneWidget,
+        );
+        await tester.enterText(find.byType(TextField), query);
+        await tester.pumpAndSettle();
+        await tester.tap(find.byType(ListTile));
+        await tester.pumpAndSettle();
+        expect(find.text('reader 1'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      });
+    }
   }
 
   testWidgets('offline result opens the exact ayah and page', (tester) async {
@@ -68,8 +116,7 @@ void main() {
       ],
     );
     addTearDown(router.dispose);
-    await tester.pumpWidget(MaterialApp.router(routerConfig: router));
-    await tester.pumpAndSettle();
+    await pumpSearch(tester, MaterialApp.router(routerConfig: router));
     await tester.enterText(find.byType(TextField), 'بسم الله');
     await tester.pump();
     expect(find.byType(ListTile), findsOneWidget);
