@@ -72,8 +72,9 @@ class _ContentProvenanceViewState extends State<ContentProvenanceView> {
   Widget build(BuildContext context) => FutureBuilder<String>(
     future: manifest,
     builder: (context, snapshot) {
-      if (snapshot.hasError)
+      if (snapshot.hasError) {
         return Text(l10nOf(context).dataSourcesScreenMessage9);
+      }
       if (!snapshot.hasData) return const LinearProgressIndicator();
       final collections =
           (jsonDecode(snapshot.data!) as Map<String, dynamic>)['collections']

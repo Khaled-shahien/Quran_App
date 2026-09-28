@@ -181,7 +181,8 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
         builder: (context, themeProvider, child) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            title: 'Sakina',
+            onGenerateTitle: (context) =>
+                AppLocalizations.of(context)!.applicationTitle,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,

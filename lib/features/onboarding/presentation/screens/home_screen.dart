@@ -922,7 +922,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildMoreMenuSwitch(
           title: appL10n.homeScreenMessage39,
           subtitle: appL10n.homeScreenMessage40,
-          rightSubtitle: 'AM 07:00',
+          rightSubtitle: appL10n.homeReminderTime1,
           leadingIcon: Icon(Icons.wb_sunny, color: iconColor),
           value: settingsProvider.isMorningAlarmEnabled,
           onChanged: (val) => settingsProvider.toggleMorningAlarm(val),
@@ -930,7 +930,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildMoreMenuSwitch(
           title: appL10n.homeScreenMessage41,
           subtitle: appL10n.homeScreenMessage42,
-          rightSubtitle: 'PM 05:30',
+          rightSubtitle: appL10n.homeReminderTime2,
           leadingIcon: Icon(Icons.nightlight_round, color: iconColor),
           value: settingsProvider.isEveningAlarmEnabled,
           onChanged: (val) => settingsProvider.toggleEveningAlarm(val),
@@ -942,7 +942,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildMoreMenuSwitch(
           title: appL10n.homeScreenMessage44,
           subtitle: appL10n.homeScreenMessage45,
-          rightSubtitle: 'PM 09:00',
+          rightSubtitle: appL10n.homeReminderTime3,
           leadingIcon: Icon(Icons.notifications, color: iconColor),
           value: settingsProvider.isMulkAlarmEnabled,
           onChanged: (val) => settingsProvider.toggleMulkAlarm(val),
@@ -950,7 +950,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildMoreMenuSwitch(
           title: appL10n.homeScreenMessage46,
           subtitle: appL10n.homeScreenMessage47,
-          rightSubtitle: 'PM 08:30',
+          rightSubtitle: appL10n.homeReminderTime4,
           leadingIcon: Icon(Icons.notifications, color: iconColor),
           value: settingsProvider.isBaqarahAlarmEnabled,
           onChanged: (val) => settingsProvider.toggleBaqarahAlarm(val),

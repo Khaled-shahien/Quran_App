@@ -305,8 +305,9 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
   }
 
   String _maskedToken(String? token) {
-    if (token == null || token.isEmpty)
+    if (token == null || token.isEmpty) {
       return appL10n.notificationTestScreenMessage36;
+    }
     if (token.length <= 8) return '********';
     return '${token.substring(0, 4)}...${token.substring(token.length - 4)}';
   }

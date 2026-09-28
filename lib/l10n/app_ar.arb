@@ -2323,5 +2323,45 @@
   "splashScreenMessage1": "تطبيقك للطمأنينة والهدوء",
   "@splashScreenMessage1": {
     "description": "Display text used in lib/features/splash/presentation/screens/splash_screen.dart."
+  },
+  "videoCategoryLabel1": "خطب الجمعة",
+  "@videoCategoryLabel1": {
+    "description": "Video category chip label."
+  },
+  "videoCategoryLabel2": "دروس",
+  "@videoCategoryLabel2": {
+    "description": "Video category chip label."
+  },
+  "videoCategoryLabel3": "تفسير",
+  "@videoCategoryLabel3": {
+    "description": "Video category chip label."
+  },
+  "videoCategoryLabel4": "قصص الأنبياء",
+  "@videoCategoryLabel4": {
+    "description": "Video category chip label."
+  },
+  "videoCategoryLabel5": "فقه",
+  "@videoCategoryLabel5": {
+    "description": "Video category chip label."
+  },
+  "homeReminderTime1": "AM 07:00",
+  "@homeReminderTime1": {
+    "description": "Existing reminder preview time."
+  },
+  "homeReminderTime2": "PM 05:30",
+  "@homeReminderTime2": {
+    "description": "Existing reminder preview time."
+  },
+  "homeReminderTime3": "PM 09:00",
+  "@homeReminderTime3": {
+    "description": "Existing reminder preview time."
+  },
+  "homeReminderTime4": "PM 08:30",
+  "@homeReminderTime4": {
+    "description": "Existing reminder preview time."
+  },
+  "applicationTitle": "Sakina",
+  "@applicationTitle": {
+    "description": "Application title."
   }
 }

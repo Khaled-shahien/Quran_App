@@ -551,14 +551,15 @@ class CurrentWirdWidget extends StatelessWidget {
     required BuildContext context,
     required KhatmaModel khatma,
   }) async {
+    final strings = l10nOf(context);
     final KhatmaAyahPosition position = await _quranLocator
         .resolvePositionFromStoredOrUnit(khatma: khatma);
 
     return _WirdPreviewData(
       ayahText: position.ayahText.isEmpty
-          ? l10nOf(context).currentWirdWidgetMessage19
+          ? strings.currentWirdWidgetMessage19
           : position.ayahText,
-      reference: l10nOf(context).currentWirdWidgetMessage20(
+      reference: strings.currentWirdWidgetMessage20(
         (position.surahName).toString(),
         (position.ayahNumber).toString(),
         (position.pageNumber).toString(),

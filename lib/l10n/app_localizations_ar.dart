@@ -1706,4 +1706,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get splashScreenMessage1 => 'تطبيقك للطمأنينة والهدوء';
+
+  @override
+  String get videoCategoryLabel1 => 'خطب الجمعة';
+
+  @override
+  String get videoCategoryLabel2 => 'دروس';
+
+  @override
+  String get videoCategoryLabel3 => 'تفسير';
+
+  @override
+  String get videoCategoryLabel4 => 'قصص الأنبياء';
+
+  @override
+  String get videoCategoryLabel5 => 'فقه';
+
+  @override
+  String get homeReminderTime1 => 'AM 07:00';
+
+  @override
+  String get homeReminderTime2 => 'PM 05:30';
+
+  @override
+  String get homeReminderTime3 => 'PM 09:00';
+
+  @override
+  String get homeReminderTime4 => 'PM 08:30';
+
+  @override
+  String get applicationTitle => 'Sakina';
 }

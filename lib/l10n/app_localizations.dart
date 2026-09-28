@@ -3151,6 +3151,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تطبيقك للطمأنينة والهدوء'**
   String get splashScreenMessage1;
+
+  /// Video category chip label.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطب الجمعة'**
+  String get videoCategoryLabel1;
+
+  /// Video category chip label.
+  ///
+  /// In ar, this message translates to:
+  /// **'دروس'**
+  String get videoCategoryLabel2;
+
+  /// Video category chip label.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفسير'**
+  String get videoCategoryLabel3;
+
+  /// Video category chip label.
+  ///
+  /// In ar, this message translates to:
+  /// **'قصص الأنبياء'**
+  String get videoCategoryLabel4;
+
+  /// Video category chip label.
+  ///
+  /// In ar, this message translates to:
+  /// **'فقه'**
+  String get videoCategoryLabel5;
+
+  /// Existing reminder preview time.
+  ///
+  /// In ar, this message translates to:
+  /// **'AM 07:00'**
+  String get homeReminderTime1;
+
+  /// Existing reminder preview time.
+  ///
+  /// In ar, this message translates to:
+  /// **'PM 05:30'**
+  String get homeReminderTime2;
+
+  /// Existing reminder preview time.
+  ///
+  /// In ar, this message translates to:
+  /// **'PM 09:00'**
+  String get homeReminderTime3;
+
+  /// Existing reminder preview time.
+  ///
+  /// In ar, this message translates to:
+  /// **'PM 08:30'**
+  String get homeReminderTime4;
+
+  /// Application title.
+  ///
+  /// In ar, this message translates to:
+  /// **'Sakina'**
+  String get applicationTitle;
 }
 
 class _AppLocalizationsDelegate

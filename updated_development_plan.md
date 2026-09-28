@@ -20,9 +20,9 @@
 | **STATUS E — No Longer Applicable** | 0 |
 | **STATUS G — Unable to Verify** | 3 tasks have runtime/device aspects that cannot be verified statically |
 | **New findings this re-audit** | 5 (NF-001 through NF-005) |
-| **Confirmed test failures** | 0 — B-02 regression run on 2026-09-28 |
+| **Confirmed test failures** | 0 - NF-005 final regression on 2026-09-28 |
 | **Static analysis** | `dart analyze lib`: **no issues** |
-| **Full test suite** | **232 tests: 232 passed, 0 failed** (2026-09-28) |
+| **Full test suite** | **242 tests: 242 passed, 0 failed** (2026-09-28) |
 | **Current production blockers** | 5 categories (identity/signing, content, notifications, privacy/store, device evidence) |
 | **Production readiness** | **NOT READY** |
 
@@ -45,7 +45,7 @@
 | Firebase | Core, Messaging (dormant), Crashlytics (opt-in), Analytics (opt-in) | [firebase_options.dart](file:///e:/Projects/01-personal/Quran-App/lib/firebase_options.dart) |
 | Notifications | flutter_local_notifications, WorkManager, boot receivers | [notification_service.dart](file:///e:/Projects/01-personal/Quran-App/lib/core/services/notification_service.dart) |
 | Monitoring | Optional Crashlytics + Analytics, off by default, requires build flag + user opt-in | [monitoring_service.dart](file:///e:/Projects/01-personal/Quran-App/lib/core/services/monitoring_service.dart) |
-| Localization | Partial ARB (11 strings), inline Arabic elsewhere | [app_ar.arb](file:///e:/Projects/01-personal/Quran-App/lib/l10n/app_ar.arb) |
+| Localization | VERIFIED UI-copy extraction: 519 Arabic ARB messages; Arabic-only locale | [app_ar.arb](file:///e:/Projects/01-personal/Quran-App/lib/l10n/app_ar.arb) |
 | Fonts | Bundled Cairo + Amiri with OFL licenses | [fonts/](file:///e:/Projects/01-personal/Quran-App/fonts) |
 | Themes | Light/dark Material 3 with `AppColors`, `AppTypography`, component themes | [app_theme.dart](file:///e:/Projects/01-personal/Quran-App/lib/core/theme/app_theme.dart) |
 
@@ -160,7 +160,7 @@
 | T35 | Device matrix | QA | P0 | F | 25% | Physical devices unavailable | — | Acquire devices |
 | T36 | Security review | Security | P0 | B | 50% | Independent review and owner key rotation | NF-004 confirmed | Resume B-03 after owner rotation evidence |
 | T37 | Profiling | Performance | P2 | B | 50% | Profile measurements | — | Profile build |
-| T38 | Final regression | QA | P0 | B | 50% | Physical/signed regression | NF-003 resolved | Automated suite 232/232; device regression remains |
+| T38 | Final regression | QA | P0 | B | 50% | Physical/signed regression | NF-003 resolved | Automated suite 242/242; device regression remains |
 | T39 | Store release | Release | P0 | F | 0% | All gates must close | — | All blockers |
 | T40 | Operations | Operations | P1 | B | 50% | Alerts/owners/evidence | — | Approved project |
 
@@ -214,7 +214,7 @@ The following tasks are verified complete at repository/test scope:
 | T33 | Arabic listing copy + screenshot requirements | Final assets, privacy URL, owner approval |
 | T36 | Local security checks (signing, .gitignore, HTTPS) | Independent security review, NF-004 |
 | T37 | Offline fonts, shorter splash | Profile-mode startup/frame/memory measurements |
-| T38 | 232 tests pass (2026-09-28) | Physical device regression |
+| T38 | 242 tests pass (2026-09-28) | Physical device regression |
 | T40 | Runbook/monitoring integration drafted | Alerts, named owners, production evidence |
 
 ---
@@ -243,7 +243,7 @@ The following tasks are verified complete at repository/test scope:
 12. **T37:** Run profile-mode measurements
 13. **T18:** Validate media cached/stale behavior
 14. **T24:** Complete bidi/icon direction audit
-15. **NF-005:** Expand ARB localization coverage
+15. **NF-005:** VERIFIED - UI-copy extraction and regression verification, 100%
 
 ### P3 — Enhancement
 
@@ -323,14 +323,14 @@ All in [quran_search_screen_test.dart](file:///e:/Projects/01-personal/Quran-App
 **Action Taken:** Removed the exact credential from the current working-tree plan. Runtime code already reads `YOUTUBE_API_KEY` through `String.fromEnvironment`; no runtime configuration change was needed.
 **Required Action:** Key owner rotates/replaces the exposed credential, updates the ignored local/CI configuration, disables the old credential, and supplies non-secret evidence. No Google Cloud CLI or credential-management connector is available in this session. Redaction does not remove Git history or revoke the credential.
 **Acceptance:** Working-tree cleanup and ignored/untracked `.env` pass. Historical exposure is confirmed; rotation/revocation remains unverified. B-03 remains BLOCKED.
-### NF-005 — ARB localization covers only 11 strings *(NEW FINDING)*
+### NF-005 - Expand ARB localization coverage
 
-**Evidence:** [app_ar.arb](file:///e:/Projects/01-personal/Quran-App/lib/l10n/app_ar.arb) contains only 11 strings: `prayerTitle`, `prayerLoadError`, `retry`, `choosePrayerLocation`, `todayPrayerTimes`, `searchQuran`, `searchAyah`, `searchHint`, `searchEmpty`. Many screens still use inline Arabic string literals (e.g., Quran search hint at line 108: `'اسم السورة أو رقمها أو جزء من آية'`, all navigation labels, all settings labels, all error messages across features).  
-**Impact:** Future localization/translation work is blocked; string inconsistency risk; difficult to audit all user-facing text.  
-**Root Cause:** ARB was introduced for core prayer/search screens but not extended to other features.  
-**Priority:** P2  
-**Action:** Systematically extract all user-facing string literals to ARB. Prioritize: settings, navigation, error messages, feature titles, then content-adjacent text.  
-**Acceptance:** All user-visible strings come from ARB resources; no inline Arabic string literals remain for UI text.
+**Status:** VERIFIED at repository/test scope - **100%**, 2026-09-28.
+**Current evidence:** 519 messages in `lib/l10n/app_ar.arb`, generated Arabic localization classes, context lookup and background Arabic fallback. HEAD `1b31792` already contained 509 messages; this session completed the remaining UI labels and verification instead of repeating that migration.
+**Scope:** App-authored UI copy: settings, navigation, feature titles, labels, tooltips, errors, notifications and content-adjacent controls. Religious datasets (Quran text/surah metadata, daily verses, Asma names/meanings), external content, persisted identifiers, lookup keys, asset paths, parser tokens and comments are data rather than translatable UI copy. They remain unchanged. Arabic remains the only supported locale; additional-language support is not claimed.
+**Implementation:** Added the five video category chip labels, four existing reminder preview labels and application title to ARB. Captured localization resources before the asynchronous current-wird lookup to eliminate unsafe context access.
+**Acceptance:** Audited app-authored UI copy is supplied by ARB resources; remaining inline Arabic occurrences were reviewed as the data/identifier exceptions above. Dynamic placeholders, delegate selection and isolated-widget fallback pass new tests. Full regression: **242/242 passed**. Static analysis: **no issues**.
+**Remaining work:** None for this UI-copy extraction task. Religious content approval remains B-06/T12; physical-device QA and future translations remain separate.
 
 ---
 
@@ -460,7 +460,7 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | 4 | Owner decisions: prayer method policy, content approval, privacy URL | Content owner/scholar |
 | 5 | Apply approved IDs, generate Firebase config, configure signing | #3 output |
 | 6 | Isolate/remove FCM (T11) | Product decision from #3 |
-| 7 | Expand ARB localization (NF-005) | None (can parallel with #3-5) |
+| 7 | VERIFIED: ARB UI localization (NF-005), 100% | Completed 2026-09-28; 242/242 regression tests |
 | 8 | Profile performance on physical device (T37) | Device available |
 | 9 | Physical notification/permission/reboot matrix (T14) | #5 (signed build) |
 | 10 | Physical accessibility/Qibla/RTL audit (T31, T35) | #5 + device |
@@ -714,7 +714,7 @@ Per [RELEASE_REQUIREMENTS.md](file:///e:/Projects/01-personal/Quran-App/docs/REL
 
 1. `dart format --set-exit-if-changed lib test integration_test` — zero changes
 2. `dart analyze lib` — no issues ✅ (currently passing)
-3. `flutter test` — zero failures ✅ (232/232 passed, 2026-09-28)
+3. `flutter test` — zero failures ✅ (242/242 passed, 2026-09-28)
 4. Integration tests pass on device
 5. `verify_content.py --require-approved` — passes ❌ (currently blocked)
 6. `verify_release.py` — identity gate passes ❌ (currently blocked)
@@ -783,11 +783,11 @@ graph TD
 14. Assemble release evidence archive
 15. Internal test → staged rollout
 
-> **The project has made substantial progress since the original audit.** 18/40 tasks are complete at repository/test scope, and the architecture, navigation, settings, prayer configuration, dark mode, and font infrastructure are significantly improved. The remaining work is primarily owner-dependent decisions (identity, content approval, privacy), device verification (notifications, accessibility, sensors), and remaining tooltip, localization, security and FCM work. The latest automated suite passes 232/232 tests. No fundamental architecture or product problems remain.
+> **The project has made substantial progress since the original audit.** 18/40 tasks are complete at repository/test scope, and the architecture, navigation, settings, prayer configuration, dark mode, and font infrastructure are significantly improved. The remaining work is primarily owner-dependent decisions (identity, content approval, privacy), device verification (notifications, accessibility, sensors), and remaining security and FCM work. The latest automated suite passes 242/242 tests. NF-005 UI localization is verified; owner/device gates remain open. No fundamental architecture or product problems remain.
 
 ## 23. Live Incremental Master Status Table
 
-Historical comparison sections retain original audit observations. Live tables and the latest history entry take precedence. B-02 also closes T10 at repository/test scope; T01 and T38 still require physical verification. Latest full suite: 232/232 passed.
+Historical comparison sections retain original audit observations. Live tables and the latest history entry take precedence. B-02 also closes T10 at repository/test scope; T01 and T38 still require physical verification. Latest full suite: 242/242 passed (NF-005). Original master-task completion remains 18/40 (45% fully complete); NF-005 is an additional finding and does not close a separate T01-T40 task.
 
 | ID | Task | Priority | Status | Completion | Last Updated | Notes |
 |---|---|---|---|---:|---|---|
@@ -801,6 +801,7 @@ Historical comparison sections retain original audit observations. Live tables a
 | B-08 | Privacy/store package | P0 | BLOCKED | 0% | 2026-09-28 | Owner URL, contact, assets, approval |
 | B-09 | Device accessibility/reliability | P0 | BLOCKED | 0% | 2026-09-28 | B-05 and devices |
 | B-10 | Isolate FCM | P1 | BLOCKED | 0% | 2026-09-28 | Product decision |
+| NF-005 | Expand ARB UI localization | P2 | VERIFIED | 100% | 2026-09-28 | 519 messages; 4 new tests; full suite 242/242; content/identifier exclusions documented |
 
 # IMPLEMENTATION PROGRESS HISTORY
 
@@ -1013,3 +1014,55 @@ Notes:
 - Reason: Next independent code task in the implementation order; B-03 is explicitly deferred and other higher-priority backlog items require owner inputs or devices.
 - Dependencies: None recorded in the plan. Inspect existing localization and define the single-task scope before implementing.
 - B-03 remains eligible to resume when owner rotation evidence is supplied. NF-005 was not started in this session.
+## 2026-09-28 - NF-005 - Complete ARB UI localization and verification
+
+Status: VERIFIED (repository/test scope)
+Completion: 100%
+
+Current-state inspection:
+- Read the plan, embedded latest B-04 history and docs/production-fix-progress.md before selecting NF-005, the next independent task recommended by the latest entry.
+- HEAD was `1b31792`; the existing localization migration already supplied 509 ARB messages. Did not repeat it or reimplement B-01/B-02/B-04.
+- Preserved pre-existing cleanup edits in data_sources_screen.dart, notification_test_screen.dart and splash_screen.dart; those edits were included in final verification, not newly authored here.
+
+Implemented:
+- Added ten remaining UI resources (519 total): five video category labels, four reminder preview labels and application title; regenerated localization classes.
+- MaterialApp now obtains its title through onGenerateTitle and the active localization delegate.
+- Captured localization resources before the current-wird asynchronous lookup, resolving both analyzer context-after-await warnings.
+- Added four tests for dynamic message output, active delegate selection, isolated-widget Arabic fallback and typed ARB placeholder metadata.
+
+Files changed in this session:
+- `lib/core/app/app_root.dart`
+- `lib/features/media/presentation/providers/video_provider.dart`
+- `lib/features/onboarding/presentation/screens/home_screen.dart`
+- `lib/features/onboarding/presentation/widgets/current_wird_widget.dart`
+- `lib/l10n/app_ar.arb`, `app_localizations.dart`, `app_localizations_ar.dart`
+- `test/l10n/localization_test.dart`
+- `updated_development_plan.md`
+
+Verification:
+- `flutter gen-l10n`: succeeded.
+- `flutter test test/l10n/localization_test.dart --reporter expanded`: 4/4 passed.
+- `dart analyze lib test/l10n`: no issues.
+- `dart format --output=none --set-exit-if-changed lib test/l10n`: 185 files checked, zero changes.
+- Final `flutter test --reporter expanded`: **242/242 passed**, zero failures, including settings goldens, light/dark RTL, back-button behavior, prayer failure handling, Quran lookup/navigation, media and Khatma regressions.
+- The earlier full run overlapped edits and reported one test-file compilation failure from ARB getters not yet generated. It is not counted as passing evidence; the complete post-generation rerun above supersedes it.
+- `git diff --check`: passed. Assets, content manifest and dependencies unchanged.
+
+| Acceptance Criterion | Result | Evidence |
+|---|---|---|
+| App-authored UI copy uses ARB | PASS | Reviewed remaining Arabic occurrences and direct text/label/title literals; 519 resources, including previously missed video chip labels |
+| No inline Arabic UI copy remains | PASS at audited UI scope | Remaining religious records, external content, asset paths, stable storage/lookup identifiers, parsing tokens and comments are explicitly excluded from UI copy |
+| Dynamic text and resource lookup work | PASS | Four new localization tests; generated resources compile |
+| Arabic presentation and existing behavior retained | PASS | 242/242 full regression, including unchanged light/dark settings golden baselines and RTL checks |
+| No unsafe asynchronous context lookup introduced | PASS | Resources captured before await; analyzer reports no issues |
+
+Remaining Work: None for NF-005 UI-copy extraction. No second locale, physical-device result, religious-content approval or release readiness is claimed. B-03 remains deferred/BLOCKED at 50%; all owner/device gates retain their status.
+
+### NEXT RECOMMENDED TASK
+
+- Task ID: T37
+- Task Title: Profile performance on a physical device
+- Priority: P2
+- Reason: Next item (#8) in the updated implementation order after NF-005; owner-dependent higher-priority work remains blocked.
+- Dependencies: A physical target device and a runnable profile build; collect startup, frame and memory measurements. Device availability must be established before claiming results.
+- T37 was not started in this session. Stop after this status/history update.

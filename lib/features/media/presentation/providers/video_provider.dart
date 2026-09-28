@@ -10,11 +10,11 @@ class VideoProvider extends ChangeNotifier {
     : _getIslamicVideos = getIslamicVideos;
 
   static final Map<String, String> categories = <String, String>{
-    'خطب الجمعة': appL10n.videoProviderMessage1,
-    'دروس': appL10n.videoProviderMessage2,
-    'تفسير': appL10n.videoProviderMessage3,
-    'قصص الأنبياء': appL10n.videoProviderMessage4,
-    'فقه': appL10n.videoProviderMessage5,
+    appL10n.videoCategoryLabel1: appL10n.videoProviderMessage1,
+    appL10n.videoCategoryLabel2: appL10n.videoProviderMessage2,
+    appL10n.videoCategoryLabel3: appL10n.videoProviderMessage3,
+    appL10n.videoCategoryLabel4: appL10n.videoProviderMessage4,
+    appL10n.videoCategoryLabel5: appL10n.videoProviderMessage5,
   };
 
   static final List<VideoChannel> fallbackChannels = <VideoChannel>[
