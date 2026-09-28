@@ -50,10 +50,7 @@ class ArticlesRemoteDataSource {
 
     for (final feed in _feeds) {
       try {
-        final body = await _getFeedBody(feed);
-        if (body == null || body.trim().isEmpty) continue;
-
-        final parsed = _parseRss(body, feed);
+        final parsed = await _getFeedArticles(feed);
         articles.addAll(parsed);
         successfulFeeds++;
       } catch (error) {
@@ -71,9 +68,12 @@ class ArticlesRemoteDataSource {
     return articles;
   }
 
-  Future<String?> _getFeedBody(_RssFeed feed) async {
+  Future<List<ArticleModel>> _getFeedArticles(_RssFeed feed) async {
     final cacheKey = 'media_rss_${Uri.encodeComponent(feed.url)}';
-    final cached = await _cache.getCached(cacheKey);
+    final cached = await _cache.getParsed(
+      cacheKey,
+      (body) => _parseRss(body, feed),
+    );
     if (cached != null) return cached;
 
     final response = await _client
@@ -94,11 +94,20 @@ class ArticlesRemoteDataSource {
       );
     }
 
+    final articles = _parseRss(response.body, feed);
     await _cache.cache(cacheKey, response.body);
-    return response.body;
+    return articles;
   }
 
   List<ArticleModel> _parseRss(String xml, _RssFeed feed) {
+    // Reject error pages and truncated feed envelopes before persisting them.
+    if (!RegExp(
+      r'<rss\b[^>]*>\s*<channel\b[^>]*>.*</channel>\s*</rss>\s*$',
+      dotAll: true,
+      caseSensitive: false,
+    ).hasMatch(xml)) {
+      throw const FormatException('Invalid RSS feed envelope');
+    }
     final itemRegex = RegExp(
       r'<item\b[^>]*>(.*?)</item>',
       dotAll: true,

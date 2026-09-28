@@ -31,7 +31,7 @@ void main() {
     );
 
     expect(find.text('حديث الاختبار'), findsOneWidget);
-    expect(find.byIcon(Icons.arrow_back_ios), findsOneWidget);
+    expect(find.byIcon(Icons.chevron_right), findsOneWidget);
     expect(find.byIcon(Icons.menu_book), findsOneWidget);
 
     final card = tester.widget<Card>(find.byType(Card));

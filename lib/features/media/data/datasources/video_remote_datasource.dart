@@ -21,14 +21,12 @@ class VideoRemoteDataSource {
   final String _apiKey;
 
   Future<List<VideoModel>> searchVideos(String query) async {
+    final cacheKey = 'media_youtube_${Uri.encodeComponent(query)}';
+    final cached = await _cache.getParsed(cacheKey, _parseVideos);
+    if (cached != null) return cached;
+
     if (_apiKey.trim().isEmpty) {
       throw MissingApiKeyException(appL10n.videoRemoteDatasourceMessage1);
-    }
-
-    final cacheKey = 'media_youtube_${Uri.encodeComponent(query)}';
-    final cached = await _cache.getCached(cacheKey);
-    if (cached != null) {
-      return _parseVideos(cached);
     }
 
     final uri =
@@ -56,13 +54,17 @@ class VideoRemoteDataSource {
       );
     }
 
+    final videos = _parseVideos(response.body);
     await _cache.cache(cacheKey, response.body);
-    return _parseVideos(response.body);
+    return videos;
   }
 
   List<VideoModel> _parseVideos(String responseBody) {
     final decoded = jsonDecode(responseBody) as Map<String, dynamic>;
-    final items = decoded['items'] as List<dynamic>? ?? const [];
+    final items = decoded['items'];
+    if (items is! List<dynamic>) {
+      throw const FormatException('Missing video items list');
+    }
 
     return items
         .map((item) => VideoModel.fromJson(item as Map<String, dynamic>))

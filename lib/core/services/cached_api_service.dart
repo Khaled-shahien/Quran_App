@@ -7,6 +7,25 @@ class CachedApiService {
 
   static const Duration defaultCacheDuration = Duration(hours: 6);
 
+  /// Invalid persisted payloads are cache misses, so retry can reach the server.
+  Future<T?> getParsed<T>(String key, T Function(String) parse) async {
+    final body = await getCached(key);
+    if (body == null) return null;
+    try {
+      return parse(body);
+    } on FormatException {
+      await _remove(key);
+    } on TypeError {
+      await _remove(key);
+    }
+    return null;
+  }
+
+  Future<void> _remove(String key) async {
+    await _prefs.remove(key);
+    await _prefs.remove(_timestampKey(key));
+  }
+
   Future<String?> getCached(
     String key, {
     Duration duration = defaultCacheDuration,
@@ -16,8 +35,7 @@ class CachedApiService {
 
     final cachedAt = DateTime.fromMillisecondsSinceEpoch(timestamp);
     if (DateTime.now().difference(cachedAt) > duration) {
-      await _prefs.remove(key);
-      await _prefs.remove(_timestampKey(key));
+      await _remove(key);
       return null;
     }
 

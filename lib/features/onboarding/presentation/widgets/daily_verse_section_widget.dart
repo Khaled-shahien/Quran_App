@@ -138,6 +138,7 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
                   const SizedBox(height: 10),
                   Text(
                     _selectedVerse['english']!,
+                    textDirection: TextDirection.ltr,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.roboto(color: Colors.white70),
                   ),

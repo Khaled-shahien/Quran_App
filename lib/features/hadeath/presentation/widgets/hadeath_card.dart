@@ -27,9 +27,9 @@ class HadeathCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Icon(
-                Icons.arrow_back_ios,
+                Icons.menu_book,
                 color: Theme.of(context).colorScheme.primary,
-                size: 20,
+                size: 24,
               ),
               Expanded(
                 child: Text(
@@ -44,9 +44,9 @@ class HadeathCard extends StatelessWidget {
                 ),
               ),
               Icon(
-                Icons.menu_book,
+                Icons.chevron_right,
                 color: Theme.of(context).colorScheme.primary,
-                size: 24,
+                size: 20,
               ),
             ],
           ),

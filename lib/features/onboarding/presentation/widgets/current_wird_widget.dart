@@ -249,7 +249,7 @@ class CurrentWirdWidget extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(
-                                      Icons.chevron_left,
+                                      Icons.chevron_right,
                                       color: finishedBtnText,
                                       size: 20,
                                     ),

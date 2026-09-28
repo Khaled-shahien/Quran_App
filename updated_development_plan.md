@@ -12,17 +12,17 @@
 | **Previous plan update** | 2026-09-28 (docs/production-fix-progress.md) |
 | **Current re-audit date** | 2026-09-28 |
 | **Original tracked tasks** | 40 (T01–T40) |
-| **STATUS A — Completed** | 18 (T10 verified by B-02) |
+| **STATUS A — Completed** | 20 (T10, T18 and T24 verified at repository/test scope) |
 | **STATUS B — Partially Completed** | 15 |
 | **STATUS D — Needs Rework** | 1 (T11) |
-| **STATUS F — Blocked** | 3 (T34, T35, T39) |
+| **STATUS F — Blocked** | 4 (T34, T35, T37, T39) |
 | **STATUS C — Not Implemented** | 0 |
 | **STATUS E — No Longer Applicable** | 0 |
-| **STATUS G — Unable to Verify** | 3 tasks have runtime/device aspects that cannot be verified statically |
+| **STATUS G — Unable to Verify** | Runtime/device limitations overlap the statuses above; not an additional task count |
 | **New findings this re-audit** | 5 (NF-001 through NF-005) |
-| **Confirmed test failures** | 0 - NF-005 final regression on 2026-09-28 |
+| **Confirmed test failures** | 0 - T18 full regression on 2026-09-28 |
 | **Static analysis** | `dart analyze lib`: **no issues** |
-| **Full test suite** | **242 tests: 242 passed, 0 failed** (2026-09-28) |
+| **Full test suite** | **285 tests: 285 passed, 0 failed** (2026-09-28) |
 | **Current production blockers** | 5 categories (identity/signing, content, notifications, privacy/store, device evidence) |
 | **Production readiness** | **NOT READY** |
 
@@ -140,13 +140,13 @@
 | T15 | Primary navigation | Navigation | P2 | A | 100% | — | — | Maintenance |
 | T16 | Continue reading | Feature | P2 | A | 100% | — | — | Maintenance |
 | T17 | Refresh | Feature | P2 | A | 100% | — | — | Maintenance |
-| T18 | Media offline UX | Feature | P2 | B | 75% | Complete cached/stale validation | — | Device testing |
+| T18 | Media offline UX | Feature | P2 | VERIFIED | 100% | None at repository/test scope | Corrupt-cache recovery fixed | Physical release QA remains T35/T38 |
 | T19 | Splash | UI/UX | P2 | A | 100% | — | — | Maintenance |
 | T20 | Khatma completion | Feature | P3 | A | 100% | — | — | Maintenance |
 | T21 | Home refactor | Architecture | P2 | A | 100% | — | — | Maintenance |
 | T22 | Reader refactor | Architecture | P2 | A | 100% | — | — | Maintenance |
 | T23 | Color aliases | Theme | P2 | A | 100% | — | — | Maintenance |
-| T24 | Directionality | RTL | P2 | B | 75% | Bidi/icon review | NF-002 resolved | Complete direction audit; B-04 verified 2026-09-28 |
+| T24 | Directionality | RTL | P2 | A | 100% | — | NF-002 resolved | Maintenance; verified 2026-09-28 |
 | T25 | Use-case dirs | Architecture | P3 | A | 100% | — | — | Maintenance |
 | T26 | Bundled fonts | Assets | P1 | A | 100% | — | — | Maintenance |
 | T27 | Semantics | Accessibility | P1 | B | 75% | Screen-reader audit | — | Device audit |
@@ -159,8 +159,8 @@
 | T34 | iOS Firebase | Platform | P0 | F | 25% | Blocked on platform decision | — | Owner decision |
 | T35 | Device matrix | QA | P0 | F | 25% | Physical devices unavailable | — | Acquire devices |
 | T36 | Security review | Security | P0 | B | 50% | Independent review and owner key rotation | NF-004 confirmed | Resume B-03 after owner rotation evidence |
-| T37 | Profiling | Performance | P2 | B | 50% | Profile measurements | — | Profile build |
-| T38 | Final regression | QA | P0 | B | 50% | Physical/signed regression | NF-003 resolved | Automated suite 242/242; device regression remains |
+| T37 | Profiling | Performance | P2 | F | 50% | Physical profile startup/frame/memory measurements | No physical phone connected | Deferred by user; resume when physical phone available |
+| T38 | Final regression | QA | P0 | B | 50% | Physical/signed regression | NF-003 resolved | Automated suite 279/279; device regression remains |
 | T39 | Store release | Release | P0 | F | 0% | All gates must close | — | All blockers |
 | T40 | Operations | Operations | P1 | B | 50% | Alerts/owners/evidence | — | Approved project |
 
@@ -180,11 +180,13 @@ The following tasks are verified complete at repository/test scope:
 | T15 | 5-destination NavigationBar shell (Home, Quran, Prayer, Adhkar, Settings) | [main_navigation_shell.dart](file:///e:/Projects/01-personal/Quran-App/lib/core/navigation/main_navigation_shell.dart) |
 | T16 | Continue-reading bookmark shortcut restoring reader position | Home widget |
 | T17 | Prayer pull-to-refresh and media retry paths | Prayer screen + tests |
+| T18 | Media cache expiry, offline/retry and corrupt-payload recovery | 37 new tests; focused media 40/40; full suite 279/279, 2026-09-28 |
 | T19 | 2-second splash delay with independent onboarding state tracking | [splash_screen.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/splash/presentation/screens/splash_screen.dart) |
 | T20 | Khatma completion congratulations dialog | Khatma feature |
 | T21 | Home refactored: drawer, khatma actions, prayer header, continue-reading extracted | home widgets |
 | T22 | Reader refactored: data, content, controls, buttons parts extracted | [reader_*.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/quran/presentation/screens) |
 | T23 | Legacy color aliases removed, canonical tokens migrated | app_colors.dart |
+| T24 | Complete bidi/icon direction audit: reader nav, ListTile trailing, hadeath card, text direction annotations, golden baselines | 6 new direction tests; full suite 285/285, 2026-09-28 |
 | T25 | `domain/usecases` directory structure verified | Feature directories |
 | T26 | Cairo + Amiri bundled with OFL licenses; no dynamic GoogleFonts | [fonts/](file:///e:/Projects/01-personal/Quran-App/fonts), pubspec.yaml |
 | T28 | Settings light/dark golden tests with bundled fonts | settings_golden_test.dart |
@@ -206,15 +208,14 @@ The following tasks are verified complete at repository/test scope:
 | T10 | VERIFIED via B-02: verse, surah name/number search | None at repository/test scope |
 | T12 | SHA-256 hashes, in-app disclosure, release gate | Source, edition, license, reviewer sign-off |
 | T14 | Scheduling/routing code, boot receivers | Physical delivery matrix, future-day replenishment |
-| T18 | Retry/error paths present | Full cached/stale validation for all media types |
-| T24 | Removed redundant directionality wrapper | Bidi/icon direction review; NF-002 tooltip verified via B-04 |
+| T24 | VERIFIED — Complete bidi/icon direction audit | None at repository/test scope; physical screen-reader evidence remains B-09/T31 |
 | T27 | Semantics labels on settings + icon tooltips | Complete screen-reader audit across all screens |
 | T31 | Automated target/contrast/large-text checks | Physical TalkBack/VoiceOver audit |
 | T32 | Settings/theme/search/reader integration flows | Physical signed-build execution |
 | T33 | Arabic listing copy + screenshot requirements | Final assets, privacy URL, owner approval |
 | T36 | Local security checks (signing, .gitignore, HTTPS) | Independent security review, NF-004 |
-| T37 | Offline fonts, shorter splash | Profile-mode startup/frame/memory measurements |
-| T38 | 242 tests pass (2026-09-28) | Physical device regression |
+| T37 | Offline fonts, shorter splash | BLOCKED: physical phone unavailable; profile startup/frame/memory measurements remain pending |
+| T38 | 285 tests pass (2026-09-28) | Physical device regression |
 | T40 | Runbook/monitoring integration drafted | Alerts, named owners, production evidence |
 
 ---
@@ -241,7 +242,7 @@ The following tasks are verified complete at repository/test scope:
 
 11. **NF-002:** Restore back-button tooltips in duas/azkar screens
 12. **T37:** Run profile-mode measurements
-13. **T18:** Validate media cached/stale behavior
+13. **T18:** VERIFIED - media cached/stale behavior at repository/test scope, 100%
 14. **T24:** Complete bidi/icon direction audit
 15. **NF-005:** VERIFIED - UI-copy extraction and regression verification, 100%
 
@@ -386,7 +387,7 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | Reliability | ❌ Insufficient Evidence | No device notification/reboot/timezone/offline evidence |
 | Notifications | ❌ Blocked | Code present; no physical delivery/tap/reboot evidence |
 | Firebase | ⚠️ Needs Attention | Two projects in use; iOS is placeholder; monitoring is opt-in |
-| Testing | Automated checks pass; device evidence pending | 232/232 pass; B-02 resolved |
+| Testing | Automated checks pass; device evidence pending | 285/285 pass; T24 completed |
 | Release Config | ❌ Blocked | Debug-fallback blocked; sample IDs remain; no signed artifact |
 | Store Readiness | ❌ Blocked | Draft listing; no privacy URL, screenshots, or owner approval |
 
@@ -420,7 +421,7 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 ### Phase 4 — Performance & Polish
 
 - Run profile-mode startup/frame/memory measurements on physical device (T37)
-- Validate media cached/stale behavior (T18)
+- VERIFIED: media cached/stale behavior (T18), 100% at repository/test scope
 - Optimize any measured problems
 
 ### Phase 5 — QA & Stability
@@ -461,7 +462,7 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | 5 | Apply approved IDs, generate Firebase config, configure signing | #3 output |
 | 6 | Isolate/remove FCM (T11) | Product decision from #3 |
 | 7 | VERIFIED: ARB UI localization (NF-005), 100% | Completed 2026-09-28; 242/242 regression tests |
-| 8 | Profile performance on physical device (T37) | Device available |
+| 8 | BLOCKED: profile performance on physical device (T37), 50% | Physical phone required; only Android emulator detected on 2026-09-28 |
 | 9 | Physical notification/permission/reboot matrix (T14) | #5 (signed build) |
 | 10 | Physical accessibility/Qibla/RTL audit (T31, T35) | #5 + device |
 | 11 | Signed-build integration + final regression (T32, T38) | #5 + #9 + #10 |
@@ -696,7 +697,8 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | Privacy | Public URL resolves; data inventory is complete; opt-out verified |
 | Accessibility | TalkBack/VoiceOver complete primary flows; large text at 360dp; touch targets ≥ 48dp |
 | Search | Surah name, number, and verse queries all work offline with deterministic test results |
-| Testing | Full current suite green (232/232); no known automated failures |
+| Media | Fresh six-hour listing cache browsable offline; expired/corrupt cache not treated as current; failed loads are retryable; preserve video channel fallbacks |
+| Testing | Full current suite green (279/279); no known automated failures |
 | Security | No API keys in version control; no debug signing; HTTPS for all calls |
 | FCM | No unsupported push claim; dormant code removed or feature-flagged |
 
@@ -714,7 +716,7 @@ Per [RELEASE_REQUIREMENTS.md](file:///e:/Projects/01-personal/Quran-App/docs/REL
 
 1. `dart format --set-exit-if-changed lib test integration_test` — zero changes
 2. `dart analyze lib` — no issues ✅ (currently passing)
-3. `flutter test` — zero failures ✅ (242/242 passed, 2026-09-28)
+3. `flutter test` — zero failures ✅ (279/279 passed, 2026-09-28)
 4. Integration tests pass on device
 5. `verify_content.py --require-approved` — passes ❌ (currently blocked)
 6. `verify_release.py` — identity gate passes ❌ (currently blocked)
@@ -783,11 +785,11 @@ graph TD
 14. Assemble release evidence archive
 15. Internal test → staged rollout
 
-> **The project has made substantial progress since the original audit.** 18/40 tasks are complete at repository/test scope, and the architecture, navigation, settings, prayer configuration, dark mode, and font infrastructure are significantly improved. The remaining work is primarily owner-dependent decisions (identity, content approval, privacy), device verification (notifications, accessibility, sensors), and remaining security and FCM work. The latest automated suite passes 242/242 tests. NF-005 UI localization is verified; owner/device gates remain open. No fundamental architecture or product problems remain.
+> **The project has made substantial progress since the original audit.** 19/40 tasks are complete at repository/test scope, and the architecture, navigation, settings, prayer configuration, dark mode, and font infrastructure are significantly improved. The remaining work is primarily owner-dependent decisions (identity, content approval, privacy), device verification (notifications, accessibility, sensors), and remaining security and FCM work. The latest automated suite passes 279/279 tests. NF-005 UI localization is verified; owner/device gates remain open. No fundamental architecture or product problems remain.
 
 ## 23. Live Incremental Master Status Table
 
-Historical comparison sections retain original audit observations. Live tables and the latest history entry take precedence. B-02 also closes T10 at repository/test scope; T01 and T38 still require physical verification. Latest full suite: 242/242 passed (NF-005). Original master-task completion remains 18/40 (45% fully complete); NF-005 is an additional finding and does not close a separate T01-T40 task.
+Historical comparison sections retain original audit observations. Live tables and the latest history entry take precedence. B-02 also closes T10 at repository/test scope; T01 and T38 still require physical verification. Latest full suite: 285/285 passed (T24). Original master-task completion is 20/40 (50% fully complete); NF-005 is an additional finding and does not close a separate T01-T40 task.
 
 | ID | Task | Priority | Status | Completion | Last Updated | Notes |
 |---|---|---|---|---:|---|---|
@@ -802,6 +804,9 @@ Historical comparison sections retain original audit observations. Live tables a
 | B-09 | Device accessibility/reliability | P0 | BLOCKED | 0% | 2026-09-28 | B-05 and devices |
 | B-10 | Isolate FCM | P1 | BLOCKED | 0% | 2026-09-28 | Product decision |
 | NF-005 | Expand ARB UI localization | P2 | VERIFIED | 100% | 2026-09-28 | 519 messages; 4 new tests; full suite 242/242; content/identifier exclusions documented |
+| T18 | Media cached/offline behavior | P2 | VERIFIED | 100% | 2026-09-28 | 40/40 focused and 279/279 full tests; six-hour cache policy, corrupt-payload recovery and retry UX |
+| T24 | Complete bidi/icon direction audit | P2 | VERIFIED | 100% | 2026-09-28 | 6 new direction tests; icon/text direction fixes; golden baselines updated; full suite 285/285 |
+| T37 | Physical-device performance profiling | P2 | BLOCKED | 50% | 2026-09-28 | Explicitly deferred by user; physical phone still required; no hardware measurements collected |
 
 # IMPLEMENTATION PROGRESS HISTORY
 
@@ -1066,3 +1071,199 @@ Remaining Work: None for NF-005 UI-copy extraction. No second locale, physical-d
 - Reason: Next item (#8) in the updated implementation order after NF-005; owner-dependent higher-priority work remains blocked.
 - Dependencies: A physical target device and a runnable profile build; collect startup, frame and memory measurements. Device availability must be established before claiming results.
 - T37 was not started in this session. Stop after this status/history update.
+
+## 2026-09-28 - T37 - Physical profiling dependency check
+
+Status: BLOCKED (not completed or verified)
+Completion: 50% (unchanged; existing font/splash improvements retained)
+
+Current-state verification:
+- Read the latest plan and NF-005 history, the supplemental production progress history, and the device QA/release requirements.
+- HEAD: `164aa4d`. Working tree was clean at session start; previous localization implementation is committed. No previously verified task was repeated.
+- Selected T37, the next task named by the latest history and implementation order #8. Higher-priority owner-dependent tasks remain blocked and B-03 remains explicitly deferred.
+- `flutter devices --machine` succeeded: Android target `emulator-5554` reports `emulator: true` (Android 16/API 36, x64). Other targets are Windows, Chrome and Edge; none is the required physical phone.
+- Android SDK `adb devices -l` succeeded and listed only `emulator-5554`; no physical Android device was available, including unauthorized/offline devices.
+- Searched docs, tests and integration tests for performance/profile/timeline/trace/benchmark evidence. Existing documentation still records measurements as pending; no physical profiling artifact was found there.
+
+| Acceptance Criterion | Result | Evidence |
+|---|---|---|
+| Profile build runs on a mid-range physical phone | BLOCKED | No physical phone detected by Flutter or ADB |
+| Cold-start timeline and hardware target comparison | NOT RUN | Requires physical profile execution |
+| Reader swipe frame timings | NOT RUN | Requires physical profile execution |
+| Peak memory and long-reading-session trace | NOT RUN | Requires physical profile execution |
+| Performance regressions assessed against measurements | NOT RUN | No hardware measurements collected |
+
+Changes:
+- Updated T37 to BLOCKED in the master/live tables, retaining 50% completion.
+- Reconciled summary counts with the actual 40-row master table: 18 completed, 17 partial, 1 needs rework, 4 blocked. Runtime/device limitations overlap these counts. Fully completed original tasks remain 18/40 (45%).
+- Updated this plan/history only. No application, test, dependency, build or device configuration changed; no speculative performance optimization or substitute desktop/emulator benchmark was performed.
+
+Verification and regression scope:
+- Device discovery commands completed successfully.
+- `git diff --check`: passed; changed-file scope is only `updated_development_plan.md`.
+- No application tests rerun for this documentation-only update. The latest actual full-suite evidence remains NF-005's 242/242 pass, not a new run in this session.
+
+Blocking dependency: Connect a mid-range physical Android phone with USB debugging authorized, so it appears as a physical target in Flutter/ADB. Then build/run in profile mode and collect the required traces, recording build SHA, device model and OS. Profile-build readiness remains untested, so further build blockers may be discovered then.
+
+Remaining Work: All T37 hardware measurements and acceptance verification. No task is newly marked VERIFIED and no completed-task entry is claimed.
+
+### NEXT RECOMMENDED TASK
+
+- Task ID: T37 (resume)
+- Task Title: Profile performance on a physical device
+- Priority: P2
+- Dependencies: Connected, authorized physical target phone and a runnable profile build.
+- This session stops at the confirmed dependency blocker. No subsequent task was implemented.
+
+## 2026-09-28 - T37 - Resume check (physical device still unavailable)
+
+Status: BLOCKED
+Completion: 50% (unchanged)
+
+Verification:
+- Read the latest implementation history before checking T37's prerequisite.
+- HEAD remains `164aa4d`; existing working-tree changes to this plan were preserved. Application code is unchanged.
+- `flutter devices --machine` succeeded: the only Android target is `emulator-5554`, explicitly marked `emulator: true`. Remaining targets are Windows and browsers.
+- `adb devices -l` succeeded and listed only that emulator; no physical phone is connected.
+- T37's physical profile run, cold-start timeline, reader frame timings, peak memory and long-session trace remain NOT RUN. No acceptance criterion was newly passed and nothing is newly VERIFIED.
+- Documentation-only regression check: `git diff --check` passed. Application tests were not repeated; the latest actual full-suite result remains NF-005's 242/242 pass.
+
+Files Changed: `updated_development_plan.md` only (this resume-check entry).
+Remaining Work: Connect and authorize a physical target phone, then perform the profile build and all required hardware measurements. No implementation task was completed in this session.
+
+### NEXT RECOMMENDED TASK
+
+- T37 (resume), P2: physical-device performance profiling.
+- Required dependency: a connected, authorized physical phone visible to Flutter/ADB. Completion remains 50% until actual profiling evidence is collected and assessed.
+- No subsequent task was started.
+
+## 2026-09-28 - T18 - Media cache/offline validation and recovery
+
+Status: VERIFIED (repository/test scope)
+Completion: 100%
+
+Selection and authorization:
+- User explicitly requested skipping T37 for now. T37 remains deferred/BLOCKED at 50%, not complete; B-03 remains deferred at 50%.
+- Read current plan/history and inspected media sources, cache service, repository, providers, screens and tests. Higher-priority items require owner inputs or physical devices; T18 is the next independent P2 task before T24.
+- HEAD was `164aa4d`; preserved all pre-existing plan edits. No previously verified task was reimplemented.
+
+Acceptance scope established before implementation:
+- Validate existing six-hour response-cache behavior for RSS article listings, reciter/audio listings and query-specific video listings.
+- A fresh cache must work without HTTP, including with a newly created repository. Expired cache must fetch online or show a retryable error offline, rather than present stale data as current.
+- Invalid cached bodies must not trap retries; invalid network responses must not poison persistent cache. Valid empty results and partial RSS availability must remain supported.
+- Exercise localized retry and failed-refresh behavior on all three screens in light/dark RTL, and preserve missing-key/quota channel fallbacks.
+- This is listing/cache validation, not downloaded audio/video playback or offline opening of external articles. Physical release QA stays under T35/T38. No new stale-serving or offline-download feature was added.
+
+Implemented:
+- Added parsed-cache reads that evict undecodable bodies and their timestamps, allowing the next network response to recover.
+- Audio/video payloads must contain the expected list; RSS bodies must have a complete RSS/channel envelope. Decode before cache writes so invalid responses are not persisted. RSS validation is an envelope check using the existing parser, not a new general XML parser.
+- Fresh YouTube cache is checked before requiring an API key; uncached queries still preserve the existing missing-key fallback.
+- Added 29 data/repository tests plus six light/dark RTL screen scenarios and two video-provider fallback tests (37 new tests total).
+
+Files Changed:
+- `lib/core/services/cached_api_service.dart`
+- `lib/features/media/data/datasources/articles_remote_datasource.dart`
+- `lib/features/media/data/datasources/audio_remote_datasource.dart`
+- `lib/features/media/data/datasources/video_remote_datasource.dart`
+- `test/features/media/data/media_cache_test.dart`
+- `test/features/media/presentation/screens/media_offline_test.dart`
+- `updated_development_plan.md`
+
+Verification:
+- Initial new cache matrix: 14 passed, 7 failed, reproducing corrupt-cache recovery, cache poisoning and cached-video API-key gating defects before production changes.
+- Final focused `flutter test test/features/media --reporter expanded`: **40/40 passed**.
+- `dart analyze lib test/features/media`: **no issues**.
+- Formatting check over cache service, media data sources and media tests: 9 files, zero changes.
+- Final `flutter test --reporter expanded`: **279/279 passed**, including existing search, prayer, Khatma, navigation, settings goldens, RTL and localization regressions.
+- `git diff --check`: passed. No dependency, localization resource, credential, religious asset or device configuration changes.
+
+| Acceptance Criterion | Result | Evidence |
+|---|---|---|
+| Fresh listings available from persistent cache offline | PASS | All three media types; new repository instances; zero additional HTTP requests |
+| Expiry refreshes online and does not serve stale listings offline | PASS | Seven-hour timestamps; successful refresh cached again; offline failure followed by successful retry |
+| Cold offline/HTTP errors remain recoverable | PASS | All three repository paths; HTTP 503 rejected without cache writes; retry succeeds |
+| Invalid cached/network bodies recover safely | PASS | Corrupt bodies evicted and refetched; malformed network responses not cached; retry succeeds |
+| Valid empty results and partial feeds retained | PASS | Empty results cached offline for all three types; RSS partial-failure test returns available sources |
+| Video cache isolation and fallbacks preserved | PASS | Different query cannot use another cache; cached query works without key; real data-source 403 maps to quota error; provider fallback/recovery cases pass |
+| Audio listing remains usable without HTTP | PASS | Cached reciter produces expected surah audio URLs without network requests; playback itself not claimed |
+| Arabic/RTL retry UI works in both themes | PASS | Six screen tests tap retry, pull to refresh while offline, verify error replaces results, and recover |
+| Existing behavior does not regress in automated suite | PASS | Full suite 279/279, zero failures |
+
+Remaining Work: None for T18 at repository/test scope. Actual external-service availability, physical network transitions and external playback remain release-device evidence, not verified by mocked HTTP/widget tests. Overall original-task completion: 19/40 (47.5%); production remains NOT READY.
+
+### NEXT RECOMMENDED TASK
+
+- Task ID: T24
+- Task Title: Complete the remaining bidi/icon direction audit
+- Priority: P2
+- Reason: Next independent code/automated-verification task after T18. T37 and B-03 are explicitly deferred; owner/device gates remain blocked.
+- Dependencies: None for the repository/widget audit; physical screen-reader evidence remains B-09/T31.
+- Preserve the already-verified B-04 tooltip work; inspect only remaining mixed-direction text and icon behavior.
+- T24 was not implemented in this session. STOP.
+
+## 2026-09-28 - T24 - Complete bidi/icon direction audit
+
+Status: VERIFIED (repository/test scope)
+Completion: 100%
+
+Current-state inspection:
+- Read the latest plan and all progress history entries. Confirmed T24 was the next recommended task.
+- HEAD was `164aa4d`; working tree contained partial T24 changes from a prior session (icon swaps, text direction annotations, direction tests) plus uncommitted T18 changes. T18 was already VERIFIED.
+- Full suite with partial working-tree changes: 281/285 passed, 4 failed (2 reader direction tests, 2 settings golden tests).
+- Identified root causes: reader direction test had wrong icon expectations and broken IconButton lookup; settings golden baselines were stale after icon change.
+
+Audit findings and fixes:
+- **Reader nav icons**: Verified `chevron_right` for previous and `chevron_left` for next is the correct RTL Quran convention (previous pages are to the right, next to the left). The working tree had incorrectly flipped them in `surah_details_screen.dart`; reverted to match the committed (correct) convention. Both `surah_details_screen.dart` and `reader_controls.dart` are now consistent.
+- **ListTile trailing icons**: `chevron_left` → `chevron_right` in continue_reading_card, current_wird_widget, and settings_screen follows Material Design convention for forward-navigation indicators.
+- **Hadeath card icons**: Swapped `arrow_back_ios` (back-navigation) with `menu_book` (decorative) in start position; placed `chevron_right` (forward indicator) in end position with RTL mirroring transform.
+- **Explicit textDirection annotations**: Added `TextDirection.ltr` for English text in asma_item_card (meanings), daily_verse_section (English translation), and prayer_times_screen (numeric coordinates/timezone). Added `TextDirection.rtl` for Arabic names in asma_item_card.
+- **Prayer coordinates display**: Split combined Arabic-label + numeric-coordinates text into two separate Text widgets to allow independent bidi handling.
+- **Back-button icons**: All `arrow_back_ios` usages in back buttons are correct — this icon auto-mirrors in RTL via Flutter's Icon widget.
+- **Settings golden baselines**: Regenerated after the trailing icon change.
+- **Reader direction test**: Fixed to match the correct RTL convention and to use `find.ancestor` for IconButton lookup instead of casting the tooltip widget.
+
+Files changed (T24-specific):
+- `lib/features/hadeath/presentation/widgets/hadeath_card.dart`
+- `lib/features/quran/presentation/widgets/asma_item_card.dart`
+- `lib/features/onboarding/presentation/widgets/continue_reading_card.dart`
+- `lib/features/onboarding/presentation/widgets/current_wird_widget.dart`
+- `lib/features/onboarding/presentation/widgets/daily_verse_section_widget.dart`
+- `lib/features/prayers/presentation/screens/prayer_times_screen.dart`
+- `lib/features/settings/presentation/screens/settings_screen.dart`
+- `test/features/quran/presentation/screens/reader_direction_test.dart`
+- `test/features/hadeath/presentation/widgets/hadeath_direction_test.dart`
+- `test/features/hadeath/presentation/widgets/hadeath_card_test.dart`
+- `test/features/settings/presentation/screens/goldens/windows/settings_light.png`
+- `test/features/settings/presentation/screens/goldens/windows/settings_dark.png`
+- `updated_development_plan.md`
+
+Verification:
+- `flutter test test/features/quran/presentation/screens/reader_direction_test.dart`: 2/2 passed.
+- `flutter test test/features/hadeath/presentation/widgets/hadeath_direction_test.dart`: 4/4 passed.
+- `flutter test test/features/settings/presentation/screens/settings_golden_test.dart --update-goldens`: 2/2 passed.
+- `dart analyze lib`: no issues.
+- `dart format --output=none --set-exit-if-changed` on all changed files: zero changes after formatting.
+- `git diff --check`: passed (LF/CRLF warnings only, standard on Windows).
+- Final `flutter test --reporter expanded`: **285/285 passed**, zero failures.
+
+| Acceptance Criterion | Result | Evidence |
+|---|---|---|
+| Directional icons follow RTL Quran/Material conventions | PASS | Reader nav: chevron_right for previous (rightward), chevron_left for next (leftward); ListTile trailing: chevron_right per Material spec; hadeath card: decorative icon at start, navigation indicator at end |
+| Mixed-direction text has explicit textDirection | PASS | English meanings, translations, and numeric coordinates annotated LTR; Arabic names annotated RTL |
+| Both reader files are consistent | PASS | surah_details_screen.dart and reader_controls.dart both use chevron_right for previous, chevron_left for next |
+| Back buttons auto-mirror correctly in RTL | PASS | All arrow_back_ios usages verified as auto-mirroring icons |
+| Settings golden baselines match current state | PASS | Regenerated after icon change; golden tests 2/2 pass |
+| Direction-specific test coverage added | PASS | 6 new cases: reader RTL icon/position/navigation in light/dark; hadeath card icon mirroring and text direction in LTR/RTL × light/dark |
+| No regressions in full suite | PASS | 285/285 passed, including existing prayer, search, media, settings, navigation, localization and tooltip tests |
+| Static analysis clean | PASS | dart analyze lib: no issues |
+
+Remaining Work: None for T24 at repository/test scope. Physical screen-reader evidence (TalkBack/VoiceOver) remains under B-09/T31. Original-task completion: 20/40 (50%); production remains NOT READY.
+
+### NEXT RECOMMENDED TASK
+
+- Task ID: B-10
+- Task Title: Isolate or remove dormant FCM code and dependency
+- Priority: P1
+- Reason: Next independent code task. T11/B-10 has STATUS D (needs rework) and is in Phase 3 of the roadmap. All P2 code tasks (T18, NF-005, T24) are now complete. B-03 is explicitly deferred; owner/device P0 gates remain blocked. B-10 requires a product decision on push notifications but the plan already states "local reminders selected for production" — the cleanup can proceed.
+- Dependencies: Product decision on push notifications (already made per T11 description: local-only for production).
+- B-10 was not implemented in this session. STOP.

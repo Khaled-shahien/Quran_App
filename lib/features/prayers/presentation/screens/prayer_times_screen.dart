@@ -192,10 +192,18 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Text(
-              '${provider.locationLabel} • ${PrayerCalculationPolicy.methods[provider.selectedMethod]}\n'
-              '${provider.prayerTimes?.timezone ?? ""} • ${provider.selectedCoordinates?.latitude.toStringAsFixed(4)}, ${provider.selectedCoordinates?.longitude.toStringAsFixed(4)}',
-              textAlign: TextAlign.center,
+            child: Column(
+              children: [
+                Text(
+                  '${provider.locationLabel} • ${PrayerCalculationPolicy.methods[provider.selectedMethod]}',
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  '${provider.prayerTimes?.timezone ?? ""} • ${provider.selectedCoordinates?.latitude.toStringAsFixed(4)}, ${provider.selectedCoordinates?.longitude.toStringAsFixed(4)}',
+                  textDirection: TextDirection.ltr,
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
           if (provider.prayerTimes?.isCached == true)

@@ -18,7 +18,7 @@ class ContinueReadingCard extends StatelessWidget {
         subtitle: Text(
           bookmark.surahName ?? l10nOf(context).continueReadingCardMessage2,
         ),
-        trailing: const Icon(Icons.chevron_left),
+        trailing: const Icon(Icons.chevron_right),
         onTap: () => context.push('/quran/surah/${bookmark.surahNumber}'),
       ),
     );

@@ -68,7 +68,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               leading: const Icon(Icons.location_on_outlined),
               title: Text(l10nOf(context).settingsScreenMessage6),
               subtitle: Text(prayer.locationLabel),
-              trailing: const Icon(Icons.chevron_left),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () => showPrayerLocationDialog(context, prayer),
             ),
             SwitchListTile(

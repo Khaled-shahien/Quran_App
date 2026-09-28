@@ -62,6 +62,7 @@ class AsmaItemCard extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 arabicName,
+                textDirection: TextDirection.rtl,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontFamily: 'Amiri',
@@ -72,6 +73,7 @@ class AsmaItemCard extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 meaning,
+                textDirection: TextDirection.ltr,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 12,

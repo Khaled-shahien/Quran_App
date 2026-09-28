@@ -22,9 +22,9 @@ class AudioRemoteDataSource {
   static const String _cacheKey = 'media_mp3quran_reciters_ar';
 
   Future<List<ReciterModel>> getReciters() async {
-    final cached = await _cache.getCached(_cacheKey);
+    final cached = await _cache.getParsed(_cacheKey, _parseReciters);
     if (cached != null) {
-      return _parseReciters(cached);
+      return cached;
     }
 
     final response = await _client
@@ -37,13 +37,17 @@ class AudioRemoteDataSource {
       );
     }
 
+    final reciters = _parseReciters(response.body);
     await _cache.cache(_cacheKey, response.body);
-    return _parseReciters(response.body);
+    return reciters;
   }
 
   List<ReciterModel> _parseReciters(String responseBody) {
     final decoded = jsonDecode(responseBody) as Map<String, dynamic>;
-    final reciters = decoded['reciters'] as List<dynamic>? ?? const [];
+    final reciters = decoded['reciters'];
+    if (reciters is! List<dynamic>) {
+      throw const FormatException('Missing reciters list');
+    }
 
     return reciters
         .map((item) => ReciterModel.fromJson(item as Map<String, dynamic>))
