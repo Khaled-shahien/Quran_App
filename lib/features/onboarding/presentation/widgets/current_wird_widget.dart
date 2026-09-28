@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
@@ -64,7 +63,8 @@ class CurrentWirdWidget extends StatelessWidget {
               // Section Title
               Text(
                 'الورد الحالي',
-                style: GoogleFonts.cairo(
+                style: TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: primaryColor,
@@ -91,7 +91,8 @@ class CurrentWirdWidget extends StatelessWidget {
                           children: [
                             Text(
                               'من قوله تعالى',
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: textDark,
@@ -99,7 +100,8 @@ class CurrentWirdWidget extends StatelessWidget {
                             ),
                             Text(
                               'الجزء ${activeKhatma.currentJuz}',
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: primaryColor,
@@ -129,7 +131,8 @@ class CurrentWirdWidget extends StatelessWidget {
                           children: [
                             Text(
                               'بدء الختمة: ${activeKhatma.startMode}',
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: primaryColor,
@@ -137,7 +140,8 @@ class CurrentWirdWidget extends StatelessWidget {
                             ),
                             Text(
                               '${activeKhatma.amountValue} / يوم',
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: primaryColor,
@@ -151,7 +155,8 @@ class CurrentWirdWidget extends StatelessWidget {
                           'من ${activeKhatma.todayFromUnit} '
                           'إلى ${activeKhatma.todayToUnit} '
                           '(${activeKhatma.amountType})',
-                          style: GoogleFonts.cairo(
+                          style: TextStyle(
+                            fontFamily: 'Cairo',
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: textDark.withValues(alpha: 0.8),
@@ -166,7 +171,8 @@ class CurrentWirdWidget extends StatelessWidget {
                               Flexible(
                                 child: Text(
                                   'يوجد موضع محفوظ لاستكمال الورد',
-                                  style: GoogleFonts.cairo(
+                                  style: TextStyle(
+                                    fontFamily: 'Cairo',
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700,
                                     color: primaryColor,
@@ -212,7 +218,8 @@ class CurrentWirdWidget extends StatelessWidget {
                                     SnackBar(
                                       content: Text(
                                         message,
-                                        style: GoogleFonts.cairo(
+                                        style: const TextStyle(
+                                          fontFamily: 'Cairo',
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -243,7 +250,8 @@ class CurrentWirdWidget extends StatelessWidget {
                                     const SizedBox(width: 4),
                                     Text(
                                       'أتممت القراءة',
-                                      style: GoogleFonts.cairo(
+                                      style: TextStyle(
+                                        fontFamily: 'Cairo',
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: finishedBtnText,
@@ -275,9 +283,10 @@ class CurrentWirdWidget extends StatelessWidget {
                                   ),
                                   elevation: 0,
                                 ),
-                                child: Text(
+                                child: const Text(
                                   'اقرأ الورد',
-                                  style: GoogleFonts.cairo(
+                                  style: TextStyle(
+                                    fontFamily: 'Cairo',
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -302,7 +311,8 @@ class CurrentWirdWidget extends StatelessWidget {
                   children: [
                     Text(
                       'الختمة الحالية',
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: textDark,
@@ -318,21 +328,21 @@ class CurrentWirdWidget extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: Text(
+                                title: const Text(
                                   'إلغاء الختمة',
-                                  style: GoogleFonts.cairo(),
+                                  style: TextStyle(fontFamily: 'Cairo'),
                                 ),
-                                content: Text(
+                                content: const Text(
                                   'هل أنت متأكد من '
                                   'إلغاء الختمة الحالية؟',
-                                  style: GoogleFonts.cairo(),
+                                  style: TextStyle(fontFamily: 'Cairo'),
                                 ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: Text(
+                                    child: const Text(
                                       'تراجع',
-                                      style: GoogleFonts.cairo(),
+                                      style: TextStyle(fontFamily: 'Cairo'),
                                     ),
                                   ),
                                   TextButton(
@@ -340,9 +350,10 @@ class CurrentWirdWidget extends StatelessWidget {
                                       khatmaProvider.cancelKhatma();
                                       Navigator.pop(context);
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'نعم، إلغاء',
-                                      style: GoogleFonts.cairo(
+                                      style: TextStyle(
+                                        fontFamily: 'Cairo',
                                         color: Colors.red,
                                       ),
                                     ),
@@ -373,7 +384,8 @@ class CurrentWirdWidget extends StatelessWidget {
                     Text(
                       'المتبقي: ${activeKhatma.remainingUnits.ceil()} '
                       '${activeKhatma.amountType}',
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: textDark,
@@ -382,7 +394,8 @@ class CurrentWirdWidget extends StatelessWidget {
                     Text(
                       'الإنجاز: '
                       '${(activeKhatma.progress * 100).toStringAsFixed(1)}%',
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: textDark,
@@ -409,7 +422,8 @@ class CurrentWirdWidget extends StatelessWidget {
                       const SizedBox(height: 16),
                       Text(
                         'لا توجد ختمة نشطة حالياً',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: textDark,
@@ -419,7 +433,8 @@ class CurrentWirdWidget extends StatelessWidget {
                       Text(
                         'ابدأ ختمة جديدة '
                         'وتابع وردك اليومي بسهولة',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
                           fontSize: 14,
                           color: textDark.withValues(alpha: 0.7),
                         ),
@@ -440,9 +455,10 @@ class CurrentWirdWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           'ابدأ ختمة جديدة',
-                          style: GoogleFonts.cairo(
+                          style: TextStyle(
+                            fontFamily: 'Cairo',
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -659,7 +675,8 @@ class _AnimatedWirdAyahPreviewState extends State<_AnimatedWirdAyahPreview> {
             children: [
               Text(
                 display.ayahText,
-                style: GoogleFonts.amiri(
+                style: TextStyle(
+                  fontFamily: 'Amiri',
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: widget.textColor,
@@ -671,7 +688,8 @@ class _AnimatedWirdAyahPreviewState extends State<_AnimatedWirdAyahPreview> {
                 const SizedBox(height: 8),
                 Text(
                   display.reference,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: widget.textColor.withValues(alpha: 0.75),

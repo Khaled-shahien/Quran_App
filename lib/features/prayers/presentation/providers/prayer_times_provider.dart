@@ -25,6 +25,41 @@ abstract class PrayerLocationService {
   Future<Coordinates> getCurrentCoordinates();
 }
 
+class PrayerLocationException implements Exception {
+  const PrayerLocationException(this.message);
+  final String message;
+}
+
+class DevicePrayerLocationService implements PrayerLocationService {
+  const DevicePrayerLocationService();
+  @override
+  Future<Coordinates> getCurrentCoordinates() async {
+    if (!await Geolocator.isLocationServiceEnabled()) {
+      throw const PrayerLocationException(
+        'خدمة الموقع متوقفة. فعّلها أو اختر مدينة يدوياً.',
+      );
+    }
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+    if (permission == LocationPermission.deniedForever) {
+      throw const PrayerLocationException(
+        'إذن الموقع مرفوض. يمكنك تفعيله من إعدادات الجهاز أو اختيار مدينة يدوياً.',
+      );
+    }
+    if (permission == LocationPermission.denied) {
+      throw const PrayerLocationException(
+        'لم يُسمح بالوصول للموقع. اختر مدينة أو أدخل الإحداثيات يدوياً.',
+      );
+    }
+    final position = await Geolocator.getCurrentPosition().timeout(
+      const Duration(seconds: 20),
+    );
+    return (latitude: position.latitude, longitude: position.longitude);
+  }
+}
+
 class FixedPrayerLocationService implements PrayerLocationService {
   const FixedPrayerLocationService({
     required this.latitude,
@@ -55,6 +90,7 @@ class PrayerTimesProvider extends ChangeNotifier {
   final PrayerTimesRepository _repository;
   final PrayerTimesClock _clock;
   final PrayerLocationService _locationService;
+  final PrayerLocationService _deviceLocationService;
   final PrayerNotificationScheduler _notificationScheduler;
 
   final SharedPreferences? _preferences;
@@ -89,12 +125,15 @@ class PrayerTimesProvider extends ChangeNotifier {
     SharedPreferences? preferences,
     PrayerTimesClock? clock,
     PrayerLocationService? locationService,
+    PrayerLocationService? deviceLocationService,
     PrayerNotificationScheduler? notificationScheduler,
   }) : _preferences = preferences,
        _repository = repository,
        _clock = clock ?? SystemPrayerTimesClock(),
        _locationService =
            locationService ?? const UnconfiguredPrayerLocationService(),
+       _deviceLocationService =
+           deviceLocationService ?? const DevicePrayerLocationService(),
        _notificationScheduler =
            notificationScheduler ?? const NoopPrayerNotificationScheduler() {
     final lat = preferences?.getDouble('prayer_latitude');
@@ -131,40 +170,41 @@ class PrayerTimesProvider extends ChangeNotifier {
     if (_disposed) return;
     final requestId = ++_requestId;
     _prayerTimes = null;
-    await _notificationScheduler.cancelPrayerNotifications();
-    if (_disposed || requestId != _requestId) return;
-    _selectedCoordinates = (latitude: latitude, longitude: longitude);
-    locationLabel = label.trim().isEmpty ? 'موقع يدوي' : label.trim();
-    selectedMethod = method;
-    await _preferences?.setDouble('prayer_latitude', latitude);
-    if (_disposed || requestId != _requestId) return;
-    await _preferences?.setDouble('prayer_longitude', longitude);
-    if (_disposed || requestId != _requestId) return;
-    await _preferences?.setString('prayer_location_label', locationLabel);
-    if (_disposed || requestId != _requestId) return;
-    await _preferences?.setInt('prayer_method', method);
-    if (_disposed || requestId != _requestId) return;
-    await fetchTodayForCurrentLocation(calculationMethod: method);
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+    try {
+      await _notificationScheduler.cancelPrayerNotifications();
+      if (_disposed || requestId != _requestId) return;
+      _selectedCoordinates = (latitude: latitude, longitude: longitude);
+      locationLabel = label.trim().isEmpty ? 'موقع يدوي' : label.trim();
+      selectedMethod = method;
+      await _preferences?.setDouble('prayer_latitude', latitude);
+      if (_disposed || requestId != _requestId) return;
+      await _preferences?.setDouble('prayer_longitude', longitude);
+      if (_disposed || requestId != _requestId) return;
+      await _preferences?.setString('prayer_location_label', locationLabel);
+      if (_disposed || requestId != _requestId) return;
+      await _preferences?.setInt('prayer_method', method);
+      if (_disposed || requestId != _requestId) return;
+      await fetchTodayForCurrentLocation(calculationMethod: method);
+    } catch (_) {
+      if (_disposed || requestId != _requestId) return;
+      _isLoading = false;
+      _errorMessage =
+          'تعذر حفظ إعدادات الموقع أو تحديث التنبيهات. أعد المحاولة.';
+      notifyListeners();
+    }
   }
 
   Future<void> useDeviceLocation() async {
     if (_disposed) return;
     final requestId = ++_requestId;
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
     try {
-      if (!await Geolocator.isLocationServiceEnabled()) {
-        throw StateError('disabled');
-      }
-      var permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-      }
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
-        throw StateError('denied');
-      }
-      final position = await Geolocator.getCurrentPosition().timeout(
-        const Duration(seconds: 20),
-      );
+      final position = await _deviceLocationService.getCurrentCoordinates();
       if (_disposed || requestId != _requestId) return;
       await selectLocation(
         position.latitude,
@@ -172,11 +212,12 @@ class PrayerTimesProvider extends ChangeNotifier {
         'موقع الجهاز',
         selectedMethod,
       );
-    } catch (_) {
+    } catch (error) {
       if (_disposed || requestId != _requestId) return;
       _isLoading = false;
-      _errorMessage =
-          'تعذر تحميل المواقيت. حدد موقعك أو تحقق من الاتصال وأعد المحاولة.';
+      _errorMessage = error is PrayerLocationException
+          ? error.message
+          : 'تعذر تحديد الموقع. اختر مدينة يدوياً أو أعد المحاولة.';
       notifyListeners();
     }
   }

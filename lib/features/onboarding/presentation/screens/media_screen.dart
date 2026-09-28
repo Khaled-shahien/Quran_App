@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/media_tiles_widget.dart';
 
@@ -12,7 +11,8 @@ class MediaScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'كل الوسائط',
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
           ),

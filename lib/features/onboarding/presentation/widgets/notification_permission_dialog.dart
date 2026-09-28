@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/providers/notification_provider.dart';
@@ -36,7 +36,8 @@ class NotificationPermissionDialog extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'تفعيل الإشعارات',
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.primary,
@@ -46,7 +47,8 @@ class NotificationPermissionDialog extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               'لتجربة أفضل، اسمح للتطبيق بإرسال إشعارات لتذكيرك بأوقات الصلاة، الأذكار، والورد اليومي.',
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 fontSize: 15,
                 height: 1.5,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -68,9 +70,10 @@ class NotificationPermissionDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'السماح بالإشعارات',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 16,
                     height: 1.4,
                     fontWeight: FontWeight.bold,
@@ -92,9 +95,10 @@ class NotificationPermissionDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'ليس الآن',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),

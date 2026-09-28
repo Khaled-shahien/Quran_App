@@ -15,7 +15,7 @@ class AppTheme {
       onSurface: AppColors.primaryText,
       error: AppColors.error,
       onError: AppColors.black,
-      outline: AppColors.lightSecondary,
+      outline: const Color(0xFF81756F),
     );
 
     return ThemeData(
@@ -67,7 +67,7 @@ class AppTheme {
       onSurface: AppColors.white,
       error: AppColors.error,
       onError: AppColors.black,
-      outline: AppColors.darkSecondary,
+      outline: const Color(0xFF93867F),
     );
 
     return ThemeData(
@@ -95,6 +95,12 @@ class AppTheme {
         surfaceTintColor: AppColors.darkCardContent,
       ),
       scaffoldBackgroundColor: AppColors.darkBackground,
+      navigationBarTheme: _buildNavigationBarTheme(colorScheme),
+      bottomSheetTheme: _buildBottomSheetTheme(colorScheme),
+      dialogTheme: _buildDialogTheme(colorScheme),
+      inputDecorationTheme: _buildInputDecorationTheme(colorScheme),
+      scrollbarTheme: _buildScrollbarTheme(),
+      extensions: [_buildThemeExtensions()],
     );
   }
 
@@ -167,7 +173,7 @@ class AppTheme {
       titleSmall: AppTypography.titleSmall.copyWith(color: AppColors.white),
       bodyLarge: AppTypography.bodyLarge.copyWith(color: AppColors.lightGray),
       bodyMedium: AppTypography.bodyMedium.copyWith(color: AppColors.lightGray),
-      bodySmall: AppTypography.bodySmall.copyWith(color: AppColors.gray),
+      bodySmall: AppTypography.bodySmall.copyWith(color: AppColors.darkCaption),
       labelLarge: AppTypography.labelLarge.copyWith(color: AppColors.white),
       labelMedium: AppTypography.labelMedium.copyWith(color: AppColors.white),
       labelSmall: AppTypography.labelSmall.copyWith(color: AppColors.white),
@@ -333,7 +339,7 @@ class AppTheme {
         color: colorScheme.onSurfaceVariant,
       ),
       hintStyle: AppTypography.bodyMedium.copyWith(
-        color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+        color: colorScheme.onSurfaceVariant,
       ),
       errorStyle: AppTypography.bodySmall.copyWith(color: colorScheme.error),
     );

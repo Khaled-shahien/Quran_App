@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -32,7 +32,8 @@ class _HadeathScreenState extends State<HadeathScreen> {
       appBar: AppBar(
         title: Text(
           'الأحاديث النبوية',
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
           ),
@@ -61,17 +62,22 @@ class _HadeathScreenState extends State<HadeathScreen> {
                 return Center(
                   child: Text(
                     provider.errorMessage!,
-                    style: GoogleFonts.cairo(color: Colors.red, fontSize: 16),
+                    style: const TextStyle(
+                      fontFamily: 'Cairo',
+                      color: Colors.red,
+                      fontSize: 16,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 );
               }
 
               if (provider.ahadethList.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text(
                     'لا توجد أحاديث لعرضها',
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       color: AppColors.secondaryText,
                       fontSize: 18,
                     ),

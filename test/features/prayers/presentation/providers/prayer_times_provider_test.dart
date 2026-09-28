@@ -80,6 +80,42 @@ class PendingCancellationScheduler extends NoopPrayerNotificationScheduler {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test('late GPS result cannot override manual city selection', () async {
+    final location = PendingPrayerLocationService();
+    final provider = PrayerTimesProvider(
+      repository: FakePrayerTimesRepository(),
+      deviceLocationService: location,
+    );
+    addTearDown(provider.dispose);
+    final gps = provider.useDeviceLocation();
+    expect(provider.isLoading, isTrue);
+    await provider.selectLocation(21.4, 39.8, 'Makkah', 4);
+    location.result.complete((latitude: 30.0, longitude: 31.0));
+    await gps;
+    expect(provider.locationLabel, 'Makkah');
+    expect(provider.isLoading, isFalse);
+  });
+  test(
+    'GPS denial leaves manual fallback available and clears loading',
+    () async {
+      final location = PendingPrayerLocationService();
+      final provider = PrayerTimesProvider(
+        repository: FakePrayerTimesRepository(),
+        deviceLocationService: location,
+      );
+      addTearDown(provider.dispose);
+      final gps = provider.useDeviceLocation();
+      location.result.completeError(
+        const PrayerLocationException('Choose a city'),
+      );
+      await gps;
+      expect(provider.isLoading, isFalse);
+      expect(provider.errorMessage, 'Choose a city');
+      await provider.selectLocation(21.4, 39.8, 'Makkah', 4);
+      expect(provider.hasData, isTrue);
+      expect(provider.hasError, isFalse);
+    },
+  );
   test('late location lookup cannot replace a manual selection', () async {
     final location = PendingPrayerLocationService();
     final repository = FakePrayerTimesRepository();

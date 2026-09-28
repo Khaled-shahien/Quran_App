@@ -1,7 +1,7 @@
 import '../../../prayers/domain/prayer_time_zone.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 import 'dart:async';
 import '../../../../core/widgets/pulse_loader.dart';
@@ -62,9 +62,10 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
               children: [
                 const Icon(Icons.error_outline, size: 48, color: Colors.red),
                 const SizedBox(height: 16),
-                Text(
+                const Text(
                   'خطأ في تحميل أوقات الصلاة',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: Colors.red,
@@ -77,7 +78,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 const SizedBox(height: 8),
                 Text(
                   provider.errorMessage ?? 'خطأ غير معروف',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 14,
                     color: Colors.grey[600],
                   ),
@@ -96,7 +98,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           padding: const EdgeInsets.all(16),
           child: Text(
             'لا توجد بيانات متاحة',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               fontSize: 16,
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -124,7 +127,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           // Prayer Times List Header
           Text(
             'جميع مواقيت الصلاة',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.primary,
@@ -166,11 +170,12 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Next Prayer Label
-            Align(
+            const Align(
               alignment: Alignment.centerRight,
               child: Text(
                 'الصلاة القادمة',
-                style: GoogleFonts.cairo(
+                style: TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: Colors.white70,
@@ -184,7 +189,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
               alignment: Alignment.centerRight,
               child: Text(
                 nextPrayerName,
-                style: GoogleFonts.cairo(
+                style: const TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 44,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -201,9 +207,10 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'في',
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         color: Colors.white70,
@@ -212,7 +219,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                     const SizedBox(height: 4),
                     Text(
                       timeRemaining,
-                      style: GoogleFonts.cairo(
+                      style: const TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
@@ -222,7 +230,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 ),
                 Text(
                   nextPrayerTime,
-                  style: GoogleFonts.cairo(
+                  style: const TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -287,7 +296,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         children: [
           Text(
             prayerName,
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               fontSize: 15,
               fontWeight: isNext ? FontWeight.bold : FontWeight.w500,
               color: Theme.of(context).colorScheme.primary,
@@ -305,7 +315,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
             ),
             child: Text(
               prayerTime,
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
                 color: isNext

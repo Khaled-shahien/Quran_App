@@ -1,3 +1,4 @@
 {
-    "github.copilot.chat.codesearch.enabled": false
+    "github.copilot.chat.codesearch.enabled": false,
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

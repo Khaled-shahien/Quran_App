@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/app_strings.dart';
-import '../widgets/notification_permission_dialog.dart';
+
 import '../widgets/onboarding_page.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -51,23 +51,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       if (!mounted) return;
-      if (!(prefs.getBool('has_seen_notification_permission') ?? false)) {
-        final finished = await showDialog<bool>(
-          context: context,
-          barrierDismissible: false,
-          builder: (dialogContext) => Directionality(
-            textDirection: TextDirection.rtl,
-            child: NotificationPermissionDialog(
-              onFinish: () {
-                if (dialogContext.mounted) {
-                  Navigator.of(dialogContext).pop(true);
-                }
-              },
-            ),
-          ),
-        );
-        if (finished != true) return;
-      }
+      await prefs.setBool('onboarding_complete', true);
       if (mounted) context.go('/home');
     } catch (_) {
       if (mounted) {

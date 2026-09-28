@@ -5,22 +5,42 @@
     {
       "path": "assets/quran_master.json",
       "sha256": "f746543f6e4ab4c484d197184b6aa7035d169269a99fbd4e530e78165bff93a4",
-      "source": "pending_owner_review"
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null
     },
     {
       "path": "assets/quran_duas.json",
       "sha256": "5e4c6e7667457cfc69a12175b8b4e2fcccd37eca82fc65c6303c0cd71c9eab14",
-      "source": "pending_owner_review"
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null
     },
     {
       "path": "assets/prayers_data.json",
       "sha256": "0b352f292021ba1391e9b7ed5ebad9c15360a360c5c76b058ff0668faa98f5bc",
-      "source": "pending_owner_review"
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null
     },
     {
       "path": "assets/hadeath/ahadeth.txt",
       "sha256": "0d1612239f653c238b3fd025b9b6cecc2d24b28d1127e5b0ea6ed404bcdba9c4",
-      "source": "pending_owner_review"
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null
     }
   ]
 }

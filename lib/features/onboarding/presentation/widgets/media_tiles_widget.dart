@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MediaTilesWidget extends StatelessWidget {
   const MediaTilesWidget({super.key});
@@ -59,7 +58,8 @@ class MediaTilesWidget extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(
+                      fontFamily: 'Cairo',
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,

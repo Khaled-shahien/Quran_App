@@ -31,6 +31,7 @@ class QuranSettingsDialog extends StatelessWidget {
                   ),
                 ),
                 IconButton(
+                  tooltip: 'إغلاق إعدادات القراءة',
                   icon: const Icon(Icons.close),
                   color: Theme.of(context).colorScheme.primary,
                   onPressed: () => Navigator.pop(context),

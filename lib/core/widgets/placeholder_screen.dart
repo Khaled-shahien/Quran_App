@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class PlaceholderScreen extends StatelessWidget {
   final String title;
@@ -12,7 +11,8 @@ class PlaceholderScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           title,
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
           ),
@@ -36,7 +36,8 @@ class PlaceholderScreen extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               'هذه الميزة تحت التطوير',
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.primary,
@@ -45,7 +46,8 @@ class PlaceholderScreen extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'ستتوفر قريباً إن شاء الله',
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 fontSize: 16,
                 color: Theme.of(
                   context,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
 
@@ -29,9 +28,10 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'ختمة جديدة',
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -54,7 +54,8 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                 'الرجاء تحديد المكان أو الجزء '
                 'الذي تريد\nأن تبدء منه الختمة',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: textColor, // Dark brownish-grey or light
@@ -72,7 +73,8 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                   children: [
                     Text(
                       'البدء من:',
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: textColor,
@@ -93,7 +95,8 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                               Icons.arrow_drop_down,
                               color: isDarkMode ? Colors.white54 : Colors.grey,
                             ),
-                            style: GoogleFonts.cairo(
+                            style: TextStyle(
+                              fontFamily: 'Cairo',
                               fontSize: 16,
                               color: dropdownTextColor,
                               fontWeight: FontWeight.w600,
@@ -130,7 +133,8 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                     children: [
                       Text(
                         'رقم الجزء:',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: textColor,
@@ -153,7 +157,8 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                                     ? Colors.white54
                                     : Colors.grey,
                               ),
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
                                 fontSize: 16,
                                 color: dropdownTextColor,
                                 fontWeight: FontWeight.w600,
@@ -202,9 +207,10 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'الاستمرار',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,

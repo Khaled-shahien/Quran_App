@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/features/media/domain/entities/reciter.dart';
@@ -54,7 +54,8 @@ class ReciterCard extends StatelessWidget {
                       textDirection: TextDirection.rtl,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 15,
                         fontWeight: FontWeight.w800,
                         color: theme.colorScheme.primary,
@@ -66,7 +67,8 @@ class ReciterCard extends StatelessWidget {
                       textDirection: TextDirection.rtl,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 12,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -77,7 +79,8 @@ class ReciterCard extends StatelessWidget {
               const SizedBox(width: AppSpacing.sm),
               Text(
                 '${reciter.surahNumbers.length} سورة',
-                style: GoogleFonts.cairo(
+                style: TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 12,
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w700,

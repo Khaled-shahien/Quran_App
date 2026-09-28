@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CategoryGridWidget extends StatelessWidget {
   const CategoryGridWidget({super.key});
@@ -77,7 +76,11 @@ class CategoryGridWidget extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             title,
-            style: GoogleFonts.cairo(fontSize: 11, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontFamily: 'Cairo',
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

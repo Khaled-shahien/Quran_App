@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:sakina_app/features/quran/presentation/widgets/'
     'asma_item_card.dart';
 
@@ -295,7 +295,8 @@ class _AsmaAlHusnaScreenState extends State<AsmaAlHusnaScreen> {
       appBar: AppBar(
         title: Text(
           'أسماء الله الحسنى',
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
           ),
@@ -304,6 +305,7 @@ class _AsmaAlHusnaScreenState extends State<AsmaAlHusnaScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
+          tooltip: 'رجوع',
           icon: Icon(
             Icons.arrow_back_ios,
             color: Theme.of(context).colorScheme.primary,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -96,6 +96,7 @@ class _QuranScreenState extends State<_QuranScreenContent> {
                 button: true,
                 label: 'الرجوع للشاشة السابقة',
                 child: IconButton(
+                  tooltip: 'رجوع',
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () => Navigator.pop(context),
                 ),
@@ -177,7 +178,8 @@ class _QuranScreenState extends State<_QuranScreenContent> {
                 const SizedBox(height: 16),
                 Text(
                   _error!,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 16,
                     color: theme.colorScheme.error,
                   ),
@@ -190,7 +192,7 @@ class _QuranScreenState extends State<_QuranScreenContent> {
                   child: ElevatedButton(
                     onPressed: _loadSurahs,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: AppColors.lightPrimary,
                       foregroundColor: Colors.white,
                     ),
                     child: const Text('إعادة المحاولة'),
@@ -338,7 +340,8 @@ class SurahCard extends StatelessWidget {
                           arabicName,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.cairo(
+                          style: TextStyle(
+                            fontFamily: 'Cairo',
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: textColor,

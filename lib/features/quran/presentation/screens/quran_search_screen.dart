@@ -1,6 +1,8 @@
 import '../../../../l10n/app_localizations.dart';
 import '../../../../l10n/app_localizations_ar.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../domain/entities/ayah_entity.dart';
@@ -17,6 +19,25 @@ class QuranSearchScreen extends StatefulWidget {
 class _QuranSearchScreenState extends State<QuranSearchScreen> {
   Map<int, List<AyahEntity>>? _source;
   List<QuranSearchResult> _results = [];
+  List<Map<String, dynamic>> _surahs = [];
+  List<Map<String, dynamic>> get _matchingSurahs {
+    final query = normalizeArabicSearch(_query).trim().replaceAllMapped(
+      RegExp('[٠-٩]'),
+      (m) => (m[0]!.codeUnitAt(0) - 0x660).toString(),
+    );
+    if (query.isEmpty) return [];
+    return _surahs
+        .where(
+          (surah) =>
+              surah['number'].toString() == query ||
+              normalizeArabicSearch(surah['name'] as String).contains(query) ||
+              normalizeArabicSearch(
+                surah['englishName'] as String,
+              ).contains(query),
+        )
+        .toList();
+  }
+
   String _query = '';
   bool _failed = false;
 
@@ -24,6 +45,31 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
   void initState() {
     super.initState();
     _load();
+    _loadSurahNames();
+  }
+
+  Future<void> _loadSurahNames() async {
+    try {
+      final decoded =
+          jsonDecode(await rootBundle.loadString('assets/quran_master.json'));
+      if (decoded is! List) {
+        throw const FormatException('Quran metadata must be a list');
+      }
+
+      final data = decoded
+          .whereType<Map>()
+          .map((item) => Map<String, dynamic>.from(item))
+          .where(
+            (surah) =>
+                surah['number'] != null &&
+                surah['name'] is String &&
+                surah['englishName'] is String,
+          )
+          .toList();
+      if (mounted) setState(() => _surahs = data);
+    } catch (error) {
+      debugPrint('Surah metadata load failed: $error');
+    }
   }
 
   Future<void> _load() async {
@@ -59,7 +105,7 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
               autofocus: true,
               decoration: InputDecoration(
                 labelText: l10n.searchAyah,
-                hintText: l10n.searchHint,
+                hintText: 'اسم السورة أو رقمها أو جزء من آية',
                 prefixIcon: const Icon(Icons.search),
               ),
               onChanged: (value) => setState(() {
@@ -80,12 +126,23 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
                 ? const Center(child: CircularProgressIndicator())
                 : _query.trim().isEmpty
                 ? const Center(child: Text('اكتب كلمة أو جزءاً من آية'))
-                : _results.isEmpty
+                : _results.isEmpty && _matchingSurahs.isEmpty
                 ? Center(child: Text(l10n.searchEmpty))
                 : ListView.builder(
-                    itemCount: _results.length,
+                    itemCount: _matchingSurahs.length + _results.length,
                     itemBuilder: (context, index) {
-                      final result = _results[index];
+                      final surahs = _matchingSurahs;
+                      if (index < surahs.length) {
+                        final surah = surahs[index];
+                        return ListTile(
+                          leading: const Icon(Icons.menu_book),
+                          title: Text(surah['name'] as String),
+                          subtitle: Text('سورة ${surah['number']}'),
+                          onTap: () =>
+                              context.push('/quran/surah/${surah['number']}'),
+                        );
+                      }
+                      final result = _results[index - surahs.length];
                       final text = result.ayah.text;
                       return ListTile(
                         title: Text.rich(

@@ -15,6 +15,7 @@ class NotificationProvider extends ChangeNotifier {
   final SharedPreferences prefs;
   final LocalNotificationGateway _notificationGateway;
   final MessagingGateway _messagingGateway;
+  final bool _messagingEnabled;
 
   bool _isInitialized = false;
   final bool _isLoading = false;
@@ -27,7 +28,8 @@ class NotificationProvider extends ChangeNotifier {
     required this.prefs,
     LocalNotificationGateway? notificationGateway,
     MessagingGateway? messagingGateway,
-  }) : _notificationGateway =
+  }) : _messagingEnabled = messagingGateway != null,
+       _notificationGateway =
            notificationGateway ?? NotificationServiceGateway(),
        _messagingGateway = messagingGateway ?? FirebaseMessagingGateway();
 
@@ -40,7 +42,7 @@ class NotificationProvider extends ChangeNotifier {
       await _notificationGateway.initialize(requestPermissions: false);
 
       // Initialize Firebase in background (non-blocking)
-      _initializeFirebaseInBackground();
+      if (_messagingEnabled) _initializeFirebaseInBackground();
 
       _isInitialized = true;
       _addLog('Notification services initialized');
@@ -109,8 +111,10 @@ class NotificationProvider extends ChangeNotifier {
   Future<void> requestPermissions() async {
     try {
       await _notificationGateway.requestPermissions();
-      await _initializeFirebaseWithRetry();
-      await _checkPermissionStatus();
+      if (_messagingEnabled) {
+        await _initializeFirebaseWithRetry();
+        await _checkPermissionStatus();
+      }
       _addLog('Permissions requested');
     } catch (e) {
       _addLog('Error requesting permissions: $e');

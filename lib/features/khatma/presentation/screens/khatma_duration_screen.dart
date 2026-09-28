@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import 'package:provider/provider.dart';
@@ -85,9 +84,10 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'ختمة جديدة',
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -109,7 +109,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 'حدد نوع الخطة ووحدة المتابعة '
                 'ووقت التذكير اليومي',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: textColor,
@@ -163,7 +164,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                   children: [
                     Text(
                       'وحدة التتبع:',
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: textColor,
@@ -184,7 +186,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                               Icons.arrow_drop_down,
                               color: isDarkMode ? Colors.white54 : Colors.grey,
                             ),
-                            style: GoogleFonts.cairo(
+                            style: TextStyle(
+                              fontFamily: 'Cairo',
                               fontSize: 14,
                               color: dropdownTextColor,
                               fontWeight: FontWeight.bold,
@@ -253,7 +256,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                       : 'المدة المتوقعة للإتمام: '
                             '${(_remainingUnits / _dailyTarget).ceil()}'
                             ' يوماً',
-                  style: GoogleFonts.cairo(
+                  style: const TextStyle(
+                    fontFamily: 'Cairo',
                     fontWeight: FontWeight.bold,
                     color: AppColors.primary,
                   ),
@@ -291,18 +295,18 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
 
                   await provider.startNewKhatma(newKhatma);
 
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'تم إنشاء الختمة بنجاح!',
-                          style: GoogleFonts.cairo(),
-                        ),
-                        backgroundColor: Colors.green,
+                  if (!context.mounted) return;
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'تم إنشاء الختمة بنجاح!',
+                        style: TextStyle(fontFamily: 'Cairo'),
                       ),
-                    );
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                  }
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
@@ -311,9 +315,10 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'الاستمرار',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -354,7 +359,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
           children: [
             Text(
               title,
-              style: GoogleFonts.cairo(
+              style: const TextStyle(
+                fontFamily: 'Cairo',
                 fontWeight: FontWeight.bold,
                 color: AppColors.primary,
               ),
@@ -363,7 +369,11 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
             const SizedBox(height: 2),
             Text(
               subtitle,
-              style: GoogleFonts.cairo(fontSize: 12, color: AppColors.primary),
+              style: const TextStyle(
+                fontFamily: 'Cairo',
+                fontSize: 12,
+                color: AppColors.primary,
+              ),
               textAlign: TextAlign.right,
             ),
           ],
@@ -379,7 +389,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
         children: [
           Text(
             'مدة الختمة:',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: textColor,
@@ -397,7 +408,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
               alignment: Alignment.center,
               child: Text(
                 '$_durationDays يوماً',
-                style: GoogleFonts.cairo(
+                style: const TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
@@ -460,7 +472,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
         children: [
           Text(
             'الورد اليومي:',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: textColor,
@@ -478,7 +491,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
               alignment: Alignment.center,
               child: Text(
                 '${_formatDouble(_dailyTarget)} $_unitLabel',
-                style: GoogleFonts.cairo(
+                style: const TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
@@ -551,7 +565,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
         children: [
           Text(
             'وقت التذكير:',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: textColor,
@@ -587,7 +602,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 child: Text(
                   '${_reminderHour.toString().padLeft(2, '0')}:'
                   '${_reminderMinute.toString().padLeft(2, '0')}',
-                  style: GoogleFonts.cairo(
+                  style: const TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: AppColors.primary,

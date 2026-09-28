@@ -25,7 +25,11 @@ class ThemeProvider extends ValueNotifier<ThemeMode> {
   }
 
   Future<void> toggleTheme(bool isDark) async {
-    value = isDark ? ThemeMode.dark : ThemeMode.light;
-    await prefs.setString(_themeModeKey, isDark ? 'dark' : 'light');
+    await setThemeMode(isDark ? ThemeMode.dark : ThemeMode.light);
+  }
+
+  Future<void> setThemeMode(ThemeMode mode) async {
+    value = mode;
+    await prefs.setString(_themeModeKey, mode.name);
   }
 }

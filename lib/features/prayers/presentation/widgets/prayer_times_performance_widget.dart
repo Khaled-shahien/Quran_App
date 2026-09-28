@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 import 'package:sakina_app/core/theme/app_colors.dart';
 import 'package:sakina_app/core/widgets/pulse_loader.dart';
@@ -58,7 +58,8 @@ class _PrayerTimesHeader extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           'أوقات الصلاة',
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
@@ -160,14 +161,22 @@ class _ErrorDisplay extends StatelessWidget {
       children: [
         const Icon(Icons.error_outline, color: Colors.red, size: 48),
         const SizedBox(height: 16),
-        Text(
+        const Text(
           'حدث خطأ في تحميل أوقات الصلاة',
-          style: GoogleFonts.cairo(fontSize: 16, fontWeight: FontWeight.w500),
+          style: TextStyle(
+            fontFamily: 'Cairo',
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
           errorMessage,
-          style: GoogleFonts.cairo(fontSize: 14, color: Colors.grey[600]),
+          style: TextStyle(
+            fontFamily: 'Cairo',
+            fontSize: 14,
+            color: Colors.grey[600],
+          ),
           textAlign: TextAlign.center,
         ),
       ],
@@ -248,7 +257,8 @@ class _PrayerTimeTile extends StatelessWidget {
         children: [
           Text(
             prayerName,
-            style: GoogleFonts.cairo(
+            style: const TextStyle(
+              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: FontWeight.w500,
               color: AppColors.lightOnSurface,
@@ -264,7 +274,8 @@ class _PrayerTimeTile extends StatelessWidget {
             ),
             child: Text(
               prayerTime,
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.primary,

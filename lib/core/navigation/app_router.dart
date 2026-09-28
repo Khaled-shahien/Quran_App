@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+import 'main_navigation_shell.dart';
+import '../../features/settings/presentation/screens/settings_screen.dart';
 import '../../features/settings/presentation/screens/data_sources_screen.dart';
 import '../../features/onboarding/presentation/widgets/current_wird_widget.dart';
 import '../../features/quran/presentation/screens/quran_search_screen.dart';
@@ -49,6 +52,36 @@ final GoRouter appRouter = GoRouter(
   navigatorKey: appNavigatorKey,
   initialLocation: '/splash',
   routes: <RouteBase>[
+    ShellRoute(
+      builder: (context, state, child) =>
+          MainNavigationShell(location: state.uri.path, child: child),
+      routes: [
+        GoRoute(
+          path: '/home',
+          pageBuilder: (context, state) => _fadePage(state, const HomeScreen()),
+        ),
+        GoRoute(
+          path: '/quran',
+          pageBuilder: (context, state) =>
+              _fadePage(state, const QuranScreen()),
+        ),
+        GoRoute(
+          path: '/prayers',
+          pageBuilder: (context, state) =>
+              _fadePage(state, const PrayerTimesScreen()),
+        ),
+        GoRoute(
+          path: '/duas',
+          pageBuilder: (context, state) =>
+              _fadePage(state, const AzkarScreen()),
+        ),
+        GoRoute(
+          path: '/settings',
+          pageBuilder: (context, state) =>
+              _fadePage(state, const SettingsScreen()),
+        ),
+      ],
+    ),
     GoRoute(
       path: '/settings/data-sources',
       pageBuilder: (context, state) =>
@@ -78,14 +111,7 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) =>
           _fadePage(state, const OnboardingScreen()),
     ),
-    GoRoute(
-      path: '/home',
-      pageBuilder: (context, state) => _fadePage(state, const HomeScreen()),
-    ),
-    GoRoute(
-      path: '/quran',
-      pageBuilder: (context, state) => _fadePage(state, const QuranScreen()),
-    ),
+
     GoRoute(
       path: '/quran/surah/:number',
       pageBuilder: (context, state) {
@@ -147,19 +173,12 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-    GoRoute(
-      path: '/prayers',
-      pageBuilder: (context, state) =>
-          _fadePage(state, const PrayerTimesScreen()),
-    ),
+
     GoRoute(
       path: '/qibla',
       pageBuilder: (context, state) => _fadePage(state, const QiblaScreen()),
     ),
-    GoRoute(
-      path: '/duas',
-      pageBuilder: (context, state) => _fadePage(state, const AzkarScreen()),
-    ),
+
     GoRoute(
       path: '/duas/all',
       pageBuilder: (context, state) => _fadePage(state, const DuasScreen()),
@@ -262,11 +281,12 @@ final GoRouter appRouter = GoRouter(
         ),
       ),
     ),
-    GoRoute(
-      path: '/settings/notification-test',
-      pageBuilder: (context, state) =>
-          _fadePage(state, const NotificationTestScreen()),
-    ),
+    if (kDebugMode)
+      GoRoute(
+        path: '/settings/notification-test',
+        pageBuilder: (context, state) =>
+            _fadePage(state, const NotificationTestScreen()),
+      ),
     GoRoute(
       path: '/khatma/location',
       pageBuilder: (context, state) =>

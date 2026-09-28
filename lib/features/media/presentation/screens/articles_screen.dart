@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/features/media/presentation/providers/articles_provider.dart';
@@ -31,9 +31,9 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'المقالات',
-            style: GoogleFonts.cairo(fontWeight: FontWeight.bold),
+            style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -113,7 +113,8 @@ class _SourceChips extends StatelessWidget {
           return ChoiceChip(
             label: Text(
               isAll ? 'كل المصادر' : source!,
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 color: selected ? theme.colorScheme.onPrimary : null,
                 fontWeight: FontWeight.w700,
               ),

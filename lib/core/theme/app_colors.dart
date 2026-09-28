@@ -32,27 +32,14 @@ abstract class AppColors {
 
   // Captions (for both modes)
   static const Color captions = Color(0xFF675757);
+  static const Color darkCaption = Color(0xFFBDBDBD);
 
   // Legacy Colors (for compatibility - can be removed later)
-  static const Color primary = Color(
-    0xFF795547,
-  ); // Updated to match light mode primary
+  static const Color primary = lightPrimary;
+  static const Color accent = lightPageAccent;
   static const Color primaryVariant = Color(0xFF5D4037);
-  static const Color secondary = Color(
-    0xFFF0E6D2,
-  ); // Updated to match light mode secondary
 
   // Background Colors
-  static const Color background = Color(
-    0xFFFEFBF4,
-  ); // Light mode background (from home screen)
-  static const Color scaffoldBackground = Color(
-    0xFFFEFBF4,
-  ); // Light mode default
-  static const Color surface = Color(0xFFFFFBF9); // Off-white
-  static const Color cardBackground = Color(
-    0xFFFFE9C2,
-  ); // Updated to match card content
 
   // Text Colors
   static const Color primaryText = Color(0xFF1B1B1B); // Dark gray-black
@@ -60,9 +47,6 @@ abstract class AppColors {
   static const Color hintTextColor = Color(0xFF9E9E9E); // Light gray
 
   // Accent Colors
-  static const Color accent = Color(
-    0xFFCC9B76,
-  ); // Updated to match light mode accent
   static const Color darkCard = Color(
     0xFF2D2D2D,
   ); // Dark card color from home screen

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart';
+import '../../../quran/domain/services/quran_search.dart';
 import '../../domain/prayer_calculation_policy.dart';
 import '../providers/prayer_times_provider.dart';
 
@@ -6,6 +9,16 @@ Future<void> showPrayerLocationDialog(
   BuildContext context,
   PrayerTimesProvider provider,
 ) async {
+  List<Map<String, dynamic>> cities = [];
+  try {
+    cities =
+        (jsonDecode(await rootBundle.loadString('assets/prayer_cities.json'))
+                as List)
+            .cast<Map<String, dynamic>>();
+  } catch (_) {
+    /* Manual coordinates remain available if the catalog fails. */
+  }
+  if (!context.mounted) return;
   final name = TextEditingController(
     text: provider.selectedCoordinates == null ? '' : provider.locationLabel,
   );
@@ -17,6 +30,7 @@ Future<void> showPrayerLocationDialog(
   );
   final form = GlobalKey<FormState>();
   var method = provider.selectedMethod;
+  var useDevice = false;
   final save = await showDialog<bool>(
     context: context,
     builder: (context) => StatefulBuilder(
@@ -28,8 +42,39 @@ Future<void> showPrayerLocationDialog(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Autocomplete<Map<String, dynamic>>(
+                  displayStringForOption: (city) =>
+                      '${city['name']}، ${city['country']}',
+                  optionsBuilder: (value) {
+                    final query = normalizeArabicSearch(value.text.trim());
+                    if (query.isEmpty) return cities;
+                    return cities.where(
+                      (city) => normalizeArabicSearch(
+                        '${city['name']} ${city['englishName']} ${city['country']}',
+                      ).contains(query),
+                    );
+                  },
+                  fieldViewBuilder: (context, controller, focus, submit) =>
+                      TextFormField(
+                        controller: controller,
+                        focusNode: focus,
+                        decoration: const InputDecoration(
+                          labelText: 'بحث في المدن المتاحة دون اتصال',
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                      ),
+                  onSelected: (city) {
+                    name.text = '${city['name']}، ${city['country']}';
+                    latitude.text = city['latitude'].toString();
+                    longitude.text = city['longitude'].toString();
+                  },
+                ),
+                const SizedBox(height: 12),
                 const Text(
-                  'تُرسل الإحداثيات إلى Aladhan لحساب المواقيت. أدخل موقعاً يدوياً أو استخدم موقع الجهاز من الشاشة السابقة.',
+                  'المدن تستخدم إحداثيات وسط المدينة. إذا لم تجد مدينتك، أدخل الإحداثيات أو استخدم موقع الجهاز.',
+                ),
+                const Text(
+                  'تُرسل الإحداثيات إلى Aladhan لحساب المواقيت. أدخل موقعاً يدوياً أو استخدم موقع الجهاز.',
                 ),
                 TextFormField(
                   controller: name,
@@ -78,6 +123,14 @@ Future<void> showPrayerLocationDialog(
           ),
         ),
         actions: [
+          TextButton.icon(
+            icon: const Icon(Icons.my_location),
+            label: const Text('موقع الجهاز'),
+            onPressed: () {
+              useDevice = true;
+              Navigator.pop(context, false);
+            },
+          ),
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: const Text('إلغاء'),
@@ -99,6 +152,8 @@ Future<void> showPrayerLocationDialog(
       name.text,
       method,
     );
+  } else if (useDevice) {
+    await provider.useDeviceLocation();
   }
   // Wait until the dialog's reverse transition releases its text fields.
   await Future<void>.delayed(const Duration(milliseconds: 300));

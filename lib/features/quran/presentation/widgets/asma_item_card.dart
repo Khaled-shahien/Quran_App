@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../../core/theme/app_colors.dart';
 
 class AsmaItemCard extends StatelessWidget {
@@ -63,7 +63,8 @@ class AsmaItemCard extends StatelessWidget {
               Text(
                 arabicName,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.amiri(
+                style: const TextStyle(
+                  fontFamily: 'Amiri',
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),

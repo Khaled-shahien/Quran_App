@@ -70,6 +70,8 @@ dependencies:
   get_it: ^7.6.0
   dartz: ^0.10.1
   geolocator: 14.0.2
+  firebase_crashlytics: 4.3.10
+  firebase_analytics: 11.6.0
 
 dev_dependencies:
   flutter_test:
@@ -109,6 +111,15 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: fonts/Cairo.ttf
+    - family: Amiri
+      fonts:
+        - asset: fonts/Amiri-Regular.ttf
+        - asset: fonts/Amiri-Bold.ttf
+          weight: 700
 
   # To add assets to your application, add an assets section, like this:
   assets:
@@ -117,6 +128,10 @@ flutter:
     - assets/quran_master.json
     - assets/prayers_data.json
     - assets/quran_duas.json
+    - assets/prayer_cities.json
+    - content_manifest.json
+    - fonts/Cairo-OFL.txt
+    - fonts/Amiri-OFL.txt
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

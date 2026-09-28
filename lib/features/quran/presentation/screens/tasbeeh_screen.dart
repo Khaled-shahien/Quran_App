@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 
@@ -36,7 +36,8 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         ),
         title: Text(
           'التسبيح الإلكتروني',
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -89,7 +90,8 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                             ),
                             child: Text(
                               'الأدعية',
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.primary,
@@ -163,7 +165,8 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                                 selectedIndex < tasbeehPhrases.length
                             ? tasbeehPhrases[selectedIndex]['text']
                             : '',
-                        style: GoogleFonts.amiri(
+                        style: TextStyle(
+                          fontFamily: 'Amiri',
                           fontSize: 28,
                           color: Theme.of(context).colorScheme.primary,
                           height: 1.5,
@@ -200,7 +203,8 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                   child: Center(
                     child: Text(
                       count.toString().padLeft(2, '0'),
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.primary,
@@ -229,9 +233,10 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                     ElevatedButton.icon(
                       onPressed: _showAddTasbeehDialog,
                       icon: const Icon(Icons.add, color: Colors.white),
-                      label: Text(
+                      label: const Text(
                         'إضافة جديد',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
                           color: Colors.white,
                           fontSize: 14,
                         ),
@@ -252,9 +257,10 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                         color: Colors.red,
                         size: 18,
                       ),
-                      label: Text(
+                      label: const Text(
                         'إعادة تعيين',
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
                           color: Colors.red,
                           fontSize: 14,
                         ),
@@ -307,7 +313,8 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         return AlertDialog.adaptive(
           title: Text(
             'إضافة تسبيحة جديدة',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.primary,
               fontSize: 18,
@@ -317,7 +324,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
             controller: controller,
             decoration: InputDecoration(
               hintText: 'أدخل نص التسبيحة',
-              hintStyle: GoogleFonts.cairo(),
+              hintStyle: const TextStyle(fontFamily: 'Cairo'),
               filled: true,
               fillColor: Theme.of(context).scaffoldBackgroundColor,
               border: OutlineInputBorder(
@@ -340,7 +347,8 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
               ),
             ),
             textAlign: TextAlign.right,
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
@@ -349,7 +357,10 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('إلغاء', style: GoogleFonts.cairo(color: Colors.red)),
+              child: const Text(
+                'إلغاء',
+                style: TextStyle(fontFamily: 'Cairo', color: Colors.red),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -367,9 +378,9 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
               ),
-              child: Text(
+              child: const Text(
                 'إضافة',
-                style: GoogleFonts.cairo(color: Colors.white),
+                style: TextStyle(fontFamily: 'Cairo', color: Colors.white),
               ),
             ),
           ],
@@ -419,7 +430,10 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('تم حذف "$title"', style: GoogleFonts.cairo()),
+            content: Text(
+              'تم حذف "$title"',
+              style: const TextStyle(fontFamily: 'Cairo'),
+            ),
             action: SnackBarAction(
               label: 'تراجع',
               textColor: AppColors.accent,
@@ -486,7 +500,8 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                 flex: 2,
                 child: Text(
                   title,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 16,
                     color: isCompleted
                         ? Colors.green
@@ -508,7 +523,8 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                   ),
                   child: Text(
                     counter,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       fontSize: 14,
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,

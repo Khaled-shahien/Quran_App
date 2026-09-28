@@ -190,12 +190,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
             supportedLocales: AppLocalizations.supportedLocales,
             routerConfig: appRouter,
             builder: (context, child) {
-              return NoiseBackground(
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: child!,
-                ),
-              );
+              return NoiseBackground(child: child!);
             },
           );
         },

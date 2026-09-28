@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/features/media/domain/entities/article.dart';
@@ -44,7 +44,8 @@ class ArticleCard extends StatelessWidget {
                     ),
                     child: Text(
                       article.sourceName,
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 11,
                         color: theme.colorScheme.onPrimaryContainer,
                         fontWeight: FontWeight.w700,
@@ -60,7 +61,8 @@ class ArticleCard extends StatelessWidget {
                 textAlign: TextAlign.right,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.cairo(
+                style: TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: theme.colorScheme.primary,
@@ -74,7 +76,8 @@ class ArticleCard extends StatelessWidget {
                   textAlign: TextAlign.right,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 13,
                     color: theme.colorScheme.onSurfaceVariant,
                     height: 1.5,
@@ -92,7 +95,8 @@ class ArticleCard extends StatelessWidget {
                   const Spacer(),
                   Text(
                     _formatDate(article.pubDate),
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       fontSize: 11,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -118,11 +122,11 @@ class ArticleCard extends StatelessWidget {
 
   void _showLaunchError(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text(
           'تعذر فتح الرابط',
           textAlign: TextAlign.center,
-          style: GoogleFonts.cairo(),
+          style: TextStyle(fontFamily: 'Cairo'),
         ),
       ),
     );

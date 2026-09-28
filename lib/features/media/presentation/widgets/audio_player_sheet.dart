@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/features/media/domain/entities/reciter.dart';
@@ -46,7 +46,8 @@ class AudioPlayerSheet extends StatelessWidget {
                     Text(
                       reciter.name,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
                         color: theme.colorScheme.primary,
@@ -56,7 +57,8 @@ class AudioPlayerSheet extends StatelessWidget {
                     Text(
                       reciter.moshafName,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 13,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -104,7 +106,8 @@ class _SurahAudioTile extends StatelessWidget {
           backgroundColor: theme.colorScheme.primary,
           child: Text(
             surah.surahNumber.toString(),
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               color: theme.colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
             ),
@@ -113,12 +116,15 @@ class _SurahAudioTile extends StatelessWidget {
         title: Text(
           'سورة ${surah.surahName}',
           textDirection: TextDirection.rtl,
-          style: GoogleFonts.cairo(fontWeight: FontWeight.w800),
+          style: const TextStyle(
+            fontFamily: 'Cairo',
+            fontWeight: FontWeight.w800,
+          ),
         ),
-        subtitle: Text(
+        subtitle: const Text(
           'فتح التلاوة في مشغل الصوت',
           textDirection: TextDirection.rtl,
-          style: GoogleFonts.cairo(fontSize: 12),
+          style: TextStyle(fontFamily: 'Cairo', fontSize: 12),
         ),
         trailing: IconButton.filledTonal(
           tooltip: 'تشغيل',
@@ -137,11 +143,11 @@ class _SurahAudioTile extends StatelessWidget {
     );
     if (!opened && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'تعذر فتح ملف الصوت',
             textAlign: TextAlign.center,
-            style: GoogleFonts.cairo(),
+            style: TextStyle(fontFamily: 'Cairo'),
           ),
         ),
       );

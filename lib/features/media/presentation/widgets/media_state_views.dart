@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/core/widgets/pulse_loader.dart';
 
@@ -42,7 +42,8 @@ class MediaErrorView extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 fontSize: 15,
                 color: theme.colorScheme.onSurface,
               ),
@@ -51,7 +52,10 @@ class MediaErrorView extends StatelessWidget {
             FilledButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded),
-              label: Text('إعادة المحاولة', style: GoogleFonts.cairo()),
+              label: const Text(
+                'إعادة المحاولة',
+                style: TextStyle(fontFamily: 'Cairo'),
+              ),
             ),
           ],
         ),
@@ -86,7 +90,8 @@ class MediaEmptyView extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 fontSize: 15,
                 color: theme.colorScheme.onSurfaceVariant,
               ),

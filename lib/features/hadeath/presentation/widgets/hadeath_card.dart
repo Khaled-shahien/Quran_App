@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class HadeathCard extends StatelessWidget {
   final String title;
@@ -36,7 +35,8 @@ class HadeathCard extends StatelessWidget {
                 child: Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.amiri(
+                  style: TextStyle(
+                    fontFamily: 'Amiri',
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
                     color: Theme.of(context).colorScheme.primary,

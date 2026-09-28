@@ -95,7 +95,10 @@ class NotificationService {
 
   /// Initialize the notification service.
   Future<void> initialize({bool requestPermissions = false}) async {
-    if (_isInitialized) return;
+    if (_isInitialized) {
+      if (requestPermissions) await this.requestPermissions();
+      return;
+    }
     if (_initFuture != null) {
       await _initFuture;
       if (requestPermissions) {
@@ -116,9 +119,9 @@ class NotificationService {
       const AndroidInitializationSettings androidInit =
           AndroidInitializationSettings('@mipmap/ic_launcher');
       const DarwinInitializationSettings iosInit = DarwinInitializationSettings(
-        requestAlertPermission: true,
-        requestBadgePermission: true,
-        requestSoundPermission: true,
+        requestAlertPermission: false,
+        requestBadgePermission: false,
+        requestSoundPermission: false,
       );
 
       const InitializationSettings initializationSettings =

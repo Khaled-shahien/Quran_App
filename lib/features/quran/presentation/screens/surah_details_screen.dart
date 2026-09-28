@@ -3,7 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../domain/entities/surah_entity.dart';
@@ -445,7 +445,8 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                   'بِسْمِ اللَّهِ '
                   'الرَّحْمَٰنِ الرَّحِيمِ',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.amiri(
+                  style: TextStyle(
+                    fontFamily: 'Amiri',
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: textColor,
@@ -518,7 +519,8 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.amiri(
+                style: TextStyle(
+                  fontFamily: 'Amiri',
                   fontSize: 21,
                   color: primary,
                   fontWeight: FontWeight.bold,
@@ -531,7 +533,8 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 11,
                   color: primary.withValues(alpha: 0.72),
                   fontWeight: FontWeight.w600,
@@ -672,7 +675,8 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                       'الصفحة $currentPage من $totalPages',
                       key: ValueKey<int>(currentPage),
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 13,
                         color: theme.colorScheme.primary.withValues(
                           alpha: 0.78,
@@ -783,7 +787,8 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                             textDirection: TextDirection.rtl,
                             child: SelectableText.rich(
                               TextSpan(
-                                style: GoogleFonts.amiri(
+                                style: TextStyle(
+                                  fontFamily: 'Amiri',
                                   fontSize: _fontSize,
                                   color: textColor,
                                   height: _lineHeight,
@@ -919,7 +924,8 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.amiri(
+                            style: TextStyle(
+                              fontFamily: 'Amiri',
                               fontSize: (_fontSize * 0.82).clamp(20.0, 28.0),
                               fontWeight: FontWeight.bold,
                               color: primary,
@@ -933,7 +939,8 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.cairo(
+                            style: TextStyle(
+                              fontFamily: 'Cairo',
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: primary.withValues(alpha: 0.7),
@@ -970,7 +977,8 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                     'بِسْمِ اللَّهِ '
                     'الرَّحْمَٰنِ الرَّحِيمِ',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.amiri(
+                    style: TextStyle(
+                      fontFamily: 'Amiri',
                       fontSize: (_fontSize * 0.78).clamp(19.0, 26.0),
                       fontWeight: FontWeight.bold,
                       color: primary,
@@ -1051,17 +1059,21 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                     Text(
                       'تخصيص القراءة',
                       textAlign: TextAlign.right,
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                     const SizedBox(height: 14),
-                    Text(
+                    const Text(
                       'حجم الخط',
                       textAlign: TextAlign.right,
-                      style: GoogleFonts.cairo(fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     Slider(
                       value: _fontSize,
@@ -1075,10 +1087,13 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                         setLocalState(() {});
                       },
                     ),
-                    Text(
+                    const Text(
                       'تباعد الأسطر',
                       textAlign: TextAlign.right,
-                      style: GoogleFonts.cairo(fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     Slider(
                       value: _lineHeight,
@@ -1100,10 +1115,13 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                         });
                         setLocalState(() {});
                       },
-                      title: Text(
+                      title: const Text(
                         'إظهار أرقام الآيات',
                         textAlign: TextAlign.right,
-                        style: GoogleFonts.cairo(fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                     SwitchListTile(
@@ -1114,10 +1132,13 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                         });
                         setLocalState(() {});
                       },
-                      title: Text(
+                      title: const Text(
                         'وضع القراءة الكاملة',
                         textAlign: TextAlign.right,
-                        style: GoogleFonts.cairo(fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],

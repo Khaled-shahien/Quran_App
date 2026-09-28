@@ -28,7 +28,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
-          flutter-version: 3.42.0-0.4.pre
+          flutter-version: 3.48.0-0.5.pre
           channel: beta
           cache: true
 
@@ -54,3 +54,17 @@ jobs:
 
       - name: Build debug Android APK
         run: flutter build apk --debug --no-pub
+
+  visual-windows:
+    name: Windows visual baselines
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2
+        with:
+          flutter-version: 3.48.0-0.5.pre
+          channel: beta
+          cache: true
+      - run: flutter pub get
+      - run: flutter test test/features/settings/presentation/screens/settings_golden_test.dart

@@ -46,6 +46,9 @@ app.*.map.json
 
 # API keys - never commit local values.
 .env
+android/key.properties
+*.jks
+*.keystore
 .env.*
 !.env.example
 # Widget Preview related

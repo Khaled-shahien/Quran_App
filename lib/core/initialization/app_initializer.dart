@@ -1,11 +1,13 @@
 import 'dart:developer' as developer;
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import '../services/monitoring_service.dart';
 
 import 'package:sakina_app/firebase_options.dart';
 import 'package:sakina_app/core/di/service_locator.dart';
 import 'package:sakina_app/core/services/notification_service.dart';
-import 'package:sakina_app/core/services/firebase_messaging_service.dart';
+
 import 'package:sakina_app/core/services/workmanager_service.dart';
 
 /// AppInitializer is responsible for orchestrating the app's boot sequence.
@@ -26,7 +28,9 @@ class AppInitializer {
 
     await _initializeFirebase();
     await _setupDependencyInjection();
-    await _registerBackgroundHandlers();
+    if (Firebase.apps.isNotEmpty) {
+      await MonitoringService.instance.initialize(getIt<SharedPreferences>());
+    }
     await _initializeBackgroundServices();
 
     _isInitialized = true;
@@ -35,6 +39,7 @@ class AppInitializer {
 
   /// Initializes the Firebase app instance.
   static Future<void> _initializeFirebase() async {
+    if (!MonitoringService.configured) return;
     try {
       if (Firebase.apps.isEmpty) {
         await Firebase.initializeApp(
@@ -74,31 +79,10 @@ class AppInitializer {
     }
   }
 
-  /// Registers background/terminated state handlers.
-  static Future<void> _registerBackgroundHandlers() async {
-    try {
-      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-      developer.log(
-        'FCM background handler registered',
-        name: 'sakina_app.init',
-      );
-    } catch (e) {
-      developer.log(
-        'Failed to register FCM background handler',
-        name: 'sakina_app.init',
-        error: e,
-        level: 1000,
-      );
-    }
-  }
-
   /// Bootstraps local services sequentially.
   static Future<void> _initializeBackgroundServices() async {
     try {
       // Assuming getIt is loaded successfully
-      final firebaseMessagingService = getIt<FirebaseMessagingService>();
-      await firebaseMessagingService.initialize();
-
       final notificationService = getIt<NotificationService>();
       try {
         await notificationService.initialize(requestPermissions: false);

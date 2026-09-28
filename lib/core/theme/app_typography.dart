@@ -1,97 +1,111 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppTypography {
   // Display styles
-  static TextStyle displayLarge = GoogleFonts.cairo(
+  static TextStyle displayLarge = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 57,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle displayMedium = GoogleFonts.cairo(
+  static TextStyle displayMedium = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 45,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle displaySmall = GoogleFonts.cairo(
+  static TextStyle displaySmall = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 36,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
   // Headline styles
-  static TextStyle headlineLarge = GoogleFonts.cairo(
+  static TextStyle headlineLarge = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 32,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle headlineMedium = GoogleFonts.cairo(
+  static TextStyle headlineMedium = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 28,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle headlineSmall = GoogleFonts.cairo(
+  static TextStyle headlineSmall = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 24,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
   // Title styles
-  static TextStyle titleLarge = GoogleFonts.cairo(
+  static TextStyle titleLarge = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 22,
     fontWeight: FontWeight.w500,
     letterSpacing: 0,
   );
 
-  static TextStyle titleMedium = GoogleFonts.cairo(
+  static TextStyle titleMedium = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 16,
     fontWeight: FontWeight.w500,
     letterSpacing: 0,
   );
 
-  static TextStyle titleSmall = GoogleFonts.cairo(
+  static TextStyle titleSmall = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 14,
     fontWeight: FontWeight.w500,
     letterSpacing: 0,
   );
 
   // Body styles
-  static TextStyle bodyLarge = GoogleFonts.cairo(
+  static TextStyle bodyLarge = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 16,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle bodyMedium = GoogleFonts.cairo(
+  static TextStyle bodyMedium = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 14,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
-  static TextStyle bodySmall = GoogleFonts.cairo(
+  static TextStyle bodySmall = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 12,
     fontWeight: FontWeight.w400,
     letterSpacing: 0,
   );
 
   // Label styles
-  static TextStyle labelLarge = GoogleFonts.cairo(
+  static TextStyle labelLarge = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 14,
     fontWeight: FontWeight.w500,
     letterSpacing: 0,
   );
 
-  static TextStyle labelMedium = GoogleFonts.cairo(
+  static TextStyle labelMedium = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 12,
     fontWeight: FontWeight.w500,
     letterSpacing: 0,
   );
 
-  static TextStyle labelSmall = GoogleFonts.cairo(
+  static TextStyle labelSmall = const TextStyle(
+    fontFamily: 'Cairo',
     fontSize: 11,
     fontWeight: FontWeight.w500,
     letterSpacing: 0,

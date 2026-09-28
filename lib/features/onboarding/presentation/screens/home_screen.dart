@@ -192,13 +192,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
-                  Expanded(
+                  const Expanded(
                     child: Text(
                       AppStrings.appName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -263,7 +264,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text(
               label,
               textAlign: TextAlign.center,
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 color: active ? Colors.white : AppColors.primary,
                 fontWeight: FontWeight.bold,
               ),
@@ -281,7 +283,8 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.only(top: 16, bottom: 8, right: 20, left: 20),
       child: Text(
         title,
-        style: GoogleFonts.cairo(
+        style: TextStyle(
+          fontFamily: 'Cairo',
           fontWeight: FontWeight.bold,
           color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
           fontSize: 14,
@@ -317,7 +320,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   title,
                   textAlign: TextAlign.right,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: textColor ?? Theme.of(context).colorScheme.primary,
@@ -363,7 +367,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: Theme.of(context).colorScheme.primary,
@@ -371,7 +376,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Text(
                     subtitle,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       fontSize: 12,
                       color: Theme.of(
                         context,
@@ -398,7 +404,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 4),
                   Text(
                     rightSubtitle,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       fontSize: 12,
                       color: Theme.of(
                         context,
@@ -455,7 +462,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Text(
                   message,
-                  style: GoogleFonts.cairo(color: Colors.white),
+                  style: const TextStyle(
+                    fontFamily: 'Cairo',
+                    color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -518,7 +528,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
@@ -530,7 +541,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? 'عدد الأوراد المكتملة: $completed'
                       : 'عدد الأوراد المتبقية: $remaining',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     color: Theme.of(
                       context,
                     ).colorScheme.primary.withValues(alpha: 0.7),
@@ -546,7 +558,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           : 'لا توجد أوراد قادمة. '
                                 'تم إنجاز الختمة بالكامل.',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 14,
                         color: Theme.of(
                           context,
@@ -572,7 +585,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             contentPadding: EdgeInsets.zero,
                             title: Text(
                               'من ${wird.fromUnit} إلى ${wird.toUnit} (${activeKhatma.amountType})',
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -580,7 +594,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             subtitle: Text(
                               'مكتمل في $dateLabel',
-                              style: GoogleFonts.cairo(
+                              style: TextStyle(
+                                fontFamily: 'Cairo',
                                 color: Theme.of(
                                   context,
                                 ).colorScheme.primary.withValues(alpha: 0.65),
@@ -606,7 +621,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           contentPadding: EdgeInsets.zero,
                           title: Text(
                             'ورد اليوم $wirdDay',
-                            style: GoogleFonts.cairo(
+                            style: TextStyle(
+                              fontFamily: 'Cairo',
                               fontWeight: FontWeight.w600,
                               color: Theme.of(context).colorScheme.primary,
                             ),
@@ -614,7 +630,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           subtitle: Text(
                             'قادم',
-                            style: GoogleFonts.cairo(
+                            style: TextStyle(
+                              fontFamily: 'Cairo',
                               color: Theme.of(
                                 context,
                               ).colorScheme.primary.withValues(alpha: 0.65),
@@ -949,22 +966,28 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () => showDialog<void>(
             context: context,
             builder: (dialogContext) => AlertDialog(
-              title: Text(
+              title: const Text(
                 'إعدادات اللغة',
-                style: GoogleFonts.cairo(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontFamily: 'Cairo',
+                  fontWeight: FontWeight.bold,
+                ),
                 textAlign: TextAlign.right,
               ),
-              content: Text(
+              content: const Text(
                 'اللغة الحالية للتطبيق هي العربية. '
                 'سيتم دعم لغات إضافية '
                 'لاحقاً بإذن الله.',
-                style: GoogleFonts.cairo(),
+                style: TextStyle(fontFamily: 'Cairo'),
                 textAlign: TextAlign.right,
               ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(dialogContext),
-                  child: Text('حسناً', style: GoogleFonts.cairo()),
+                  child: const Text(
+                    'حسناً',
+                    style: TextStyle(fontFamily: 'Cairo'),
+                  ),
                 ),
               ],
             ),
@@ -1028,7 +1051,8 @@ class _HomeScreenState extends State<HomeScreen> {
           return Center(
             child: Text(
               'لا توجد آيات مفضلة',
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 fontSize: 16,
                 color: Theme.of(
                   context,
@@ -1076,7 +1100,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(
                           verse['arabic'] ?? '',
                           textAlign: TextAlign.right,
-                          style: GoogleFonts.amiri(
+                          style: TextStyle(
+                            fontFamily: 'Amiri',
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.primary,
@@ -1088,7 +1113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 8),
                   Text(
                     verse['surah'] ?? '',
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       fontSize: 12,
                       color: Theme.of(
                         context,
@@ -1183,7 +1209,8 @@ class _PrayerTimeHeader extends StatelessWidget {
                       Text(
                         currentTime,
                         textAlign: TextAlign.right,
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
                           fontSize: 38,
                           fontWeight: FontWeight.w900,
                           color: theme.colorScheme.onPrimary,

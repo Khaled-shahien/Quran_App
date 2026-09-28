@@ -16,6 +16,10 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
+    - lib/features/quran/presentation/screens/reader_buttons.dart
+    - lib/features/quran/presentation/screens/reader_content.dart
+    - lib/features/quran/presentation/screens/reader_controls.dart
+    - lib/features/quran/presentation/screens/reader_data.dart
 include: package:flutter_lints/flutter.yaml
 
 linter:

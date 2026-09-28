@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AzkarScreen extends StatelessWidget {
   const AzkarScreen({super.key});
@@ -12,7 +11,8 @@ class AzkarScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'الأذكار',
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -24,6 +24,7 @@ class AzkarScreen extends StatelessWidget {
           button: true,
           label: 'الرجوع للشاشة السابقة',
           child: IconButton(
+            tooltip: 'رجوع',
             icon: Icon(
               Icons.arrow_back_ios,
               color: Theme.of(context).colorScheme.primary,
@@ -184,7 +185,8 @@ Widget _buildHeaderCard(
                 maxLines: textScale > 1.2 ? 2 : 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.right,
-                style: GoogleFonts.cairo(
+                style: const TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -243,7 +245,8 @@ Widget _buildGridCard(
                 maxLines: textScale > 1.2 ? 2 : 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.right,
-                style: GoogleFonts.cairo(
+                style: const TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,

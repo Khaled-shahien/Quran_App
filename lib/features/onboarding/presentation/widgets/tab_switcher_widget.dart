@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../../core/theme/app_colors.dart';
 
 class TabSwitcherWidget extends StatelessWidget {
@@ -40,13 +40,14 @@ class TabSwitcherWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color: active ? AppColors.accent : Colors.transparent,
+            color: active ? AppColors.lightPageAccent : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               color: active
                   ? Colors.white
                   : Theme.of(context).colorScheme.primary,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 import '../../../../core/widgets/pulse_loader.dart';
 import '../providers/azkar_provider.dart';
@@ -16,7 +16,8 @@ class AzkarDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           categoryName,
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -28,6 +29,7 @@ class AzkarDetailsScreen extends StatelessWidget {
           button: true,
           label: 'الرجوع للشاشة السابقة',
           child: IconButton(
+            tooltip: 'رجوع',
             icon: Icon(
               Icons.arrow_back_ios,
               color: Theme.of(context).colorScheme.primary,
@@ -46,10 +48,14 @@ class AzkarDetailsScreen extends StatelessWidget {
               }
 
               if (provider.errorMessage != null) {
-                return Center(
+                return const Center(
                   child: Text(
                     'حدث خطأ في تحميل الأذكار',
-                    style: GoogleFonts.cairo(color: Colors.red, fontSize: 18),
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
+                      color: Colors.red,
+                      fontSize: 18,
+                    ),
                   ),
                 );
               }
@@ -60,7 +66,8 @@ class AzkarDetailsScreen extends StatelessWidget {
                 return Center(
                   child: Text(
                     'لا توجد بيانات لهذا القسم حالياً',
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       fontSize: 18,
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -118,7 +125,8 @@ class _AzkarItemCard extends StatelessWidget {
                 children: [
                   Text(
                     item.title,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,
@@ -141,7 +149,8 @@ class _AzkarItemCard extends StatelessWidget {
                         ),
                         child: Text(
                           'التكرار: ${item.repeat}',
-                          style: GoogleFonts.cairo(
+                          style: TextStyle(
+                            fontFamily: 'Cairo',
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.primary,
@@ -157,7 +166,8 @@ class _AzkarItemCard extends StatelessWidget {
               // Azkar Text
               Text(
                 item.text,
-                style: GoogleFonts.amiri(
+                style: TextStyle(
+                  fontFamily: 'Amiri',
                   fontSize: 22,
                   height: 2.0,
                   color: Theme.of(context).colorScheme.onSurface,
@@ -172,7 +182,11 @@ class _AzkarItemCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   item.reference,
-                  style: GoogleFonts.cairo(fontSize: 12, color: Colors.grey),
+                  style: const TextStyle(
+                    fontFamily: 'Cairo',
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
                   textAlign: TextAlign.left,
                 ),
               ],

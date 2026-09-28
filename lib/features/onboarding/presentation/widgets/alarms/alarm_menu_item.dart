@@ -45,26 +45,11 @@ class AlarmMenuItem extends StatelessWidget {
         return ListTile(
           leading: Icon(icon, color: iconColor),
           title: Text(title),
-          subtitle: Text(subtitle),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                timeText,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(width: 8),
-              // Time settings button
-              IconButton(
-                icon: const Icon(Icons.access_time, size: 20),
-                onPressed: () => _showTimePicker(context),
-                tooltip: 'تعديل الوقت',
-              ),
-            ],
+          subtitle: Text('$subtitle • $timeText'),
+          trailing: IconButton(
+            icon: const Icon(Icons.access_time),
+            onPressed: () => _showTimePicker(context),
+            tooltip: 'تعديل وقت $title',
           ),
           onTap: () => _showTimePicker(context),
         );

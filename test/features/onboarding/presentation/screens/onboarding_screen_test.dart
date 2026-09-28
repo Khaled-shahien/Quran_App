@@ -44,7 +44,7 @@ void main() {
         theme: ThemeData(
           brightness: brightness,
           colorScheme: ColorScheme.fromSeed(
-            seedColor: AppColors.primary,
+            seedColor: AppColors.lightPrimary,
             brightness: brightness,
           ),
         ),
@@ -110,7 +110,7 @@ void main() {
     expect(find.byType(NotificationPermissionDialog), findsNothing);
   });
 
-  testWidgets('Skip shows one notification prompt and allows declining', (
+  testWidgets('Skip finishes once without requesting notification permission', (
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
@@ -121,12 +121,12 @@ void main() {
     skip();
     skip();
     await tester.pumpAndSettle();
-    expect(find.byType(NotificationPermissionDialog), findsOneWidget);
-    await tester.tap(find.text('ليس الآن'));
+    expect(find.byType(NotificationPermissionDialog), findsNothing);
+
     await tester.pumpAndSettle();
     expect(find.text('Home destination'), findsOneWidget);
     final prefs = await SharedPreferences.getInstance();
-    expect(prefs.getBool('has_seen_notification_permission'), isTrue);
+    expect(prefs.getBool('onboarding_complete'), isTrue);
   });
 
   testWidgets('Reduced motion still allows page navigation', (tester) async {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Animated splash screen that displays the Sakina logo
@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _navigateAfterDelay() async {
-    await Future.delayed(const Duration(milliseconds: 3500));
+    await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
 
     final prefs = await SharedPreferences.getInstance();
@@ -85,16 +85,17 @@ class _SplashScreenState extends State<SplashScreen>
                 opacity: _fadeAnimation,
                 child: ScaleTransition(
                   scale: _scaleAnimation,
-                  child: Column(
+                  child: const Column(
                     children: [
-                      const Spacer(flex: 3),
-                      const Spacer(flex: 2),
+                      Spacer(flex: 3),
+                      Spacer(flex: 2),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        padding: EdgeInsets.symmetric(horizontal: 24),
                         child: Text(
                           'تطبيقك للطمأنينة والهدوء',
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.cairo(
+                          style: TextStyle(
+                            fontFamily: 'Cairo',
                             color: logoGold,
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
@@ -102,8 +103,8 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      const SizedBox(
+                      SizedBox(height: 24),
+                      SizedBox(
                         width: 30,
                         height: 30,
                         child: CircularProgressIndicator(
@@ -111,7 +112,7 @@ class _SplashScreenState extends State<SplashScreen>
                           color: logoGold,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                     ],
                   ),
                 ),

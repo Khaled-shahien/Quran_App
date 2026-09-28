@@ -4,7 +4,7 @@ import '../../domain/prayer_time_zone.dart';
 import 'prayer_location_dialog.dart';
 import '../../domain/prayer_calculation_policy.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 import 'dart:async';
 import '../../../../core/widgets/pulse_loader.dart';
@@ -77,7 +77,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
       appBar: AppBar(
         title: Text(
           l10n.prayerTitle,
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
@@ -123,17 +124,26 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                     const SizedBox(height: 16),
                     Text(
                       l10n.prayerLoadError,
-                      style: GoogleFonts.cairo(fontSize: 16, color: Colors.red),
+                      style: const TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 16,
+                        color: Colors.red,
+                      ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
+                    const Text(
                       'خطأ في تحميل أوقات الصلاة',
-                      style: GoogleFonts.cairo(fontSize: 16, color: Colors.red),
+                      style: TextStyle(
+                        fontFamily: 'Cairo',
+                        fontSize: 16,
+                        color: Colors.red,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       provider.errorMessage ?? 'خطأ غير معروف',
-                      style: GoogleFonts.cairo(
+                      style: const TextStyle(
+                        fontFamily: 'Cairo',
                         fontSize: 14,
                         color: Colors.grey,
                       ),
@@ -147,7 +157,10 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                         onPressed: () {
                           provider.fetchTodayForCurrentLocation();
                         },
-                        child: Text(l10n.retry, style: GoogleFonts.cairo()),
+                        child: Text(
+                          l10n.retry,
+                          style: const TextStyle(fontFamily: 'Cairo'),
+                        ),
                       ),
                     ),
                   ],
@@ -206,7 +219,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
               children: [
                 Text(
                   l10n.todayPrayerTimes,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: Theme.of(context).colorScheme.primary,
@@ -215,7 +229,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                 const SizedBox(height: 4),
                 Text(
                   formattedDate,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -223,7 +238,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                 const SizedBox(height: 8),
                 Text(
                   'مواقيت الصلاة',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
@@ -271,11 +287,12 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Next Prayer Label
-              Align(
+              const Align(
                 alignment: Alignment.centerRight,
                 child: Text(
                   'الصلاة القادمة',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: Colors.white70,
@@ -288,7 +305,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                 children: [
                   Text(
                     'صلاة $nextPrayerName',
-                    style: GoogleFonts.cairo(
+                    style: const TextStyle(
+                      fontFamily: 'Cairo',
                       fontSize: 56,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -302,7 +320,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                     children: [
                       Text(
                         nextPrayerTime,
-                        style: GoogleFonts.cairo(
+                        style: const TextStyle(
+                          fontFamily: 'Cairo',
                           fontSize: 48,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -313,9 +332,10 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'في',
-                            style: GoogleFonts.cairo(
+                            style: TextStyle(
+                              fontFamily: 'Cairo',
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Colors.white70,
@@ -323,7 +343,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                           ),
                           Text(
                             timeRemaining,
-                            style: GoogleFonts.cairo(
+                            style: const TextStyle(
+                              fontFamily: 'Cairo',
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: Colors.white,
@@ -399,7 +420,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
         children: [
           Text(
             prayerName,
-            style: GoogleFonts.cairo(
+            style: TextStyle(
+              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: isNext ? FontWeight.bold : FontWeight.w500,
               color: Theme.of(context).colorScheme.primary,
@@ -417,7 +439,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
             ),
             child: Text(
               prayerTime,
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: isNext

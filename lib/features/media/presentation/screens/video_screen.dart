@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/features/media/presentation/providers/video_provider.dart';
@@ -33,9 +33,9 @@ class _VideoScreenState extends State<VideoScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'الفيديوهات',
-            style: GoogleFonts.cairo(fontWeight: FontWeight.bold),
+            style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -66,7 +66,8 @@ class _VideoScreenState extends State<VideoScreen> {
                       child: Text(
                         provider.fallbackMessage!,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.cairo(
+                        style: TextStyle(
+                          fontFamily: 'Cairo',
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w700,
                         ),
@@ -116,7 +117,8 @@ class _CategoryChips extends StatelessWidget {
           return ChoiceChip(
             label: Text(
               entry.key,
-              style: GoogleFonts.cairo(
+              style: TextStyle(
+                fontFamily: 'Cairo',
                 color: selected ? theme.colorScheme.onPrimary : null,
                 fontWeight: FontWeight.w700,
               ),

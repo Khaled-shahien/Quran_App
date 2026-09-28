@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/features/media/domain/entities/video.dart';
@@ -47,7 +47,8 @@ class VideoCard extends StatelessWidget {
                     textAlign: TextAlign.right,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       fontWeight: FontWeight.w800,
                       color: theme.colorScheme.primary,
                     ),
@@ -59,7 +60,8 @@ class VideoCard extends StatelessWidget {
                     textAlign: TextAlign.right,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
+                      fontFamily: 'Cairo',
                       fontSize: 12,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -100,7 +102,8 @@ class VideoChannelCard extends StatelessWidget {
         title: Text(
           channel.name,
           textDirection: TextDirection.rtl,
-          style: GoogleFonts.cairo(
+          style: TextStyle(
+            fontFamily: 'Cairo',
             fontWeight: FontWeight.w800,
             color: theme.colorScheme.primary,
           ),
@@ -108,7 +111,7 @@ class VideoChannelCard extends StatelessWidget {
         subtitle: Text(
           channel.description,
           textDirection: TextDirection.rtl,
-          style: GoogleFonts.cairo(),
+          style: const TextStyle(fontFamily: 'Cairo'),
         ),
         trailing: const Icon(Icons.open_in_new_rounded),
       ),
@@ -139,11 +142,11 @@ Future<void> _openUrl(BuildContext context, String url) async {
   final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
   if (!opened && context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text(
           'تعذر فتح الرابط',
           textAlign: TextAlign.center,
-          style: GoogleFonts.cairo(),
+          style: TextStyle(fontFamily: 'Cairo'),
         ),
       ),
     );

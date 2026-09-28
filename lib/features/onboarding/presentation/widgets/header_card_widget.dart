@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
 import '../../../prayers/presentation/providers/'
     'prayer_times_performance_provider.dart';
@@ -35,13 +35,15 @@ class HeaderCardWidget extends StatelessWidget {
               children: [
                 Text(
                   currentName,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 Text(
                   currentTime,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 34,
                     fontWeight: FontWeight.w900,
                     color: Theme.of(context).colorScheme.primary,
@@ -50,14 +52,16 @@ class HeaderCardWidget extends StatelessWidget {
                 const Spacer(),
                 Text(
                   'الصلاة التالية: $nextName',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 12,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 Text(
                   nextTime,
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,

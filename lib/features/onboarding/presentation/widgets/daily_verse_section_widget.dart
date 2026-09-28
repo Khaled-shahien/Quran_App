@@ -77,16 +77,18 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 'الآيات اليومية',
-                style: GoogleFonts.cairo(
+                style: TextStyle(
+                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 _selectedVerse['surah']!,
-                style: GoogleFonts.cairo(
+                style: TextStyle(
+                  fontFamily: 'Cairo',
                   color: Theme.of(context).colorScheme.primary,
                   fontSize: 14,
                 ),
@@ -124,7 +126,8 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
                   Text(
                     _selectedVerse['arabic']!,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.amiri(
+                    style: const TextStyle(
+                      fontFamily: 'Amiri',
                       fontSize: 26,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

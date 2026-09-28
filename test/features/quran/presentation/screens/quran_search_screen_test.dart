@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sakina_app/features/quran/domain/entities/ayah_entity.dart';
@@ -34,6 +35,21 @@ class SearchRepository implements AyahRepository {
 }
 
 void main() {
+  for (final query in ['الفاتحة', '١', '1']) {
+    testWidgets('surah lookup supports $query offline', (tester) async {
+      // The binding clears asset caches between tests. Decode outside fake time.
+      await tester.runAsync(() => rootBundle.loadString('assets/quran_master.json'));
+      await tester.pumpWidget(
+        MaterialApp(home: QuranSearchScreen(repository: SearchRepository())),
+      );
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), query);
+      await tester.pumpAndSettle();
+      expect(find.byType(ListTile), findsOneWidget);
+      expect(find.text('سورة 1'), findsOneWidget);
+    });
+  }
+
   testWidgets('offline result opens the exact ayah and page', (tester) async {
     Map<String, dynamic>? extra;
     final router = GoRouter(
