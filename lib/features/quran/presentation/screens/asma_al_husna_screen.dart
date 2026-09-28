@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:sakina_app/features/quran/presentation/widgets/'
@@ -294,7 +295,7 @@ class _AsmaAlHusnaScreenState extends State<AsmaAlHusnaScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'أسماء الله الحسنى',
+          l10nOf(context).asmaAlHusnaScreenMessage1,
           style: TextStyle(
             fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.primary,
@@ -305,7 +306,7 @@ class _AsmaAlHusnaScreenState extends State<AsmaAlHusnaScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          tooltip: 'رجوع',
+          tooltip: l10nOf(context).appStringsMessage13,
           icon: Icon(
             Icons.arrow_back_ios,
             color: Theme.of(context).colorScheme.primary,

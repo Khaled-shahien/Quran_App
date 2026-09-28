@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -33,9 +34,12 @@ class _VideoScreenState extends State<VideoScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'الفيديوهات',
-            style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.bold),
+          title: Text(
+            l10nOf(context).videoScreenMessage1,
+            style: const TextStyle(
+              fontFamily: 'Cairo',
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -77,8 +81,8 @@ class _VideoScreenState extends State<VideoScreen> {
                     child: provider.channels.isNotEmpty
                         ? _FallbackChannels(provider: provider)
                         : provider.videos.isEmpty
-                        ? const MediaEmptyView(
-                            message: 'لا توجد فيديوهات متاحة حالياً',
+                        ? MediaEmptyView(
+                            message: l10nOf(context).videoScreenMessage2,
                             icon: Icons.video_library_outlined,
                           )
                         : _VideoResults(provider: provider),

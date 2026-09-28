@@ -24,9 +24,9 @@ mixin _ReaderContent on _ReaderState {
     }
 
     if (_surahPages.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'لا توجد آيات في هذه السورة',
+          appL10n.readerContentMessage1,
           style: TextStyle(
             fontSize: 16,
             color: Colors.grey,
@@ -229,8 +229,12 @@ mixin _ReaderContent on _ReaderState {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '${_revelationLabel(verse.revelationType)} '
-                            '• ${verse.totalAyah} آية',
+                            appL10n.readerContentMessage2(
+                              (_revelationLabel(
+                                verse.revelationType,
+                              )).toString(),
+                              (verse.totalAyah).toString(),
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
@@ -269,8 +273,7 @@ mixin _ReaderContent on _ReaderState {
                     border: Border.all(color: primary.withValues(alpha: 0.14)),
                   ),
                   child: Text(
-                    'بِسْمِ اللَّهِ '
-                    'الرَّحْمَٰنِ الرَّحِيمِ',
+                    appL10n.readerContentMessage3,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Amiri',

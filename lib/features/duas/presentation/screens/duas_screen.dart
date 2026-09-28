@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ class DuasScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          'الأدعية',
+          l10nOf(context).appStringsMessage30,
           style: TextStyle(
             fontFamily: 'Cairo',
             fontWeight: FontWeight.bold,
@@ -25,8 +26,9 @@ class DuasScreen extends StatelessWidget {
         elevation: 0,
         leading: Semantics(
           button: true,
-          label: 'الرجوع للشاشة السابقة',
+          label: l10nOf(context).azkarDetailsScreenMessage1,
           child: IconButton(
+            tooltip: l10nOf(context).azkarDetailsScreenMessage2,
             icon: Icon(
               Icons.arrow_back_ios,
               color: Theme.of(context).colorScheme.primary,
@@ -45,10 +47,10 @@ class DuasScreen extends StatelessWidget {
               }
 
               if (provider.errorMessage != null) {
-                return const Center(
+                return Center(
                   child: Text(
-                    'حدث خطأ في تحميل الأدعية',
-                    style: TextStyle(
+                    l10nOf(context).duasScreenMessage1,
+                    style: const TextStyle(
                       fontFamily: 'Cairo',
                       color: Colors.red,
                       fontSize: 18,
@@ -64,7 +66,7 @@ class DuasScreen extends StatelessWidget {
               if (category == null || category.items.isEmpty) {
                 return Center(
                   child: Text(
-                    'لا توجد أدعية حالياً',
+                    l10nOf(context).duasScreenMessage2,
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 18,
@@ -99,7 +101,7 @@ class _DuasItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       container: true,
-      label: 'دعاء ${item.title}',
+      label: l10nOf(context).duasScreenMessage3((item.title).toString()),
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(

@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/media_tiles_widget.dart';
@@ -10,7 +11,7 @@ class MediaScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'كل الوسائط',
+          l10nOf(context).homeScreenMessage28,
           style: TextStyle(
             fontFamily: 'Cairo',
             fontWeight: FontWeight.bold,

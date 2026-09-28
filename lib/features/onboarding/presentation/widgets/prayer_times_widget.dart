@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import '../../../prayers/domain/prayer_time_zone.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -62,9 +63,9 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
               children: [
                 const Icon(Icons.error_outline, size: 48, color: Colors.red),
                 const SizedBox(height: 16),
-                const Text(
-                  'خطأ في تحميل أوقات الصلاة',
-                  style: TextStyle(
+                Text(
+                  l10nOf(context).prayerTimesWidgetMessage1,
+                  style: const TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -73,11 +74,12 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 ),
                 TextButton(
                   onPressed: () => context.push('/prayers'),
-                  child: const Text('تحديد موقع الصلاة'),
+                  child: Text(l10nOf(context).prayerTimesWidgetMessage2),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  provider.errorMessage ?? 'خطأ غير معروف',
+                  provider.errorMessage ??
+                      l10nOf(context).prayerTimesWidgetMessage3,
                   style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 14,
@@ -97,7 +99,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         return Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
-            'لا توجد بيانات متاحة',
+            l10nOf(context).prayerTimesWidgetMessage4,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 16,
@@ -126,7 +128,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           const SizedBox(height: 20),
           // Prayer Times List Header
           Text(
-            'جميع مواقيت الصلاة',
+            appL10n.prayerTimesWidgetMessage5,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 16,
@@ -170,11 +172,11 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Next Prayer Label
-            const Align(
+            Align(
               alignment: Alignment.centerRight,
               child: Text(
-                'الصلاة القادمة',
-                style: TextStyle(
+                appL10n.prayerTimesWidgetMessage6,
+                style: const TextStyle(
                   fontFamily: 'Cairo',
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -207,9 +209,9 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'في',
-                      style: TextStyle(
+                    Text(
+                      appL10n.prayerTimesWidgetMessage7,
+                      style: const TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -246,12 +248,12 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
   }
 
   Widget _buildPrayerTimesList(Map<String, String> prayerTimes) {
-    const arabicNames = {
-      'Fajr': 'الفجر',
-      'Dhuhr': 'الظهر',
-      'Asr': 'العصر',
-      'Maghrib': 'المغرب',
-      'Isha': 'العشاء',
+    final arabicNames = {
+      'Fajr': appL10n.prayerTimesWidgetMessage8,
+      'Dhuhr': appL10n.prayerTimesWidgetMessage9,
+      'Asr': appL10n.prayerTimesWidgetMessage10,
+      'Maghrib': appL10n.prayerTimesWidgetMessage11,
+      'Isha': appL10n.prayerTimesWidgetMessage12,
     };
 
     final nextPrayerInfo = _getNextPrayer(prayerTimes);
@@ -333,12 +335,12 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
   /// Get next prayer information
   Map<String, dynamic> _getNextPrayer(Map<String, String> prayerTimes) {
     const englishOrder = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-    const arabicNames = {
-      'Fajr': 'الفجر',
-      'Dhuhr': 'الظهر',
-      'Asr': 'العصر',
-      'Maghrib': 'المغرب',
-      'Isha': 'العشاء',
+    final arabicNames = {
+      'Fajr': appL10n.prayerTimesWidgetMessage8,
+      'Dhuhr': appL10n.prayerTimesWidgetMessage9,
+      'Asr': appL10n.prayerTimesWidgetMessage10,
+      'Maghrib': appL10n.prayerTimesWidgetMessage11,
+      'Isha': appL10n.prayerTimesWidgetMessage12,
     };
 
     final now = context.read<PrayerTimesProvider>().locationNow;
@@ -361,9 +363,9 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
 
     if (nextPrayerTime == null) {
       return {
-        'name': 'الفجر غداً',
+        'name': appL10n.prayerTimesWidgetMessage13,
         'time': '--:--',
-        'remaining': 'بانتظار مواقيت الغد',
+        'remaining': appL10n.prayerTimesWidgetMessage14,
       };
     }
 
@@ -373,13 +375,18 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
 
     String remainingText = '';
     if (timeRemaining.inHours > 0) {
-      remainingText = '$hoursStr ساعة و$minutesStr دقيقة';
+      remainingText = appL10n.prayerTimesWidgetMessage15(
+        (hoursStr).toString(),
+        (minutesStr).toString(),
+      );
     } else {
-      remainingText = '$minutesStr دقيقة';
+      remainingText = appL10n.prayerTimesWidgetMessage16(
+        (minutesStr).toString(),
+      );
     }
 
     return {
-      'name': nextPrayerName ?? 'الفجر',
+      'name': nextPrayerName ?? appL10n.prayerTimesWidgetMessage8,
       'time': _formatTimeForDisplay(nextPrayerTime),
       'remaining': remainingText,
     };

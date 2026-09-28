@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -29,24 +30,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final theme = context.watch<ThemeProvider>();
     final prayer = context.watch<PrayerTimesProvider>();
     return Scaffold(
-      appBar: AppBar(title: const Text('الإعدادات')),
+      appBar: AppBar(title: Text(l10nOf(context).appStringsMessage16)),
       body: SafeArea(
         child: ListView(
           children: [
-            const _SectionTitle('المظهر والقراءة'),
+            _SectionTitle(l10nOf(context).settingsScreenMessage1),
             Padding(
               padding: const EdgeInsets.all(16),
               child: DropdownButtonFormField<ThemeMode>(
                 isExpanded: true,
                 initialValue: theme.themeMode,
-                decoration: const InputDecoration(labelText: 'مظهر التطبيق'),
-                items: const [
+                decoration: InputDecoration(
+                  labelText: l10nOf(context).settingsScreenMessage2,
+                ),
+                items: [
                   DropdownMenuItem(
                     value: ThemeMode.system,
-                    child: Text('حسب الجهاز'),
+                    child: Text(l10nOf(context).settingsScreenMessage3),
                   ),
-                  DropdownMenuItem(value: ThemeMode.light, child: Text('فاتح')),
-                  DropdownMenuItem(value: ThemeMode.dark, child: Text('داكن')),
+                  DropdownMenuItem(
+                    value: ThemeMode.light,
+                    child: Text(l10nOf(context).settingsScreenMessage4),
+                  ),
+                  DropdownMenuItem(
+                    value: ThemeMode.dark,
+                    child: Text(l10nOf(context).settingsScreenMessage5),
+                  ),
                 ],
                 onChanged: (value) {
                   if (value != null) theme.setThemeMode(value);
@@ -54,17 +63,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             ReadingPreferencesPanel(preferences: settings.prefs),
-            const _SectionTitle('الصلاة'),
+            _SectionTitle(l10nOf(context).mainNavigationShellMessage1),
             ListTile(
               leading: const Icon(Icons.location_on_outlined),
-              title: const Text('الموقع وطريقة الحساب'),
+              title: Text(l10nOf(context).settingsScreenMessage6),
               subtitle: Text(prayer.locationLabel),
               trailing: const Icon(Icons.chevron_left),
               onTap: () => showPrayerLocationDialog(context, prayer),
             ),
             SwitchListTile(
-              title: const Text('تنبيهات الصلاة'),
-              subtitle: const Text('تذكير بالمواقيت حسب الموقع المحدد'),
+              title: Text(l10nOf(context).settingsScreenMessage7),
+              subtitle: Text(l10nOf(context).settingsScreenMessage8),
               value:
                   settings.prefs.getBool('prayer_notifications_enabled') ??
                   true,
@@ -83,39 +92,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 }
               },
             ),
-            const _SectionTitle('التذكيرات اليومية'),
+            _SectionTitle(l10nOf(context).settingsScreenMessage9),
             for (final alarm in [
               (
                 type: 'morning',
-                title: 'أذكار الصباح',
+                title: l10nOf(context).azkarScreenMessage1,
                 icon: Icons.wb_sunny_outlined,
                 enabled: settings.isMorningAlarmEnabled,
                 toggle: settings.toggleMorningAlarm,
               ),
               (
                 type: 'evening',
-                title: 'أذكار المساء',
+                title: l10nOf(context).azkarScreenMessage2,
                 icon: Icons.nights_stay_outlined,
                 enabled: settings.isEveningAlarmEnabled,
                 toggle: settings.toggleEveningAlarm,
               ),
               (
                 type: 'mulk',
-                title: 'سورة الملك',
+                title: l10nOf(context).homeScreenMessage31,
                 icon: Icons.menu_book,
                 enabled: settings.isMulkAlarmEnabled,
                 toggle: settings.toggleMulkAlarm,
               ),
               (
                 type: 'baqarah',
-                title: 'سورة البقرة',
+                title: l10nOf(context).homeScreenMessage32,
                 icon: Icons.auto_stories,
                 enabled: settings.isBaqarahAlarmEnabled,
                 toggle: settings.toggleBaqarahAlarm,
               ),
             ]) ...[
               SwitchListTile(
-                title: Text('تذكير ${alarm.title}'),
+                title: Text(
+                  l10nOf(
+                    context,
+                  ).settingsScreenMessage10((alarm.title).toString()),
+                ),
                 value: alarm.enabled,
                 onChanged: (enabled) async {
                   if (enabled) {
@@ -126,22 +139,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               AlarmMenuItem(
                 title: alarm.title,
-                subtitle: 'وقت التذكير',
+                subtitle: l10nOf(context).settingsScreenMessage11,
                 icon: alarm.icon,
                 alarmType: alarm.type,
                 isEnabled: alarm.enabled,
                 onChanged: alarm.toggle,
               ),
             ],
-            const _SectionTitle('عن سكينة'),
+            _SectionTitle(l10nOf(context).settingsScreenMessage12),
             if (MonitoringService.instance.available)
               ListenableBuilder(
                 listenable: MonitoringService.instance,
                 builder: (context, _) => SwitchListTile(
-                  title: const Text('إرسال تقارير الأعطال وبيانات الاستخدام'),
-                  subtitle: const Text(
-                    'اختياري. لا يشمل الموقع أو عمليات البحث أو سجل القراءة.',
-                  ),
+                  title: Text(l10nOf(context).settingsScreenMessage13),
+                  subtitle: Text(l10nOf(context).settingsScreenMessage14),
                   value: MonitoringService.instance.enabled,
                   onChanged: (value) async {
                     try {
@@ -149,9 +160,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     } catch (_) {
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             content: Text(
-                              'تعذر تغيير إعداد مشاركة البيانات. أعد المحاولة.',
+                              l10nOf(context).settingsScreenMessage15,
                             ),
                           ),
                         );
@@ -162,18 +173,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ListTile(
               leading: const Icon(Icons.privacy_tip_outlined),
-              title: const Text('الخصوصية ومصادر المحتوى'),
+              title: Text(l10nOf(context).homeScreenMessage25),
               onTap: () => context.push('/settings/data-sources'),
             ),
             ListTile(
               leading: const Icon(Icons.info_outline),
-              title: const Text('عن التطبيق'),
+              title: Text(l10nOf(context).settingsScreenMessage16),
               onTap: () => showAboutDialog(
                 context: context,
-                applicationName: 'سكينة',
-                children: const [
-                  Text('رفيقك اليومي للقرآن والأذكار ومواقيت الصلاة.'),
-                ],
+                applicationName: l10nOf(context).appConstantsMessage1,
+                children: [Text(l10nOf(context).settingsScreenMessage17)],
               ),
             ),
           ],

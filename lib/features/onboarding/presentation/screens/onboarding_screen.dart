@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تعذّر بدء التطبيق، حاول مرة أخرى.')),
+          SnackBar(content: Text(appL10n.onboardingScreenMessage1)),
         );
       }
     } finally {
@@ -108,7 +109,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           maintainState: true,
                           child: TextButton(
                             onPressed: _completing ? null : _finishOnboarding,
-                            child: const Text('تخطي'),
+                            child: Text(
+                              l10nOf(context).onboardingScreenMessage2,
+                            ),
                           ),
                         ),
                       ],
@@ -133,9 +136,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Semantics(
-                            label:
-                                'الصفحة ${_currentPage + 1} من '
-                                '${onboardingPages.length}',
+                            label: l10nOf(context).onboardingScreenMessage3(
+                              (_currentPage + 1).toString(),
+                              (onboardingPages.length).toString(),
+                            ),
                             liveRegion: true,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -167,7 +171,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             children: [
                               if (_currentPage > 0) ...[
                                 IconButton.outlined(
-                                  tooltip: 'السابق',
+                                  tooltip: l10nOf(
+                                    context,
+                                  ).onboardingScreenMessage4,
                                   onPressed: _completing
                                       ? null
                                       : () => _changePage(_currentPage - 1),
@@ -203,7 +209,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   child: Text(
                                     _isLastPage
                                         ? AppStrings.getStartedButton
-                                        : 'التالي',
+                                        : l10nOf(context).appStringsMessage12,
                                   ),
                                 ),
                               ),

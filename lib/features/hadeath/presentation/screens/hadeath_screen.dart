@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -31,7 +32,7 @@ class _HadeathScreenState extends State<HadeathScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          'الأحاديث النبوية',
+          l10nOf(context).hadeathScreenMessage1,
           style: TextStyle(
             fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.primary,
@@ -73,10 +74,10 @@ class _HadeathScreenState extends State<HadeathScreen> {
               }
 
               if (provider.ahadethList.isEmpty) {
-                return const Center(
+                return Center(
                   child: Text(
-                    'لا توجد أحاديث لعرضها',
-                    style: TextStyle(
+                    l10nOf(context).hadeathScreenMessage2,
+                    style: const TextStyle(
                       fontFamily: 'Cairo',
                       color: AppColors.secondaryText,
                       fontSize: 18,
@@ -94,7 +95,9 @@ class _HadeathScreenState extends State<HadeathScreen> {
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: HadeathCard(
                       title: hadeath.title.isEmpty
-                          ? 'الحديث ${index + 1}'
+                          ? l10nOf(
+                              context,
+                            ).hadeathScreenMessage3((index + 1).toString())
                           : hadeath.title,
                       onTap: () {
                         context.push('/hadeath/details/$index', extra: hadeath);

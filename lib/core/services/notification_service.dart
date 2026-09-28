@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
 
@@ -52,21 +53,24 @@ class NotificationService {
   };
 
   static const String _defaultChannelId = 'sakina_app_channel';
-  static const String _defaultChannelName = 'إشعارات سكينة';
-  static const String _defaultChannelDescription = 'إشعارات عامة من سكينة';
+  static final String _defaultChannelName = appL10n.notificationServiceMessage1;
+  static final String _defaultChannelDescription =
+      appL10n.notificationServiceMessage2;
 
   static const String _alarmsChannelId = 'sakina_alarms_channel';
-  static const String _alarmsChannelName = 'تذكيرات القرآن والأذكار';
-  static const String _alarmsChannelDescription =
-      'تذكيرات يومية للأذكار والسور';
+  static final String _alarmsChannelName = appL10n.notificationServiceMessage3;
+  static final String _alarmsChannelDescription =
+      appL10n.notificationServiceMessage4;
 
   static const String _prayerChannelId = 'prayer_times_default_sound_v2';
-  static const String _prayerChannelName = 'مواقيت الصلاة';
-  static const String _prayerChannelDescription = 'إشعارات أوقات الصلاة الخمس';
+  static final String _prayerChannelName = appL10n.notificationServiceMessage5;
+  static final String _prayerChannelDescription =
+      appL10n.notificationServiceMessage6;
 
   static const String _testChannelId = 'test_channel';
-  static const String _testChannelName = 'إشعارات الاختبار';
-  static const String _testChannelDescription = 'إشعارات اختبار التطبيق';
+  static final String _testChannelName = appL10n.notificationServiceMessage7;
+  static final String _testChannelDescription =
+      appL10n.notificationServiceMessage8;
 
   // Alarm time keys
   static const String _morningAlarmHourKey = 'morning_alarm_hour';
@@ -189,7 +193,7 @@ class NotificationService {
     }
 
     await androidImplementation.createNotificationChannel(
-      const AndroidNotificationChannel(
+      AndroidNotificationChannel(
         _defaultChannelId,
         _defaultChannelName,
         description: _defaultChannelDescription,
@@ -198,7 +202,7 @@ class NotificationService {
     );
 
     await androidImplementation.createNotificationChannel(
-      const AndroidNotificationChannel(
+      AndroidNotificationChannel(
         _alarmsChannelId,
         _alarmsChannelName,
         description: _alarmsChannelDescription,
@@ -207,7 +211,7 @@ class NotificationService {
     );
 
     await androidImplementation.createNotificationChannel(
-      const AndroidNotificationChannel(
+      AndroidNotificationChannel(
         _prayerChannelId,
         _prayerChannelName,
         description: _prayerChannelDescription,
@@ -219,7 +223,7 @@ class NotificationService {
     );
 
     await androidImplementation.createNotificationChannel(
-      const AndroidNotificationChannel(
+      AndroidNotificationChannel(
         _testChannelId,
         _testChannelName,
         description: _testChannelDescription,
@@ -324,7 +328,7 @@ class NotificationService {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
 
-    const AndroidNotificationDetails androidNotificationDetails =
+    final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
           _defaultChannelId,
           _defaultChannelName,
@@ -341,7 +345,7 @@ class NotificationService {
           presentSound: true,
         );
 
-    const NotificationDetails notificationDetails = NotificationDetails(
+    final NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
       iOS: iosNotificationDetails,
     );
@@ -419,7 +423,7 @@ class NotificationService {
       name: 'sakina_app.notifications',
     );
 
-    const AndroidNotificationDetails androidNotificationDetails =
+    final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
           _alarmsChannelId,
           _alarmsChannelName,
@@ -441,7 +445,7 @@ class NotificationService {
           interruptionLevel: InterruptionLevel.timeSensitive,
         );
 
-    const NotificationDetails notificationDetails = NotificationDetails(
+    final NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
       iOS: iosNotificationDetails,
     );
@@ -481,23 +485,23 @@ class NotificationService {
     switch (payload) {
       case 'morning_adhkar':
         return (
-          title: 'تذكير أذكار الصباح',
-          body: 'حان وقت أذكار الصباح. افتح التطبيق للقراءة والمتابعة.',
+          title: appL10n.notificationServiceMessage9,
+          body: appL10n.notificationServiceMessage10,
         );
       case 'evening_adhkar':
         return (
-          title: 'تذكير أذكار المساء',
-          body: 'حان وقت أذكار المساء. افتح التطبيق للقراءة والمتابعة.',
+          title: appL10n.notificationServiceMessage11,
+          body: appL10n.notificationServiceMessage12,
         );
       case 'mulk_surah':
         return (
-          title: 'تذكير سورة الملك',
-          body: 'حان وقت قراءة سورة الملك. افتح التطبيق للقراءة والمتابعة.',
+          title: appL10n.notificationServiceMessage13,
+          body: appL10n.notificationServiceMessage14,
         );
       case 'baqarah_surah':
         return (
-          title: 'تذكير سورة البقرة',
-          body: 'حان وقت قراءة سورة البقرة. افتح التطبيق للقراءة والمتابعة.',
+          title: appL10n.notificationServiceMessage15,
+          body: appL10n.notificationServiceMessage16,
         );
       default:
         return (title: title, body: body);
@@ -523,7 +527,7 @@ class NotificationService {
       scheduleAtLocal = now.add(const Duration(seconds: 5));
     }
 
-    const AndroidNotificationDetails androidNotificationDetails =
+    final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
           _testChannelId,
           _testChannelName,
@@ -542,7 +546,7 @@ class NotificationService {
           presentSound: true,
         );
 
-    const NotificationDetails notificationDetails = NotificationDetails(
+    final NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
       iOS: iosNotificationDetails,
     );
@@ -596,7 +600,7 @@ class NotificationService {
       return;
     }
 
-    const AndroidNotificationDetails androidNotificationDetails =
+    final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
           _prayerChannelId,
           _prayerChannelName,
@@ -619,7 +623,7 @@ class NotificationService {
           interruptionLevel: InterruptionLevel.timeSensitive,
         );
 
-    const NotificationDetails notificationDetails = NotificationDetails(
+    final NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
       iOS: iosNotificationDetails,
     );
@@ -634,8 +638,8 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
-      'حان وقت صلاة $prayerName',
-      'اضغط لفتح التطبيق ومتابعة وردك',
+      appL10n.notificationServiceMessage17((prayerName).toString()),
+      appL10n.notificationServiceMessage18,
       scheduledDate,
       notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
@@ -739,13 +743,8 @@ class NotificationService {
 
     await scheduleDailyNotification(
       id: _morningAdhkarNotificationId,
-      title: '⏰ تذكير أذكار الصباح',
-      body:
-          'حان وقت أذكار الصباح. '
-          'اللهم ما أصبح بك من نعمة '
-          'أو بأحد من خلقك '
-          'فمنك وحدك لا شريك لك، '
-          'فلك الحمد ولك الشكر',
+      title: appL10n.notificationServiceMessage19,
+      body: appL10n.notificationServiceMessage20,
       hour: h,
       minute: m,
       payload: 'morning_adhkar',
@@ -769,11 +768,8 @@ class NotificationService {
 
     await scheduleDailyNotification(
       id: _eveningAdhkarNotificationId,
-      title: '⏰ تذكير أذكار المساء',
-      body:
-          'حان وقت أذكار المساء. '
-          'أمسينا وأمسى الملك لله، والحمد لله، '
-          'لا إله إلا الله وحده لا شريك له',
+      title: appL10n.notificationServiceMessage21,
+      body: appL10n.notificationServiceMessage22,
       hour: h,
       minute: m,
       payload: 'evening_adhkar',
@@ -796,13 +792,8 @@ class NotificationService {
 
     await scheduleDailyNotification(
       id: _mulkNotificationId,
-      title: '⏰ تذكير سورة الملك',
-      body:
-          'حان وقت قراءة سورة الملك. '
-          'قال صلى الله عليه وسلم: '
-          '"إن سورة من القرآن '
-          'ثلاثون آية شفعت لرجل '
-          'حتى غفر له: تبارك الذي بيده الملك"',
+      title: appL10n.notificationServiceMessage23,
+      body: appL10n.notificationServiceMessage24,
       hour: h,
       minute: m,
       payload: 'mulk_surah',
@@ -826,13 +817,8 @@ class NotificationService {
 
     await scheduleDailyNotification(
       id: _baqarahNotificationId,
-      title: '⏰ تذكير سورة البقرة',
-      body:
-          'حان وقت قراءة سورة البقرة. '
-          'قال صلى الله عليه وسلم: '
-          '"اقرأوا سورة البقرة، '
-          'فإن أخذها بركة وتركها حسرة '
-          'ولا تستطيعها البطلة"',
+      title: appL10n.notificationServiceMessage25,
+      body: appL10n.notificationServiceMessage26,
       hour: h,
       minute: m,
       payload: 'baqarah_surah',
@@ -1012,7 +998,7 @@ class NotificationService {
     );
     developer.log('Body: $body', name: 'sakina_app.notifications');
 
-    const AndroidNotificationDetails androidNotificationDetails =
+    final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
           _testChannelId,
           _testChannelName,
@@ -1031,7 +1017,7 @@ class NotificationService {
           presentSound: true,
         );
 
-    const NotificationDetails notificationDetails = NotificationDetails(
+    final NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
       iOS: iosNotificationDetails,
     );

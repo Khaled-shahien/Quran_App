@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -35,7 +36,7 @@ class NotificationPermissionDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'تفعيل الإشعارات',
+              l10nOf(context).notificationPermissionDialogMessage1,
               style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 22,
@@ -46,7 +47,7 @@ class NotificationPermissionDialog extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'لتجربة أفضل، اسمح للتطبيق بإرسال إشعارات لتذكيرك بأوقات الصلاة، الأذكار، والورد اليومي.',
+              l10nOf(context).notificationPermissionDialogMessage2,
               style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 15,
@@ -70,9 +71,9 @@ class NotificationPermissionDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'السماح بالإشعارات',
-                  style: TextStyle(
+                child: Text(
+                  l10nOf(context).notificationPermissionDialogMessage3,
+                  style: const TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 16,
                     height: 1.4,
@@ -95,9 +96,9 @@ class NotificationPermissionDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'ليس الآن',
-                  style: TextStyle(
+                child: Text(
+                  l10nOf(context).notificationPermissionDialogMessage4,
+                  style: const TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

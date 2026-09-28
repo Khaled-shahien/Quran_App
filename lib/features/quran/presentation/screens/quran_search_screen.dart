@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../l10n/app_localizations_ar.dart';
 import 'package:flutter/material.dart';
@@ -50,8 +51,9 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
 
   Future<void> _loadSurahNames() async {
     try {
-      final decoded =
-          jsonDecode(await rootBundle.loadString('assets/quran_master.json'));
+      final decoded = jsonDecode(
+        await rootBundle.loadString('assets/quran_master.json'),
+      );
       if (decoded is! List) {
         throw const FormatException('Quran metadata must be a list');
       }
@@ -105,7 +107,7 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
               autofocus: true,
               decoration: InputDecoration(
                 labelText: l10n.searchAyah,
-                hintText: 'اسم السورة أو رقمها أو جزء من آية',
+                hintText: l10nOf(context).quranSearchScreenMessage1,
                 prefixIcon: const Icon(Icons.search),
               ),
               onChanged: (value) => setState(() {
@@ -119,13 +121,13 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
                 ? Center(
                     child: TextButton(
                       onPressed: _load,
-                      child: const Text('تعذر تحميل القرآن. إعادة المحاولة'),
+                      child: Text(l10nOf(context).quranSearchScreenMessage2),
                     ),
                   )
                 : _source == null
                 ? const Center(child: CircularProgressIndicator())
                 : _query.trim().isEmpty
-                ? const Center(child: Text('اكتب كلمة أو جزءاً من آية'))
+                ? Center(child: Text(l10nOf(context).quranSearchScreenMessage3))
                 : _results.isEmpty && _matchingSurahs.isEmpty
                 ? Center(child: Text(l10n.searchEmpty))
                 : ListView.builder(
@@ -137,7 +139,11 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
                         return ListTile(
                           leading: const Icon(Icons.menu_book),
                           title: Text(surah['name'] as String),
-                          subtitle: Text('سورة ${surah['number']}'),
+                          subtitle: Text(
+                            l10nOf(context).surahAudioModelMessage1(
+                              (surah['number']).toString(),
+                            ),
+                          ),
                           onTap: () =>
                               context.push('/quran/surah/${surah['number']}'),
                         );
@@ -166,7 +172,10 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
                           ),
                         ),
                         subtitle: Text(
-                          'سورة ${result.surahNumber} • آية ${result.ayah.numberInSurah}',
+                          l10nOf(context).quranSearchScreenMessage4(
+                            (result.surahNumber).toString(),
+                            (result.ayah.numberInSurah).toString(),
+                          ),
                         ),
                         onTap: () => context.push(
                           '/quran/surah/${result.surahNumber}',

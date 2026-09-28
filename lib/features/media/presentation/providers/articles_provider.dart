@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sakina_app/features/media/domain/entities/article.dart';
 import 'package:sakina_app/features/media/domain/errors/media_exception.dart';
@@ -64,6 +65,6 @@ class ArticlesProvider extends ChangeNotifier {
 
   String _messageFrom(Object error) {
     if (error is MediaException) return error.message;
-    return 'حدث خطأ غير متوقع، حاول مرة أخرى';
+    return appL10n.articlesProviderMessage1;
   }
 }

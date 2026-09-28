@@ -146,7 +146,7 @@
 | T21 | Home refactor | Architecture | P2 | A | 100% | — | — | Maintenance |
 | T22 | Reader refactor | Architecture | P2 | A | 100% | — | — | Maintenance |
 | T23 | Color aliases | Theme | P2 | A | 100% | — | — | Maintenance |
-| T24 | Directionality | RTL | P2 | B | 75% | Bidi/icon review | NF-002 | Tooltip + direction audit |
+| T24 | Directionality | RTL | P2 | B | 75% | Bidi/icon review | NF-002 resolved | Complete direction audit; B-04 verified 2026-09-28 |
 | T25 | Use-case dirs | Architecture | P3 | A | 100% | — | — | Maintenance |
 | T26 | Bundled fonts | Assets | P1 | A | 100% | — | — | Maintenance |
 | T27 | Semantics | Accessibility | P1 | B | 75% | Screen-reader audit | — | Device audit |
@@ -158,7 +158,7 @@
 | T33 | Store listing | Release | P1 | B | 50% | Final assets/URL | — | Owner assets |
 | T34 | iOS Firebase | Platform | P0 | F | 25% | Blocked on platform decision | — | Owner decision |
 | T35 | Device matrix | QA | P0 | F | 25% | Physical devices unavailable | — | Acquire devices |
-| T36 | Security review | Security | P0 | B | 50% | Independent review | NF-004 | Security review |
+| T36 | Security review | Security | P0 | B | 50% | Independent review and owner key rotation | NF-004 confirmed | Resume B-03 after owner rotation evidence |
 | T37 | Profiling | Performance | P2 | B | 50% | Profile measurements | — | Profile build |
 | T38 | Final regression | QA | P0 | B | 50% | Physical/signed regression | NF-003 resolved | Automated suite 232/232; device regression remains |
 | T39 | Store release | Release | P0 | F | 0% | All gates must close | — | All blockers |
@@ -207,7 +207,7 @@ The following tasks are verified complete at repository/test scope:
 | T12 | SHA-256 hashes, in-app disclosure, release gate | Source, edition, license, reviewer sign-off |
 | T14 | Scheduling/routing code, boot receivers | Physical delivery matrix, future-day replenishment |
 | T18 | Retry/error paths present | Full cached/stale validation for all media types |
-| T24 | Removed redundant directionality wrapper | Bidi/icon direction review, NF-002 tooltip |
+| T24 | Removed redundant directionality wrapper | Bidi/icon direction review; NF-002 tooltip verified via B-04 |
 | T27 | Semantics labels on settings + icon tooltips | Complete screen-reader audit across all screens |
 | T31 | Automated target/contrast/large-text checks | Physical TalkBack/VoiceOver audit |
 | T32 | Settings/theme/search/reader integration flows | Physical signed-build execution |
@@ -272,6 +272,7 @@ The following tasks are verified complete at repository/test scope:
 |---|---|---|
 | T34 (iOS Firebase) | No launch-platform decision, no approved bundle/project identity, iOS GoogleService-Info is a placeholder file | Owner must decide iOS launch scope, supply genuine native Firebase config |
 | T35 (Device matrix) | Physical test devices and evidence capture unavailable | Acquire Android test devices; decide iOS inclusion |
+| B-03 (YouTube API key) | Key committed in documentation; rotation evidence unavailable | Owner replaces/revokes key and validates private configuration |
 | T39 (Store release) | All P0 gates must close: credentials, content approval, device evidence, signed artifact validation | Complete all Phase 1–6 items |
 
 ---
@@ -289,7 +290,9 @@ The evidence below records the original finding. See progress history for implem
 **Action:** Wrap the notification cancellation and preference writes in error handling; show localized retry on failure; add scheduler-failure and preference-write-failure tests.  
 **Acceptance:** No uncaught UI exception from `selectLocation`; latest request remains authoritative; failed saves show localized retry; passed saves are confirmed.
 
-### NF-002 — Back-button tooltips removed from dua/azkar screens *(confirmed, carried from previous plan)*
+### NF-002 — Back-button tooltips removed from dua/azkar screens *(resolved: B-04 VERIFIED, 2026-09-28)*
+
+The following evidence describes the original finding. B-04 restored all three tooltips; verification is recorded in the latest progress history.
 
 **Evidence:** [duas_screen.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/duas/presentation/screens/duas_screen.dart) line 29 and [azkar_screen.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/duas/presentation/screens/azkar_screen.dart) line 26: `IconButton` has no `tooltip` property. `Semantics` wrapper with label is present but doesn't provide hover/pointer tooltip.  
 **Impact:** Pointer/desktop users lose hover guidance on back buttons.  
@@ -311,15 +314,15 @@ All in [quran_search_screen_test.dart](file:///e:/Projects/01-personal/Quran-App
 **Action:** Trace the async loading/rendering timing; ensure surah metadata is available before query evaluation completes; fix tests to be deterministic.  
 **Acceptance:** PASS — all three queries render exactly one result; full current suite 232/232 passed (B-02). The failure evidence above is historical.
 
-### NF-004 — YouTube API key exposed in committed .env file *(NEW FINDING)*
+### NF-004 — YouTube API key committed in the development plan *(confirmed; B-03 BLOCKED, 2026-09-28)*
 
-**Evidence:** [.env](file:///e:/Projects/01-personal/Quran-App/.env) contains `YOUTUBE_API_KEY=AIzaSyC1qnj7kgbOVoZowIB03OZJhGBzeljeems`. While `.env` is listed in [.gitignore](file:///e:/Projects/01-personal/Quran-App/.gitignore) (line 48), the file exists in the working tree. If this was ever committed to version history, the key is exposed.  
-**Impact:** Potential unauthorized YouTube API usage, quota abuse, or billing impact.  
-**Root Cause:** API key placed in a file that should be excluded but may have been committed before `.gitignore` was updated.  
-**Priority:** P1 (Security)  
-**Action:** Verify git history for `.env` commits. If committed: rotate the key immediately. Regardless: ensure `.env` is never committed; use `--dart-define` or CI secrets for API keys.  
-**Acceptance:** No API keys in version-controlled files; `.env` confirmed absent from git history or key rotated.
-
+**Evidence:** Exact-value search found the local YouTube credential in tracked `updated_development_plan.md`, introduced by commit `cbe5823` on 2026-09-28. At audit HEAD `2b913b3`, this was the only tracked working-tree path containing that value. `git log --all -- .env` and `git ls-files -- .env` returned no entries; `.env` is ignored by `.gitignore:48`. The repository is not shallow. This checks locally available refs, not inaccessible remote/deleted history.
+**Impact:** The credential must be treated as exposed; remote validity, restrictions and rotation status have not been verified.
+**Root Cause:** A security finding copied the credential into version-controlled documentation. Ignoring `.env` did not protect this copy.
+**Priority:** P1 (Security)
+**Action Taken:** Removed the exact credential from the current working-tree plan. Runtime code already reads `YOUTUBE_API_KEY` through `String.fromEnvironment`; no runtime configuration change was needed.
+**Required Action:** Key owner rotates/replaces the exposed credential, updates the ignored local/CI configuration, disables the old credential, and supplies non-secret evidence. No Google Cloud CLI or credential-management connector is available in this session. Redaction does not remove Git history or revoke the credential.
+**Acceptance:** Working-tree cleanup and ignored/untracked `.env` pass. Historical exposure is confirmed; rotation/revocation remains unverified. B-03 remains BLOCKED.
 ### NF-005 — ARB localization covers only 11 strings *(NEW FINDING)*
 
 **Evidence:** [app_ar.arb](file:///e:/Projects/01-personal/Quran-App/lib/l10n/app_ar.arb) contains only 11 strings: `prayerTitle`, `prayerLoadError`, `retry`, `choosePrayerLocation`, `todayPrayerTimes`, `searchQuran`, `searchAyah`, `searchHint`, `searchEmpty`. Many screens still use inline Arabic string literals (e.g., Quran search hint at line 108: `'اسم السورة أو رقمها أو جزء من آية'`, all navigation labels, all settings labels, all error messages across features).  
@@ -336,7 +339,7 @@ All in [quran_search_screen_test.dart](file:///e:/Projects/01-personal/Quran-App
 | Regression | Type | Evidence | Severity |
 |---|---|---|---|
 | NF-001: Error handling removed from `selectLocation` | Error handling | prayer_times_provider.dart | P1 |
-| NF-002: Tooltip removed from 3 back buttons | Accessibility/UX | duas/azkar screens | P2 |
+| NF-002: Tooltip removed from 3 back buttons | Resolved — B-04 VERIFIED | Six hover/semantics/navigation cases pass | P2 |
 | NF-003: 3 surah lookup tests fail | Resolved — B-02 VERIFIED | 7 focused tests and 232/232 full suite | P1 |
 
 No confirmed navigation, theme, RTL, Firebase, notification delivery, or data integrity regression beyond the above. Device-only regressions remain **Unable to Verify** without physical testing.
@@ -396,7 +399,7 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 - VERIFIED B-01 / NF-001: Restored error handling in `selectLocation` (2026-09-28)
 - VERIFIED B-02 / NF-003: Surah lookup tests fixed; full suite 232/232 (2026-09-28)
 - Fix NF-004: Rotate YouTube API key if committed to git history; remove `.env` from any tracked state
-- Restore tooltips (NF-002)
+- VERIFIED B-04: Restore tooltips (NF-002), 2026-09-28
 
 ### Phase 2 — Core Functional Completion (Owner-Dependent)
 
@@ -524,8 +527,15 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | **Title** | Rotate or verify YouTube API key security |
 | **Category** | Security |
 | **Priority** | P1 |
-| **Current Status** | NF-004 — key found in `.env` in working tree |
-| **Description** | `.env` file contains a YouTube API key. While `.gitignore` excludes `.env`, the key may exist in git history. |
+| **Current Status** | BLOCKED |
+| **Completion** | 50% (audit and local cleanup complete; rotation and post-rotation validation pending) |
+| **Last Updated** | 2026-09-28 |
+| **Files Changed** | updated_development_plan.md |
+| **Blocking Reason** | Exact YouTube key committed in plan at cbe5823; no available Google Cloud credential-management access or rotation evidence. |
+| **Required Dependency** | Key owner with access to the owning Google Cloud project. |
+| **What Is Needed** | Replace/revoke exposed key, update ignored local/CI configuration, provide non-secret rotation evidence and validate YouTube integration. |
+| **Remaining Work** | Owner rotation/revocation and post-rotation verification. |
+| **Description** | `.env` is ignored and absent from local reachable history, but the same YouTube key was committed in this plan at cbe5823. Current working-tree copy is redacted; history remains exposed. |
 | **Why Needed** | Exposed API keys can lead to unauthorized usage, quota abuse, or billing impact. |
 | **Implementation Details** | Run `git log --all --diff-filter=A -- .env` to check if `.env` was ever committed. If yes: rotate the key in Google Cloud Console immediately. Ensure no secrets are tracked. |
 | **Dependencies** | Git history access |
@@ -543,7 +553,13 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | **Title** | Restore back-button tooltips in duas/azkar screens |
 | **Category** | Accessibility / UX |
 | **Priority** | P2 |
-| **Current Status** | NF-002 — tooltips absent |
+| **Current Status** | VERIFIED |
+| **Completion** | 100% |
+| **Last Updated** | 2026-09-28 |
+| **Implementation Notes** | Added Arabic tooltip to all three back IconButtons, retaining semantic labels and navigation callbacks. |
+| **Files Changed** | Three duas/azkar screens; back_button_tooltip_test.dart; updated_development_plan.md |
+| **Verification** | 42 focused/regression tests pass; static analysis clean; six mouse-hover/semantics/navigation cases in light/dark RTL. |
+| **Remaining Work** | None for B-04; broader T24 direction audit and physical accessibility remain separate. |
 | **Description** | `IconButton` back buttons in `duas_screen.dart`, `azkar_screen.dart`, and `azkar_details_screen.dart` have `Semantics` wrappers but no `tooltip` property. |
 | **Why Needed** | Pointer/desktop hover guidance; consistent with other screens. |
 | **Implementation Details** | Add `tooltip: 'الرجوع'` to each back `IconButton`. Consider extracting a shared `AppBackButton` widget. |
@@ -749,7 +765,7 @@ graph TD
 **Immediate code actions (no owner dependency):**
 1. VERIFIED: `selectLocation` error handling (NF-001 / B-01)
 2. VERIFIED: Quran surah lookup test failures (NF-003 / B-02)
-3. Restore back-button tooltips (NF-002)
+3. VERIFIED: Back-button tooltips (NF-002 / B-04)
 4. Verify API key git history and rotate if needed (NF-004)
 
 **Owner-dependent actions (cannot proceed without external input):**
@@ -777,8 +793,8 @@ Historical comparison sections retain original audit observations. Live tables a
 |---|---|---|---|---:|---|---|
 | B-01 | Harden manual prayer failure handling | P1 | VERIFIED | 100% | 2026-09-28 | NF-001 resolved |
 | B-02 | Fix Quran surah lookup tests | P1 | VERIFIED | 100% | 2026-09-28 | 7 focused tests; full suite 232/232; NF-003 resolved |
-| B-03 | Verify API key security | P1 | NOT_STARTED | 0% | 2026-09-28 | Git history check |
-| B-04 | Restore tooltips | P2 | NOT_STARTED | 0% | 2026-09-28 | NF-002 |
+| B-03 | Verify API key security | P1 | BLOCKED | 50% | 2026-09-28 | Explicitly deferred by user; rotation evidence still required |
+| B-04 | Restore tooltips | P2 | VERIFIED | 100% | 2026-09-28 | NF-002 resolved; hover/semantics/navigation verified in both themes and RTL |
 | B-05 | Identity and signing | P0 | BLOCKED | 0% | 2026-09-28 | Owner credentials and approved IDs |
 | B-06 | Content approval | P0 | BLOCKED | 0% | 2026-09-28 | Owner and qualified reviewer |
 | B-07 | Notification evidence | P0 | BLOCKED | 0% | 2026-09-28 | B-05 and physical devices |
@@ -880,3 +896,120 @@ Notes:
 - Reason: Next actionable critical backlog item; higher priority than B-04 tooltips. Owner/device-dependent P0 work remains blocked.
 - Dependencies: Git history access; rotation requires the key owner's Google Cloud access if exposure is confirmed.
 - Scope reminder: Check all tracked files as well as .env history; the existing NF-004 plan text itself contains a key value. Do not assume .gitignore establishes safety.
+## 2026-09-28 — B-03 — Verify YouTube API key security (blocked)
+
+Status: BLOCKED
+Completion: 50%
+
+Completed:
+- Read current plan/history and confirmed B-02 helper and theme coverage exist; prior tasks were not reimplemented.
+- Audited the non-shallow local repository at HEAD `2b913b3`. Exact-key history search found introduction in `cbe5823` (2026-09-28), path `updated_development_plan.md`.
+- Confirmed `.env` is ignored and untracked, with no commits touching that path across available refs.
+- Removed the exposed value from the current plan and replaced the speculative NF-004 finding with confirmed, redacted evidence.
+- Confirmed runtime configuration already uses `String.fromEnvironment('YOUTUBE_API_KEY')`.
+
+Files Changed:
+- `updated_development_plan.md`
+
+Verification:
+- `git rev-parse --is-shallow-repository`: false.
+- `git log --all -- .env`: no entries; `git ls-files -- .env`: no entries.
+- `git check-ignore -v .env`: ignored by `.gitignore:48`.
+- Exact-value tracked working-tree scan after cleanup: no matches. Matching output was restricted to filenames; credential values were not printed.
+- Exact-value history search: committed exposure confirmed in `cbe5823`; redaction is not revocation or history removal.
+- `git diff --check`: passed. Scope check: documentation only, no application/test/configuration changes. Runtime suite was not rerun for this documentation-only change; latest actual full-suite result remains B-02's 232/232.
+
+| Acceptance Criterion | Result | Evidence |
+|---|---|---|
+| YouTube key absent from tracked working-tree files | PASS | Exact-value scan finds no paths after redaction |
+| .env absent from tracked files | PASS | git ls-files returns no entries; ignore rule confirmed |
+| Key absent from all tracked commits | FAIL | Exact-value history search identifies cbe5823 in the plan |
+| Previously committed key rotated/revoked | BLOCKED | No owner rotation evidence or available credential-management access |
+| Post-rotation YouTube configuration works | BLOCKED | Requires replacement credential in private configuration and validation |
+
+Blocking Reason: Confirmed historical exposure requires action in the owning Google Cloud project.
+Required Dependency: Key owner/project administrator.
+What Is Needed: Replace the credential, update ignored local/CI configuration, revoke the old key, and supply non-secret rotation/revocation evidence. Do not paste replacement credentials into chat or this plan.
+Suggested Resolution: Owner performs those steps in the owning project; then resume B-03 to verify evidence, scan tracked content again, and check the YouTube integration. No Git history rewriting was performed.
+Remaining Work: Rotation/revocation and post-rotation validation. Completion is two of four work stages: audit, local cleanup, rotation, final verification.
+
+### NEXT RECOMMENDED TASK
+
+- Task ID: B-03 (resume)
+- Task Title: Complete YouTube API key rotation and verification
+- Priority: P1
+- Reason: The selected task is blocked, not complete; do not advance to another task automatically.
+- Dependencies: Owner access to the owning Google Cloud project and non-secret rotation evidence.
+- Subsequent queued task after B-03 is verified: B-04 — Restore back-button tooltips. Not started in this session.
+## 2026-09-28 — B-03 — Resume check (blocker unchanged)
+
+Status: BLOCKED
+Completion: 50% (unchanged)
+
+Verification:
+- Read the latest progress history and B-03 dependency/acceptance requirements.
+- Repository HEAD remains `2b913b3`; existing working-tree plan edits preserved.
+- Compared the local YouTube credential to the plan in commit `cbe5823` without printing either value: the local configuration still contains the exposed credential.
+- Exact-value tracked working-tree scan: zero matching paths. `.env` remains untracked and ignored by `.gitignore:48`.
+- No rotation/revocation evidence found in project documentation; Google Cloud CLI remains unavailable. Local comparison cannot establish the credential's remote validity or revocation status.
+
+Acceptance: Local redaction and .env exclusion remain PASS. Rotation/revocation and post-rotation configuration verification remain BLOCKED. Nothing newly marked VERIFIED.
+Files Changed: `updated_development_plan.md` only (status note and this history entry).
+Regression Check: Documentation-only change; `git diff --check` passed. No application tests rerun; previous 232/232 result remains historical evidence from B-02.
+Remaining Work: Owner replaces/revokes the exposed credential, updates private local/CI configuration, and supplies non-secret evidence; then verify YouTube integration.
+
+### NEXT RECOMMENDED TASK
+
+- Task ID: B-03 (resume after owner input)
+- Task Title: Complete YouTube API key rotation and verification
+- Priority: P1
+- Dependencies: Non-secret rotation/revocation confirmation and updated private configuration from the key owner.
+- B-04 remains queued and NOT_STARTED. No unrelated work performed.
+## 2026-09-28 — B-04 — Restore back-button tooltips
+
+Status: VERIFIED
+Completion: 100%
+
+Authorization:
+- User explicitly deferred B-03 and requested B-04. This supersedes the prior stop-before-B-04 instruction. B-03 remains BLOCKED at 50%; it is neither cancelled nor verified.
+
+Implemented:
+- Added `tooltip: 'الرجوع'` to back IconButtons in DuasScreen, AzkarScreen and AzkarDetailsScreen.
+- Retained the existing Arabic semantic labels and Navigator.pop callbacks.
+- Added six behavioral widget cases covering real mouse hover, accessible label presence, and return to the previous route across all three screens in light/dark RTL.
+
+Files Changed:
+- `lib/features/duas/presentation/screens/duas_screen.dart`
+- `lib/features/duas/presentation/screens/azkar_screen.dart`
+- `lib/features/duas/presentation/screens/azkar_details_screen.dart`
+- `test/features/duas/presentation/screens/back_button_tooltip_test.dart`
+- `updated_development_plan.md`
+
+Verification:
+- `flutter test test/features/duas test/core/navigation/main_navigation_shell_test.dart test/features/settings/presentation/screens/settings_screen_test.dart`: 42 tests passed.
+- Initial new-test run revealed semantics-handle cleanup errors; corrected disposal within the test, then all six new scenarios passed with the regression suite.
+- `dart analyze lib/features/duas test/features/duas`: no issues.
+- Test formatting check and `git diff --check`: passed.
+
+| Acceptance Criterion | Result | Evidence |
+|---|---|---|
+| All three back buttons show a tooltip on hover | PASS | Mouse pointer moved onto each button; rendered Arabic tooltip asserted |
+| Semantic labels remain available | PASS | Existing Arabic back-label semantics asserted on all three screens |
+| Back actions continue to work | PASS | Each screen pushed from a previous route, then back tap returns to it |
+| Light/dark and Arabic/RTL behavior | PASS | Six scenarios cover both themes with RTL direction |
+| Related functionality and accessibility checks do not regress | PASS | 42 tests pass, including existing screen states, accessible navigation and large-text settings |
+
+Remaining Work: None for B-04.
+Notes:
+- Hover was verified with automated pointer interaction, not a manual device session. Physical screen-reader evidence remains under B-09/T31.
+- Full suite not rerun for this three-property UI change; latest full-suite result remains the historical B-02 232/232 run. This session's actual result is the 42-test focused regression run.
+- T24 stays partially complete because its broader bidi/icon audit is outside B-04.
+
+### NEXT RECOMMENDED TASK
+
+- Task ID: NF-005
+- Task Title: Expand ARB localization coverage
+- Priority: P2
+- Reason: Next independent code task in the implementation order; B-03 is explicitly deferred and other higher-priority backlog items require owner inputs or devices.
+- Dependencies: None recorded in the plan. Inspect existing localization and define the single-task scope before implementing.
+- B-03 remains eligible to resume when owner rotation evidence is supplied. NF-005 was not started in this session.

@@ -25,10 +25,10 @@ mixin _ReaderControls on _ReaderState {
   String _revelationLabel(String value) {
     final String normalized = value.toLowerCase();
     if (normalized.contains('mecca') || normalized.contains('meccan')) {
-      return 'مكية';
+      return appL10n.quranScreenMessage2;
     }
     if (normalized.contains('medina') || normalized.contains('medinan')) {
-      return 'مدنية';
+      return appL10n.quranScreenMessage3;
     }
     return value;
   }
@@ -76,7 +76,7 @@ mixin _ReaderControls on _ReaderState {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _ReaderNavButton(
-                  tooltip: 'الصفحة السابقة',
+                  tooltip: appL10n.readerControlsMessage1,
                   icon: Icons.chevron_right,
                   onPressed: _currentSurahPage > 0
                       ? () => _pageController.previousPage(
@@ -106,7 +106,10 @@ mixin _ReaderControls on _ReaderState {
                       );
                     },
                     child: Text(
-                      'الصفحة $currentPage من $totalPages',
+                      appL10n.onboardingScreenMessage3(
+                        (currentPage).toString(),
+                        (totalPages).toString(),
+                      ),
                       key: ValueKey<int>(currentPage),
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -121,7 +124,7 @@ mixin _ReaderControls on _ReaderState {
                   ),
                 ),
                 _ReaderNavButton(
-                  tooltip: 'الصفحة التالية',
+                  tooltip: appL10n.readerControlsMessage2,
                   icon: Icons.chevron_left,
                   onPressed: _currentSurahPage < _surahPages.length - 1
                       ? () => _pageController.nextPage(
@@ -173,8 +176,8 @@ mixin _ReaderControls on _ReaderState {
       SnackBar(
         content: Text(
           savedWirdPosition
-              ? 'تم حفظ موضع الورد الحالي'
-              : 'تم حفظ علامة القراءة بنجاح',
+              ? appL10n.readerControlsMessage3
+              : appL10n.readerControlsMessage4,
           style: const TextStyle(fontFamily: 'Amiri', fontSize: 16),
           textAlign: TextAlign.center,
         ),
@@ -202,7 +205,7 @@ mixin _ReaderControls on _ReaderState {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'تخصيص القراءة',
+                      l10nOf(context).readerControlsMessage5,
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontFamily: 'Cairo',
@@ -212,8 +215,8 @@ mixin _ReaderControls on _ReaderState {
                       ),
                     ),
                     const SizedBox(height: 14),
-                    const Text(
-                      'حجم الخط',
+                    Text(
+                      l10nOf(context).readerControlsMessage6,
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontFamily: 'Cairo',
@@ -233,8 +236,8 @@ mixin _ReaderControls on _ReaderState {
                         setLocalState(() {});
                       },
                     ),
-                    const Text(
-                      'تباعد الأسطر',
+                    Text(
+                      l10nOf(context).readerControlsMessage7,
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontFamily: 'Cairo',
@@ -263,8 +266,8 @@ mixin _ReaderControls on _ReaderState {
                         _persistReadingPreferences();
                         setLocalState(() {});
                       },
-                      title: const Text(
-                        'إظهار أرقام الآيات',
+                      title: Text(
+                        l10nOf(context).readerControlsMessage8,
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontFamily: 'Cairo',
@@ -281,8 +284,8 @@ mixin _ReaderControls on _ReaderState {
                         _persistReadingPreferences();
                         setLocalState(() {});
                       },
-                      title: const Text(
-                        'وضع القراءة الكاملة',
+                      title: Text(
+                        l10nOf(context).readerControlsMessage9,
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontFamily: 'Cairo',

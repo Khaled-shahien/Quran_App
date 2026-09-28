@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -23,8 +24,8 @@ class TabSwitcherWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _tabButton(context, 'جميع التصنيفات', 0),
-          _tabButton(context, 'أوقات الصلاة', 1),
+          _tabButton(context, l10nOf(context).tabSwitcherWidgetMessage1, 0),
+          _tabButton(context, l10nOf(context).prayerTitle, 1),
         ],
       ),
     );

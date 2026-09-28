@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'dart:math' as math;
 
 import 'package:json_annotation/json_annotation.dart';
@@ -21,11 +22,11 @@ extension KhatmaTrackingUnitX on KhatmaTrackingUnit {
   String get arabicLabel {
     switch (this) {
       case KhatmaTrackingUnit.page:
-        return 'صفحة';
+        return appL10n.khatmaModelMessage1;
       case KhatmaTrackingUnit.hizb:
-        return 'حزب';
+        return appL10n.khatmaModelMessage2;
       case KhatmaTrackingUnit.juz:
-        return 'جزء';
+        return appL10n.khatmaModelMessage3;
     }
   }
 
@@ -459,7 +460,8 @@ class KhatmaModel {
           json['id']?.toString() ??
           DateTime.now().millisecondsSinceEpoch.toString(),
       'start_mode':
-          readValue('start_mode', 'startMode')?.toString() ?? 'بداية المصحف',
+          readValue('start_mode', 'startMode')?.toString() ??
+          appL10n.appRouterMessage4,
       'start_juz': (readValue('start_juz', 'startJuz') as num?)?.toInt() ?? 1,
       'start_date': parseDateTime(
         readValue('start_date', 'startDate'),

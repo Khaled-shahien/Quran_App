@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:sakina_app/core/theme/app_radius.dart';
@@ -78,7 +79,9 @@ class ReciterCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                '${reciter.surahNumbers.length} سورة',
+                l10nOf(
+                  context,
+                ).reciterCardMessage1((reciter.surahNumbers.length).toString()),
                 style: TextStyle(
                   fontFamily: 'Cairo',
                   fontSize: 12,

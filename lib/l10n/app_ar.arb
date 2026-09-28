@@ -8,5 +8,2320 @@
   "searchQuran": "البحث في القرآن",
   "searchAyah": "ابحث عن آية",
   "searchHint": "يمكن البحث دون تشكيل",
-  "searchEmpty": "لا توجد نتائج. جرّب تعديل كلمات البحث"
+  "searchEmpty": "لا توجد نتائج. جرّب تعديل كلمات البحث",
+  "appConstantsMessage1": "سكينة",
+  "@appConstantsMessage1": {
+    "description": "Display text used in lib/core/constants/app_constants.dart."
+  },
+  "appStringsMessage1": "التطبيق الشامل للقرآن الكريم",
+  "@appStringsMessage1": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage2": "تطبيق سكينة",
+  "@appStringsMessage2": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage3": "تعلم الدين الاسلامي عن طريق تصنيفات وملفات وشروحات ومحاضرات..الخ , يوفر أوقات الصلاة وخطب والقرآن الكريم كامل مع توفير تفسير وقراءة بالصوت ,, اكتشف المزيد بنفسك",
+  "@appStringsMessage3": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage4": "ابدأ الآن",
+  "@appStringsMessage4": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage5": "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
+  "@appStringsMessage5": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage6": "الصفحة الرئيسية",
+  "@appStringsMessage6": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage7": "مرحباً بك في سكينة!",
+  "@appStringsMessage7": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage8": "حسناً",
+  "@appStringsMessage8": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage9": "إلغاء",
+  "@appStringsMessage9": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage10": "تأكيد",
+  "@appStringsMessage10": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage11": "حفظ",
+  "@appStringsMessage11": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage12": "التالي",
+  "@appStringsMessage12": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage13": "رجوع",
+  "@appStringsMessage13": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage14": "إغلاق",
+  "@appStringsMessage14": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage15": "بحث",
+  "@appStringsMessage15": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage16": "الإعدادات",
+  "@appStringsMessage16": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage17": "الملف الشخصي",
+  "@appStringsMessage17": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage18": "تسجيل الخروج",
+  "@appStringsMessage18": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage19": "خطأ",
+  "@appStringsMessage19": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage20": "حدث خطأ ما، يرجى المحاولة لاحقاً",
+  "@appStringsMessage20": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage21": "لا يوجد اتصال بالإنترنت",
+  "@appStringsMessage21": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage22": "حاول مجدداً",
+  "@appStringsMessage22": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage23": "جار التحميل...",
+  "@appStringsMessage23": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage24": "يرجى الانتظار...",
+  "@appStringsMessage24": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage25": "لا توجد بيانات",
+  "@appStringsMessage25": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage26": "لا توجد نتائج",
+  "@appStringsMessage26": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage27": "الرئيسية",
+  "@appStringsMessage27": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage28": "القرآن",
+  "@appStringsMessage28": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage29": "الصلوات",
+  "@appStringsMessage29": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage30": "الأدعية",
+  "@appStringsMessage30": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage31": "التفسير",
+  "@appStringsMessage31": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage32": "تلاوة القرآن",
+  "@appStringsMessage32": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage33": "التقويم الهجري",
+  "@appStringsMessage33": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage34": "آيات قرآنية",
+  "@appStringsMessage34": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appStringsMessage35": "تذكير يومي",
+  "@appStringsMessage35": {
+    "description": "Display text used in lib/core/constants/app_strings.dart."
+  },
+  "appRouterMessage1": "الختمة الحالية",
+  "@appRouterMessage1": {
+    "description": "Display text used in lib/core/navigation/app_router.dart."
+  },
+  "appRouterMessage2": "تعذر فتح السورة:\nرقم السورة غير صالح.",
+  "@appRouterMessage2": {
+    "description": "Display text used in lib/core/navigation/app_router.dart."
+  },
+  "appRouterMessage3": "تعذر فتح الحديث:\nمعرف الحديث غير صالح.",
+  "@appRouterMessage3": {
+    "description": "Display text used in lib/core/navigation/app_router.dart."
+  },
+  "appRouterMessage4": "بداية المصحف",
+  "@appRouterMessage4": {
+    "description": "Display text used in lib/core/navigation/app_router.dart."
+  },
+  "appRouterMessage5": "تنبيه",
+  "@appRouterMessage5": {
+    "description": "Display text used in lib/core/navigation/app_router.dart."
+  },
+  "appRouterMessage6": "تعذر فتح السورة\nمن الرابط المباشر.",
+  "@appRouterMessage6": {
+    "description": "Display text used in lib/core/navigation/app_router.dart."
+  },
+  "appRouterMessage7": "تعذر فتح الحديث\nمن الرابط المباشر.",
+  "@appRouterMessage7": {
+    "description": "Display text used in lib/core/navigation/app_router.dart."
+  },
+  "mainNavigationShellMessage1": "الصلاة",
+  "@mainNavigationShellMessage1": {
+    "description": "Display text used in lib/core/navigation/main_navigation_shell.dart."
+  },
+  "mainNavigationShellMessage2": "الأذكار",
+  "@mainNavigationShellMessage2": {
+    "description": "Display text used in lib/core/navigation/main_navigation_shell.dart."
+  },
+  "firebaseMessagingServiceMessage1": "إشعار جديد",
+  "@firebaseMessagingServiceMessage1": {
+    "description": "Display text used in lib/core/services/firebase_messaging_service.dart."
+  },
+  "notificationServiceMessage1": "إشعارات سكينة",
+  "@notificationServiceMessage1": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage2": "إشعارات عامة من سكينة",
+  "@notificationServiceMessage2": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage3": "تذكيرات القرآن والأذكار",
+  "@notificationServiceMessage3": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage4": "تذكيرات يومية للأذكار والسور",
+  "@notificationServiceMessage4": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage5": "مواقيت الصلاة",
+  "@notificationServiceMessage5": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage6": "إشعارات أوقات الصلاة الخمس",
+  "@notificationServiceMessage6": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage7": "إشعارات الاختبار",
+  "@notificationServiceMessage7": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage8": "إشعارات اختبار التطبيق",
+  "@notificationServiceMessage8": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage9": "تذكير أذكار الصباح",
+  "@notificationServiceMessage9": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage10": "حان وقت أذكار الصباح. افتح التطبيق للقراءة والمتابعة.",
+  "@notificationServiceMessage10": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage11": "تذكير أذكار المساء",
+  "@notificationServiceMessage11": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage12": "حان وقت أذكار المساء. افتح التطبيق للقراءة والمتابعة.",
+  "@notificationServiceMessage12": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage13": "تذكير سورة الملك",
+  "@notificationServiceMessage13": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage14": "حان وقت قراءة سورة الملك. افتح التطبيق للقراءة والمتابعة.",
+  "@notificationServiceMessage14": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage15": "تذكير سورة البقرة",
+  "@notificationServiceMessage15": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage16": "حان وقت قراءة سورة البقرة. افتح التطبيق للقراءة والمتابعة.",
+  "@notificationServiceMessage16": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage17": "حان وقت صلاة {value1}",
+  "@notificationServiceMessage17": {
+    "description": "Display text used in lib/core/services/notification_service.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationServiceMessage18": "اضغط لفتح التطبيق ومتابعة وردك",
+  "@notificationServiceMessage18": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage19": "⏰ تذكير أذكار الصباح",
+  "@notificationServiceMessage19": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage20": "حان وقت أذكار الصباح. اللهم ما أصبح بك من نعمة أو بأحد من خلقك فمنك وحدك لا شريك لك، فلك الحمد ولك الشكر",
+  "@notificationServiceMessage20": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage21": "⏰ تذكير أذكار المساء",
+  "@notificationServiceMessage21": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage22": "حان وقت أذكار المساء. أمسينا وأمسى الملك لله، والحمد لله، لا إله إلا الله وحده لا شريك له",
+  "@notificationServiceMessage22": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage23": "⏰ تذكير سورة الملك",
+  "@notificationServiceMessage23": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage24": "حان وقت قراءة سورة الملك. قال صلى الله عليه وسلم: \"إن سورة من القرآن ثلاثون آية شفعت لرجل حتى غفر له: تبارك الذي بيده الملك\"",
+  "@notificationServiceMessage24": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage25": "⏰ تذكير سورة البقرة",
+  "@notificationServiceMessage25": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "notificationServiceMessage26": "حان وقت قراءة سورة البقرة. قال صلى الله عليه وسلم: \"اقرأوا سورة البقرة، فإن أخذها بركة وتركها حسرة ولا تستطيعها البطلة\"",
+  "@notificationServiceMessage26": {
+    "description": "Display text used in lib/core/services/notification_service.dart."
+  },
+  "placeholderScreenMessage1": "هذه الميزة تحت التطوير",
+  "@placeholderScreenMessage1": {
+    "description": "Display text used in lib/core/widgets/placeholder_screen.dart."
+  },
+  "placeholderScreenMessage2": "ستتوفر قريباً إن شاء الله",
+  "@placeholderScreenMessage2": {
+    "description": "Display text used in lib/core/widgets/placeholder_screen.dart."
+  },
+  "azkarDetailsScreenMessage1": "الرجوع للشاشة السابقة",
+  "@azkarDetailsScreenMessage1": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_details_screen.dart."
+  },
+  "azkarDetailsScreenMessage2": "الرجوع",
+  "@azkarDetailsScreenMessage2": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_details_screen.dart."
+  },
+  "azkarDetailsScreenMessage3": "حدث خطأ في تحميل الأذكار",
+  "@azkarDetailsScreenMessage3": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_details_screen.dart."
+  },
+  "azkarDetailsScreenMessage4": "لا توجد بيانات لهذا القسم حالياً",
+  "@azkarDetailsScreenMessage4": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_details_screen.dart."
+  },
+  "azkarDetailsScreenMessage5": "ذكر {value1}",
+  "@azkarDetailsScreenMessage5": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_details_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "azkarDetailsScreenMessage6": "التكرار: {value1}",
+  "@azkarDetailsScreenMessage6": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_details_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "azkarScreenMessage1": "أذكار الصباح",
+  "@azkarScreenMessage1": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart."
+  },
+  "azkarScreenMessage2": "أذكار المساء",
+  "@azkarScreenMessage2": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart."
+  },
+  "azkarScreenMessage3": "أذكار النوم",
+  "@azkarScreenMessage3": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart."
+  },
+  "azkarScreenMessage4": "بعد الصلاة",
+  "@azkarScreenMessage4": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart."
+  },
+  "azkarScreenMessage5": "الاستيقاظ",
+  "@azkarScreenMessage5": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart."
+  },
+  "azkarScreenMessage6": "أذكار المسجد",
+  "@azkarScreenMessage6": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart."
+  },
+  "azkarScreenMessage7": "أدعية مأثورة",
+  "@azkarScreenMessage7": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart."
+  },
+  "azkarScreenMessage8": "أدعية قرآنية",
+  "@azkarScreenMessage8": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart."
+  },
+  "azkarScreenMessage9": "دعاء السفر",
+  "@azkarScreenMessage9": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart."
+  },
+  "azkarScreenMessage10": "الرقية الشرعية",
+  "@azkarScreenMessage10": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart."
+  },
+  "azkarScreenMessage11": "فتح قسم {value1}",
+  "@azkarScreenMessage11": {
+    "description": "Display text used in lib/features/duas/presentation/screens/azkar_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "duasScreenMessage1": "حدث خطأ في تحميل الأدعية",
+  "@duasScreenMessage1": {
+    "description": "Display text used in lib/features/duas/presentation/screens/duas_screen.dart."
+  },
+  "duasScreenMessage2": "لا توجد أدعية حالياً",
+  "@duasScreenMessage2": {
+    "description": "Display text used in lib/features/duas/presentation/screens/duas_screen.dart."
+  },
+  "duasScreenMessage3": "دعاء {value1}",
+  "@duasScreenMessage3": {
+    "description": "Display text used in lib/features/duas/presentation/screens/duas_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "hadeathProviderMessage1": "حدث خطأ أثناء تحميل الأحاديث: {value1}",
+  "@hadeathProviderMessage1": {
+    "description": "Display text used in lib/features/hadeath/presentation/providers/hadeath_provider.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "hadeathDetailsScreenMessage1": "بِسْمِ اللَّهِ الرَّحْمَِٰ الرَّحِيمِ",
+  "@hadeathDetailsScreenMessage1": {
+    "description": "Display text used in lib/features/hadeath/presentation/screens/hadeath_details_screen.dart."
+  },
+  "hadeathScreenMessage1": "الأحاديث النبوية",
+  "@hadeathScreenMessage1": {
+    "description": "Display text used in lib/features/hadeath/presentation/screens/hadeath_screen.dart."
+  },
+  "hadeathScreenMessage2": "لا توجد أحاديث لعرضها",
+  "@hadeathScreenMessage2": {
+    "description": "Display text used in lib/features/hadeath/presentation/screens/hadeath_screen.dart."
+  },
+  "hadeathScreenMessage3": "الحديث {value1}",
+  "@hadeathScreenMessage3": {
+    "description": "Display text used in lib/features/hadeath/presentation/screens/hadeath_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "khatmaModelMessage1": "صفحة",
+  "@khatmaModelMessage1": {
+    "description": "Display text used in lib/features/khatma/domain/models/khatma_model.dart."
+  },
+  "khatmaModelMessage2": "حزب",
+  "@khatmaModelMessage2": {
+    "description": "Display text used in lib/features/khatma/domain/models/khatma_model.dart."
+  },
+  "khatmaModelMessage3": "جزء",
+  "@khatmaModelMessage3": {
+    "description": "Display text used in lib/features/khatma/domain/models/khatma_model.dart."
+  },
+  "khatmaProviderMessage1": "ورد الختمة اليومي",
+  "@khatmaProviderMessage1": {
+    "description": "Display text used in lib/features/khatma/presentation/providers/khatma_provider.dart."
+  },
+  "khatmaProviderMessage2": "لا تنس وردك اليوم: {value1} (من {value2} إلى {value3})",
+  "@khatmaProviderMessage2": {
+    "description": "Display text used in lib/features/khatma/presentation/providers/khatma_provider.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      },
+      "value3": {
+        "type": "String"
+      }
+    }
+  },
+  "khatmaDurationScreenMessage1": "ختمة جديدة",
+  "@khatmaDurationScreenMessage1": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage2": "حدد نوع الخطة ووحدة المتابعة ووقت التذكير اليومي",
+  "@khatmaDurationScreenMessage2": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage3": "حسب المدة",
+  "@khatmaDurationScreenMessage3": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage4": "توزيع تلقائي حتى تاريخ الإتمام",
+  "@khatmaDurationScreenMessage4": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage5": "حسب الورد اليومي",
+  "@khatmaDurationScreenMessage5": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage6": "تحدد مقدار القراءة كل يوم",
+  "@khatmaDurationScreenMessage6": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage7": "وحدة التتبع:",
+  "@khatmaDurationScreenMessage7": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage8": "صفحة (604)",
+  "@khatmaDurationScreenMessage8": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage9": "حزب (60)",
+  "@khatmaDurationScreenMessage9": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage10": "جزء (30)",
+  "@khatmaDurationScreenMessage10": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage11": "وردك المقترح: {value1} {value2} يومياً",
+  "@khatmaDurationScreenMessage11": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      }
+    }
+  },
+  "khatmaDurationScreenMessage12": "المدة المتوقعة للإتمام: {value1} يوماً",
+  "@khatmaDurationScreenMessage12": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "khatmaDurationScreenMessage13": "تم إنشاء الختمة بنجاح!",
+  "@khatmaDurationScreenMessage13": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage14": "الاستمرار",
+  "@khatmaDurationScreenMessage14": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage15": "مدة الختمة:",
+  "@khatmaDurationScreenMessage15": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage16": "{value1} يوماً",
+  "@khatmaDurationScreenMessage16": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "khatmaDurationScreenMessage17": "الورد اليومي:",
+  "@khatmaDurationScreenMessage17": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaDurationScreenMessage18": "وقت التذكير:",
+  "@khatmaDurationScreenMessage18": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_duration_screen.dart."
+  },
+  "khatmaLocationScreenMessage1": "جزء مخصص",
+  "@khatmaLocationScreenMessage1": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_location_screen.dart."
+  },
+  "khatmaLocationScreenMessage2": "الرجاء تحديد المكان أو الجزء الذي تريد\nأن تبدء منه الختمة",
+  "@khatmaLocationScreenMessage2": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_location_screen.dart."
+  },
+  "khatmaLocationScreenMessage3": "البدء من:",
+  "@khatmaLocationScreenMessage3": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_location_screen.dart."
+  },
+  "khatmaLocationScreenMessage4": "رقم الجزء:",
+  "@khatmaLocationScreenMessage4": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_location_screen.dart."
+  },
+  "khatmaLocationScreenMessage5": "الجزء {value1}",
+  "@khatmaLocationScreenMessage5": {
+    "description": "Display text used in lib/features/khatma/presentation/screens/khatma_location_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "articlesRemoteDatasourceMessage1": "إسلام ويب",
+  "@articlesRemoteDatasourceMessage1": {
+    "description": "Display text used in lib/features/media/data/datasources/articles_remote_datasource.dart."
+  },
+  "articlesRemoteDatasourceMessage2": "مقالات إسلامية",
+  "@articlesRemoteDatasourceMessage2": {
+    "description": "Display text used in lib/features/media/data/datasources/articles_remote_datasource.dart."
+  },
+  "articlesRemoteDatasourceMessage3": "طريق الإسلام",
+  "@articlesRemoteDatasourceMessage3": {
+    "description": "Display text used in lib/features/media/data/datasources/articles_remote_datasource.dart."
+  },
+  "articlesRemoteDatasourceMessage4": "مقالات ودروس",
+  "@articlesRemoteDatasourceMessage4": {
+    "description": "Display text used in lib/features/media/data/datasources/articles_remote_datasource.dart."
+  },
+  "articlesRemoteDatasourceMessage5": "الألوكة الشرعية",
+  "@articlesRemoteDatasourceMessage5": {
+    "description": "Display text used in lib/features/media/data/datasources/articles_remote_datasource.dart."
+  },
+  "articlesRemoteDatasourceMessage6": "فقه وعلوم شرعية",
+  "@articlesRemoteDatasourceMessage6": {
+    "description": "Display text used in lib/features/media/data/datasources/articles_remote_datasource.dart."
+  },
+  "articlesRemoteDatasourceMessage7": "صيد الفوائد",
+  "@articlesRemoteDatasourceMessage7": {
+    "description": "Display text used in lib/features/media/data/datasources/articles_remote_datasource.dart."
+  },
+  "articlesRemoteDatasourceMessage8": "فوائد ومقالات",
+  "@articlesRemoteDatasourceMessage8": {
+    "description": "Display text used in lib/features/media/data/datasources/articles_remote_datasource.dart."
+  },
+  "articlesRemoteDatasourceMessage9": "تعذر تحميل المقالات، تحقق من اتصالك بالإنترنت",
+  "@articlesRemoteDatasourceMessage9": {
+    "description": "Display text used in lib/features/media/data/datasources/articles_remote_datasource.dart."
+  },
+  "articlesRemoteDatasourceMessage10": "تعذر تحميل {value1} ({value2})",
+  "@articlesRemoteDatasourceMessage10": {
+    "description": "Display text used in lib/features/media/data/datasources/articles_remote_datasource.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      }
+    }
+  },
+  "audioRemoteDatasourceMessage1": "تعذر تحميل قائمة القراء ({value1})",
+  "@audioRemoteDatasourceMessage1": {
+    "description": "Display text used in lib/features/media/data/datasources/audio_remote_datasource.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "videoRemoteDatasourceMessage1": "أضف مفتاح YouTube API لعرض الفيديوهات مباشرة",
+  "@videoRemoteDatasourceMessage1": {
+    "description": "Display text used in lib/features/media/data/datasources/video_remote_datasource.dart."
+  },
+  "videoRemoteDatasourceMessage2": "تم تجاوز الحد اليومي للفيديوهات، جرب لاحقاً",
+  "@videoRemoteDatasourceMessage2": {
+    "description": "Display text used in lib/features/media/data/datasources/video_remote_datasource.dart."
+  },
+  "videoRemoteDatasourceMessage3": "تعذر تحميل الفيديوهات ({value1})",
+  "@videoRemoteDatasourceMessage3": {
+    "description": "Display text used in lib/features/media/data/datasources/video_remote_datasource.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "surahAudioModelMessage1": "سورة {value1}",
+  "@surahAudioModelMessage1": {
+    "description": "Display text used in lib/features/media/data/models/surah_audio_model.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "mediaRepositoryImplMessage1": "تعذر تحميل المقالات",
+  "@mediaRepositoryImplMessage1": {
+    "description": "Display text used in lib/features/media/data/repositories/media_repository_impl.dart."
+  },
+  "mediaRepositoryImplMessage2": "تعذر تحميل الصوتيات",
+  "@mediaRepositoryImplMessage2": {
+    "description": "Display text used in lib/features/media/data/repositories/media_repository_impl.dart."
+  },
+  "mediaRepositoryImplMessage3": "تعذر تحميل الفيديوهات",
+  "@mediaRepositoryImplMessage3": {
+    "description": "Display text used in lib/features/media/data/repositories/media_repository_impl.dart."
+  },
+  "mediaRepositoryImplMessage4": "انتهت مهلة الاتصال، حاول مرة أخرى",
+  "@mediaRepositoryImplMessage4": {
+    "description": "Display text used in lib/features/media/data/repositories/media_repository_impl.dart."
+  },
+  "mediaRepositoryImplMessage5": "تحقق من اتصالك بالإنترنت",
+  "@mediaRepositoryImplMessage5": {
+    "description": "Display text used in lib/features/media/data/repositories/media_repository_impl.dart."
+  },
+  "mediaRepositoryImplMessage6": "تعذر قراءة البيانات المستلمة",
+  "@mediaRepositoryImplMessage6": {
+    "description": "Display text used in lib/features/media/data/repositories/media_repository_impl.dart."
+  },
+  "mediaRepositoryImplMessage7": "{value1}، حاول مرة أخرى",
+  "@mediaRepositoryImplMessage7": {
+    "description": "Display text used in lib/features/media/data/repositories/media_repository_impl.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "articlesProviderMessage1": "حدث خطأ غير متوقع، حاول مرة أخرى",
+  "@articlesProviderMessage1": {
+    "description": "Display text used in lib/features/media/presentation/providers/articles_provider.dart."
+  },
+  "videoProviderMessage1": "خطبة الجمعة",
+  "@videoProviderMessage1": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "videoProviderMessage2": "درس ديني",
+  "@videoProviderMessage2": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "videoProviderMessage3": "تفسير القرآن",
+  "@videoProviderMessage3": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "videoProviderMessage4": "قصص الأنبياء",
+  "@videoProviderMessage4": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "videoProviderMessage5": "فقه إسلامي",
+  "@videoProviderMessage5": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "videoProviderMessage6": "قناة الرسالة",
+  "@videoProviderMessage6": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "videoProviderMessage7": "برامج ودروس إسلامية",
+  "@videoProviderMessage7": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "videoProviderMessage8": "دار الإفتاء المصرية",
+  "@videoProviderMessage8": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "videoProviderMessage9": "فتاوى ودروس شرعية",
+  "@videoProviderMessage9": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "videoProviderMessage10": "الشيخ محمد متولي الشعراوي",
+  "@videoProviderMessage10": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "videoProviderMessage11": "تفسير القرآن الكريم",
+  "@videoProviderMessage11": {
+    "description": "Display text used in lib/features/media/presentation/providers/video_provider.dart."
+  },
+  "articlesScreenMessage1": "المقالات",
+  "@articlesScreenMessage1": {
+    "description": "Display text used in lib/features/media/presentation/screens/articles_screen.dart."
+  },
+  "articlesScreenMessage2": "لا توجد مقالات متاحة حالياً",
+  "@articlesScreenMessage2": {
+    "description": "Display text used in lib/features/media/presentation/screens/articles_screen.dart."
+  },
+  "articlesScreenMessage3": "كل المصادر",
+  "@articlesScreenMessage3": {
+    "description": "Display text used in lib/features/media/presentation/screens/articles_screen.dart."
+  },
+  "audioScreenMessage1": "الصوتيات",
+  "@audioScreenMessage1": {
+    "description": "Display text used in lib/features/media/presentation/screens/audio_screen.dart."
+  },
+  "audioScreenMessage2": "كل القراء",
+  "@audioScreenMessage2": {
+    "description": "Display text used in lib/features/media/presentation/screens/audio_screen.dart."
+  },
+  "audioScreenMessage3": "نتائج البحث",
+  "@audioScreenMessage3": {
+    "description": "Display text used in lib/features/media/presentation/screens/audio_screen.dart."
+  },
+  "audioScreenMessage4": "لا توجد نتائج مطابقة",
+  "@audioScreenMessage4": {
+    "description": "Display text used in lib/features/media/presentation/screens/audio_screen.dart."
+  },
+  "audioScreenMessage5": "ابحث باسم القارئ",
+  "@audioScreenMessage5": {
+    "description": "Display text used in lib/features/media/presentation/screens/audio_screen.dart."
+  },
+  "audioScreenMessage6": "مسح البحث",
+  "@audioScreenMessage6": {
+    "description": "Display text used in lib/features/media/presentation/screens/audio_screen.dart."
+  },
+  "videoScreenMessage1": "الفيديوهات",
+  "@videoScreenMessage1": {
+    "description": "Display text used in lib/features/media/presentation/screens/video_screen.dart."
+  },
+  "videoScreenMessage2": "لا توجد فيديوهات متاحة حالياً",
+  "@videoScreenMessage2": {
+    "description": "Display text used in lib/features/media/presentation/screens/video_screen.dart."
+  },
+  "articleCardMessage1": "تعذر فتح الرابط",
+  "@articleCardMessage1": {
+    "description": "Display text used in lib/features/media/presentation/widgets/article_card.dart."
+  },
+  "audioPlayerSheetMessage1": "فتح التلاوة في مشغل الصوت",
+  "@audioPlayerSheetMessage1": {
+    "description": "Display text used in lib/features/media/presentation/widgets/audio_player_sheet.dart."
+  },
+  "audioPlayerSheetMessage2": "تشغيل",
+  "@audioPlayerSheetMessage2": {
+    "description": "Display text used in lib/features/media/presentation/widgets/audio_player_sheet.dart."
+  },
+  "audioPlayerSheetMessage3": "تعذر فتح ملف الصوت",
+  "@audioPlayerSheetMessage3": {
+    "description": "Display text used in lib/features/media/presentation/widgets/audio_player_sheet.dart."
+  },
+  "reciterCardMessage1": "{value1} سورة",
+  "@reciterCardMessage1": {
+    "description": "Display text used in lib/features/media/presentation/widgets/reciter_card.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "homeScreenMessage1": "فتح القائمة الجانبية",
+  "@homeScreenMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage2": "إغلاق القائمة الجانبية",
+  "@homeScreenMessage2": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage3": "المزيد",
+  "@homeScreenMessage3": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage4": "المفضلة",
+  "@homeScreenMessage4": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage5": "تبويب {value1}",
+  "@homeScreenMessage5": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "homeScreenMessage6": "مفعل",
+  "@homeScreenMessage6": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage7": "معطل",
+  "@homeScreenMessage7": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage8": "لا توجد ختمة نشطة حالياً",
+  "@homeScreenMessage8": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage9": "الأوراد السابقة",
+  "@homeScreenMessage9": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage10": "الأوراد القادمة",
+  "@homeScreenMessage10": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage11": "عدد الأوراد المكتملة: {value1}",
+  "@homeScreenMessage11": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "homeScreenMessage12": "عدد الأوراد المتبقية: {value1}",
+  "@homeScreenMessage12": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "homeScreenMessage13": "لم يتم إكمال أي ورد بعد.",
+  "@homeScreenMessage13": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage14": "لا توجد أوراد قادمة. تم إنجاز الختمة بالكامل.",
+  "@homeScreenMessage14": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage15": "من {value1} إلى {value2} ({value3})",
+  "@homeScreenMessage15": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      },
+      "value3": {
+        "type": "String"
+      }
+    }
+  },
+  "homeScreenMessage16": "مكتمل في {value1}",
+  "@homeScreenMessage16": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "homeScreenMessage17": "ورد اليوم {value1}",
+  "@homeScreenMessage17": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "homeScreenMessage18": "قادم",
+  "@homeScreenMessage18": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage19": "تعذر تحميل بيانات السور",
+  "@homeScreenMessage19": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage20": "لا يوجد فاصل محفوظ حالياً",
+  "@homeScreenMessage20": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage21": "تعذر فتح الفاصل المحفوظ",
+  "@homeScreenMessage21": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage22": "تعذر إيجاد السورة المرتبطة بالفاصل",
+  "@homeScreenMessage22": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage23": "حدث خطأ أثناء فتح الفاصل",
+  "@homeScreenMessage23": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage24": "هذه الميزة ستتوفر قريباً إن شاء الله",
+  "@homeScreenMessage24": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage25": "الخصوصية ومصادر المحتوى",
+  "@homeScreenMessage25": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage26": "الفاصل",
+  "@homeScreenMessage26": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage27": "المكتبة",
+  "@homeScreenMessage27": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage28": "كل الوسائط",
+  "@homeScreenMessage28": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage29": "سنن قرآنية",
+  "@homeScreenMessage29": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage30": "سورة الكهف",
+  "@homeScreenMessage30": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage31": "سورة الملك",
+  "@homeScreenMessage31": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage32": "سورة البقرة",
+  "@homeScreenMessage32": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage33": "تفعيل الوضع الليلي",
+  "@homeScreenMessage33": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage34": "تغيير مظهر التطبيق",
+  "@homeScreenMessage34": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage35": "بدء ختمة جديدة",
+  "@homeScreenMessage35": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage36": "إعدادات مواقيت الصلاة",
+  "@homeScreenMessage36": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage37": "اتجاه القبلة",
+  "@homeScreenMessage37": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage38": "منبهات الأذكار",
+  "@homeScreenMessage38": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage39": "منبه أذكار الصباح",
+  "@homeScreenMessage39": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage40": "وقت منبه أذكار الصباح",
+  "@homeScreenMessage40": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage41": "منبه أذكار المساء",
+  "@homeScreenMessage41": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage42": "وقت منبه أذكار المساء",
+  "@homeScreenMessage42": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage43": "منبهات السنن",
+  "@homeScreenMessage43": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage44": "منبه سورة الملك",
+  "@homeScreenMessage44": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage45": "وقت منبه سورة الملك",
+  "@homeScreenMessage45": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage46": "منبه سورة البقرة",
+  "@homeScreenMessage46": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage47": "وقت منبه سورة البقرة",
+  "@homeScreenMessage47": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage48": "تطبيق ختمة",
+  "@homeScreenMessage48": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage49": "اللغة",
+  "@homeScreenMessage49": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage50": "إعدادات اللغة",
+  "@homeScreenMessage50": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage51": "اللغة الحالية للتطبيق هي العربية. سيتم دعم لغات إضافية لاحقاً بإذن الله.",
+  "@homeScreenMessage51": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage52": "الإتصال بنا",
+  "@homeScreenMessage52": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage53": "mailto:contact@quranapp.com?subject=تطبيق ختمة - تواصل",
+  "@homeScreenMessage53": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage54": "تابعنا على تويتر",
+  "@homeScreenMessage54": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage55": "تابعنا على انستقرام",
+  "@homeScreenMessage55": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage56": "انشر التطبيق",
+  "@homeScreenMessage56": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage57": "تطبيق سكينة - تطبيق إسلامي شامل. حمل الآن! \n(رابط التطبيق قريباً)",
+  "@homeScreenMessage57": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage58": "قيم تطبيق سكينة",
+  "@homeScreenMessage58": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage59": "لا توجد آيات مفضلة",
+  "@homeScreenMessage59": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage60": "إزالة الآية من المفضلة",
+  "@homeScreenMessage60": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
+  },
+  "homeScreenMessage61": "الصلاة التالية: {value1}",
+  "@homeScreenMessage61": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingScreenMessage1": "تعذّر بدء التطبيق، حاول مرة أخرى.",
+  "@onboardingScreenMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/onboarding_screen.dart."
+  },
+  "onboardingScreenMessage2": "تخطي",
+  "@onboardingScreenMessage2": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/onboarding_screen.dart."
+  },
+  "onboardingScreenMessage3": "الصفحة {value1} من {value2}",
+  "@onboardingScreenMessage3": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/onboarding_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingScreenMessage4": "السابق",
+  "@onboardingScreenMessage4": {
+    "description": "Display text used in lib/features/onboarding/presentation/screens/onboarding_screen.dart."
+  },
+  "alarmMenuItemMessage1": "تعديل وقت {value1}",
+  "@alarmMenuItemMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/alarms/alarm_menu_item.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "alarmMenuItemMessage2": "م",
+  "@alarmMenuItemMessage2": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/alarms/alarm_menu_item.dart."
+  },
+  "alarmMenuItemMessage3": "ص",
+  "@alarmMenuItemMessage3": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/alarms/alarm_menu_item.dart."
+  },
+  "alarmTimePickerDialogMessage1": "تعذر تحميل وقت التذكير",
+  "@alarmTimePickerDialogMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/alarms/alarm_time_picker_dialog.dart."
+  },
+  "alarmTimePickerDialogMessage2": "تم حفظ وقت {value1}",
+  "@alarmTimePickerDialogMessage2": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/alarms/alarm_time_picker_dialog.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "alarmTimePickerDialogMessage3": "تعذر حفظ الوقت. أعد المحاولة.",
+  "@alarmTimePickerDialogMessage3": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/alarms/alarm_time_picker_dialog.dart."
+  },
+  "categoryGridWidgetMessage1": "التسبيح",
+  "@categoryGridWidgetMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/category_grid_widget.dart."
+  },
+  "categoryGridWidgetMessage2": "الأسماء",
+  "@categoryGridWidgetMessage2": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/category_grid_widget.dart."
+  },
+  "categoryGridWidgetMessage3": "الأحاديث",
+  "@categoryGridWidgetMessage3": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/category_grid_widget.dart."
+  },
+  "continueReadingCardMessage1": "متابعة القراءة",
+  "@continueReadingCardMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/continue_reading_card.dart."
+  },
+  "continueReadingCardMessage2": "القرآن الكريم",
+  "@continueReadingCardMessage2": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/continue_reading_card.dart."
+  },
+  "currentWirdWidgetMessage1": "تم إتمام ورد اليوم، انتقل إلى الورد التالي",
+  "@currentWirdWidgetMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage2": "تم إتمام الختمة بنجاح، بارك الله فيك",
+  "@currentWirdWidgetMessage2": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage3": "الورد الحالي",
+  "@currentWirdWidgetMessage3": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage4": "من قوله تعالى",
+  "@currentWirdWidgetMessage4": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage5": "بدء الختمة: {value1}",
+  "@currentWirdWidgetMessage5": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "currentWirdWidgetMessage6": "{value1} / يوم",
+  "@currentWirdWidgetMessage6": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "currentWirdWidgetMessage7": "ورد اليوم: من {value1} إلى {value2} ({value3})",
+  "@currentWirdWidgetMessage7": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      },
+      "value3": {
+        "type": "String"
+      }
+    }
+  },
+  "currentWirdWidgetMessage8": "يوجد موضع محفوظ لاستكمال الورد",
+  "@currentWirdWidgetMessage8": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage9": "أتممت القراءة",
+  "@currentWirdWidgetMessage9": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage10": "اقرأ الورد",
+  "@currentWirdWidgetMessage10": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage11": "إلغاء الختمة",
+  "@currentWirdWidgetMessage11": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage12": "هل أنت متأكد من إلغاء الختمة الحالية؟",
+  "@currentWirdWidgetMessage12": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage13": "تراجع",
+  "@currentWirdWidgetMessage13": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage14": "نعم، إلغاء",
+  "@currentWirdWidgetMessage14": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage15": "المتبقي: {value1} {value2}",
+  "@currentWirdWidgetMessage15": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      }
+    }
+  },
+  "currentWirdWidgetMessage16": "الإنجاز: {value1}%",
+  "@currentWirdWidgetMessage16": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "currentWirdWidgetMessage17": "ابدأ ختمة جديدة وتابع وردك اليومي بسهولة",
+  "@currentWirdWidgetMessage17": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage18": "ابدأ ختمة جديدة",
+  "@currentWirdWidgetMessage18": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage19": "تعذر تحميل آية الورد",
+  "@currentWirdWidgetMessage19": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "currentWirdWidgetMessage20": "{value1} - الآية {value2} - صفحة {value3}",
+  "@currentWirdWidgetMessage20": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      },
+      "value3": {
+        "type": "String"
+      }
+    }
+  },
+  "currentWirdWidgetMessage21": "جاري تحميل آية الورد...",
+  "@currentWirdWidgetMessage21": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/current_wird_widget.dart."
+  },
+  "dailyVerseSectionWidgetMessage1": "الآيات اليومية",
+  "@dailyVerseSectionWidgetMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/daily_verse_section_widget.dart."
+  },
+  "homeDrawerMessage1": "إغلاق القائمة",
+  "@homeDrawerMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/home_drawer.dart."
+  },
+  "notificationPermissionDialogMessage1": "تفعيل الإشعارات",
+  "@notificationPermissionDialogMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/notification_permission_dialog.dart."
+  },
+  "notificationPermissionDialogMessage2": "لتجربة أفضل، اسمح للتطبيق بإرسال إشعارات لتذكيرك بأوقات الصلاة، الأذكار، والورد اليومي.",
+  "@notificationPermissionDialogMessage2": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/notification_permission_dialog.dart."
+  },
+  "notificationPermissionDialogMessage3": "السماح بالإشعارات",
+  "@notificationPermissionDialogMessage3": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/notification_permission_dialog.dart."
+  },
+  "notificationPermissionDialogMessage4": "ليس الآن",
+  "@notificationPermissionDialogMessage4": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/notification_permission_dialog.dart."
+  },
+  "onboardingPageMessage1": "أهلًا بك في سكينة",
+  "@onboardingPageMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage2": "مساحة يطمئن فيها قلبك؛ تجمع لك القرآن والذكر ومواقيت الصلاة، لترافقك في يومك.",
+  "@onboardingPageMessage2": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage3": "رفيقك في كل يوم",
+  "@onboardingPageMessage3": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage4": "قرآن",
+  "@onboardingPageMessage4": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage5": "ذكر",
+  "@onboardingPageMessage5": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage6": "صلاة",
+  "@onboardingPageMessage6": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage7": "مع القرآن، آيةً بآية",
+  "@onboardingPageMessage7": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage8": "اقرأ القرآن واحفظ موضع قراءتك، وحدّد هدف ختمتك وتابع وردك اليومي بالوتيرة التي تناسبك.",
+  "@onboardingPageMessage8": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage9": "وردٌ تقرؤه، وقربٌ تجده",
+  "@onboardingPageMessage9": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage10": "قراءة القرآن",
+  "@onboardingPageMessage10": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage11": "حفظ الموضع",
+  "@onboardingPageMessage11": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage12": "متابعة الختمة",
+  "@onboardingPageMessage12": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage13": "ليكن يومك عامرًا بالذكر",
+  "@onboardingPageMessage13": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage14": "أذكار الصباح والمساء، وأدعية ترافق يومك، ومسبحة إلكترونية تعينك على متابعة تسبيحك.",
+  "@onboardingPageMessage14": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage15": "لحظات ذكر، وأثرٌ يبقى",
+  "@onboardingPageMessage15": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage16": "أذكار يومية",
+  "@onboardingPageMessage16": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage17": "أدعية",
+  "@onboardingPageMessage17": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage18": "تسبيح",
+  "@onboardingPageMessage18": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage19": "صلاتك ووردك في موعدهما",
+  "@onboardingPageMessage19": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage20": "تابع مواقيت الصلاة، واضبط تذكيرات الأذكار والورد اليومي لتجد وقتًا لما يطمئن به قلبك.",
+  "@onboardingPageMessage20": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage21": "تذكيرٌ يعينك على المداومة",
+  "@onboardingPageMessage21": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage22": "تذكيرات الأذكار",
+  "@onboardingPageMessage22": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "onboardingPageMessage23": "الورد اليومي",
+  "@onboardingPageMessage23": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/onboarding_page.dart."
+  },
+  "prayerTimesWidgetMessage1": "خطأ في تحميل أوقات الصلاة",
+  "@prayerTimesWidgetMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage2": "تحديد موقع الصلاة",
+  "@prayerTimesWidgetMessage2": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage3": "خطأ غير معروف",
+  "@prayerTimesWidgetMessage3": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage4": "لا توجد بيانات متاحة",
+  "@prayerTimesWidgetMessage4": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage5": "جميع مواقيت الصلاة",
+  "@prayerTimesWidgetMessage5": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage6": "الصلاة القادمة",
+  "@prayerTimesWidgetMessage6": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage7": "في",
+  "@prayerTimesWidgetMessage7": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage8": "الفجر",
+  "@prayerTimesWidgetMessage8": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage9": "الظهر",
+  "@prayerTimesWidgetMessage9": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage10": "العصر",
+  "@prayerTimesWidgetMessage10": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage11": "المغرب",
+  "@prayerTimesWidgetMessage11": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage12": "العشاء",
+  "@prayerTimesWidgetMessage12": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage13": "الفجر غداً",
+  "@prayerTimesWidgetMessage13": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage14": "بانتظار مواقيت الغد",
+  "@prayerTimesWidgetMessage14": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart."
+  },
+  "prayerTimesWidgetMessage15": "{value1} ساعة و{value2} دقيقة",
+  "@prayerTimesWidgetMessage15": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerTimesWidgetMessage16": "{value1} دقيقة",
+  "@prayerTimesWidgetMessage16": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/prayer_times_widget.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "tabSwitcherWidgetMessage1": "جميع التصنيفات",
+  "@tabSwitcherWidgetMessage1": {
+    "description": "Display text used in lib/features/onboarding/presentation/widgets/tab_switcher_widget.dart."
+  },
+  "prayerCalculationPolicyMessage1": "رابطة العالم الإسلامي",
+  "@prayerCalculationPolicyMessage1": {
+    "description": "Display text used in lib/features/prayers/domain/prayer_calculation_policy.dart."
+  },
+  "prayerCalculationPolicyMessage2": "أم القرى",
+  "@prayerCalculationPolicyMessage2": {
+    "description": "Display text used in lib/features/prayers/domain/prayer_calculation_policy.dart."
+  },
+  "prayerCalculationPolicyMessage3": "الهيئة المصرية العامة للمساحة",
+  "@prayerCalculationPolicyMessage3": {
+    "description": "Display text used in lib/features/prayers/domain/prayer_calculation_policy.dart."
+  },
+  "prayerTimesPerformanceProviderMessage1": "الشروق",
+  "@prayerTimesPerformanceProviderMessage1": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_performance_provider.dart."
+  },
+  "prayerTimesProviderMessage1": "خدمة الموقع متوقفة. فعّلها أو اختر مدينة يدوياً.",
+  "@prayerTimesProviderMessage1": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerTimesProviderMessage2": "إذن الموقع مرفوض. يمكنك تفعيله من إعدادات الجهاز أو اختيار مدينة يدوياً.",
+  "@prayerTimesProviderMessage2": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerTimesProviderMessage3": "لم يُسمح بالوصول للموقع. اختر مدينة أو أدخل الإحداثيات يدوياً.",
+  "@prayerTimesProviderMessage3": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerTimesProviderMessage4": "لم يتم تحديد الموقع",
+  "@prayerTimesProviderMessage4": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerTimesProviderMessage5": "موقع محفوظ",
+  "@prayerTimesProviderMessage5": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerTimesProviderMessage6": "موقع يدوي",
+  "@prayerTimesProviderMessage6": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerTimesProviderMessage7": "تعذر حفظ موقع الصلاة. أعد اختيار الموقع وحاول مرة أخرى.",
+  "@prayerTimesProviderMessage7": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerTimesProviderMessage8": "موقع الجهاز",
+  "@prayerTimesProviderMessage8": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerTimesProviderMessage9": "تعذر تحديد الموقع. اختر مدينة يدوياً أو أعد المحاولة.",
+  "@prayerTimesProviderMessage9": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerTimesProviderMessage10": "تعذر تحميل المواقيت. حدد موقعك أو تحقق من الاتصال وأعد المحاولة.",
+  "@prayerTimesProviderMessage10": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerTimesProviderMessage11": "حدد الموقع",
+  "@prayerTimesProviderMessage11": {
+    "description": "Display text used in lib/features/prayers/presentation/providers/prayer_times_provider.dart."
+  },
+  "prayerLocationDialogMessage1": "موقع الصلاة وطريقة الحساب",
+  "@prayerLocationDialogMessage1": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
+  },
+  "prayerLocationDialogMessage2": "{value1}، {value2}",
+  "@prayerLocationDialogMessage2": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerLocationDialogMessage3": "بحث في المدن المتاحة دون اتصال",
+  "@prayerLocationDialogMessage3": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
+  },
+  "prayerLocationDialogMessage4": "المدن تستخدم إحداثيات وسط المدينة. إذا لم تجد مدينتك، أدخل الإحداثيات أو استخدم موقع الجهاز.",
+  "@prayerLocationDialogMessage4": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
+  },
+  "prayerLocationDialogMessage5": "تُرسل الإحداثيات إلى Aladhan لحساب المواقيت. أدخل موقعاً يدوياً أو استخدم موقع الجهاز.",
+  "@prayerLocationDialogMessage5": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
+  },
+  "prayerLocationDialogMessage6": "اسم المكان",
+  "@prayerLocationDialogMessage6": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
+  },
+  "prayerLocationDialogMessage7": "خط العرض (من ‎-90 إلى 90)",
+  "@prayerLocationDialogMessage7": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
+  },
+  "prayerLocationDialogMessage8": "خط الطول (من ‎-180 إلى 180)",
+  "@prayerLocationDialogMessage8": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
+  },
+  "prayerLocationDialogMessage9": "طريقة الحساب",
+  "@prayerLocationDialogMessage9": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
+  },
+  "prayerLocationDialogMessage10": "أدخل إحداثيات صحيحة",
+  "@prayerLocationDialogMessage10": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
+  },
+  "prayerTimesScreenMessage1": "تعديل الموقع وطريقة الحساب",
+  "@prayerTimesScreenMessage1": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_times_screen.dart."
+  },
+  "prayerTimesScreenMessage2": "استخدام موقع الجهاز وإرساله لحساب المواقيت",
+  "@prayerTimesScreenMessage2": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_times_screen.dart."
+  },
+  "prayerTimesScreenMessage3": "إعادة تحميل مواقيت الصلاة",
+  "@prayerTimesScreenMessage3": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_times_screen.dart."
+  },
+  "prayerTimesScreenMessage4": "مواقيت محفوظة",
+  "@prayerTimesScreenMessage4": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_times_screen.dart."
+  },
+  "prayerTimesScreenMessage5": "مواقيت محفوظة قديمة؛ تعذر تحديثها",
+  "@prayerTimesScreenMessage5": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_times_screen.dart."
+  },
+  "prayerTimesScreenMessage6": "{value1} • {value2}",
+  "@prayerTimesScreenMessage6": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_times_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerTimesScreenMessage7": "تحديث المواقيت",
+  "@prayerTimesScreenMessage7": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_times_screen.dart."
+  },
+  "prayerTimesScreenMessage8": "صلاة {value1}",
+  "@prayerTimesScreenMessage8": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_times_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerTimesScreenMessage9": "تتوفر المواقيت عند تحديث يوم الغد",
+  "@prayerTimesScreenMessage9": {
+    "description": "Display text used in lib/features/prayers/presentation/screens/prayer_times_screen.dart."
+  },
+  "prayerTimesPerformanceWidgetMessage1": "جاري تحميل أوقات الصلاة...",
+  "@prayerTimesPerformanceWidgetMessage1": {
+    "description": "Display text used in lib/features/prayers/presentation/widgets/prayer_times_performance_widget.dart."
+  },
+  "prayerTimesPerformanceWidgetMessage2": "حدث خطأ في تحميل أوقات الصلاة",
+  "@prayerTimesPerformanceWidgetMessage2": {
+    "description": "Display text used in lib/features/prayers/presentation/widgets/prayer_times_performance_widget.dart."
+  },
+  "qiblaScreenMessage1": "افتح إعدادات الهاتف وفعّل الموقع وصلاحيته لتطبيق سكينة.",
+  "@qiblaScreenMessage1": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage2": "تحديث الموقع والبوصلة",
+  "@qiblaScreenMessage2": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage3": "جارٍ تحديد موقعك",
+  "@qiblaScreenMessage3": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage4": "نحتاج موقعك لحساب اتجاه الكعبة. قد يستغرق تحديد الموقع بضع ثوانٍ.",
+  "@qiblaScreenMessage4": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage5": "خدمة الموقع متوقفة",
+  "@qiblaScreenMessage5": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage6": "فعّل الموقع من إعدادات الهاتف، ثم عد إلى هذه الشاشة.",
+  "@qiblaScreenMessage6": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage7": "السماح بالوصول إلى الموقع",
+  "@qiblaScreenMessage7": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage8": "اسمح باستخدام الموقع أثناء فتح الشاشة لتحديد اتجاه القبلة من مكانك.",
+  "@qiblaScreenMessage8": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage9": "صلاحية الموقع غير مفعّلة",
+  "@qiblaScreenMessage9": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage10": "افتح إعدادات التطبيق واسمح بالوصول إلى الموقع أثناء الاستخدام.",
+  "@qiblaScreenMessage10": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage11": "البوصلة متاحة على الهاتف",
+  "@qiblaScreenMessage11": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage12": "افتح التطبيق على هاتف Android أو iPhone مزود بحساس بوصلة.",
+  "@qiblaScreenMessage12": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage13": "تعذّر تحديد موقعك",
+  "@qiblaScreenMessage13": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage14": "انتقل إلى مكان تصل إليه إشارة الموقع، ثم حاول مرة أخرى.",
+  "@qiblaScreenMessage14": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage15": "فتح الإعدادات",
+  "@qiblaScreenMessage15": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage16": "السماح بالموقع",
+  "@qiblaScreenMessage16": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage17": "أنت قريب جدًا من الكعبة. اتجه إلى الكعبة مباشرة؛ لا تكفي دقة موقع الهاتف لتوجيهك هنا.",
+  "@qiblaScreenMessage17": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage18": "تعذّرت قراءة البوصلة",
+  "@qiblaScreenMessage18": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage19": "جارٍ قراءة البوصلة",
+  "@qiblaScreenMessage19": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage20": "البوصلة تحتاج إلى معايرة",
+  "@qiblaScreenMessage20": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage21": "أنت باتجاه القبلة",
+  "@qiblaScreenMessage21": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage22": "يسارًا",
+  "@qiblaScreenMessage22": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage23": "يمينًا",
+  "@qiblaScreenMessage23": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage24": "استدر {value1} {value2}°",
+  "@qiblaScreenMessage24": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaScreenMessage25": "وَحَيْثُ مَا كُنتُمْ فَوَلُّوا وُجُوهَكُمْ شَطْرَهُ",
+  "@qiblaScreenMessage25": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage26": "ضع الهاتف أفقيًا ووجّه حافته العلوية نحو الكعبة",
+  "@qiblaScreenMessage26": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage27": "{value1}° من الشمال الجغرافي",
+  "@qiblaScreenMessage27": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaScreenMessage28": "قد لا يحتوي جهازك على حساس بوصلة. يمكنك استخدام الزاوية المعروضة مع بوصلة موثوقة، أو التجربة على هاتف آخر.",
+  "@qiblaScreenMessage28": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage29": "لدقة أفضل، ابتعد عن المعادن والمغناطيس وحرّك الهاتف على شكل 8 لمعايرة البوصلة. الاتجاه تقريبي ويتأثر بدقة الحساس.",
+  "@qiblaScreenMessage29": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage30": "سهم اتجاه الكعبة",
+  "@qiblaScreenMessage30": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage31": "ش",
+  "@qiblaScreenMessage31": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage32": "شرق",
+  "@qiblaScreenMessage32": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage33": "ج",
+  "@qiblaScreenMessage33": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "qiblaScreenMessage34": "غرب",
+  "@qiblaScreenMessage34": {
+    "description": "Display text used in lib/features/qibla/presentation/screens/qibla_screen.dart."
+  },
+  "surahModelMessage1": "مكة",
+  "@surahModelMessage1": {
+    "description": "Display text used in lib/features/quran/data/models/surah_model.dart."
+  },
+  "surahModelMessage2": "المدينة",
+  "@surahModelMessage2": {
+    "description": "Display text used in lib/features/quran/data/models/surah_model.dart."
+  },
+  "asmaAlHusnaScreenMessage1": "أسماء الله الحسنى",
+  "@asmaAlHusnaScreenMessage1": {
+    "description": "Display text used in lib/features/quran/presentation/screens/asma_al_husna_screen.dart."
+  },
+  "quranScreenMessage1": "إعادة تحميل السور",
+  "@quranScreenMessage1": {
+    "description": "Display text used in lib/features/quran/presentation/screens/quran_screen.dart."
+  },
+  "quranScreenMessage2": "مكية",
+  "@quranScreenMessage2": {
+    "description": "Display text used in lib/features/quran/presentation/screens/quran_screen.dart."
+  },
+  "quranScreenMessage3": "مدنية",
+  "@quranScreenMessage3": {
+    "description": "Display text used in lib/features/quran/presentation/screens/quran_screen.dart."
+  },
+  "quranScreenMessage4": "سورة {value1}، عدد الآيات {value2}، {value3}",
+  "@quranScreenMessage4": {
+    "description": "Display text used in lib/features/quran/presentation/screens/quran_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      },
+      "value3": {
+        "type": "String"
+      }
+    }
+  },
+  "quranScreenMessage5": "{value1} آية",
+  "@quranScreenMessage5": {
+    "description": "Display text used in lib/features/quran/presentation/screens/quran_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "quranSearchScreenMessage1": "اسم السورة أو رقمها أو جزء من آية",
+  "@quranSearchScreenMessage1": {
+    "description": "Display text used in lib/features/quran/presentation/screens/quran_search_screen.dart."
+  },
+  "quranSearchScreenMessage2": "تعذر تحميل القرآن. إعادة المحاولة",
+  "@quranSearchScreenMessage2": {
+    "description": "Display text used in lib/features/quran/presentation/screens/quran_search_screen.dart."
+  },
+  "quranSearchScreenMessage3": "اكتب كلمة أو جزءاً من آية",
+  "@quranSearchScreenMessage3": {
+    "description": "Display text used in lib/features/quran/presentation/screens/quran_search_screen.dart."
+  },
+  "quranSearchScreenMessage4": "سورة {value1} • آية {value2}",
+  "@quranSearchScreenMessage4": {
+    "description": "Display text used in lib/features/quran/presentation/screens/quran_search_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      }
+    }
+  },
+  "readerButtonsMessage1": "حفظ العلامة",
+  "@readerButtonsMessage1": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_buttons.dart."
+  },
+  "readerContentMessage1": "لا توجد آيات في هذه السورة",
+  "@readerContentMessage1": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_content.dart."
+  },
+  "readerContentMessage2": "{value1} • {value2} آية",
+  "@readerContentMessage2": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_content.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      },
+      "value2": {
+        "type": "String"
+      }
+    }
+  },
+  "readerContentMessage3": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+  "@readerContentMessage3": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_content.dart."
+  },
+  "readerControlsMessage1": "الصفحة السابقة",
+  "@readerControlsMessage1": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_controls.dart."
+  },
+  "readerControlsMessage2": "الصفحة التالية",
+  "@readerControlsMessage2": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_controls.dart."
+  },
+  "readerControlsMessage3": "تم حفظ موضع الورد الحالي",
+  "@readerControlsMessage3": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_controls.dart."
+  },
+  "readerControlsMessage4": "تم حفظ علامة القراءة بنجاح",
+  "@readerControlsMessage4": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_controls.dart."
+  },
+  "readerControlsMessage5": "تخصيص القراءة",
+  "@readerControlsMessage5": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_controls.dart."
+  },
+  "readerControlsMessage6": "حجم الخط",
+  "@readerControlsMessage6": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_controls.dart."
+  },
+  "readerControlsMessage7": "تباعد الأسطر",
+  "@readerControlsMessage7": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_controls.dart."
+  },
+  "readerControlsMessage8": "إظهار أرقام الآيات",
+  "@readerControlsMessage8": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_controls.dart."
+  },
+  "readerControlsMessage9": "وضع القراءة الكاملة",
+  "@readerControlsMessage9": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_controls.dart."
+  },
+  "readerDataMessage1": "حدث خطأ أثناء تحميل آيات السورة",
+  "@readerDataMessage1": {
+    "description": "Display text used in lib/features/quran/presentation/screens/reader_data.dart."
+  },
+  "surahDetailsScreenMessage1": "خيارات القراءة",
+  "@surahDetailsScreenMessage1": {
+    "description": "Display text used in lib/features/quran/presentation/screens/surah_details_screen.dart."
+  },
+  "tasbeehScreenMessage1": "سبحان الله",
+  "@tasbeehScreenMessage1": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage2": "الحمدلله",
+  "@tasbeehScreenMessage2": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage3": "لا اله الا الله",
+  "@tasbeehScreenMessage3": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage4": "الله أكبر",
+  "@tasbeehScreenMessage4": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage5": "التسبيح الإلكتروني",
+  "@tasbeehScreenMessage5": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage6": "تسبيحة",
+  "@tasbeehScreenMessage6": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage7": "إضافة جديد",
+  "@tasbeehScreenMessage7": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage8": "إعادة تعيين",
+  "@tasbeehScreenMessage8": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage9": "إضافة تسبيحة جديدة",
+  "@tasbeehScreenMessage9": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage10": "أدخل نص التسبيحة",
+  "@tasbeehScreenMessage10": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage11": "إضافة",
+  "@tasbeehScreenMessage11": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
+  },
+  "tasbeehScreenMessage12": "تم حذف \"{value1}\"",
+  "@tasbeehScreenMessage12": {
+    "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "quranSettingsDialogMessage1": "إعدادات القراءة",
+  "@quranSettingsDialogMessage1": {
+    "description": "Display text used in lib/features/quran/presentation/widgets/quran_settings_dialog.dart."
+  },
+  "quranSettingsDialogMessage2": "إغلاق إعدادات القراءة",
+  "@quranSettingsDialogMessage2": {
+    "description": "Display text used in lib/features/quran/presentation/widgets/quran_settings_dialog.dart."
+  },
+  "quranSettingsDialogMessage3": "الوضع الليلي",
+  "@quranSettingsDialogMessage3": {
+    "description": "Display text used in lib/features/quran/presentation/widgets/quran_settings_dialog.dart."
+  },
+  "dataSourcesScreenMessage1": "الموقع والمواقيت",
+  "@dataSourcesScreenMessage1": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "dataSourcesScreenMessage2": "تُحفظ إحداثيات موقع الصلاة وطريقة الحساب على الجهاز، وتُرسل إلى خدمة Aladhan لجلب المواقيت. يمكنك تعديلها من شاشة الصلاة. تستخدم القبلة إذن الموقع لحساب الاتجاه. يمكن إلغاء الإذن من إعدادات الجهاز.",
+  "@dataSourcesScreenMessage2": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "dataSourcesScreenMessage3": "البيانات والتذكيرات",
+  "@dataSourcesScreenMessage3": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "dataSourcesScreenMessage4": "تُحفظ المفضلة والعلامات والختمة والإعدادات محلياً. مسح بيانات التطبيق من إعدادات النظام يزيل البيانات المحلية. التذكيرات محلية ولا تحتاج خدمة رسائل عن بُعد. عند إتاحة تقارير الأعطال والاستخدام يمكنك اختيار تفعيلها أو إيقافها من الإعدادات؛ لا نضيف الموقع أو البحث أو سجل القراءة إلى هذه التقارير. قد تتلقى الخدمات الخارجية بيانات الاتصال. حذف البيانات المحلية لا يعني حذف سجلات الخدمات الخارجية أو النسخ الاحتياطية.",
+  "@dataSourcesScreenMessage4": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "dataSourcesScreenMessage5": "مصادر المحتوى",
+  "@dataSourcesScreenMessage5": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "dataSourcesScreenMessage6": "القرآن والأحاديث والأدعية متاحة ضمن ملفات التطبيق للعمل دون اتصال. توثيق الطبعة والمصدر والترخيص واعتماد المراجعة لكل مجموعة لم يكتمل بعد. بصمات سلامة الملفات تكشف التغييرات ولا تُعد توثيقاً شرعياً للمحتوى.",
+  "@dataSourcesScreenMessage6": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "dataSourcesScreenMessage7": "صوت تنبيه الصلاة الحالي هو صوت النظام الافتراضي.",
+  "@dataSourcesScreenMessage7": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "dataSourcesScreenMessage8": "إحداثيات المدن: GeoNames عبر Open-Meteo، بترخيص CC BY 4.0. الإحداثيات لمراكز المدن ويمكن تعديلها يدوياً.",
+  "@dataSourcesScreenMessage8": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "dataSourcesScreenMessage9": "تعذر تحميل سجل مصادر المحتوى.",
+  "@dataSourcesScreenMessage9": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "dataSourcesScreenMessage10": "سجل توثيق المحتوى",
+  "@dataSourcesScreenMessage10": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "dataSourcesScreenMessage11": "المصدر والطبعة والترخيص: بانتظار المراجعة",
+  "@dataSourcesScreenMessage11": {
+    "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
+  },
+  "notificationTestScreenMessage1": "اختبار الإشعارات",
+  "@notificationTestScreenMessage1": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage2": "حالة الصلاحيات",
+  "@notificationTestScreenMessage2": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage3": "الحالة",
+  "@notificationTestScreenMessage3": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage4": "غير معروفة",
+  "@notificationTestScreenMessage4": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage5": "جاهزية الخدمة",
+  "@notificationTestScreenMessage5": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage6": "جاهزة",
+  "@notificationTestScreenMessage6": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage7": "قيد التشغيل",
+  "@notificationTestScreenMessage7": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage8": "الإشعارات المحلية",
+  "@notificationTestScreenMessage8": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage9": "إشعار فوري",
+  "@notificationTestScreenMessage9": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage10": "إشعار بعد دقيقة",
+  "@notificationTestScreenMessage10": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage11": "إلغاء الكل",
+  "@notificationTestScreenMessage11": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage12": "إشعارات الدفع (FCM)",
+  "@notificationTestScreenMessage12": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage13": "طلب الصلاحيات",
+  "@notificationTestScreenMessage13": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage14": "رمز FCM:",
+  "@notificationTestScreenMessage14": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage15": "تحديث",
+  "@notificationTestScreenMessage15": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage16": "نسخ",
+  "@notificationTestScreenMessage16": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage17": "الإشعارات المجدولة",
+  "@notificationTestScreenMessage17": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage18": "لا توجد إشعارات مجدولة",
+  "@notificationTestScreenMessage18": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage19": "التحكم في المنبهات",
+  "@notificationTestScreenMessage19": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage20": "إعادة جدولة جميع المنبهات",
+  "@notificationTestScreenMessage20": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage21": "سجلات التصحيح",
+  "@notificationTestScreenMessage21": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage22": "مسح",
+  "@notificationTestScreenMessage22": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage23": "لا توجد سجلات",
+  "@notificationTestScreenMessage23": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage24": "اختبار فوري",
+  "@notificationTestScreenMessage24": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage25": "هذا إشعار اختبار فوري ناجح",
+  "@notificationTestScreenMessage25": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage26": "تم إظهار الإشعار بنجاح",
+  "@notificationTestScreenMessage26": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage27": "فشل الاختبار: {value1}",
+  "@notificationTestScreenMessage27": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationTestScreenMessage28": "سيظهر هذا الإشعار بعد دقيقة من الآن",
+  "@notificationTestScreenMessage28": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage29": "تمت جدولة الإشعار بعد دقيقة",
+  "@notificationTestScreenMessage29": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage30": "فشل الجدولة: {value1}",
+  "@notificationTestScreenMessage30": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationTestScreenMessage31": "تم إلغاء جميع الإشعارات",
+  "@notificationTestScreenMessage31": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage32": "تم طلب الصلاحيات",
+  "@notificationTestScreenMessage32": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage33": "تم تحديث الرمز",
+  "@notificationTestScreenMessage33": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage34": "تم نسخ الرمز",
+  "@notificationTestScreenMessage34": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage35": "تم إعادة جدولة جميع المنبهات",
+  "@notificationTestScreenMessage35": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "notificationTestScreenMessage36": "غير متاح",
+  "@notificationTestScreenMessage36": {
+    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
+  },
+  "settingsScreenMessage1": "المظهر والقراءة",
+  "@settingsScreenMessage1": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage2": "مظهر التطبيق",
+  "@settingsScreenMessage2": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage3": "حسب الجهاز",
+  "@settingsScreenMessage3": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage4": "فاتح",
+  "@settingsScreenMessage4": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage5": "داكن",
+  "@settingsScreenMessage5": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage6": "الموقع وطريقة الحساب",
+  "@settingsScreenMessage6": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage7": "تنبيهات الصلاة",
+  "@settingsScreenMessage7": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage8": "تذكير بالمواقيت حسب الموقع المحدد",
+  "@settingsScreenMessage8": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage9": "التذكيرات اليومية",
+  "@settingsScreenMessage9": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage10": "تذكير {value1}",
+  "@settingsScreenMessage10": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsScreenMessage11": "وقت التذكير",
+  "@settingsScreenMessage11": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage12": "عن سكينة",
+  "@settingsScreenMessage12": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage13": "إرسال تقارير الأعطال وبيانات الاستخدام",
+  "@settingsScreenMessage13": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage14": "اختياري. لا يشمل الموقع أو عمليات البحث أو سجل القراءة.",
+  "@settingsScreenMessage14": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage15": "تعذر تغيير إعداد مشاركة البيانات. أعد المحاولة.",
+  "@settingsScreenMessage15": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage16": "عن التطبيق",
+  "@settingsScreenMessage16": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "settingsScreenMessage17": "رفيقك اليومي للقرآن والأذكار ومواقيت الصلاة.",
+  "@settingsScreenMessage17": {
+    "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
+  },
+  "readingPreferencesMessage1": "حجم خط القرآن",
+  "@readingPreferencesMessage1": {
+    "description": "Display text used in lib/features/settings/presentation/widgets/reading_preferences.dart."
+  },
+  "readingPreferencesMessage2": "حجم الخط {value1}",
+  "@readingPreferencesMessage2": {
+    "description": "Display text used in lib/features/settings/presentation/widgets/reading_preferences.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "readingPreferencesMessage3": "تباعد الأسطر {value1}",
+  "@readingPreferencesMessage3": {
+    "description": "Display text used in lib/features/settings/presentation/widgets/reading_preferences.dart.",
+    "placeholders": {
+      "value1": {
+        "type": "String"
+      }
+    }
+  },
+  "splashScreenMessage1": "تطبيقك للطمأنينة والهدوء",
+  "@splashScreenMessage1": {
+    "description": "Display text used in lib/features/splash/presentation/screens/splash_screen.dart."
+  }
 }

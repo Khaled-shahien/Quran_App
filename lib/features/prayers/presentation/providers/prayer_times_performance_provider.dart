@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import '../../domain/prayer_calculation_policy.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sakina_app/features/prayers/domain/Entities/'
@@ -167,7 +168,9 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
       final parsed = _parseTime(time24);
       int hour = parsed.hour;
       int min = parsed.minute;
-      String period = hour >= 12 ? 'م' : 'ص';
+      String period = hour >= 12
+          ? appL10n.alarmMenuItemMessage2
+          : appL10n.alarmMenuItemMessage3;
       if (hour > 12) hour -= 12;
       if (hour == 0) hour = 12;
       String mStr = min.toString().padLeft(2, '0');
@@ -190,12 +193,12 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
     }
 
     final arabicNames = {
-      'Fajr': 'الفجر',
-      'Sunrise': 'الشروق',
-      'Dhuhr': 'الظهر',
-      'Asr': 'العصر',
-      'Maghrib': 'المغرب',
-      'Isha': 'العشاء',
+      'Fajr': appL10n.prayerTimesWidgetMessage8,
+      'Sunrise': appL10n.prayerTimesPerformanceProviderMessage1,
+      'Dhuhr': appL10n.prayerTimesWidgetMessage9,
+      'Asr': appL10n.prayerTimesWidgetMessage10,
+      'Maghrib': appL10n.prayerTimesWidgetMessage11,
+      'Isha': appL10n.prayerTimesWidgetMessage12,
     };
 
     final now = _clock.now();
@@ -210,9 +213,9 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
       {'key': 'Isha', 'time': times['Isha']},
     ];
 
-    String currentName = 'العشاء';
+    String currentName = appL10n.prayerTimesWidgetMessage12;
     String currentTime = times['Isha'] ?? '--:--';
-    String nextName = 'الفجر';
+    String nextName = appL10n.prayerTimesWidgetMessage8;
     String nextTime = times['Fajr'] ?? '--:--';
 
     for (int i = 0; i < prayers.length; i++) {
@@ -223,7 +226,7 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
       if (now.isBefore(prayerTime)) {
         if (i == 0) {
           // Before Fajr -> Current is Isha of previous day, Next is Fajr
-          currentName = 'العشاء';
+          currentName = appL10n.prayerTimesWidgetMessage12;
           currentTime = times['Isha']!;
           nextName = arabicNames[pt['key']]!;
           nextTime = pt['time']!;
@@ -239,9 +242,9 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
 
       // If we reached the end and now > Isha time
       if (i == prayers.length - 1 && now.isAfter(prayerTime)) {
-        currentName = 'العشاء';
+        currentName = appL10n.prayerTimesWidgetMessage12;
         currentTime = times['Isha']!;
-        nextName = 'الفجر';
+        nextName = appL10n.prayerTimesWidgetMessage8;
         nextTime = times['Fajr']!;
       }
     }

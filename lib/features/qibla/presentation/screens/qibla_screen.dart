@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'dart:async';
 import 'dart:math' as math;
 
@@ -47,13 +48,9 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
   Future<void> _openSettings() async {
     final opened = await controller.openSettings();
     if (!opened && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'افتح إعدادات الهاتف وفعّل الموقع وصلاحيته لتطبيق سكينة.',
-          ),
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(appL10n.qiblaScreenMessage1)));
     }
   }
 
@@ -64,10 +61,10 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
       animation: controller,
       builder: (context, _) => Scaffold(
         appBar: AppBar(
-          title: const Text('اتجاه القبلة'),
+          title: Text(l10nOf(context).homeScreenMessage37),
           actions: [
             IconButton(
-              tooltip: 'تحديث الموقع والبوصلة',
+              tooltip: l10nOf(context).qiblaScreenMessage2,
               onPressed: controller.status == QiblaStatus.loading
                   ? null
                   : () => controller.start(),
@@ -96,33 +93,33 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
     final (icon, title, message) = switch (controller.status) {
       QiblaStatus.loading => (
         Icons.my_location,
-        'جارٍ تحديد موقعك',
-        'نحتاج موقعك لحساب اتجاه الكعبة. قد يستغرق تحديد الموقع بضع ثوانٍ.',
+        l10nOf(context).qiblaScreenMessage3,
+        l10nOf(context).qiblaScreenMessage4,
       ),
       QiblaStatus.locationOff => (
         Icons.location_off_outlined,
-        'خدمة الموقع متوقفة',
-        'فعّل الموقع من إعدادات الهاتف، ثم عد إلى هذه الشاشة.',
+        l10nOf(context).qiblaScreenMessage5,
+        l10nOf(context).qiblaScreenMessage6,
       ),
       QiblaStatus.denied => (
         Icons.location_disabled,
-        'السماح بالوصول إلى الموقع',
-        'اسمح باستخدام الموقع أثناء فتح الشاشة لتحديد اتجاه القبلة من مكانك.',
+        l10nOf(context).qiblaScreenMessage7,
+        l10nOf(context).qiblaScreenMessage8,
       ),
       QiblaStatus.deniedForever => (
         Icons.settings_outlined,
-        'صلاحية الموقع غير مفعّلة',
-        'افتح إعدادات التطبيق واسمح بالوصول إلى الموقع أثناء الاستخدام.',
+        l10nOf(context).qiblaScreenMessage9,
+        l10nOf(context).qiblaScreenMessage10,
       ),
       QiblaStatus.unsupported => (
         Icons.explore_off_outlined,
-        'البوصلة متاحة على الهاتف',
-        'افتح التطبيق على هاتف Android أو iPhone مزود بحساس بوصلة.',
+        l10nOf(context).qiblaScreenMessage11,
+        l10nOf(context).qiblaScreenMessage12,
       ),
       _ => (
         Icons.location_searching,
-        'تعذّر تحديد موقعك',
-        'انتقل إلى مكان تصل إليه إشارة الموقع، ثم حاول مرة أخرى.',
+        l10nOf(context).qiblaScreenMessage13,
+        l10nOf(context).qiblaScreenMessage14,
       ),
     };
     return Padding(
@@ -147,14 +144,14 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
               FilledButton.icon(
                 onPressed: _openSettings,
                 icon: const Icon(Icons.settings_outlined),
-                label: const Text('فتح الإعدادات'),
+                label: Text(l10nOf(context).qiblaScreenMessage15),
               ),
             TextButton(
               onPressed: () => controller.start(),
               child: Text(
                 controller.status == QiblaStatus.denied
-                    ? 'السماح بالموقع'
-                    : 'إعادة المحاولة',
+                    ? l10nOf(context).qiblaScreenMessage16
+                    : l10nOf(context).retry,
               ),
             ),
           ],
@@ -169,37 +166,42 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
     final turn = controller.turn;
     final needsCalibration = heading?.needsCalibration ?? false;
     if (controller.nearKaaba) {
-      return const Padding(
-        padding: EdgeInsets.only(top: 48),
+      return Padding(
+        padding: const EdgeInsets.only(top: 48),
         child: Text(
-          'أنت قريب جدًا من الكعبة. اتجه إلى الكعبة مباشرة؛ لا تكفي دقة موقع الهاتف لتوجيهك هنا.',
+          l10nOf(context).qiblaScreenMessage17,
           textAlign: TextAlign.center,
         ),
       );
     }
     final String guidance;
     if (controller.sensorUnavailable) {
-      guidance = 'تعذّرت قراءة البوصلة';
+      guidance = l10nOf(context).qiblaScreenMessage18;
     } else if (heading == null) {
-      guidance = 'جارٍ قراءة البوصلة';
+      guidance = l10nOf(context).qiblaScreenMessage19;
     } else if (needsCalibration) {
-      guidance = 'البوصلة تحتاج إلى معايرة';
+      guidance = l10nOf(context).qiblaScreenMessage20;
     } else if (controller.aligned) {
-      guidance = 'أنت باتجاه القبلة';
+      guidance = l10nOf(context).qiblaScreenMessage21;
     } else {
-      guidance =
-          'استدر ${turn! > 0 ? 'يمينًا' : 'يسارًا'} ${turn.abs().round()}°';
+      guidance = l10nOf(context).qiblaScreenMessage24(
+        (turn! > 0
+                ? l10nOf(context).qiblaScreenMessage23
+                : l10nOf(context).qiblaScreenMessage22)
+            .toString(),
+        (turn.abs().round()).toString(),
+      );
     }
     return Column(
       children: [
         Text(
-          'وَحَيْثُ مَا كُنتُمْ فَوَلُّوا وُجُوهَكُمْ شَطْرَهُ',
+          l10nOf(context).qiblaScreenMessage25,
           textAlign: TextAlign.center,
           style: theme.textTheme.titleMedium,
         ),
         const SizedBox(height: 8),
         Text(
-          'ضع الهاتف أفقيًا ووجّه حافته العلوية نحو الكعبة',
+          l10nOf(context).qiblaScreenMessage26,
           textAlign: TextAlign.center,
           style: theme.textTheme.bodyMedium,
         ),
@@ -238,7 +240,9 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
         ),
         const SizedBox(height: 12),
         Text(
-          '${controller.bearing!.toStringAsFixed(1)}° من الشمال الجغرافي',
+          l10nOf(context).qiblaScreenMessage27(
+            (controller.bearing!.toStringAsFixed(1)).toString(),
+          ),
           textAlign: TextAlign.center,
           style: theme.textTheme.titleMedium,
         ),
@@ -252,8 +256,8 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
           ),
           child: Text(
             controller.sensorUnavailable
-                ? 'قد لا يحتوي جهازك على حساس بوصلة. يمكنك استخدام الزاوية المعروضة مع بوصلة موثوقة، أو التجربة على هاتف آخر.'
-                : 'لدقة أفضل، ابتعد عن المعادن والمغناطيس وحرّك الهاتف على شكل 8 لمعايرة البوصلة. الاتجاه تقريبي ويتأثر بدقة الحساس.',
+                ? l10nOf(context).qiblaScreenMessage28
+                : l10nOf(context).qiblaScreenMessage29,
             textAlign: TextAlign.center,
           ),
         ),
@@ -278,7 +282,7 @@ class QiblaDial extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final accent = aligned ? const Color(0xFF28734F) : colors.primary;
     return Semantics(
-      label: 'سهم اتجاه الكعبة',
+      label: l10nOf(context).qiblaScreenMessage30,
       child: AspectRatio(
         aspectRatio: 1,
         child: CustomPaint(
@@ -345,7 +349,12 @@ class _CompassPainter extends CustomPainter {
         paint,
       );
     }
-    for (final entry in {0: 'ش', 90: 'شرق', 180: 'ج', 270: 'غرب'}.entries) {
+    for (final entry in {
+      0: appL10n.qiblaScreenMessage31,
+      90: appL10n.qiblaScreenMessage32,
+      180: appL10n.qiblaScreenMessage33,
+      270: appL10n.qiblaScreenMessage34,
+    }.entries) {
       final angle = (entry.key - heading - 90) * math.pi / 180;
       final label = TextPainter(
         text: TextSpan(

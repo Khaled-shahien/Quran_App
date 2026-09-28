@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -31,9 +32,12 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'المقالات',
-            style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.bold),
+          title: Text(
+            l10nOf(context).articlesScreenMessage1,
+            style: const TextStyle(
+              fontFamily: 'Cairo',
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -56,8 +60,8 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                   _SourceChips(provider: provider),
                   Expanded(
                     child: provider.articles.isEmpty
-                        ? const MediaEmptyView(
-                            message: 'لا توجد مقالات متاحة حالياً',
+                        ? MediaEmptyView(
+                            message: l10nOf(context).articlesScreenMessage2,
                             icon: Icons.article_outlined,
                           )
                         : RefreshIndicator(
@@ -112,7 +116,7 @@ class _SourceChips extends StatelessWidget {
 
           return ChoiceChip(
             label: Text(
-              isAll ? 'كل المصادر' : source!,
+              isAll ? l10nOf(context).articlesScreenMessage3 : source!,
               style: TextStyle(
                 fontFamily: 'Cairo',
                 color: selected ? theme.colorScheme.onPrimary : null,

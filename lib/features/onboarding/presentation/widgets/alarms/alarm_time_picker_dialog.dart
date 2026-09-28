@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/providers/settings_provider.dart';
@@ -39,7 +40,9 @@ class _AlarmTimePickerDialogState extends State<AlarmTimePickerDialog> {
         );
       }
     } catch (_) {
-      if (mounted) setState(() => _error = 'تعذر تحميل وقت التذكير');
+      if (mounted) {
+        setState(() => _error = appL10n.alarmTimePickerDialogMessage1);
+      }
     }
   }
 
@@ -55,13 +58,17 @@ class _AlarmTimePickerDialogState extends State<AlarmTimePickerDialog> {
       final messenger = ScaffoldMessenger.of(context);
       Navigator.pop(context);
       messenger.showSnackBar(
-        SnackBar(content: Text('تم حفظ وقت ${widget.title}')),
+        SnackBar(
+          content: Text(
+            appL10n.alarmTimePickerDialogMessage2((widget.title).toString()),
+          ),
+        ),
       );
     } catch (_) {
       if (mounted) {
         setState(() {
           _saving = false;
-          _error = 'تعذر حفظ الوقت. أعد المحاولة.';
+          _error = appL10n.alarmTimePickerDialogMessage3;
         });
       }
     }
@@ -94,11 +101,11 @@ class _AlarmTimePickerDialogState extends State<AlarmTimePickerDialog> {
     actions: [
       TextButton(
         onPressed: _saving ? null : () => Navigator.pop(context),
-        child: const Text('إلغاء'),
+        child: Text(l10nOf(context).appStringsMessage9),
       ),
       FilledButton(
         onPressed: _time == null || _saving ? null : _save,
-        child: const Text('حفظ'),
+        child: Text(l10nOf(context).appStringsMessage11),
       ),
     ],
   );

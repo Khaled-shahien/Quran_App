@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../../domain/models/khatma_model.dart';
@@ -338,11 +339,12 @@ class KhatmaProvider extends ChangeNotifier {
 
     await _reminderService.scheduleDailyReminder(
       notificationId: _khatmaReminderNotificationId,
-      title: 'ورد الختمة اليومي',
-      body:
-          'لا تنس وردك اليوم: ${khatma.amountValue} '
-          '(من ${khatma.todayFromUnit} '
-          'إلى ${khatma.todayToUnit})',
+      title: appL10n.khatmaProviderMessage1,
+      body: appL10n.khatmaProviderMessage2(
+        (khatma.amountValue).toString(),
+        (khatma.todayFromUnit).toString(),
+        (khatma.todayToUnit).toString(),
+      ),
       hour: khatma.reminderHour,
       minute: khatma.reminderMinute,
       payload: 'khatma',

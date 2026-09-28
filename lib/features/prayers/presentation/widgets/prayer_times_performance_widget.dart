@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -57,7 +58,7 @@ class _PrayerTimesHeader extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          'أوقات الصلاة',
+          l10nOf(context).prayerTitle,
           style: TextStyle(
             fontFamily: 'Cairo',
             fontSize: 18,
@@ -137,12 +138,12 @@ class _LoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         children: [
-          PulseLoader(lines: 3),
-          SizedBox(height: 16),
-          Text('جاري تحميل أوقات الصلاة...'),
+          const PulseLoader(lines: 3),
+          const SizedBox(height: 16),
+          Text(l10nOf(context).prayerTimesPerformanceWidgetMessage1),
         ],
       ),
     );
@@ -161,9 +162,9 @@ class _ErrorDisplay extends StatelessWidget {
       children: [
         const Icon(Icons.error_outline, color: Colors.red, size: 48),
         const SizedBox(height: 16),
-        const Text(
-          'حدث خطأ في تحميل أوقات الصلاة',
-          style: TextStyle(
+        Text(
+          l10nOf(context).prayerTimesPerformanceWidgetMessage2,
+          style: const TextStyle(
             fontFamily: 'Cairo',
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -190,11 +191,11 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        Icon(Icons.access_time_outlined, size: 48, color: Colors.grey),
-        SizedBox(height: 16),
-        Text('لا توجد بيانات متاحة'),
+        const Icon(Icons.access_time_outlined, size: 48, color: Colors.grey),
+        const SizedBox(height: 16),
+        Text(l10nOf(context).prayerTimesWidgetMessage4),
       ],
     );
   }
@@ -212,12 +213,12 @@ class _PrayerTimesList extends StatelessWidget {
 
     // Define Arabic names in the correct order
     final arabicNames = {
-      'Fajr': 'الفجر',
-      'Sunrise': 'الشروق',
-      'Dhuhr': 'الظهر',
-      'Asr': 'العصر',
-      'Maghrib': 'المغرب',
-      'Isha': 'العشاء',
+      'Fajr': l10nOf(context).prayerTimesWidgetMessage8,
+      'Sunrise': l10nOf(context).prayerTimesPerformanceProviderMessage1,
+      'Dhuhr': l10nOf(context).prayerTimesWidgetMessage9,
+      'Asr': l10nOf(context).prayerTimesWidgetMessage10,
+      'Maghrib': l10nOf(context).prayerTimesWidgetMessage11,
+      'Isha': l10nOf(context).prayerTimesWidgetMessage12,
     };
 
     return Column(

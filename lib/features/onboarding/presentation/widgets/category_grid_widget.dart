@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -18,37 +19,37 @@ class CategoryGridWidget extends StatelessWidget {
         delegate: SliverChildListDelegate([
           _catCard(
             context,
-            'الأدعية',
+            l10nOf(context).appStringsMessage30,
             'assets/images/الادعيه.png',
             onTap: () => context.push('/duas/all'),
           ),
           _catCard(
             context,
-            'التسبيح',
+            l10nOf(context).categoryGridWidgetMessage1,
             'assets/images/التسبيح_الالكتروني.png',
             onTap: () => context.push('/tasbeeh'),
           ),
           _catCard(
             context,
-            'الأسماء',
+            l10nOf(context).categoryGridWidgetMessage2,
             'assets/images/اسماء_الله_الحسني.png',
             onTap: () => context.push('/asma'),
           ),
           _catCard(
             context,
-            'القرآن',
+            l10nOf(context).appStringsMessage28,
             'assets/images/القران.png',
             onTap: () => context.push('/quran'),
           ),
           _catCard(
             context,
-            'الأذكار',
+            l10nOf(context).mainNavigationShellMessage2,
             'assets/images/الاذكار.png',
             onTap: () => context.push('/duas'),
           ),
           _catCard(
             context,
-            'الأحاديث',
+            l10nOf(context).categoryGridWidgetMessage3,
             'assets/images/الاحاديث.png',
             onTap: () => context.push('/hadeath'),
           ),

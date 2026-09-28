@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sakina_app/features/media/domain/entities/video.dart';
 import 'package:sakina_app/features/media/domain/entities/video_channel.dart';
@@ -8,29 +9,29 @@ class VideoProvider extends ChangeNotifier {
   VideoProvider({required GetIslamicVideos getIslamicVideos})
     : _getIslamicVideos = getIslamicVideos;
 
-  static const Map<String, String> categories = <String, String>{
-    'خطب الجمعة': 'خطبة الجمعة',
-    'دروس': 'درس ديني',
-    'تفسير': 'تفسير القرآن',
-    'قصص الأنبياء': 'قصص الأنبياء',
-    'فقه': 'فقه إسلامي',
+  static final Map<String, String> categories = <String, String>{
+    'خطب الجمعة': appL10n.videoProviderMessage1,
+    'دروس': appL10n.videoProviderMessage2,
+    'تفسير': appL10n.videoProviderMessage3,
+    'قصص الأنبياء': appL10n.videoProviderMessage4,
+    'فقه': appL10n.videoProviderMessage5,
   };
 
-  static const List<VideoChannel> fallbackChannels = <VideoChannel>[
+  static final List<VideoChannel> fallbackChannels = <VideoChannel>[
     VideoChannel(
-      name: 'قناة الرسالة',
+      name: appL10n.videoProviderMessage6,
       url: 'https://www.youtube.com/@alresala',
-      description: 'برامج ودروس إسلامية',
+      description: appL10n.videoProviderMessage7,
     ),
     VideoChannel(
-      name: 'دار الإفتاء المصرية',
+      name: appL10n.videoProviderMessage8,
       url: 'https://www.youtube.com/@DarAlIftaaMasriya',
-      description: 'فتاوى ودروس شرعية',
+      description: appL10n.videoProviderMessage9,
     ),
     VideoChannel(
-      name: 'الشيخ محمد متولي الشعراوي',
+      name: appL10n.videoProviderMessage10,
       url: 'https://www.youtube.com/@sharawy',
-      description: 'تفسير القرآن الكريم',
+      description: appL10n.videoProviderMessage11,
     ),
   ];
 
@@ -80,6 +81,6 @@ class VideoProvider extends ChangeNotifier {
 
   String _messageFrom(Object error) {
     if (error is MediaException) return error.message;
-    return 'حدث خطأ غير متوقع، حاول مرة أخرى';
+    return appL10n.articlesProviderMessage1;
   }
 }

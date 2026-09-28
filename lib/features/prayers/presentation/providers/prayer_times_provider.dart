@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import '../../domain/prayer_time_zone.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,23 +36,17 @@ class DevicePrayerLocationService implements PrayerLocationService {
   @override
   Future<Coordinates> getCurrentCoordinates() async {
     if (!await Geolocator.isLocationServiceEnabled()) {
-      throw const PrayerLocationException(
-        'خدمة الموقع متوقفة. فعّلها أو اختر مدينة يدوياً.',
-      );
+      throw PrayerLocationException(appL10n.prayerTimesProviderMessage1);
     }
     var permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
     }
     if (permission == LocationPermission.deniedForever) {
-      throw const PrayerLocationException(
-        'إذن الموقع مرفوض. يمكنك تفعيله من إعدادات الجهاز أو اختيار مدينة يدوياً.',
-      );
+      throw PrayerLocationException(appL10n.prayerTimesProviderMessage2);
     }
     if (permission == LocationPermission.denied) {
-      throw const PrayerLocationException(
-        'لم يُسمح بالوصول للموقع. اختر مدينة أو أدخل الإحداثيات يدوياً.',
-      );
+      throw PrayerLocationException(appL10n.prayerTimesProviderMessage3);
     }
     final position = await Geolocator.getCurrentPosition().timeout(
       const Duration(seconds: 20),
@@ -95,7 +90,7 @@ class PrayerTimesProvider extends ChangeNotifier {
 
   final SharedPreferences? _preferences;
   Coordinates? _selectedCoordinates;
-  String locationLabel = 'لم يتم تحديد الموقع';
+  String locationLabel = appL10n.prayerTimesProviderMessage4;
   int selectedMethod = PrayerCalculationPolicy.defaultMethod;
   DateTime? loadedDate;
   Coordinates? get selectedCoordinates => _selectedCoordinates;
@@ -146,7 +141,8 @@ class PrayerTimesProvider extends ChangeNotifier {
         lon.abs() <= 180) {
       _selectedCoordinates = (latitude: lat, longitude: lon);
       locationLabel =
-          preferences?.getString('prayer_location_label') ?? 'موقع محفوظ';
+          preferences?.getString('prayer_location_label') ??
+          appL10n.prayerTimesProviderMessage5;
     }
     final method = preferences?.getInt('prayer_method');
     if (PrayerCalculationPolicy.methods.containsKey(method)) {
@@ -169,7 +165,9 @@ class PrayerTimesProvider extends ChangeNotifier {
     }
     if (_disposed) return;
     final requestId = ++_requestId;
-    final nextLabel = label.trim().isEmpty ? 'موقع يدوي' : label.trim();
+    final nextLabel = label.trim().isEmpty
+        ? appL10n.prayerTimesProviderMessage6
+        : label.trim();
     final previousValues = <String, Object?>{};
     _isLoading = true;
     _errorMessage = null;
@@ -221,7 +219,7 @@ class PrayerTimesProvider extends ChangeNotifier {
         if (_disposed || requestId != _requestId) return;
       }
       _isLoading = false;
-      _errorMessage = 'تعذر حفظ موقع الصلاة. أعد اختيار الموقع وحاول مرة أخرى.';
+      _errorMessage = appL10n.prayerTimesProviderMessage7;
       notifyListeners();
       return;
     }
@@ -243,7 +241,7 @@ class PrayerTimesProvider extends ChangeNotifier {
       await selectLocation(
         position.latitude,
         position.longitude,
-        'موقع الجهاز',
+        appL10n.prayerTimesProviderMessage8,
         selectedMethod,
       );
     } catch (error) {
@@ -251,7 +249,7 @@ class PrayerTimesProvider extends ChangeNotifier {
       _isLoading = false;
       _errorMessage = error is PrayerLocationException
           ? error.message
-          : 'تعذر تحديد الموقع. اختر مدينة يدوياً أو أعد المحاولة.';
+          : appL10n.prayerTimesProviderMessage9;
       notifyListeners();
     }
   }
@@ -314,8 +312,7 @@ class PrayerTimesProvider extends ChangeNotifier {
     } catch (e) {
       if (_disposed || requestId != _requestId) return;
       _isLoading = false;
-      _errorMessage =
-          'تعذر تحميل المواقيت. حدد موقعك أو تحقق من الاتصال وأعد المحاولة.';
+      _errorMessage = appL10n.prayerTimesProviderMessage10;
       notifyListeners();
     }
 
@@ -376,8 +373,7 @@ class PrayerTimesProvider extends ChangeNotifier {
     } catch (_) {
       if (_disposed || requestId != _requestId) return;
       _isLoading = false;
-      _errorMessage =
-          'تعذر تحميل المواقيت. حدد موقعك أو تحقق من الاتصال وأعد المحاولة.';
+      _errorMessage = appL10n.prayerTimesProviderMessage10;
       notifyListeners();
     }
   }
@@ -432,12 +428,12 @@ class PrayerTimesProvider extends ChangeNotifier {
   }
 
   Map<String, String> getCurrentAndNextPrayer() {
-    const names = {
-      'Fajr': 'الفجر',
-      'Dhuhr': 'الظهر',
-      'Asr': 'العصر',
-      'Maghrib': 'المغرب',
-      'Isha': 'العشاء',
+    final names = {
+      'Fajr': appL10n.prayerTimesWidgetMessage8,
+      'Dhuhr': appL10n.prayerTimesWidgetMessage9,
+      'Asr': appL10n.prayerTimesWidgetMessage10,
+      'Maghrib': appL10n.prayerTimesWidgetMessage11,
+      'Isha': appL10n.prayerTimesWidgetMessage12,
     };
     final raw = _prayerTimes?.getMainPrayerTimes() ?? {};
     final formatted = getMainPrayerTimes();
@@ -445,7 +441,7 @@ class PrayerTimesProvider extends ChangeNotifier {
     final result = <String, String>{
       'currentName': locationLabel,
       'currentTime': '--:--',
-      'nextName': 'حدد الموقع',
+      'nextName': appL10n.prayerTimesProviderMessage11,
       'nextTime': '--:--',
     };
     for (final entry in names.entries) {
@@ -466,7 +462,7 @@ class PrayerTimesProvider extends ChangeNotifier {
       }
       result['currentName'] = entry.value;
       result['currentTime'] = formatted[entry.key]!;
-      result['nextName'] = 'الفجر غداً';
+      result['nextName'] = appL10n.prayerTimesWidgetMessage13;
     }
     return result;
   }

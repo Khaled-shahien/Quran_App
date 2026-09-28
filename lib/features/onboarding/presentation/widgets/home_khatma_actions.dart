@@ -10,7 +10,7 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
     final activeKhatma = khatmaProvider.activeKhatma;
 
     if (activeKhatma == null) {
-      _showFeatureMessage('لا توجد ختمة نشطة حالياً');
+      _showFeatureMessage(appL10n.homeScreenMessage8);
       return;
     }
 
@@ -24,9 +24,9 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
     final int count = showCompleted ? completedWirds.length : remaining;
     final String title;
     if (showCompleted) {
-      title = 'الأوراد السابقة';
+      title = appL10n.homeScreenMessage9;
     } else {
-      title = 'الأوراد القادمة';
+      title = appL10n.homeScreenMessage10;
     }
 
     showModalBottomSheet<void>(
@@ -57,8 +57,12 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                 const SizedBox(height: 8),
                 Text(
                   showCompleted
-                      ? 'عدد الأوراد المكتملة: $completed'
-                      : 'عدد الأوراد المتبقية: $remaining',
+                      ? l10nOf(
+                          context,
+                        ).homeScreenMessage11((completed).toString())
+                      : l10nOf(
+                          context,
+                        ).homeScreenMessage12((remaining).toString()),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Cairo',
@@ -73,9 +77,8 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                     padding: const EdgeInsets.symmetric(vertical: 24),
                     child: Text(
                       showCompleted
-                          ? 'لم يتم إكمال أي ورد بعد.'
-                          : 'لا توجد أوراد قادمة. '
-                                'تم إنجاز الختمة بالكامل.',
+                          ? l10nOf(context).homeScreenMessage13
+                          : l10nOf(context).homeScreenMessage14,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Cairo',
@@ -103,7 +106,11 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                           return ListTile(
                             contentPadding: EdgeInsets.zero,
                             title: Text(
-                              'من ${wird.fromUnit} إلى ${wird.toUnit} (${activeKhatma.amountType})',
+                              l10nOf(context).homeScreenMessage15(
+                                (wird.fromUnit).toString(),
+                                (wird.toUnit).toString(),
+                                (activeKhatma.amountType).toString(),
+                              ),
                               style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontWeight: FontWeight.w600,
@@ -112,7 +119,9 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                               textAlign: TextAlign.right,
                             ),
                             subtitle: Text(
-                              'مكتمل في $dateLabel',
+                              l10nOf(
+                                context,
+                              ).homeScreenMessage16((dateLabel).toString()),
                               style: TextStyle(
                                 fontFamily: 'Cairo',
                                 color: Theme.of(
@@ -139,7 +148,9 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                         return ListTile(
                           contentPadding: EdgeInsets.zero,
                           title: Text(
-                            'ورد اليوم $wirdDay',
+                            l10nOf(
+                              context,
+                            ).homeScreenMessage17((wirdDay).toString()),
                             style: TextStyle(
                               fontFamily: 'Cairo',
                               fontWeight: FontWeight.w600,
@@ -148,7 +159,7 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                             textAlign: TextAlign.right,
                           ),
                           subtitle: Text(
-                            'قادم',
+                            l10nOf(context).homeScreenMessage18,
                             style: TextStyle(
                               fontFamily: 'Cairo',
                               color: Theme.of(
@@ -189,7 +200,7 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
     final List<SurahEntity> surahs = await surahRepository.getAllSurahs();
     if (surahs.isEmpty) {
       if (!mounted) return;
-      _showFeatureMessage('تعذر تحميل بيانات السور');
+      _showFeatureMessage(appL10n.homeScreenMessage19);
       return;
     }
 

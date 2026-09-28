@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class QuranSettingsDialog extends StatelessWidget {
               children: [
                 const SizedBox(width: 48), // Balance close button
                 Text(
-                  'إعدادات القراءة',
+                  l10nOf(context).quranSettingsDialogMessage1,
                   style: TextStyle(
                     fontFamily: 'Amiri',
                     fontSize: 22,
@@ -31,7 +32,7 @@ class QuranSettingsDialog extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  tooltip: 'إغلاق إعدادات القراءة',
+                  tooltip: l10nOf(context).quranSettingsDialogMessage2,
                   icon: const Icon(Icons.close),
                   color: Theme.of(context).colorScheme.primary,
                   onPressed: () => Navigator.pop(context),
@@ -47,7 +48,7 @@ class QuranSettingsDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'الوضع الليلي',
+                      l10nOf(context).quranSettingsDialogMessage3,
                       style: TextStyle(
                         fontFamily: 'Amiri',
                         fontSize: 18,

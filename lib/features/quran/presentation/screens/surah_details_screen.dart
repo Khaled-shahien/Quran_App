@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
 
@@ -398,7 +399,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
       });
     } catch (e) {
       setState(() {
-        _error = 'حدث خطأ أثناء تحميل آيات السورة';
+        _error = appL10n.readerDataMessage1;
         _isLoading = false;
       });
       developer.log(
@@ -442,8 +443,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                 ),
                 width: double.infinity,
                 child: SelectableText(
-                  'بِسْمِ اللَّهِ '
-                  'الرَّحْمَٰنِ الرَّحِيمِ',
+                  l10nOf(context).readerContentMessage3,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Amiri',
@@ -485,7 +485,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       leading: _buildAppBarIconButton(
-        tooltip: 'رجوع',
+        tooltip: appL10n.appStringsMessage13,
         icon: Icons.arrow_back_ios,
         color: primary,
         onPressed: () => Navigator.pop(context),
@@ -529,7 +529,10 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
               ),
               const SizedBox(height: 2),
               Text(
-                '${_revelationLabel(revelationType)} • $totalAyah آية',
+                appL10n.readerContentMessage2(
+                  (_revelationLabel(revelationType)).toString(),
+                  (totalAyah).toString(),
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
@@ -546,13 +549,13 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
       ),
       actions: [
         _buildAppBarIconButton(
-          tooltip: 'خيارات القراءة',
+          tooltip: appL10n.surahDetailsScreenMessage1,
           icon: Icons.tune,
           color: primary,
           onPressed: _showReadingControlsSheet,
         ),
         _buildAppBarIconButton(
-          tooltip: 'الإعدادات',
+          tooltip: appL10n.appStringsMessage16,
           icon: Icons.settings,
           color: primary,
           onPressed: () {
@@ -591,10 +594,10 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
   String _revelationLabel(String value) {
     final String normalized = value.toLowerCase();
     if (normalized.contains('mecca') || normalized.contains('meccan')) {
-      return 'مكية';
+      return appL10n.quranScreenMessage2;
     }
     if (normalized.contains('medina') || normalized.contains('medinan')) {
-      return 'مدنية';
+      return appL10n.quranScreenMessage3;
     }
     return value;
   }
@@ -642,7 +645,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _ReaderNavButton(
-                  tooltip: 'الصفحة السابقة',
+                  tooltip: appL10n.readerControlsMessage1,
                   icon: Icons.chevron_right,
                   onPressed: _currentSurahPage > 0
                       ? () => _pageController.previousPage(
@@ -672,7 +675,10 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                       );
                     },
                     child: Text(
-                      'الصفحة $currentPage من $totalPages',
+                      appL10n.onboardingScreenMessage3(
+                        (currentPage).toString(),
+                        (totalPages).toString(),
+                      ),
                       key: ValueKey<int>(currentPage),
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -687,7 +693,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                   ),
                 ),
                 _ReaderNavButton(
-                  tooltip: 'الصفحة التالية',
+                  tooltip: appL10n.readerControlsMessage2,
                   icon: Icons.chevron_left,
                   onPressed: _currentSurahPage < _surahPages.length - 1
                       ? () => _pageController.nextPage(
@@ -727,10 +733,10 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
     }
 
     if (_surahPages.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
-          'لا توجد آيات في هذه السورة',
-          style: TextStyle(
+          appL10n.readerContentMessage1,
+          style: const TextStyle(
             fontSize: 16,
             color: Colors.grey,
             fontFamily: 'Amiri',
@@ -934,8 +940,12 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '${_revelationLabel(verse.revelationType)} '
-                            '• ${verse.totalAyah} آية',
+                            appL10n.readerContentMessage2(
+                              (_revelationLabel(
+                                verse.revelationType,
+                              )).toString(),
+                              (verse.totalAyah).toString(),
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
@@ -974,8 +984,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                     border: Border.all(color: primary.withValues(alpha: 0.14)),
                   ),
                   child: Text(
-                    'بِسْمِ اللَّهِ '
-                    'الرَّحْمَٰنِ الرَّحِيمِ',
+                    appL10n.readerContentMessage3,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Amiri',
@@ -1028,8 +1037,8 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
       SnackBar(
         content: Text(
           savedWirdPosition
-              ? 'تم حفظ موضع الورد الحالي'
-              : 'تم حفظ علامة القراءة بنجاح',
+              ? appL10n.readerControlsMessage3
+              : appL10n.readerControlsMessage4,
           style: const TextStyle(fontFamily: 'Amiri', fontSize: 16),
           textAlign: TextAlign.center,
         ),
@@ -1057,7 +1066,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'تخصيص القراءة',
+                      l10nOf(context).readerControlsMessage5,
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontFamily: 'Cairo',
@@ -1067,10 +1076,10 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                       ),
                     ),
                     const SizedBox(height: 14),
-                    const Text(
-                      'حجم الخط',
+                    Text(
+                      l10nOf(context).readerControlsMessage6,
                       textAlign: TextAlign.right,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Cairo',
                         fontWeight: FontWeight.w600,
                       ),
@@ -1087,10 +1096,10 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                         setLocalState(() {});
                       },
                     ),
-                    const Text(
-                      'تباعد الأسطر',
+                    Text(
+                      l10nOf(context).readerControlsMessage7,
                       textAlign: TextAlign.right,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Cairo',
                         fontWeight: FontWeight.w600,
                       ),
@@ -1115,10 +1124,10 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                         });
                         setLocalState(() {});
                       },
-                      title: const Text(
-                        'إظهار أرقام الآيات',
+                      title: Text(
+                        l10nOf(context).readerControlsMessage8,
                         textAlign: TextAlign.right,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Cairo',
                           fontWeight: FontWeight.w600,
                         ),
@@ -1132,10 +1141,10 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                         });
                         setLocalState(() {});
                       },
-                      title: const Text(
-                        'وضع القراءة الكاملة',
+                      title: Text(
+                        l10nOf(context).readerControlsMessage9,
                         textAlign: TextAlign.right,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Cairo',
                           fontWeight: FontWeight.w600,
                         ),
@@ -1202,7 +1211,7 @@ class _BookmarkButtonState extends State<_BookmarkButton>
     return ScaleTransition(
       scale: _controller,
       child: IconButton(
-        tooltip: 'حفظ العلامة',
+        tooltip: l10nOf(context).readerButtonsMessage1,
         style: IconButton.styleFrom(
           backgroundColor: widget.color.withValues(alpha: 0.1),
           side: BorderSide(color: widget.color.withValues(alpha: 0.18)),

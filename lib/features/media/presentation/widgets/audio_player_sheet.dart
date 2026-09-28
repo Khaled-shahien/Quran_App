@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:sakina_app/core/theme/app_radius.dart';
@@ -114,20 +115,20 @@ class _SurahAudioTile extends StatelessWidget {
           ),
         ),
         title: Text(
-          'سورة ${surah.surahName}',
+          l10nOf(context).surahAudioModelMessage1((surah.surahName).toString()),
           textDirection: TextDirection.rtl,
           style: const TextStyle(
             fontFamily: 'Cairo',
             fontWeight: FontWeight.w800,
           ),
         ),
-        subtitle: const Text(
-          'فتح التلاوة في مشغل الصوت',
+        subtitle: Text(
+          l10nOf(context).audioPlayerSheetMessage1,
           textDirection: TextDirection.rtl,
-          style: TextStyle(fontFamily: 'Cairo', fontSize: 12),
+          style: const TextStyle(fontFamily: 'Cairo', fontSize: 12),
         ),
         trailing: IconButton.filledTonal(
-          tooltip: 'تشغيل',
+          tooltip: l10nOf(context).audioPlayerSheetMessage2,
           onPressed: () => _openAudio(context),
           icon: const Icon(Icons.play_arrow_rounded),
         ),
@@ -143,11 +144,11 @@ class _SurahAudioTile extends StatelessWidget {
     );
     if (!opened && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'تعذر فتح ملف الصوت',
+            l10nOf(context).audioPlayerSheetMessage3,
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: 'Cairo'),
+            style: const TextStyle(fontFamily: 'Cairo'),
           ),
         ),
       );

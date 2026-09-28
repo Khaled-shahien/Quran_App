@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import '../../domain/entities/reciter.dart';
 import '../../domain/entities/surah_audio.dart';
 
@@ -18,7 +19,7 @@ class SurahAudioModel extends SurahAudio {
 
   static String surahNameForNumber(int surahNumber) {
     if (surahNumber < 1 || surahNumber > _surahNames.length) {
-      return 'سورة $surahNumber';
+      return appL10n.surahAudioModelMessage1((surahNumber).toString());
     }
     return _surahNames[surahNumber - 1];
   }

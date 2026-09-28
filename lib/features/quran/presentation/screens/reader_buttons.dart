@@ -50,7 +50,7 @@ class _BookmarkButtonState extends State<_BookmarkButton>
     return ScaleTransition(
       scale: _controller,
       child: IconButton(
-        tooltip: 'حفظ العلامة',
+        tooltip: l10nOf(context).readerButtonsMessage1,
         style: IconButton.styleFrom(
           backgroundColor: widget.color.withValues(alpha: 0.1),
           side: BorderSide(color: widget.color.withValues(alpha: 0.18)),

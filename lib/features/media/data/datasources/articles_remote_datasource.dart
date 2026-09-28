@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -19,26 +20,26 @@ class ArticlesRemoteDataSource {
 
   static int get feedCount => _feeds.length;
 
-  static const List<_RssFeed> _feeds = <_RssFeed>[
+  static final List<_RssFeed> _feeds = <_RssFeed>[
     _RssFeed(
-      name: 'إسلام ويب',
+      name: appL10n.articlesRemoteDatasourceMessage1,
       url: 'https://islamweb.net/ar/rss/articles.xml',
-      category: 'مقالات إسلامية',
+      category: appL10n.articlesRemoteDatasourceMessage2,
     ),
     _RssFeed(
-      name: 'طريق الإسلام',
+      name: appL10n.articlesRemoteDatasourceMessage3,
       url: 'https://ar.islamway.net/feed/articles',
-      category: 'مقالات ودروس',
+      category: appL10n.articlesRemoteDatasourceMessage4,
     ),
     _RssFeed(
-      name: 'الألوكة الشرعية',
+      name: appL10n.articlesRemoteDatasourceMessage5,
       url: 'https://www.alukah.net/sharia/rss/',
-      category: 'فقه وعلوم شرعية',
+      category: appL10n.articlesRemoteDatasourceMessage6,
     ),
     _RssFeed(
-      name: 'صيد الفوائد',
+      name: appL10n.articlesRemoteDatasourceMessage7,
       url: 'https://www.saaid.net/rss.xml',
-      category: 'فوائد ومقالات',
+      category: appL10n.articlesRemoteDatasourceMessage8,
     ),
   ];
 
@@ -63,9 +64,7 @@ class ArticlesRemoteDataSource {
 
     if (successfulFeeds == 0 && articles.isEmpty && lastError != null) {
       if (lastError is MediaException) throw lastError;
-      throw const MediaException(
-        'تعذر تحميل المقالات، تحقق من اتصالك بالإنترنت',
-      );
+      throw MediaException(appL10n.articlesRemoteDatasourceMessage9);
     }
 
     articles.sort((a, b) => b.pubDate.compareTo(a.pubDate));
@@ -87,7 +86,12 @@ class ArticlesRemoteDataSource {
         .timeout(const Duration(seconds: 15));
 
     if (response.statusCode != 200) {
-      throw MediaException('تعذر تحميل ${feed.name} (${response.statusCode})');
+      throw MediaException(
+        appL10n.articlesRemoteDatasourceMessage10(
+          (feed.name).toString(),
+          (response.statusCode).toString(),
+        ),
+      );
     }
 
     await _cache.cache(cacheKey, response.body);

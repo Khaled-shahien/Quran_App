@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -77,9 +78,9 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'الآيات اليومية',
-                style: TextStyle(
+              Text(
+                l10nOf(context).dailyVerseSectionWidgetMessage1,
+                style: const TextStyle(
                   fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

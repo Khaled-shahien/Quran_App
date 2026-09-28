@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -21,9 +22,7 @@ class VideoRemoteDataSource {
 
   Future<List<VideoModel>> searchVideos(String query) async {
     if (_apiKey.trim().isEmpty) {
-      throw const MissingApiKeyException(
-        'أضف مفتاح YouTube API لعرض الفيديوهات مباشرة',
-      );
+      throw MissingApiKeyException(appL10n.videoRemoteDatasourceMessage1);
     }
 
     final cacheKey = 'media_youtube_${Uri.encodeComponent(query)}';
@@ -48,13 +47,13 @@ class VideoRemoteDataSource {
         .timeout(const Duration(seconds: 15));
 
     if (response.statusCode == 403) {
-      throw const QuotaExceededException(
-        'تم تجاوز الحد اليومي للفيديوهات، جرب لاحقاً',
-      );
+      throw QuotaExceededException(appL10n.videoRemoteDatasourceMessage2);
     }
 
     if (response.statusCode != 200) {
-      throw MediaException('تعذر تحميل الفيديوهات (${response.statusCode})');
+      throw MediaException(
+        appL10n.videoRemoteDatasourceMessage3((response.statusCode).toString()),
+      );
     }
 
     await _cache.cache(cacheKey, response.body);

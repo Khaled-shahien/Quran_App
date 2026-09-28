@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,11 +25,9 @@ class CurrentWirdWidget extends StatelessWidget {
 
   static final KhatmaQuranLocator _quranLocator = KhatmaQuranLocator();
 
-  static const String _completedWirdMessage =
-      'تم إتمام ورد اليوم، '
-      'انتقل إلى الورد التالي';
-  static const String _completedKhatmaMessage =
-      'تم إتمام الختمة بنجاح، بارك الله فيك';
+  static final String _completedWirdMessage = appL10n.currentWirdWidgetMessage1;
+  static final String _completedKhatmaMessage =
+      appL10n.currentWirdWidgetMessage2;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +61,7 @@ class CurrentWirdWidget extends StatelessWidget {
             children: [
               // Section Title
               Text(
-                'الورد الحالي',
+                l10nOf(context).currentWirdWidgetMessage3,
                 style: TextStyle(
                   fontFamily: 'Cairo',
                   fontSize: 18,
@@ -90,7 +89,7 @@ class CurrentWirdWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'من قوله تعالى',
+                              l10nOf(context).currentWirdWidgetMessage4,
                               style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 14,
@@ -99,7 +98,9 @@ class CurrentWirdWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'الجزء ${activeKhatma.currentJuz}',
+                              l10nOf(context).khatmaLocationScreenMessage5(
+                                (activeKhatma.currentJuz).toString(),
+                              ),
                               style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 14,
@@ -130,7 +131,9 @@ class CurrentWirdWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'بدء الختمة: ${activeKhatma.startMode}',
+                              l10nOf(context).currentWirdWidgetMessage5(
+                                (activeKhatma.startMode).toString(),
+                              ),
                               style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 14,
@@ -139,7 +142,9 @@ class CurrentWirdWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '${activeKhatma.amountValue} / يوم',
+                              l10nOf(context).currentWirdWidgetMessage6(
+                                (activeKhatma.amountValue).toString(),
+                              ),
                               style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 14,
@@ -151,10 +156,11 @@ class CurrentWirdWidget extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'ورد اليوم: '
-                          'من ${activeKhatma.todayFromUnit} '
-                          'إلى ${activeKhatma.todayToUnit} '
-                          '(${activeKhatma.amountType})',
+                          l10nOf(context).currentWirdWidgetMessage7(
+                            (activeKhatma.todayFromUnit).toString(),
+                            (activeKhatma.todayToUnit).toString(),
+                            (activeKhatma.amountType).toString(),
+                          ),
                           style: TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 13,
@@ -170,7 +176,7 @@ class CurrentWirdWidget extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: Text(
-                                  'يوجد موضع محفوظ لاستكمال الورد',
+                                  l10nOf(context).currentWirdWidgetMessage8,
                                   style: TextStyle(
                                     fontFamily: 'Cairo',
                                     fontSize: 12,
@@ -249,7 +255,7 @@ class CurrentWirdWidget extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      'أتممت القراءة',
+                                      l10nOf(context).currentWirdWidgetMessage9,
                                       style: TextStyle(
                                         fontFamily: 'Cairo',
                                         fontSize: 14,
@@ -283,9 +289,9 @@ class CurrentWirdWidget extends StatelessWidget {
                                   ),
                                   elevation: 0,
                                 ),
-                                child: const Text(
-                                  'اقرأ الورد',
-                                  style: TextStyle(
+                                child: Text(
+                                  l10nOf(context).currentWirdWidgetMessage10,
+                                  style: const TextStyle(
                                     fontFamily: 'Cairo',
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -310,7 +316,7 @@ class CurrentWirdWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'الختمة الحالية',
+                      l10nOf(context).appRouterMessage1,
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 16,
@@ -328,21 +334,24 @@ class CurrentWirdWidget extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: const Text(
-                                  'إلغاء الختمة',
-                                  style: TextStyle(fontFamily: 'Cairo'),
+                                title: Text(
+                                  l10nOf(context).currentWirdWidgetMessage11,
+                                  style: const TextStyle(fontFamily: 'Cairo'),
                                 ),
-                                content: const Text(
-                                  'هل أنت متأكد من '
-                                  'إلغاء الختمة الحالية؟',
-                                  style: TextStyle(fontFamily: 'Cairo'),
+                                content: Text(
+                                  l10nOf(context).currentWirdWidgetMessage12,
+                                  style: const TextStyle(fontFamily: 'Cairo'),
                                 ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text(
-                                      'تراجع',
-                                      style: TextStyle(fontFamily: 'Cairo'),
+                                    child: Text(
+                                      l10nOf(
+                                        context,
+                                      ).currentWirdWidgetMessage13,
+                                      style: const TextStyle(
+                                        fontFamily: 'Cairo',
+                                      ),
                                     ),
                                   ),
                                   TextButton(
@@ -350,9 +359,11 @@ class CurrentWirdWidget extends StatelessWidget {
                                       khatmaProvider.cancelKhatma();
                                       Navigator.pop(context);
                                     },
-                                    child: const Text(
-                                      'نعم، إلغاء',
-                                      style: TextStyle(
+                                    child: Text(
+                                      l10nOf(
+                                        context,
+                                      ).currentWirdWidgetMessage14,
+                                      style: const TextStyle(
                                         fontFamily: 'Cairo',
                                         color: Colors.red,
                                       ),
@@ -382,8 +393,10 @@ class CurrentWirdWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'المتبقي: ${activeKhatma.remainingUnits.ceil()} '
-                      '${activeKhatma.amountType}',
+                      l10nOf(context).currentWirdWidgetMessage15(
+                        (activeKhatma.remainingUnits.ceil()).toString(),
+                        (activeKhatma.amountType).toString(),
+                      ),
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 14,
@@ -392,8 +405,11 @@ class CurrentWirdWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'الإنجاز: '
-                      '${(activeKhatma.progress * 100).toStringAsFixed(1)}%',
+                      l10nOf(context).currentWirdWidgetMessage16(
+                        ((activeKhatma.progress * 100).toStringAsFixed(
+                          1,
+                        )).toString(),
+                      ),
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 14,
@@ -421,7 +437,7 @@ class CurrentWirdWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'لا توجد ختمة نشطة حالياً',
+                        l10nOf(context).homeScreenMessage8,
                         style: TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 16,
@@ -431,8 +447,7 @@ class CurrentWirdWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'ابدأ ختمة جديدة '
-                        'وتابع وردك اليومي بسهولة',
+                        l10nOf(context).currentWirdWidgetMessage17,
                         style: TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 14,
@@ -455,9 +470,9 @@ class CurrentWirdWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text(
-                          'ابدأ ختمة جديدة',
-                          style: TextStyle(
+                        child: Text(
+                          l10nOf(context).currentWirdWidgetMessage18,
+                          style: const TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -506,9 +521,9 @@ class CurrentWirdWidget extends StatelessWidget {
     final List<SurahEntity> surahs = await surahRepository.getAllSurahs();
     if (surahs.isEmpty) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('تعذر تحميل بيانات السور')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10nOf(context).homeScreenMessage19)),
+      );
       return;
     }
 
@@ -541,10 +556,13 @@ class CurrentWirdWidget extends StatelessWidget {
 
     return _WirdPreviewData(
       ayahText: position.ayahText.isEmpty
-          ? 'تعذر تحميل آية الورد'
+          ? l10nOf(context).currentWirdWidgetMessage19
           : position.ayahText,
-      reference:
-          '${position.surahName} - الآية ${position.ayahNumber} - صفحة ${position.pageNumber}',
+      reference: l10nOf(context).currentWirdWidgetMessage20(
+        (position.surahName).toString(),
+        (position.ayahNumber).toString(),
+        (position.pageNumber).toString(),
+      ),
     );
   }
 }
@@ -647,8 +665,8 @@ class _AnimatedWirdAyahPreviewState extends State<_AnimatedWirdAyahPreview> {
   Widget build(BuildContext context) {
     final _WirdPreviewData display =
         _current ??
-        const _WirdPreviewData(
-          ayahText: 'جاري تحميل آية الورد...',
+        _WirdPreviewData(
+          ayahText: l10nOf(context).currentWirdWidgetMessage21,
           reference: '',
         );
 

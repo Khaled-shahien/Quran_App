@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +14,10 @@ class ContinueReadingCard extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       child: ListTile(
         leading: const Icon(Icons.bookmark),
-        title: const Text('متابعة القراءة'),
-        subtitle: Text(bookmark.surahName ?? 'القرآن الكريم'),
+        title: Text(l10nOf(context).continueReadingCardMessage1),
+        subtitle: Text(
+          bookmark.surahName ?? l10nOf(context).continueReadingCardMessage2,
+        ),
         trailing: const Icon(Icons.chevron_left),
         onTap: () => context.push('/quran/surah/${bookmark.surahNumber}'),
       ),

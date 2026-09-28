@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/hadeath_entity.dart';
@@ -15,7 +16,7 @@ class HadeathDetailsScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          tooltip: 'رجوع',
+          tooltip: l10nOf(context).appStringsMessage13,
           icon: Icon(
             Icons.arrow_back_ios,
             color: Theme.of(context).colorScheme.primary,
@@ -54,8 +55,7 @@ class HadeathDetailsScreen extends StatelessWidget {
                 ),
                 width: double.infinity,
                 child: Text(
-                  "بِسْمِ اللَّهِ "
-                  "الرَّحْمَِٰ الرَّحِيمِ",
+                  l10nOf(context).hadeathDetailsScreenMessage1,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,

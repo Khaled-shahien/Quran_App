@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -85,16 +86,16 @@ class _SplashScreenState extends State<SplashScreen>
                 opacity: _fadeAnimation,
                 child: ScaleTransition(
                   scale: _scaleAnimation,
-                  child: const Column(
+                  child: Column(
                     children: [
-                      Spacer(flex: 3),
-                      Spacer(flex: 2),
+                      const Spacer(flex: 3),
+                      const Spacer(flex: 2),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24),
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
                         child: Text(
-                          'تطبيقك للطمأنينة والهدوء',
+                          l10nOf(context).splashScreenMessage1,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Cairo',
                             color: logoGold,
                             fontSize: 20,
@@ -103,16 +104,16 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                         ),
                       ),
-                      SizedBox(height: 24),
-                      SizedBox(
+                      const SizedBox(height: 24),
+                      const SizedBox(
                         width: 30,
                         height: 30,
-                        child: CircularProgressIndicator(
+                        child: const CircularProgressIndicator(
                           strokeWidth: 3,
                           color: logoGold,
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                     ],
                   ),
                 ),

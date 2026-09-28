@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -38,11 +39,11 @@ class _HomeDrawerState extends State<HomeDrawer> with _HomeKhatmaActions {
         children: [
           ListTile(
             title: Text(
-              'سكينة',
+              l10nOf(context).appConstantsMessage1,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             trailing: IconButton(
-              tooltip: 'إغلاق القائمة',
+              tooltip: l10nOf(context).homeDrawerMessage1,
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.pop(context),
             ),
@@ -50,9 +51,15 @@ class _HomeDrawerState extends State<HomeDrawer> with _HomeKhatmaActions {
           Padding(
             padding: const EdgeInsets.all(16),
             child: SegmentedButton<bool>(
-              segments: const [
-                ButtonSegment(value: false, label: Text('المزيد')),
-                ButtonSegment(value: true, label: Text('المفضلة')),
+              segments: [
+                ButtonSegment(
+                  value: false,
+                  label: Text(l10nOf(context).homeScreenMessage3),
+                ),
+                ButtonSegment(
+                  value: true,
+                  label: Text(l10nOf(context).homeScreenMessage4),
+                ),
               ],
               selected: {_favorites},
               onSelectionChanged: (value) =>
@@ -64,20 +71,24 @@ class _HomeDrawerState extends State<HomeDrawer> with _HomeKhatmaActions {
                 ? _buildFavorites()
                 : ListView(
                     children: [
-                      _link('الإعدادات', Icons.settings_outlined, '/settings'),
-                      const ListTile(title: Text('الختمة الحالية')),
+                      _link(
+                        l10nOf(context).appStringsMessage16,
+                        Icons.settings_outlined,
+                        '/settings',
+                      ),
+                      ListTile(title: Text(l10nOf(context).appRouterMessage1)),
                       ListTile(
-                        title: const Text('الأوراد السابقة'),
+                        title: Text(l10nOf(context).homeScreenMessage9),
                         leading: const Icon(Icons.history),
                         onTap: () => _showKhatmaWirdSheet(showCompleted: true),
                       ),
                       ListTile(
-                        title: const Text('الأوراد القادمة'),
+                        title: Text(l10nOf(context).homeScreenMessage10),
                         leading: const Icon(Icons.next_plan_outlined),
                         onTap: () => _showKhatmaWirdSheet(showCompleted: false),
                       ),
                       ListTile(
-                        title: const Text('الفاصل'),
+                        title: Text(l10nOf(context).homeScreenMessage26),
                         leading: const Icon(Icons.bookmark_border),
                         onTap: () {
                           final bookmark = context.read<BookmarkProvider>();
@@ -88,24 +99,44 @@ class _HomeDrawerState extends State<HomeDrawer> with _HomeKhatmaActions {
                           );
                         },
                       ),
-                      _link('بدء ختمة جديدة', Icons.add, '/khatma/location'),
+                      _link(
+                        l10nOf(context).homeScreenMessage35,
+                        Icons.add,
+                        '/khatma/location',
+                      ),
                       const Divider(),
                       _link(
-                        'كل الوسائط',
+                        l10nOf(context).homeScreenMessage28,
                         Icons.video_library_outlined,
                         '/media',
                       ),
-                      _link('سورة الكهف', Icons.menu_book, '/quran/surah/18'),
-                      _link('سورة الملك', Icons.menu_book, '/quran/surah/67'),
-                      _link('سورة البقرة', Icons.menu_book, '/quran/surah/2'),
                       _link(
-                        'إعدادات مواقيت الصلاة',
+                        l10nOf(context).homeScreenMessage30,
+                        Icons.menu_book,
+                        '/quran/surah/18',
+                      ),
+                      _link(
+                        l10nOf(context).homeScreenMessage31,
+                        Icons.menu_book,
+                        '/quran/surah/67',
+                      ),
+                      _link(
+                        l10nOf(context).homeScreenMessage32,
+                        Icons.menu_book,
+                        '/quran/surah/2',
+                      ),
+                      _link(
+                        l10nOf(context).homeScreenMessage36,
                         Icons.mosque_outlined,
                         '/prayers',
                       ),
-                      _link('اتجاه القبلة', Icons.explore_outlined, '/qibla'),
                       _link(
-                        'الخصوصية ومصادر المحتوى',
+                        l10nOf(context).homeScreenMessage37,
+                        Icons.explore_outlined,
+                        '/qibla',
+                      ),
+                      _link(
+                        l10nOf(context).homeScreenMessage25,
                         Icons.privacy_tip_outlined,
                         '/settings/data-sources',
                       ),
@@ -120,7 +151,7 @@ class _HomeDrawerState extends State<HomeDrawer> with _HomeKhatmaActions {
   Widget _buildFavorites() => Consumer<FavoritesProvider>(
     builder: (context, provider, _) {
       if (provider.favoriteVerses.isEmpty) {
-        return const Center(child: Text('لا توجد آيات مفضلة'));
+        return Center(child: Text(l10nOf(context).homeScreenMessage59));
       }
       return ListView.builder(
         itemCount: provider.favoriteVerses.length,
@@ -133,7 +164,7 @@ class _HomeDrawerState extends State<HomeDrawer> with _HomeKhatmaActions {
             ),
             subtitle: Text(verse['surah'] ?? ''),
             trailing: IconButton(
-              tooltip: 'إزالة الآية من المفضلة',
+              tooltip: l10nOf(context).homeScreenMessage60,
               icon: const Icon(Icons.favorite),
               onPressed: () => provider.removeFavorite(verse),
             ),

@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,9 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('اختبار الإشعارات')),
+      appBar: AppBar(
+        title: Text(l10nOf(context).notificationTestScreenMessage1),
+      ),
       body: Consumer<NotificationProvider>(
         builder: (context, provider, child) {
           return SingleChildScrollView(
@@ -39,21 +42,25 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _SectionCard(
-                  title: 'حالة الصلاحيات',
+                  title: l10nOf(context).notificationTestScreenMessage2,
                   icon: Icons.verified_user_outlined,
                   children: [
                     _InfoRow(
-                      label: 'الحالة',
-                      value: provider.permissionStatus ?? 'غير معروفة',
+                      label: l10nOf(context).notificationTestScreenMessage3,
+                      value:
+                          provider.permissionStatus ??
+                          l10nOf(context).notificationTestScreenMessage4,
                     ),
                     _InfoRow(
-                      label: 'جاهزية الخدمة',
-                      value: provider.isInitialized ? 'جاهزة' : 'قيد التشغيل',
+                      label: l10nOf(context).notificationTestScreenMessage5,
+                      value: provider.isInitialized
+                          ? l10nOf(context).notificationTestScreenMessage6
+                          : l10nOf(context).notificationTestScreenMessage7,
                     ),
                   ],
                 ),
                 _SectionCard(
-                  title: 'الإشعارات المحلية',
+                  title: l10nOf(context).notificationTestScreenMessage8,
                   icon: Icons.notifications_active_outlined,
                   children: [
                     Wrap(
@@ -63,25 +70,31 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
                         FilledButton.icon(
                           onPressed: () => _showImmediateNotification(provider),
                           icon: const Icon(Icons.flash_on),
-                          label: const Text('إشعار فوري'),
+                          label: Text(
+                            l10nOf(context).notificationTestScreenMessage9,
+                          ),
                         ),
                         FilledButton.icon(
                           onPressed: () =>
                               _scheduleDelayedNotification(provider),
                           icon: const Icon(Icons.schedule),
-                          label: const Text('إشعار بعد دقيقة'),
+                          label: Text(
+                            l10nOf(context).notificationTestScreenMessage10,
+                          ),
                         ),
                         OutlinedButton.icon(
                           onPressed: () => _cancelAllNotifications(provider),
                           icon: const Icon(Icons.delete_sweep_outlined),
-                          label: const Text('إلغاء الكل'),
+                          label: Text(
+                            l10nOf(context).notificationTestScreenMessage11,
+                          ),
                         ),
                       ],
                     ),
                   ],
                 ),
                 _SectionCard(
-                  title: 'إشعارات الدفع (FCM)',
+                  title: l10nOf(context).notificationTestScreenMessage12,
                   icon: Icons.cloud_queue,
                   children: [
                     Wrap(
@@ -92,7 +105,9 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
                         FilledButton.icon(
                           onPressed: () => _requestPermissions(provider),
                           icon: const Icon(Icons.lock_open_outlined),
-                          label: const Text('طلب الصلاحيات'),
+                          label: Text(
+                            l10nOf(context).notificationTestScreenMessage13,
+                          ),
                         ),
                       ],
                     ),
@@ -100,38 +115,46 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
                       children: [
                         Expanded(
                           child: _InfoRow(
-                            label: 'رمز FCM:',
+                            label: l10nOf(
+                              context,
+                            ).notificationTestScreenMessage14,
                             value: _maskedToken(provider.fcmToken),
                           ),
                         ),
                         TextButton.icon(
                           onPressed: () => _refreshFcmToken(provider),
                           icon: const Icon(Icons.refresh),
-                          label: const Text('تحديث'),
+                          label: Text(
+                            l10nOf(context).notificationTestScreenMessage15,
+                          ),
                         ),
                         TextButton.icon(
                           onPressed: provider.fcmToken == null
                               ? null
                               : () => _copyFcmToken(provider),
                           icon: const Icon(Icons.copy),
-                          label: const Text('نسخ'),
+                          label: Text(
+                            l10nOf(context).notificationTestScreenMessage16,
+                          ),
                         ),
                       ],
                     ),
                   ],
                 ),
                 _SectionCard(
-                  title: 'الإشعارات المجدولة',
+                  title: l10nOf(context).notificationTestScreenMessage17,
                   icon: Icons.pending_actions_outlined,
                   trailing: TextButton.icon(
                     onPressed: () => provider.getPendingNotifications(),
                     icon: const Icon(Icons.refresh),
-                    label: const Text('تحديث'),
+                    label: Text(
+                      l10nOf(context).notificationTestScreenMessage15,
+                    ),
                   ),
                   children: [
                     if (provider.pendingNotifications.isEmpty)
                       Text(
-                        'لا توجد إشعارات مجدولة',
+                        l10nOf(context).notificationTestScreenMessage18,
                         style: Theme.of(context).textTheme.bodyMedium,
                       )
                     else
@@ -147,28 +170,32 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
                   ],
                 ),
                 _SectionCard(
-                  title: 'التحكم في المنبهات',
+                  title: l10nOf(context).notificationTestScreenMessage19,
                   icon: Icons.alarm_on_outlined,
                   children: [
                     FilledButton.icon(
                       onPressed: () => _rescheduleAlarms(provider),
                       icon: const Icon(Icons.restart_alt),
-                      label: const Text('إعادة جدولة جميع المنبهات'),
+                      label: Text(
+                        l10nOf(context).notificationTestScreenMessage20,
+                      ),
                     ),
                   ],
                 ),
                 _SectionCard(
-                  title: 'سجلات التصحيح',
+                  title: l10nOf(context).notificationTestScreenMessage21,
                   icon: Icons.bug_report_outlined,
                   trailing: TextButton.icon(
                     onPressed: provider.clearLogs,
                     icon: const Icon(Icons.clear_all),
-                    label: const Text('مسح'),
+                    label: Text(
+                      l10nOf(context).notificationTestScreenMessage22,
+                    ),
                   ),
                   children: [
                     if (provider.debugLogs.isEmpty)
                       Text(
-                        'لا توجد سجلات',
+                        l10nOf(context).notificationTestScreenMessage23,
                         style: Theme.of(context).textTheme.bodyMedium,
                       )
                     else
@@ -195,14 +222,16 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
     try {
       await provider.scheduleTestNotification(
         id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
-        title: 'اختبار فوري',
-        body: 'هذا إشعار اختبار فوري ناجح',
+        title: appL10n.notificationTestScreenMessage24,
+        body: appL10n.notificationTestScreenMessage25,
       );
       if (!mounted) return;
-      _showSnackBar('تم إظهار الإشعار بنجاح');
+      _showSnackBar(appL10n.notificationTestScreenMessage26);
     } catch (error) {
       if (!mounted) return;
-      _showSnackBar('فشل الاختبار: $error');
+      _showSnackBar(
+        appL10n.notificationTestScreenMessage27((error).toString()),
+      );
     }
   }
 
@@ -212,15 +241,17 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
     try {
       await provider.scheduleDelayedNotification(
         id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
-        title: 'إشعار بعد دقيقة',
-        body: 'سيظهر هذا الإشعار بعد دقيقة من الآن',
+        title: appL10n.notificationTestScreenMessage10,
+        body: appL10n.notificationTestScreenMessage28,
       );
       await provider.getPendingNotifications();
       if (!mounted) return;
-      _showSnackBar('تمت جدولة الإشعار بعد دقيقة');
+      _showSnackBar(appL10n.notificationTestScreenMessage29);
     } catch (error) {
       if (!mounted) return;
-      _showSnackBar('فشل الجدولة: $error');
+      _showSnackBar(
+        appL10n.notificationTestScreenMessage30((error).toString()),
+      );
     }
   }
 
@@ -228,19 +259,19 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
     await provider.cancelAllNotifications();
     await provider.getPendingNotifications();
     if (!mounted) return;
-    _showSnackBar('تم إلغاء جميع الإشعارات');
+    _showSnackBar(appL10n.notificationTestScreenMessage31);
   }
 
   Future<void> _requestPermissions(NotificationProvider provider) async {
     await provider.requestPermissions();
     if (!mounted) return;
-    _showSnackBar('تم طلب الصلاحيات');
+    _showSnackBar(appL10n.notificationTestScreenMessage32);
   }
 
   Future<void> _refreshFcmToken(NotificationProvider provider) async {
     await provider.refreshFCMToken();
     if (!mounted) return;
-    _showSnackBar('تم تحديث الرمز');
+    _showSnackBar(appL10n.notificationTestScreenMessage33);
   }
 
   Future<void> _copyFcmToken(NotificationProvider provider) async {
@@ -250,7 +281,7 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
     await Clipboard.setData(ClipboardData(text: token));
     await provider.copyFCMToken();
     if (!mounted) return;
-    _showSnackBar('تم نسخ الرمز');
+    _showSnackBar(appL10n.notificationTestScreenMessage34);
   }
 
   Future<void> _cancelNotification(
@@ -264,7 +295,7 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
   Future<void> _rescheduleAlarms(NotificationProvider provider) async {
     await provider.rescheduleAllAlarms();
     if (!mounted) return;
-    _showSnackBar('تم إعادة جدولة جميع المنبهات');
+    _showSnackBar(appL10n.notificationTestScreenMessage35);
   }
 
   void _showSnackBar(String message) {
@@ -274,7 +305,8 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
   }
 
   String _maskedToken(String? token) {
-    if (token == null || token.isEmpty) return 'غير متاح';
+    if (token == null || token.isEmpty)
+      return appL10n.notificationTestScreenMessage36;
     if (token.length <= 8) return '********';
     return '${token.substring(0, 4)}...${token.substring(token.length - 4)}';
   }
@@ -366,7 +398,7 @@ class _PendingNotificationTile extends StatelessWidget {
       title: Text(notification['title']?.toString() ?? ''),
       subtitle: Text(notification['body']?.toString() ?? ''),
       trailing: IconButton(
-        tooltip: 'إلغاء',
+        tooltip: l10nOf(context).appStringsMessage9,
         icon: const Icon(Icons.cancel),
         onPressed: onCancel,
       ),

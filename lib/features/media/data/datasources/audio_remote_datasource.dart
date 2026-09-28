@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -31,7 +32,9 @@ class AudioRemoteDataSource {
         .timeout(const Duration(seconds: 15));
 
     if (response.statusCode != 200) {
-      throw MediaException('تعذر تحميل قائمة القراء (${response.statusCode})');
+      throw MediaException(
+        appL10n.audioRemoteDatasourceMessage1((response.statusCode).toString()),
+      );
     }
 
     await _cache.cache(_cacheKey, response.body);

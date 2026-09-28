@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 class PlaceholderScreen extends StatelessWidget {
@@ -35,7 +36,7 @@ class PlaceholderScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              'هذه الميزة تحت التطوير',
+              l10nOf(context).placeholderScreenMessage1,
               style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 20,
@@ -45,7 +46,7 @@ class PlaceholderScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'ستتوفر قريباً إن شاء الله',
+              l10nOf(context).placeholderScreenMessage2,
               style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 16,

@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -15,10 +16,10 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
   int totalCounter = 0; // Track total counts across all phrases
   int selectedIndex = 0; // Index of currently selected phrase
   List<Map<String, dynamic>> tasbeehPhrases = [
-    {'text': 'سبحان الله', 'count': 0, 'target': 33},
-    {'text': 'الحمدلله', 'count': 0, 'target': 33},
-    {'text': 'لا اله الا الله', 'count': 0, 'target': 33},
-    {'text': 'الله أكبر', 'count': 0, 'target': 33},
+    {'text': appL10n.tasbeehScreenMessage1, 'count': 0, 'target': 33},
+    {'text': appL10n.tasbeehScreenMessage2, 'count': 0, 'target': 33},
+    {'text': appL10n.tasbeehScreenMessage3, 'count': 0, 'target': 33},
+    {'text': appL10n.tasbeehScreenMessage4, 'count': 0, 'target': 33},
   ];
 
   @override
@@ -35,7 +36,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'التسبيح الإلكتروني',
+          l10nOf(context).tasbeehScreenMessage5,
           style: TextStyle(
             fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.primary,
@@ -89,7 +90,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                               ),
                             ),
                             child: Text(
-                              'الأدعية',
+                              l10nOf(context).appStringsMessage30,
                               style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 18,
@@ -220,7 +221,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                   onPressed: _incrementCounter,
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Colors.white,
-                  label: const Text('تسبيحة'),
+                  label: Text(l10nOf(context).tasbeehScreenMessage6),
                   icon: const Icon(Icons.add),
                 ),
 
@@ -233,9 +234,9 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                     ElevatedButton.icon(
                       onPressed: _showAddTasbeehDialog,
                       icon: const Icon(Icons.add, color: Colors.white),
-                      label: const Text(
-                        'إضافة جديد',
-                        style: TextStyle(
+                      label: Text(
+                        l10nOf(context).tasbeehScreenMessage7,
+                        style: const TextStyle(
                           fontFamily: 'Cairo',
                           color: Colors.white,
                           fontSize: 14,
@@ -257,9 +258,9 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                         color: Colors.red,
                         size: 18,
                       ),
-                      label: const Text(
-                        'إعادة تعيين',
-                        style: TextStyle(
+                      label: Text(
+                        l10nOf(context).tasbeehScreenMessage8,
+                        style: const TextStyle(
                           fontFamily: 'Cairo',
                           color: Colors.red,
                           fontSize: 14,
@@ -312,7 +313,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
       builder: (BuildContext context) {
         return AlertDialog.adaptive(
           title: Text(
-            'إضافة تسبيحة جديدة',
+            l10nOf(context).tasbeehScreenMessage9,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontWeight: FontWeight.bold,
@@ -323,7 +324,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
           content: TextField(
             controller: controller,
             decoration: InputDecoration(
-              hintText: 'أدخل نص التسبيحة',
+              hintText: l10nOf(context).tasbeehScreenMessage10,
               hintStyle: const TextStyle(fontFamily: 'Cairo'),
               filled: true,
               fillColor: Theme.of(context).scaffoldBackgroundColor,
@@ -357,9 +358,9 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text(
-                'إلغاء',
-                style: TextStyle(fontFamily: 'Cairo', color: Colors.red),
+              child: Text(
+                l10nOf(context).appStringsMessage9,
+                style: const TextStyle(fontFamily: 'Cairo', color: Colors.red),
               ),
             ),
             ElevatedButton(
@@ -378,9 +379,12 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
               ),
-              child: const Text(
-                'إضافة',
-                style: TextStyle(fontFamily: 'Cairo', color: Colors.white),
+              child: Text(
+                l10nOf(context).tasbeehScreenMessage11,
+                style: const TextStyle(
+                  fontFamily: 'Cairo',
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
@@ -431,11 +435,11 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'تم حذف "$title"',
+              appL10n.tasbeehScreenMessage12((title).toString()),
               style: const TextStyle(fontFamily: 'Cairo'),
             ),
             action: SnackBarAction(
-              label: 'تراجع',
+              label: appL10n.currentWirdWidgetMessage13,
               textColor: AppColors.accent,
               onPressed: () {
                 setState(() {

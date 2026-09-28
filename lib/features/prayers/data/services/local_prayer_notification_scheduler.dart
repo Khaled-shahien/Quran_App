@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import '../../domain/prayer_time_zone.dart';
 import 'dart:developer' as developer;
 
@@ -115,11 +116,11 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
       schedule[arabicName] = parsed;
     }
 
-    addPrayer('الفجر', prayerTimes.fajr);
-    addPrayer('الظهر', prayerTimes.dhuhr);
-    addPrayer('العصر', prayerTimes.asr);
-    addPrayer('المغرب', prayerTimes.maghrib);
-    addPrayer('العشاء', prayerTimes.isha);
+    addPrayer(appL10n.prayerTimesWidgetMessage8, prayerTimes.fajr);
+    addPrayer(appL10n.prayerTimesWidgetMessage9, prayerTimes.dhuhr);
+    addPrayer(appL10n.prayerTimesWidgetMessage10, prayerTimes.asr);
+    addPrayer(appL10n.prayerTimesWidgetMessage11, prayerTimes.maghrib);
+    addPrayer(appL10n.prayerTimesWidgetMessage12, prayerTimes.isha);
 
     return schedule;
   }

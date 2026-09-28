@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:sakina_app/core/theme/app_radius.dart';
@@ -142,11 +143,11 @@ Future<void> _openUrl(BuildContext context, String url) async {
   final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
   if (!opened && context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         content: Text(
-          'تعذر فتح الرابط',
+          l10nOf(context).articleCardMessage1,
           textAlign: TextAlign.center,
-          style: TextStyle(fontFamily: 'Cairo'),
+          style: const TextStyle(fontFamily: 'Cairo'),
         ),
       ),
     );

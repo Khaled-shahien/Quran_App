@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'ayah_model.dart';
@@ -40,9 +41,9 @@ class SurahModel {
   /// Get revelation type in Arabic
   String get revelationTypeArabic {
     if (revelationType.toLowerCase() == 'mecca') {
-      return 'مكة';
+      return appL10n.surahModelMessage1;
     } else if (revelationType.toLowerCase() == 'medina') {
-      return 'المدينة';
+      return appL10n.surahModelMessage2;
     }
     return revelationType;
   }

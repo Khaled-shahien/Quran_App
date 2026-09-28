@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -123,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
       elevation: 0,
       centerTitle: true,
       leading: IconButton(
-        tooltip: 'بحث',
+        tooltip: appL10n.appStringsMessage15,
         icon: const Icon(Icons.search, size: 26),
         onPressed: () => context.push('/quran/search'),
       ),
@@ -149,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
       actions: [
         Semantics(
           button: true,
-          label: 'فتح القائمة الجانبية',
+          label: appL10n.homeScreenMessage1,
           child: IconButton(
             icon: const Icon(Icons.segment, size: 30),
             onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
@@ -182,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Semantics(
                     button: true,
-                    label: 'إغلاق القائمة الجانبية',
+                    label: appL10n.homeScreenMessage2,
                     child: IconButton(
                       icon: const Icon(
                         Icons.arrow_back_ios,
@@ -192,13 +193,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       AppStrings.appName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Cairo',
                         color: Colors.white,
                         fontSize: 18,
@@ -225,8 +226,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Row(
                   children: [
-                    _drawerTabItem('المزيد', 0),
-                    _drawerTabItem('المفضلة', 1),
+                    _drawerTabItem(appL10n.homeScreenMessage3, 0),
+                    _drawerTabItem(appL10n.homeScreenMessage4, 1),
                   ],
                 ),
               ),
@@ -252,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Semantics(
         button: true,
         selected: active,
-        label: 'تبويب $label',
+        label: appL10n.homeScreenMessage5((label).toString()),
         child: GestureDetector(
           onTap: () => setState(() => drawerSubTab = index),
           child: Container(
@@ -350,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Semantics(
       label: title,
       toggled: value,
-      value: value ? 'مفعل' : 'معطل',
+      value: value ? appL10n.homeScreenMessage6 : appL10n.homeScreenMessage7,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: Row(
@@ -491,7 +492,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final activeKhatma = khatmaProvider.activeKhatma;
 
     if (activeKhatma == null) {
-      _showFeatureMessage('لا توجد ختمة نشطة حالياً');
+      _showFeatureMessage(appL10n.homeScreenMessage8);
       return;
     }
 
@@ -505,9 +506,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final int count = showCompleted ? completedWirds.length : remaining;
     final String title;
     if (showCompleted) {
-      title = 'الأوراد السابقة';
+      title = appL10n.homeScreenMessage9;
     } else {
-      title = 'الأوراد القادمة';
+      title = appL10n.homeScreenMessage10;
     }
 
     showModalBottomSheet<void>(
@@ -538,8 +539,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 8),
                 Text(
                   showCompleted
-                      ? 'عدد الأوراد المكتملة: $completed'
-                      : 'عدد الأوراد المتبقية: $remaining',
+                      ? l10nOf(
+                          context,
+                        ).homeScreenMessage11((completed).toString())
+                      : l10nOf(
+                          context,
+                        ).homeScreenMessage12((remaining).toString()),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Cairo',
@@ -554,9 +559,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 24),
                     child: Text(
                       showCompleted
-                          ? 'لم يتم إكمال أي ورد بعد.'
-                          : 'لا توجد أوراد قادمة. '
-                                'تم إنجاز الختمة بالكامل.',
+                          ? l10nOf(context).homeScreenMessage13
+                          : l10nOf(context).homeScreenMessage14,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Cairo',
@@ -584,7 +588,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           return ListTile(
                             contentPadding: EdgeInsets.zero,
                             title: Text(
-                              'من ${wird.fromUnit} إلى ${wird.toUnit} (${activeKhatma.amountType})',
+                              l10nOf(context).homeScreenMessage15(
+                                (wird.fromUnit).toString(),
+                                (wird.toUnit).toString(),
+                                (activeKhatma.amountType).toString(),
+                              ),
                               style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontWeight: FontWeight.w600,
@@ -593,7 +601,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               textAlign: TextAlign.right,
                             ),
                             subtitle: Text(
-                              'مكتمل في $dateLabel',
+                              l10nOf(
+                                context,
+                              ).homeScreenMessage16((dateLabel).toString()),
                               style: TextStyle(
                                 fontFamily: 'Cairo',
                                 color: Theme.of(
@@ -620,7 +630,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         return ListTile(
                           contentPadding: EdgeInsets.zero,
                           title: Text(
-                            'ورد اليوم $wirdDay',
+                            l10nOf(
+                              context,
+                            ).homeScreenMessage17((wirdDay).toString()),
                             style: TextStyle(
                               fontFamily: 'Cairo',
                               fontWeight: FontWeight.w600,
@@ -629,7 +641,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             textAlign: TextAlign.right,
                           ),
                           subtitle: Text(
-                            'قادم',
+                            l10nOf(context).homeScreenMessage18,
                             style: TextStyle(
                               fontFamily: 'Cairo',
                               color: Theme.of(
@@ -670,7 +682,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final List<SurahEntity> surahs = await surahRepository.getAllSurahs();
     if (surahs.isEmpty) {
       if (!mounted) return;
-      _showFeatureMessage('تعذر تحميل بيانات السور');
+      _showFeatureMessage(appL10n.homeScreenMessage19);
       return;
     }
 
@@ -703,14 +715,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (!bookmarkProvider.hasBookmark) {
-      _showFeatureMessage('لا يوجد فاصل محفوظ حالياً');
+      _showFeatureMessage(appL10n.homeScreenMessage20);
       context.push('/quran');
       return;
     }
 
     final int? surahNumber = bookmarkProvider.surahNumber;
     if (surahNumber == null) {
-      _showFeatureMessage('تعذر فتح الفاصل المحفوظ');
+      _showFeatureMessage(appL10n.homeScreenMessage21);
       return;
     }
 
@@ -729,10 +741,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (!mounted) return;
 
       if (targetSurah == null) {
-        _showFeatureMessage(
-          'تعذر إيجاد السورة المرتبطة '
-          'بالفاصل',
-        );
+        _showFeatureMessage(appL10n.homeScreenMessage22);
         context.push('/quran');
         return;
       }
@@ -743,7 +752,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     } catch (_) {
       if (!mounted) return;
-      _showFeatureMessage('حدث خطأ أثناء فتح الفاصل');
+      _showFeatureMessage(appL10n.homeScreenMessage23);
     }
   }
 
@@ -753,10 +762,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = themeProvider.isDarkMode;
 
     void showComingSoon() {
-      _showOverlayMessage(
-        'هذه الميزة ستتوفر '
-        'قريباً إن شاء الله',
-      );
+      _showOverlayMessage(appL10n.homeScreenMessage24);
     }
 
     Future<void> launchMyUrl(String url) async {
@@ -774,7 +780,7 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.only(bottom: 20),
       children: [
         _buildMoreMenuItem(
-          title: 'الخصوصية ومصادر المحتوى',
+          title: appL10n.homeScreenMessage25,
           leadingIcon: Icon(Icons.privacy_tip_outlined, color: iconColor),
           onTap: () {
             Navigator.pop(context);
@@ -782,37 +788,37 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         // 2. الختمة الحالية
-        _buildSectionHeader('الختمة الحالية'),
+        _buildSectionHeader(appL10n.appRouterMessage1),
         _buildMoreMenuItem(
-          title: 'الأوراد السابقة',
+          title: appL10n.homeScreenMessage9,
           leadingIcon: Icon(Icons.history, color: iconColor),
           onTap: () => _showKhatmaWirdSheet(showCompleted: true),
         ),
         _buildMoreMenuItem(
-          title: 'الأوراد القادمة',
+          title: appL10n.homeScreenMessage10,
           leadingIcon: Icon(Icons.next_plan_outlined, color: iconColor),
           onTap: () => _showKhatmaWirdSheet(showCompleted: false),
         ),
         _buildMoreMenuItem(
-          title: 'الفاصل',
+          title: appL10n.homeScreenMessage26,
           leadingIcon: Icon(Icons.bookmark_border, color: iconColor),
           onTap: _openSavedBookmark,
         ),
         const Divider(height: 1),
 
         // 3. كل الوسائط
-        _buildSectionHeader('المكتبة'),
+        _buildSectionHeader(appL10n.homeScreenMessage27),
         _buildMoreMenuItem(
-          title: 'كل الوسائط',
+          title: appL10n.homeScreenMessage28,
           leadingIcon: Icon(Icons.video_library, color: iconColor),
           onTap: () => context.push('/media'),
         ),
         const Divider(height: 1),
 
         // 4. سنن قرآنية
-        _buildSectionHeader('سنن قرآنية'),
+        _buildSectionHeader(appL10n.homeScreenMessage29),
         _buildMoreMenuItem(
-          title: 'سورة الكهف',
+          title: appL10n.homeScreenMessage30,
           leadingIcon: Icon(Icons.book, color: iconColor),
           onTap: () {
             context.push(
@@ -820,7 +826,7 @@ class _HomeScreenState extends State<HomeScreen> {
               extra: <String, dynamic>{
                 'surah': SurahEntity(
                   number: 18,
-                  name: 'سورة الكهف',
+                  name: appL10n.homeScreenMessage30,
                   englishName: 'Al-Kahf',
                   englishNameTranslation: 'The Cave',
                   revelationType: 'Meccan',
@@ -831,7 +837,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         _buildMoreMenuItem(
-          title: 'سورة الملك',
+          title: appL10n.homeScreenMessage31,
           leadingIcon: Icon(Icons.menu_book, color: iconColor),
           onTap: () {
             context.push(
@@ -839,7 +845,7 @@ class _HomeScreenState extends State<HomeScreen> {
               extra: <String, dynamic>{
                 'surah': SurahEntity(
                   number: 67,
-                  name: 'سورة الملك',
+                  name: appL10n.homeScreenMessage31,
                   englishName: 'Al-Mulk',
                   englishNameTranslation: 'The Sovereignty',
                   revelationType: 'Meccan',
@@ -850,7 +856,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         _buildMoreMenuItem(
-          title: 'سورة البقرة',
+          title: appL10n.homeScreenMessage32,
           leadingIcon: Icon(Icons.auto_stories, color: iconColor),
           onTap: () {
             context.push(
@@ -858,7 +864,7 @@ class _HomeScreenState extends State<HomeScreen> {
               extra: <String, dynamic>{
                 'surah': SurahEntity(
                   number: 2,
-                  name: 'سورة البقرة',
+                  name: appL10n.homeScreenMessage32,
                   englishName: 'Al-Baqarah',
                   englishNameTranslation: 'The Cow',
                   revelationType: 'Medinan',
@@ -871,10 +877,10 @@ class _HomeScreenState extends State<HomeScreen> {
         const Divider(height: 1),
 
         // 5. الإعدادات
-        _buildSectionHeader('الإعدادات'),
+        _buildSectionHeader(appL10n.appStringsMessage16),
         _buildMoreMenuSwitch(
-          title: 'تفعيل الوضع الليلي',
-          subtitle: 'تغيير مظهر التطبيق',
+          title: appL10n.homeScreenMessage33,
+          subtitle: appL10n.homeScreenMessage34,
           leadingIcon: Icon(Icons.dark_mode_outlined, color: iconColor),
           value: isDark,
           onChanged: (v) {
@@ -882,21 +888,21 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         _buildMoreMenuItem(
-          title: 'بدء ختمة جديدة',
+          title: appL10n.homeScreenMessage35,
           leadingIcon: Icon(Icons.add, color: iconColor),
           onTap: () => context.push('/khatma/location'),
         ),
         const Divider(height: 1),
 
         // 6. مواقيت الصلاة
-        _buildSectionHeader('مواقيت الصلاة'),
+        _buildSectionHeader(appL10n.notificationServiceMessage5),
         _buildMoreMenuItem(
-          title: 'إعدادات مواقيت الصلاة',
+          title: appL10n.homeScreenMessage36,
           leadingIcon: Icon(Icons.mosque, color: iconColor),
           onTap: () => context.push('/prayers'),
         ),
         _buildMoreMenuItem(
-          title: 'اتجاه القبلة',
+          title: appL10n.homeScreenMessage37,
           leadingIcon: Image.asset(
             'assets/images/kaaba.png',
             width: 24,
@@ -912,18 +918,18 @@ class _HomeScreenState extends State<HomeScreen> {
         const Divider(height: 1),
 
         // 7. منبهات الأذكار
-        _buildSectionHeader('منبهات الأذكار'),
+        _buildSectionHeader(appL10n.homeScreenMessage38),
         _buildMoreMenuSwitch(
-          title: 'منبه أذكار الصباح',
-          subtitle: 'وقت منبه أذكار الصباح',
+          title: appL10n.homeScreenMessage39,
+          subtitle: appL10n.homeScreenMessage40,
           rightSubtitle: 'AM 07:00',
           leadingIcon: Icon(Icons.wb_sunny, color: iconColor),
           value: settingsProvider.isMorningAlarmEnabled,
           onChanged: (val) => settingsProvider.toggleMorningAlarm(val),
         ),
         _buildMoreMenuSwitch(
-          title: 'منبه أذكار المساء',
-          subtitle: 'وقت منبه أذكار المساء',
+          title: appL10n.homeScreenMessage41,
+          subtitle: appL10n.homeScreenMessage42,
           rightSubtitle: 'PM 05:30',
           leadingIcon: Icon(Icons.nightlight_round, color: iconColor),
           value: settingsProvider.isEveningAlarmEnabled,
@@ -932,18 +938,18 @@ class _HomeScreenState extends State<HomeScreen> {
         const Divider(height: 1),
 
         // 8. منبهات السنن
-        _buildSectionHeader('منبهات السنن'),
+        _buildSectionHeader(appL10n.homeScreenMessage43),
         _buildMoreMenuSwitch(
-          title: 'منبه سورة الملك',
-          subtitle: 'وقت منبه سورة الملك',
+          title: appL10n.homeScreenMessage44,
+          subtitle: appL10n.homeScreenMessage45,
           rightSubtitle: 'PM 09:00',
           leadingIcon: Icon(Icons.notifications, color: iconColor),
           value: settingsProvider.isMulkAlarmEnabled,
           onChanged: (val) => settingsProvider.toggleMulkAlarm(val),
         ),
         _buildMoreMenuSwitch(
-          title: 'منبه سورة البقرة',
-          subtitle: 'وقت منبه سورة البقرة',
+          title: appL10n.homeScreenMessage46,
+          subtitle: appL10n.homeScreenMessage47,
           rightSubtitle: 'PM 08:30',
           leadingIcon: Icon(Icons.notifications, color: iconColor),
           value: settingsProvider.isBaqarahAlarmEnabled,
@@ -952,41 +958,39 @@ class _HomeScreenState extends State<HomeScreen> {
         const Divider(height: 1),
 
         // 9. تطبيق ختمة
-        _buildSectionHeader('تطبيق ختمة'),
+        _buildSectionHeader(appL10n.homeScreenMessage48),
         _buildMoreMenuItem(
-          title: 'الصفحة الرئيسية',
+          title: appL10n.appStringsMessage6,
           leadingIcon: Icon(Icons.home_outlined, color: iconColor),
           onTap: () {
             Navigator.pop(context);
           },
         ),
         _buildMoreMenuItem(
-          title: 'اللغة',
+          title: appL10n.homeScreenMessage49,
           leadingIcon: Icon(Icons.settings, color: iconColor),
           onTap: () => showDialog<void>(
             context: context,
             builder: (dialogContext) => AlertDialog(
-              title: const Text(
-                'إعدادات اللغة',
-                style: TextStyle(
+              title: Text(
+                appL10n.homeScreenMessage50,
+                style: const TextStyle(
                   fontFamily: 'Cairo',
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.right,
               ),
-              content: const Text(
-                'اللغة الحالية للتطبيق هي العربية. '
-                'سيتم دعم لغات إضافية '
-                'لاحقاً بإذن الله.',
-                style: TextStyle(fontFamily: 'Cairo'),
+              content: Text(
+                appL10n.homeScreenMessage51,
+                style: const TextStyle(fontFamily: 'Cairo'),
                 textAlign: TextAlign.right,
               ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(dialogContext),
-                  child: const Text(
-                    'حسناً',
-                    style: TextStyle(fontFamily: 'Cairo'),
+                  child: Text(
+                    appL10n.appStringsMessage8,
+                    style: const TextStyle(fontFamily: 'Cairo'),
                   ),
                 ),
               ],
@@ -994,15 +998,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         _buildMoreMenuItem(
-          title: 'الإتصال بنا',
+          title: appL10n.homeScreenMessage52,
           leadingIcon: Icon(Icons.info_outline, color: iconColor),
-          onTap: () => launchMyUrl(
-            'mailto:contact@quranapp.com'
-            '?subject=تطبيق ختمة - تواصل',
-          ),
+          onTap: () => launchMyUrl(appL10n.homeScreenMessage53),
         ),
         _buildMoreMenuItem(
-          title: 'تابعنا على تويتر',
+          title: appL10n.homeScreenMessage54,
           leadingIcon: const Icon(
             Icons.flutter_dash,
             color: Colors.lightBlue,
@@ -1010,7 +1011,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () => launchMyUrl('https://twitter.com/quranapp'),
         ),
         _buildMoreMenuItem(
-          title: 'تابعنا على انستقرام',
+          title: appL10n.homeScreenMessage55,
           leadingIcon: const Icon(
             Icons.camera_alt,
             color: Colors.purple,
@@ -1018,21 +1019,16 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () => launchMyUrl('https://instagram.com/quranapp'),
         ),
         _buildMoreMenuItem(
-          title: 'انشر التطبيق',
+          title: appL10n.homeScreenMessage56,
           leadingIcon: Icon(Icons.share, color: iconColor),
           onTap: () {
             SharePlus.instance.share(
-              ShareParams(
-                text:
-                    'تطبيق سكينة - '
-                    'تطبيق إسلامي شامل. '
-                    'حمل الآن! \n(رابط التطبيق قريباً)',
-              ),
+              ShareParams(text: appL10n.homeScreenMessage57),
             );
           },
         ),
         _buildMoreMenuItem(
-          title: 'قيم تطبيق سكينة',
+          title: appL10n.homeScreenMessage58,
           leadingIcon: Icon(Icons.thumb_up_alt_outlined, color: iconColor),
           onTap: () => launchMyUrl(
             'https://play.google.com/store/apps/details?id=com.quranapp',
@@ -1050,7 +1046,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (favorites.isEmpty) {
           return Center(
             child: Text(
-              'لا توجد آيات مفضلة',
+              l10nOf(context).homeScreenMessage59,
               style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 16,
@@ -1082,7 +1078,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Semantics(
                         button: true,
-                        label: 'إزالة الآية من المفضلة',
+                        label: l10nOf(context).homeScreenMessage60,
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
@@ -1247,7 +1243,9 @@ class _PrayerTimeHeader extends StatelessWidget {
                             const SizedBox(width: AppSpacing.sm),
                             Expanded(
                               child: Text(
-                                'الصلاة التالية: $nextName',
+                                l10nOf(
+                                  context,
+                                ).homeScreenMessage61((nextName).toString()),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: theme.textTheme.bodySmall?.copyWith(

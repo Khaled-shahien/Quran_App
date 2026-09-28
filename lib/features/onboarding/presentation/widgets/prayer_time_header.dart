@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -101,7 +102,9 @@ class PrayerTimeHeader extends StatelessWidget {
                             const SizedBox(width: AppSpacing.sm),
                             Expanded(
                               child: Text(
-                                'الصلاة التالية: $nextName',
+                                l10nOf(
+                                  context,
+                                ).homeScreenMessage61((nextName).toString()),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: theme.textTheme.bodySmall?.copyWith(

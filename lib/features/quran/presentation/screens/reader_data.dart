@@ -231,7 +231,7 @@ mixin _ReaderData on _ReaderState {
       });
     } catch (e) {
       setState(() {
-        _error = 'حدث خطأ أثناء تحميل آيات السورة';
+        _error = appL10n.readerDataMessage1;
         _isLoading = false;
       });
       developer.log(

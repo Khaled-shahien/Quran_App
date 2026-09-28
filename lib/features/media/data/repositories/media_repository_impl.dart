@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -30,7 +31,7 @@ class MediaRepositoryImpl implements MediaRepository {
     try {
       return await _articlesDataSource.getArticles();
     } catch (error) {
-      throw _mapError(error, fallback: 'تعذر تحميل المقالات');
+      throw _mapError(error, fallback: appL10n.mediaRepositoryImplMessage1);
     }
   }
 
@@ -39,7 +40,7 @@ class MediaRepositoryImpl implements MediaRepository {
     try {
       return await _audioDataSource.getReciters();
     } catch (error) {
-      throw _mapError(error, fallback: 'تعذر تحميل الصوتيات');
+      throw _mapError(error, fallback: appL10n.mediaRepositoryImplMessage2);
     }
   }
 
@@ -57,7 +58,7 @@ class MediaRepositoryImpl implements MediaRepository {
     try {
       return await _videoDataSource.searchVideos(query);
     } catch (error) {
-      throw _mapError(error, fallback: 'تعذر تحميل الفيديوهات');
+      throw _mapError(error, fallback: appL10n.mediaRepositoryImplMessage3);
     }
   }
 
@@ -66,14 +67,16 @@ class MediaRepositoryImpl implements MediaRepository {
     if (error is QuotaExceededException) return error;
     if (error is MediaException) return error;
     if (error is TimeoutException) {
-      return const MediaException('انتهت مهلة الاتصال، حاول مرة أخرى');
+      return MediaException(appL10n.mediaRepositoryImplMessage4);
     }
     if (error is SocketException) {
-      return const MediaException('تحقق من اتصالك بالإنترنت');
+      return MediaException(appL10n.mediaRepositoryImplMessage5);
     }
     if (error is FormatException) {
-      return const MediaException('تعذر قراءة البيانات المستلمة');
+      return MediaException(appL10n.mediaRepositoryImplMessage6);
     }
-    return MediaException('$fallback، حاول مرة أخرى');
+    return MediaException(
+      appL10n.mediaRepositoryImplMessage7((fallback).toString()),
+    );
   }
 }

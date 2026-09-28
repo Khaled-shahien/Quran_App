@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/foundation.dart';
 import '../../domain/entities/hadeath_entity.dart';
 import '../../domain/repositories/hadeath_repository.dart';
@@ -30,9 +31,7 @@ class HadeathProvider extends ChangeNotifier {
 
       _ahadethList = loadedAhadeth;
     } catch (e) {
-      _errorMessage =
-          'حدث خطأ أثناء تحميل الأحاديث: '
-          '$e';
+      _errorMessage = appL10n.hadeathProviderMessage1((e).toString());
     } finally {
       _isLoading = false;
       notifyListeners();

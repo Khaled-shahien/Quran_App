@@ -1,8 +1,9 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 abstract class AppConstants {
   // App Info
-  static const String appName = 'سكينة';
+  static final String appName = appL10n.appConstantsMessage1;
   static const String appVersion = '1.0.0';
 
   // Dimensions

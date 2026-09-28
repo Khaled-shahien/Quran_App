@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -27,8 +28,9 @@ class AzkarDetailsScreen extends StatelessWidget {
         elevation: 0,
         leading: Semantics(
           button: true,
-          label: 'الرجوع للشاشة السابقة',
+          label: l10nOf(context).azkarDetailsScreenMessage1,
           child: IconButton(
+            tooltip: l10nOf(context).azkarDetailsScreenMessage2,
             icon: Icon(
               Icons.arrow_back_ios,
               color: Theme.of(context).colorScheme.primary,
@@ -47,10 +49,10 @@ class AzkarDetailsScreen extends StatelessWidget {
               }
 
               if (provider.errorMessage != null) {
-                return const Center(
+                return Center(
                   child: Text(
-                    'حدث خطأ في تحميل الأذكار',
-                    style: TextStyle(
+                    l10nOf(context).azkarDetailsScreenMessage3,
+                    style: const TextStyle(
                       fontFamily: 'Cairo',
                       color: Colors.red,
                       fontSize: 18,
@@ -64,7 +66,7 @@ class AzkarDetailsScreen extends StatelessWidget {
               if (category == null || category.items.isEmpty) {
                 return Center(
                   child: Text(
-                    'لا توجد بيانات لهذا القسم حالياً',
+                    l10nOf(context).azkarDetailsScreenMessage4,
                     style: TextStyle(
                       fontFamily: 'Cairo',
                       fontSize: 18,
@@ -99,7 +101,9 @@ class _AzkarItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       container: true,
-      label: 'ذكر ${item.title}',
+      label: l10nOf(
+        context,
+      ).azkarDetailsScreenMessage5((item.title).toString()),
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
@@ -147,7 +151,9 @@ class _AzkarItemCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          'التكرار: ${item.repeat}',
+                          l10nOf(context).azkarDetailsScreenMessage6(
+                            (item.repeat).toString(),
+                          ),
                           style: TextStyle(
                             fontFamily: 'Cairo',
                             fontSize: 12,

@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class HeaderCardWidget extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  'الصلاة التالية: $nextName',
+                  l10nOf(context).homeScreenMessage61((nextName).toString()),
                   style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 12,

@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,10 +13,13 @@ class KhatmaLocationScreen extends StatefulWidget {
 
 class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
   // Option: 'بداية المصحف' or 'جزء مخصص' etc.
-  String _selectedStartMode = 'بداية المصحف';
+  String _selectedStartMode = appL10n.appRouterMessage4;
   int _selectedJuz = 1;
 
-  final List<String> _startModes = ['بداية المصحف', 'جزء مخصص'];
+  final List<String> _startModes = [
+    appL10n.appRouterMessage4,
+    appL10n.khatmaLocationScreenMessage1,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +32,9 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text(
-          'ختمة جديدة',
-          style: TextStyle(
+        title: Text(
+          l10nOf(context).khatmaDurationScreenMessage1,
+          style: const TextStyle(
             fontFamily: 'Cairo',
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -51,8 +55,7 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
             children: [
               // Title text
               Text(
-                'الرجاء تحديد المكان أو الجزء '
-                'الذي تريد\nأن تبدء منه الختمة',
+                l10nOf(context).khatmaLocationScreenMessage2,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Cairo',
@@ -72,7 +75,7 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'البدء من:',
+                      l10nOf(context).khatmaLocationScreenMessage3,
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 18,
@@ -132,7 +135,7 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                   child: Row(
                     children: [
                       Text(
-                        'رقم الجزء:',
+                        l10nOf(context).khatmaLocationScreenMessage4,
                         style: TextStyle(
                           fontFamily: 'Cairo',
                           fontSize: 18,
@@ -168,7 +171,13 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                                   .map((int juz) {
                                     return DropdownMenuItem<int>(
                                       value: juz,
-                                      child: Text('الجزء $juz'),
+                                      child: Text(
+                                        l10nOf(
+                                          context,
+                                        ).khatmaLocationScreenMessage5(
+                                          (juz).toString(),
+                                        ),
+                                      ),
                                     );
                                   })
                                   .toList(),
@@ -207,9 +216,9 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
-                  'الاستمرار',
-                  style: TextStyle(
+                child: Text(
+                  l10nOf(context).khatmaDurationScreenMessage14,
+                  style: const TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

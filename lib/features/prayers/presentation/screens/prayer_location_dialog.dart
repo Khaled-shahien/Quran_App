@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -35,7 +36,7 @@ Future<void> showPrayerLocationDialog(
     context: context,
     builder: (context) => StatefulBuilder(
       builder: (context, setState) => AlertDialog(
-        title: const Text('موقع الصلاة وطريقة الحساب'),
+        title: Text(l10nOf(context).prayerLocationDialogMessage1),
         content: SingleChildScrollView(
           child: Form(
             key: form,
@@ -44,7 +45,10 @@ Future<void> showPrayerLocationDialog(
               children: [
                 Autocomplete<Map<String, dynamic>>(
                   displayStringForOption: (city) =>
-                      '${city['name']}، ${city['country']}',
+                      l10nOf(context).prayerLocationDialogMessage2(
+                        (city['name']).toString(),
+                        (city['country']).toString(),
+                      ),
                   optionsBuilder: (value) {
                     final query = normalizeArabicSearch(value.text.trim());
                     if (query.isEmpty) return cities;
@@ -58,27 +62,30 @@ Future<void> showPrayerLocationDialog(
                       TextFormField(
                         controller: controller,
                         focusNode: focus,
-                        decoration: const InputDecoration(
-                          labelText: 'بحث في المدن المتاحة دون اتصال',
-                          prefixIcon: Icon(Icons.search),
+                        decoration: InputDecoration(
+                          labelText: l10nOf(
+                            context,
+                          ).prayerLocationDialogMessage3,
+                          prefixIcon: const Icon(Icons.search),
                         ),
                       ),
                   onSelected: (city) {
-                    name.text = '${city['name']}، ${city['country']}';
+                    name.text = l10nOf(context).prayerLocationDialogMessage2(
+                      (city['name']).toString(),
+                      (city['country']).toString(),
+                    );
                     latitude.text = city['latitude'].toString();
                     longitude.text = city['longitude'].toString();
                   },
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  'المدن تستخدم إحداثيات وسط المدينة. إذا لم تجد مدينتك، أدخل الإحداثيات أو استخدم موقع الجهاز.',
-                ),
-                const Text(
-                  'تُرسل الإحداثيات إلى Aladhan لحساب المواقيت. أدخل موقعاً يدوياً أو استخدم موقع الجهاز.',
-                ),
+                Text(l10nOf(context).prayerLocationDialogMessage4),
+                Text(l10nOf(context).prayerLocationDialogMessage5),
                 TextFormField(
                   controller: name,
-                  decoration: const InputDecoration(labelText: 'اسم المكان'),
+                  decoration: InputDecoration(
+                    labelText: l10nOf(context).prayerLocationDialogMessage6,
+                  ),
                 ),
                 TextFormField(
                   controller: latitude,
@@ -87,8 +94,8 @@ Future<void> showPrayerLocationDialog(
                     decimal: true,
                     signed: true,
                   ),
-                  decoration: const InputDecoration(
-                    labelText: 'خط العرض (من ‎-90 إلى 90)',
+                  decoration: InputDecoration(
+                    labelText: l10nOf(context).prayerLocationDialogMessage7,
                   ),
                   validator: (text) => _coordinateError(text, 90),
                 ),
@@ -99,15 +106,17 @@ Future<void> showPrayerLocationDialog(
                     decimal: true,
                     signed: true,
                   ),
-                  decoration: const InputDecoration(
-                    labelText: 'خط الطول (من ‎-180 إلى 180)',
+                  decoration: InputDecoration(
+                    labelText: l10nOf(context).prayerLocationDialogMessage8,
                   ),
                   validator: (text) => _coordinateError(text, 180),
                 ),
                 DropdownButtonFormField<int>(
                   initialValue: method,
                   isExpanded: true,
-                  decoration: const InputDecoration(labelText: 'طريقة الحساب'),
+                  decoration: InputDecoration(
+                    labelText: l10nOf(context).prayerLocationDialogMessage9,
+                  ),
                   items: PrayerCalculationPolicy.methods.entries
                       .map(
                         (e) => DropdownMenuItem(
@@ -125,7 +134,7 @@ Future<void> showPrayerLocationDialog(
         actions: [
           TextButton.icon(
             icon: const Icon(Icons.my_location),
-            label: const Text('موقع الجهاز'),
+            label: Text(l10nOf(context).prayerTimesProviderMessage8),
             onPressed: () {
               useDevice = true;
               Navigator.pop(context, false);
@@ -133,13 +142,13 @@ Future<void> showPrayerLocationDialog(
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('إلغاء'),
+            child: Text(l10nOf(context).appStringsMessage9),
           ),
           FilledButton(
             onPressed: () {
               if (form.currentState!.validate()) Navigator.pop(context, true);
             },
-            child: const Text('حفظ'),
+            child: Text(l10nOf(context).appStringsMessage11),
           ),
         ],
       ),
@@ -165,6 +174,6 @@ Future<void> showPrayerLocationDialog(
 String? _coordinateError(String? input, double max) {
   final value = double.tryParse(input?.trim() ?? '');
   return value == null || !value.isFinite || value.abs() > max
-      ? 'أدخل إحداثيات صحيحة'
+      ? appL10n.prayerLocationDialogMessage10
       : null;
 }

@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,19 +10,19 @@ class MediaTilesWidget extends StatelessWidget {
     return SliverList(
       delegate: SliverChildListDelegate([
         _mediaTile(
-          'المقالات',
+          l10nOf(context).articlesScreenMessage1,
           const Color(0xFF235347),
           Icons.article_outlined,
           () => context.push('/media/articles'),
         ),
         _mediaTile(
-          'الصوتيات',
+          l10nOf(context).audioScreenMessage1,
           const Color(0xFF2D2D2D),
           Icons.graphic_eq_rounded,
           () => context.push('/media/audio'),
         ),
         _mediaTile(
-          'الفيديوهات',
+          l10nOf(context).videoScreenMessage1,
           const Color(0xFF8B4242),
           Icons.video_library_outlined,
           () => context.push('/media/videos'),

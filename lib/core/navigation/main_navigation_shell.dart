@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,26 +20,26 @@ class MainNavigationShell extends StatelessWidget {
       onDestinationSelected: (index) {
         if (paths[index] != location) context.go(paths[index]);
       },
-      destinations: const [
+      destinations: [
         NavigationDestination(
-          icon: Icon(Icons.home_outlined),
-          label: 'الرئيسية',
+          icon: const Icon(Icons.home_outlined),
+          label: l10nOf(context).appStringsMessage27,
         ),
         NavigationDestination(
-          icon: Icon(Icons.menu_book_outlined),
-          label: 'القرآن',
+          icon: const Icon(Icons.menu_book_outlined),
+          label: l10nOf(context).appStringsMessage28,
         ),
         NavigationDestination(
-          icon: Icon(Icons.mosque_outlined),
-          label: 'الصلاة',
+          icon: const Icon(Icons.mosque_outlined),
+          label: l10nOf(context).mainNavigationShellMessage1,
         ),
         NavigationDestination(
-          icon: Icon(Icons.wb_sunny_outlined),
-          label: 'الأذكار',
+          icon: const Icon(Icons.wb_sunny_outlined),
+          label: l10nOf(context).mainNavigationShellMessage2,
         ),
         NavigationDestination(
-          icon: Icon(Icons.settings_outlined),
-          label: 'الإعدادات',
+          icon: const Icon(Icons.settings_outlined),
+          label: l10nOf(context).appStringsMessage16,
         ),
       ],
     ),

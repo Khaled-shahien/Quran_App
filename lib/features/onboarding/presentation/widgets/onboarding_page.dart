@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_strings.dart';
@@ -22,44 +23,52 @@ class OnboardingPageContent {
   final bool showBasmalah;
 }
 
-const onboardingPages = [
+final onboardingPages = [
   OnboardingPageContent(
-    title: 'أهلًا بك في سكينة',
-    description:
-        'مساحة يطمئن فيها قلبك؛ تجمع لك القرآن والذكر '
-        'ومواقيت الصلاة، لترافقك في يومك.',
-    caption: 'رفيقك في كل يوم',
+    title: appL10n.onboardingPageMessage1,
+    description: appL10n.onboardingPageMessage2,
+    caption: appL10n.onboardingPageMessage3,
     icon: Icons.auto_stories_rounded,
     imagePath: 'assets/images/المصحف.png',
     showBasmalah: true,
-    features: ['قرآن', 'ذكر', 'صلاة'],
+    features: [
+      appL10n.onboardingPageMessage4,
+      appL10n.onboardingPageMessage5,
+      appL10n.onboardingPageMessage6,
+    ],
   ),
   OnboardingPageContent(
-    title: 'مع القرآن، آيةً بآية',
-    description:
-        'اقرأ القرآن واحفظ موضع قراءتك، وحدّد هدف ختمتك '
-        'وتابع وردك اليومي بالوتيرة التي تناسبك.',
-    caption: 'وردٌ تقرؤه، وقربٌ تجده',
+    title: appL10n.onboardingPageMessage7,
+    description: appL10n.onboardingPageMessage8,
+    caption: appL10n.onboardingPageMessage9,
     icon: Icons.menu_book_rounded,
-    features: ['قراءة القرآن', 'حفظ الموضع', 'متابعة الختمة'],
+    features: [
+      appL10n.onboardingPageMessage10,
+      appL10n.onboardingPageMessage11,
+      appL10n.onboardingPageMessage12,
+    ],
   ),
   OnboardingPageContent(
-    title: 'ليكن يومك عامرًا بالذكر',
-    description:
-        'أذكار الصباح والمساء، وأدعية ترافق يومك، '
-        'ومسبحة إلكترونية تعينك على متابعة تسبيحك.',
-    caption: 'لحظات ذكر، وأثرٌ يبقى',
+    title: appL10n.onboardingPageMessage13,
+    description: appL10n.onboardingPageMessage14,
+    caption: appL10n.onboardingPageMessage15,
     icon: Icons.wb_twilight_rounded,
-    features: ['أذكار يومية', 'أدعية', 'تسبيح'],
+    features: [
+      appL10n.onboardingPageMessage16,
+      appL10n.onboardingPageMessage17,
+      appL10n.onboardingPageMessage18,
+    ],
   ),
   OnboardingPageContent(
-    title: 'صلاتك ووردك في موعدهما',
-    description:
-        'تابع مواقيت الصلاة، واضبط تذكيرات الأذكار '
-        'والورد اليومي لتجد وقتًا لما يطمئن به قلبك.',
-    caption: 'تذكيرٌ يعينك على المداومة',
+    title: appL10n.onboardingPageMessage19,
+    description: appL10n.onboardingPageMessage20,
+    caption: appL10n.onboardingPageMessage21,
     icon: Icons.mosque_rounded,
-    features: ['مواقيت الصلاة', 'تذكيرات الأذكار', 'الورد اليومي'],
+    features: [
+      appL10n.notificationServiceMessage5,
+      appL10n.onboardingPageMessage22,
+      appL10n.onboardingPageMessage23,
+    ],
   ),
 ];
 

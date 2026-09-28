@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:sakina_app/core/theme/app_spacing.dart';
@@ -52,9 +53,9 @@ class MediaErrorView extends StatelessWidget {
             FilledButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded),
-              label: const Text(
-                'إعادة المحاولة',
-                style: TextStyle(fontFamily: 'Cairo'),
+              label: Text(
+                l10nOf(context).retry,
+                style: const TextStyle(fontFamily: 'Cairo'),
               ),
             ),
           ],

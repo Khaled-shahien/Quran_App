@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/foundation.dart';
 import 'main_navigation_shell.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
@@ -97,7 +98,7 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) => _fadePage(
         state,
         Scaffold(
-          appBar: AppBar(title: const Text('الختمة الحالية')),
+          appBar: AppBar(title: Text(l10nOf(context).appRouterMessage1)),
           body: const SingleChildScrollView(child: CurrentWirdWidget()),
         ),
       ),
@@ -135,11 +136,7 @@ final GoRouter appRouter = GoRouter(
         if (surahNumber == null) {
           return _fadePage(
             state,
-            const _RouteDataErrorScreen(
-              message:
-                  'تعذر فتح السورة:\n'
-                  'رقم السورة غير صالح.',
-            ),
+            _RouteDataErrorScreen(message: l10nOf(context).appRouterMessage2),
           );
         }
 
@@ -223,11 +220,7 @@ final GoRouter appRouter = GoRouter(
         if (index == null) {
           return _fadePage(
             state,
-            const _RouteDataErrorScreen(
-              message:
-                  'تعذر فتح الحديث:\n'
-                  'معرف الحديث غير صالح.',
-            ),
+            _RouteDataErrorScreen(message: l10nOf(context).appRouterMessage3),
           );
         }
 
@@ -298,7 +291,7 @@ final GoRouter appRouter = GoRouter(
         final Map<String, dynamic>? extra =
             state.extra as Map<String, dynamic>?;
         final String startMode =
-            extra?['startMode'] as String? ?? 'بداية المصحف';
+            extra?['startMode'] as String? ?? l10nOf(context).appRouterMessage4;
         final int? startJuz = extra?['startJuz'] as int?;
 
         return _fadePage(
@@ -318,7 +311,7 @@ class _RouteDataErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('تنبيه')),
+      appBar: AppBar(title: Text(l10nOf(context).appRouterMessage5)),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -359,10 +352,8 @@ class _SurahDetailsRouteLoader extends StatelessWidget {
 
         final SurahEntity? surah = snapshot.data;
         if (snapshot.hasError || surah == null) {
-          return const _RouteDataErrorScreen(
-            message:
-                'تعذر فتح السورة\n'
-                'من الرابط المباشر.',
+          return _RouteDataErrorScreen(
+            message: l10nOf(context).appRouterMessage6,
           );
         }
 
@@ -398,10 +389,8 @@ class _HadeathDetailsRouteLoader extends StatelessWidget {
         final List<HadeathEntity> all =
             snapshot.data ?? const <HadeathEntity>[];
         if (snapshot.hasError || index < 0 || index >= all.length) {
-          return const _RouteDataErrorScreen(
-            message:
-                'تعذر فتح الحديث\n'
-                'من الرابط المباشر.',
+          return _RouteDataErrorScreen(
+            message: l10nOf(context).appRouterMessage7,
           );
         }
 

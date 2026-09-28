@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -6,48 +7,49 @@ class DataSourcesScreen extends StatelessWidget {
   const DataSourcesScreen({super.key});
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('الخصوصية ومصادر المحتوى')),
-    body: const SafeArea(
+    appBar: AppBar(title: Text(l10nOf(context).homeScreenMessage25)),
+    body: SafeArea(
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(24),
+        padding: const EdgeInsets.all(24),
         child: SelectionArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'الموقع والمواقيت',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                l10nOf(context).dataSourcesScreenMessage1,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
+              Text(l10nOf(context).dataSourcesScreenMessage2),
+              const SizedBox(height: 24),
               Text(
-                'تُحفظ إحداثيات موقع الصلاة وطريقة الحساب على الجهاز، وتُرسل إلى خدمة Aladhan لجلب المواقيت. يمكنك تعديلها من شاشة الصلاة. تستخدم القبلة إذن الموقع لحساب الاتجاه. يمكن إلغاء الإذن من إعدادات الجهاز.',
+                l10nOf(context).dataSourcesScreenMessage3,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 12),
+              Text(l10nOf(context).dataSourcesScreenMessage4),
+              const SizedBox(height: 24),
               Text(
-                'البيانات والتذكيرات',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                l10nOf(context).dataSourcesScreenMessage5,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(height: 12),
-              Text(
-                'تُحفظ المفضلة والعلامات والختمة والإعدادات محلياً. مسح بيانات التطبيق من إعدادات النظام يزيل البيانات المحلية. التذكيرات محلية ولا تحتاج خدمة رسائل عن بُعد. عند إتاحة تقارير الأعطال والاستخدام يمكنك اختيار تفعيلها أو إيقافها من الإعدادات؛ لا نضيف الموقع أو البحث أو سجل القراءة إلى هذه التقارير. قد تتلقى الخدمات الخارجية بيانات الاتصال. حذف البيانات المحلية لا يعني حذف سجلات الخدمات الخارجية أو النسخ الاحتياطية.',
-              ),
-              SizedBox(height: 24),
-              Text(
-                'مصادر المحتوى',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 12),
-              Text(
-                'القرآن والأحاديث والأدعية متاحة ضمن ملفات التطبيق للعمل دون اتصال. توثيق الطبعة والمصدر والترخيص واعتماد المراجعة لكل مجموعة لم يكتمل بعد. بصمات سلامة الملفات تكشف التغييرات ولا تُعد توثيقاً شرعياً للمحتوى.',
-              ),
-              SizedBox(height: 24),
-              Text('صوت تنبيه الصلاة الحالي هو صوت النظام الافتراضي.'),
-              SizedBox(height: 24),
-              Text(
-                'إحداثيات المدن: GeoNames عبر Open-Meteo، بترخيص CC BY 4.0. الإحداثيات لمراكز المدن ويمكن تعديلها يدوياً.',
-              ),
-              SizedBox(height: 24),
-              ContentProvenanceView(),
+              const SizedBox(height: 12),
+              Text(l10nOf(context).dataSourcesScreenMessage6),
+              const SizedBox(height: 24),
+              Text(l10nOf(context).dataSourcesScreenMessage7),
+              const SizedBox(height: 24),
+              Text(l10nOf(context).dataSourcesScreenMessage8),
+              const SizedBox(height: 24),
+              const ContentProvenanceView(),
             ],
           ),
         ),
@@ -70,13 +72,14 @@ class _ContentProvenanceViewState extends State<ContentProvenanceView> {
   Widget build(BuildContext context) => FutureBuilder<String>(
     future: manifest,
     builder: (context, snapshot) {
-      if (snapshot.hasError) return const Text('تعذر تحميل سجل مصادر المحتوى.');
+      if (snapshot.hasError)
+        return Text(l10nOf(context).dataSourcesScreenMessage9);
       if (!snapshot.hasData) return const LinearProgressIndicator();
       final collections =
           (jsonDecode(snapshot.data!) as Map<String, dynamic>)['collections']
               as List;
       return ExpansionTile(
-        title: const Text('سجل توثيق المحتوى'),
+        title: Text(l10nOf(context).dataSourcesScreenMessage10),
         children: [
           for (final collection in collections)
             ListTile(
@@ -86,7 +89,7 @@ class _ContentProvenanceViewState extends State<ContentProvenanceView> {
               ),
               subtitle: Text(
                 collection['source'] == 'pending_owner_review'
-                    ? 'المصدر والطبعة والترخيص: بانتظار المراجعة'
+                    ? l10nOf(context).dataSourcesScreenMessage11
                     : collection['source'] as String,
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/providers/settings_provider.dart';
@@ -49,7 +50,7 @@ class AlarmMenuItem extends StatelessWidget {
           trailing: IconButton(
             icon: const Icon(Icons.access_time),
             onPressed: () => _showTimePicker(context),
-            tooltip: 'تعديل وقت $title',
+            tooltip: l10nOf(context).alarmMenuItemMessage1((title).toString()),
           ),
           onTap: () => _showTimePicker(context),
         );
@@ -70,7 +71,9 @@ class AlarmMenuItem extends StatelessWidget {
   /// Format time for display
   String _formatTime(int hour, int minute) {
     final String minuteStr = minute.toString().padLeft(2, '0');
-    final String period = hour >= 12 ? 'م' : 'ص';
+    final String period = hour >= 12
+        ? appL10n.alarmMenuItemMessage2
+        : appL10n.alarmMenuItemMessage3;
 
     int displayHour = hour;
     if (displayHour > 12) {

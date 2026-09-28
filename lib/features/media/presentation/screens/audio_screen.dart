@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -41,9 +42,12 @@ class _AudioScreenState extends State<AudioScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'الصوتيات',
-            style: TextStyle(fontFamily: 'Cairo', fontWeight: FontWeight.bold),
+          title: Text(
+            l10nOf(context).audioScreenMessage1,
+            style: const TextStyle(
+              fontFamily: 'Cairo',
+              fontWeight: FontWeight.bold,
+            ),
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -83,8 +87,8 @@ class _AudioScreenState extends State<AudioScreen> {
                     ),
                     child: Text(
                       provider.searchQuery.isEmpty
-                          ? 'كل القراء'
-                          : 'نتائج البحث',
+                          ? l10nOf(context).audioScreenMessage2
+                          : l10nOf(context).audioScreenMessage3,
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 16,
@@ -95,8 +99,8 @@ class _AudioScreenState extends State<AudioScreen> {
                   ),
                   Expanded(
                     child: provider.filteredReciters.isEmpty
-                        ? const MediaEmptyView(
-                            message: 'لا توجد نتائج مطابقة',
+                        ? MediaEmptyView(
+                            message: l10nOf(context).audioScreenMessage4,
                             icon: Icons.graphic_eq_rounded,
                           )
                         : RefreshIndicator(
@@ -164,12 +168,12 @@ class _SearchField extends StatelessWidget {
         onChanged: onChanged,
         textDirection: TextDirection.rtl,
         decoration: InputDecoration(
-          hintText: 'ابحث باسم القارئ',
+          hintText: l10nOf(context).audioScreenMessage5,
           prefixIcon: const Icon(Icons.search_rounded),
           suffixIcon: controller.text.isEmpty
               ? null
               : IconButton(
-                  tooltip: 'مسح البحث',
+                  tooltip: l10nOf(context).audioScreenMessage6,
                   onPressed: () {
                     controller.clear();
                     onChanged('');

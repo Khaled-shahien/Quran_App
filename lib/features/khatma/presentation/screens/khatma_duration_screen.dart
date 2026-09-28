@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -55,11 +56,11 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
   String get _unitLabel {
     switch (_trackingUnit) {
       case KhatmaTrackingUnit.page:
-        return 'صفحة';
+        return appL10n.khatmaModelMessage1;
       case KhatmaTrackingUnit.hizb:
-        return 'حزب';
+        return appL10n.khatmaModelMessage2;
       case KhatmaTrackingUnit.juz:
-        return 'جزء';
+        return appL10n.khatmaModelMessage3;
     }
   }
 
@@ -84,9 +85,9 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text(
-          'ختمة جديدة',
-          style: TextStyle(
+        title: Text(
+          l10nOf(context).khatmaDurationScreenMessage1,
+          style: const TextStyle(
             fontFamily: 'Cairo',
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -106,8 +107,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
             children: [
               // Title text
               Text(
-                'حدد نوع الخطة ووحدة المتابعة '
-                'ووقت التذكير اليومي',
+                l10nOf(context).khatmaDurationScreenMessage2,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Cairo',
@@ -125,10 +125,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                   children: [
                     Expanded(
                       child: _buildPlanTypeCard(
-                        title: 'حسب المدة',
-                        subtitle:
-                            'توزيع تلقائي '
-                            'حتى تاريخ الإتمام',
+                        title: l10nOf(context).khatmaDurationScreenMessage3,
+                        subtitle: l10nOf(context).khatmaDurationScreenMessage4,
                         active: _goalType == KhatmaGoalType.byDuration,
                         onTap: () {
                           setState(() {
@@ -140,10 +138,8 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: _buildPlanTypeCard(
-                        title: 'حسب الورد اليومي',
-                        subtitle:
-                            'تحدد مقدار '
-                            'القراءة كل يوم',
+                        title: l10nOf(context).khatmaDurationScreenMessage5,
+                        subtitle: l10nOf(context).khatmaDurationScreenMessage6,
                         active: _goalType == KhatmaGoalType.byDailyAmount,
                         onTap: () {
                           setState(() {
@@ -163,7 +159,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 child: Row(
                   children: [
                     Text(
-                      'وحدة التتبع:',
+                      l10nOf(context).khatmaDurationScreenMessage7,
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 16,
@@ -193,18 +189,24 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                             isExpanded: true,
-                            items: const [
+                            items: [
                               DropdownMenuItem(
                                 value: KhatmaTrackingUnit.page,
-                                child: Text('صفحة (604)'),
+                                child: Text(
+                                  l10nOf(context).khatmaDurationScreenMessage8,
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: KhatmaTrackingUnit.hizb,
-                                child: Text('حزب (60)'),
+                                child: Text(
+                                  l10nOf(context).khatmaDurationScreenMessage9,
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: KhatmaTrackingUnit.juz,
-                                child: Text('جزء (30)'),
+                                child: Text(
+                                  l10nOf(context).khatmaDurationScreenMessage10,
+                                ),
                               ),
                             ],
                             onChanged: (val) {
@@ -250,12 +252,15 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 ),
                 child: Text(
                   _goalType == KhatmaGoalType.byDuration
-                      ? 'وردك المقترح: '
-                            '${_formatDouble(_computedDailyTargetForDuration)} '
-                            '$_unitLabel يومياً'
-                      : 'المدة المتوقعة للإتمام: '
-                            '${(_remainingUnits / _dailyTarget).ceil()}'
-                            ' يوماً',
+                      ? l10nOf(context).khatmaDurationScreenMessage11(
+                          (_formatDouble(
+                            _computedDailyTargetForDuration,
+                          )).toString(),
+                          (_unitLabel).toString(),
+                        )
+                      : l10nOf(context).khatmaDurationScreenMessage12(
+                          ((_remainingUnits / _dailyTarget).ceil()).toString(),
+                        ),
                   style: const TextStyle(
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.bold,
@@ -298,10 +303,10 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                   if (!context.mounted) return;
 
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       content: Text(
-                        'تم إنشاء الختمة بنجاح!',
-                        style: TextStyle(fontFamily: 'Cairo'),
+                        l10nOf(context).khatmaDurationScreenMessage13,
+                        style: const TextStyle(fontFamily: 'Cairo'),
                       ),
                       backgroundColor: Colors.green,
                     ),
@@ -315,9 +320,9 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
-                  'الاستمرار',
-                  style: TextStyle(
+                child: Text(
+                  l10nOf(context).khatmaDurationScreenMessage14,
+                  style: const TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -388,7 +393,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
       child: Row(
         children: [
           Text(
-            'مدة الختمة:',
+            appL10n.khatmaDurationScreenMessage15,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 16,
@@ -407,7 +412,9 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
               ),
               alignment: Alignment.center,
               child: Text(
-                '$_durationDays يوماً',
+                appL10n.khatmaDurationScreenMessage16(
+                  (_durationDays).toString(),
+                ),
                 style: const TextStyle(
                   fontFamily: 'Cairo',
                   fontSize: 18,
@@ -471,7 +478,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
       child: Row(
         children: [
           Text(
-            'الورد اليومي:',
+            appL10n.khatmaDurationScreenMessage17,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 16,
@@ -564,7 +571,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
       child: Row(
         children: [
           Text(
-            'وقت التذكير:',
+            appL10n.khatmaDurationScreenMessage18,
             style: TextStyle(
               fontFamily: 'Cairo',
               fontSize: 16,

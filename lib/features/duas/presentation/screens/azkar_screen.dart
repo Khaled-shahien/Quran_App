@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,7 +11,7 @@ class AzkarScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          'الأذكار',
+          l10nOf(context).mainNavigationShellMessage2,
           style: TextStyle(
             fontFamily: 'Cairo',
             fontWeight: FontWeight.bold,
@@ -22,8 +23,9 @@ class AzkarScreen extends StatelessWidget {
         elevation: 0,
         leading: Semantics(
           button: true,
-          label: 'الرجوع للشاشة السابقة',
+          label: l10nOf(context).azkarDetailsScreenMessage1,
           child: IconButton(
+            tooltip: l10nOf(context).azkarDetailsScreenMessage2,
             icon: Icon(
               Icons.arrow_back_ios,
               color: Theme.of(context).colorScheme.primary,
@@ -48,7 +50,7 @@ class AzkarScreen extends StatelessWidget {
                         // Top Row (Morning / Evening)
                         _buildHeaderCard(
                           context,
-                          title: 'أذكار الصباح',
+                          title: l10nOf(context).azkarScreenMessage1,
                           icon: Icons.wb_sunny_outlined,
                           gradient: const LinearGradient(
                             colors: [Color(0xFF0288D1), Color(0xFF01579B)],
@@ -59,7 +61,7 @@ class AzkarScreen extends StatelessWidget {
                         const SizedBox(height: 8),
                         _buildHeaderCard(
                           context,
-                          title: 'أذكار المساء',
+                          title: l10nOf(context).azkarScreenMessage2,
                           icon: Icons.nightlight_round_outlined,
                           gradient: const LinearGradient(
                             colors: [Color(0xFF8E24AA), Color(0xFF4A148C)],
@@ -82,49 +84,49 @@ class AzkarScreen extends StatelessWidget {
                     delegate: SliverChildListDelegate([
                       _buildGridCard(
                         context,
-                        title: 'أذكار النوم',
+                        title: l10nOf(context).azkarScreenMessage3,
                         icon: Icons.nights_stay_outlined,
                         color: const Color(0xFFAD1457), // Pink/Purple
                       ),
                       _buildGridCard(
                         context,
-                        title: 'بعد الصلاة',
+                        title: l10nOf(context).azkarScreenMessage4,
                         icon: Icons.accessibility_new,
                         color: const Color(0xFF2E7D32), // Green
                       ),
                       _buildGridCard(
                         context,
-                        title: 'الاستيقاظ',
+                        title: l10nOf(context).azkarScreenMessage5,
                         icon: Icons.wb_twilight,
                         color: const Color(0xFF0097A7), // Teal/Blue
                       ),
                       _buildGridCard(
                         context,
-                        title: 'أذكار المسجد',
+                        title: l10nOf(context).azkarScreenMessage6,
                         icon: Icons.mosque_outlined,
                         color: const Color(0xFFD84315), // Deep Orange
                       ),
                       _buildGridCard(
                         context,
-                        title: 'أدعية مأثورة',
+                        title: l10nOf(context).azkarScreenMessage7,
                         icon: Icons.star_border_outlined,
                         color: const Color(0xFF827717), // Lime/Olive
                       ),
                       _buildGridCard(
                         context,
-                        title: 'أدعية قرآنية',
+                        title: l10nOf(context).azkarScreenMessage8,
                         icon: Icons.menu_book_outlined,
                         color: const Color(0xFFF57F17), // Yellow/Orange
                       ),
                       _buildGridCard(
                         context,
-                        title: 'دعاء السفر',
+                        title: l10nOf(context).azkarScreenMessage9,
                         icon: Icons.flight_takeoff_outlined,
                         color: const Color(0xFF9C27B0), // Purple
                       ),
                       _buildGridCard(
                         context,
-                        title: 'الرقية الشرعية',
+                        title: l10nOf(context).azkarScreenMessage10,
                         icon: Icons.back_hand_outlined,
                         color: const Color(0xFF00838F), // Cyan
                       ),
@@ -150,7 +152,7 @@ Widget _buildHeaderCard(
   final textScale = MediaQuery.textScalerOf(context).scale(1.0);
   return Semantics(
     button: true,
-    label: 'فتح قسم $title',
+    label: l10nOf(context).azkarScreenMessage11((title).toString()),
     child: InkWell(
       onTap: () {
         context.push('/azkar/details', extra: {'categoryName': title});
@@ -208,7 +210,7 @@ Widget _buildGridCard(
   final textScale = MediaQuery.textScalerOf(context).scale(1.0);
   return Semantics(
     button: true,
-    label: 'فتح قسم $title',
+    label: l10nOf(context).azkarScreenMessage11((title).toString()),
     child: InkWell(
       onTap: () {
         context.push('/azkar/details', extra: {'categoryName': title});

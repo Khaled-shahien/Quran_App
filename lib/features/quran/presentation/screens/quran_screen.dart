@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -94,9 +95,9 @@ class _QuranScreenState extends State<_QuranScreenContent> {
               foregroundColor: theme.colorScheme.onPrimary,
               leading: Semantics(
                 button: true,
-                label: 'الرجوع للشاشة السابقة',
+                label: l10nOf(context).azkarDetailsScreenMessage1,
                 child: IconButton(
-                  tooltip: 'رجوع',
+                  tooltip: l10nOf(context).appStringsMessage13,
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () => Navigator.pop(context),
                 ),
@@ -108,7 +109,7 @@ class _QuranScreenState extends State<_QuranScreenContent> {
                 ],
                 centerTitle: true,
                 title: Text(
-                  'القرآن الكريم',
+                  l10nOf(context).continueReadingCardMessage2,
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: theme.colorScheme.onPrimary,
                     fontWeight: FontWeight.w800,
@@ -188,14 +189,14 @@ class _QuranScreenState extends State<_QuranScreenContent> {
                 const SizedBox(height: 16),
                 Semantics(
                   button: true,
-                  label: 'إعادة تحميل السور',
+                  label: appL10n.quranScreenMessage1,
                   child: ElevatedButton(
                     onPressed: _loadSurahs,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.lightPrimary,
                       foregroundColor: Colors.white,
                     ),
-                    child: const Text('إعادة المحاولة'),
+                    child: Text(appL10n.retry),
                   ),
                 ),
               ],
@@ -246,11 +247,11 @@ class _QuranScreenState extends State<_QuranScreenContent> {
     if (normalizedPlace == 'mecca' ||
         normalizedPlace == 'meccan' ||
         normalizedPlace == 'mc') {
-      return 'مكية';
+      return appL10n.quranScreenMessage2;
     } else if (normalizedPlace == 'madina' ||
         normalizedPlace == 'medinan' ||
         normalizedPlace == 'md') {
-      return 'مدنية';
+      return appL10n.quranScreenMessage3;
     }
     return revelationPlace;
   }
@@ -295,7 +296,11 @@ class SurahCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'سورة $arabicName، عدد الآيات $versesCount، $type',
+      label: l10nOf(context).quranScreenMessage4(
+        (arabicName).toString(),
+        (versesCount).toString(),
+        (type).toString(),
+      ),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
@@ -387,7 +392,9 @@ class SurahCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          '$versesCount آية',
+                          l10nOf(
+                            context,
+                          ).quranScreenMessage5((versesCount).toString()),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(

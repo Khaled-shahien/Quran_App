@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'dart:async';
 import 'dart:developer' as developer;
 
@@ -30,7 +31,8 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await notificationService.initialize(requestPermissions: false);
   await notificationService.showNotification(
     id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
-    title: message.notification?.title ?? 'إشعار جديد',
+    title:
+        message.notification?.title ?? appL10n.firebaseMessagingServiceMessage1,
     body: message.notification?.body ?? '',
     payload: message.data['type'] ?? 'general',
     payloadData: Map<String, dynamic>.from(message.data),
@@ -242,7 +244,9 @@ class FirebaseMessagingService {
         NotificationService.instance;
     notificationService.showNotification(
       id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
-      title: message.notification?.title ?? 'إشعار جديد',
+      title:
+          message.notification?.title ??
+          appL10n.firebaseMessagingServiceMessage1,
       body: message.notification?.body ?? '',
       payload: message.data['type'] ?? 'general',
       payloadData: Map<String, dynamic>.from(message.data),

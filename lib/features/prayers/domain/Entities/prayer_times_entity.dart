@@ -1,3 +1,5 @@
+import 'package:sakina_app/l10n/localization.dart';
+
 /// Prayer Times Entity
 ///
 /// Domain entity representing prayer times for a specific date and location
@@ -84,7 +86,9 @@ class PrayerTimesEntity {
       int hour = int.parse(parts[0]);
       final int minute = int.parse(parts[1]);
 
-      final String period = hour >= 12 ? 'م' : 'ص';
+      final String period = hour >= 12
+          ? appL10n.alarmMenuItemMessage2
+          : appL10n.alarmMenuItemMessage3;
 
       if (hour == 0) {
         hour = 12;
