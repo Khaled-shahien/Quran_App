@@ -1,3 +1,8 @@
+import '../../../../l10n/app_localizations.dart';
+import '../../../../l10n/app_localizations_ar.dart';
+import '../../domain/prayer_time_zone.dart';
+import 'prayer_location_dialog.dart';
+import '../../domain/prayer_calculation_policy.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -15,14 +20,17 @@ class PrayerTimesScreen extends StatefulWidget {
   State<PrayerTimesScreen> createState() => _PrayerTimesScreenState();
 }
 
-class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
+class _PrayerTimesScreenState extends State<PrayerTimesScreen>
+    with WidgetsBindingObserver {
   late Timer _countdownTimer;
 
   @override
   void initState() {
     super.initState();
-    // Initialize with a default location (Makkah coordinates as example)
+    WidgetsBinding.instance.addObserver(this);
+    // Load only the location explicitly configured by the user.
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       final prayerProvider = Provider.of<PrayerTimesProvider>(
         context,
         listen: false,
@@ -31,29 +39,66 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
     });
 
     // Update countdown every second
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+    _countdownTimer = Timer.periodic(const Duration(minutes: 1), (_) {
+      if (!mounted) return;
+      final provider = context.read<PrayerTimesProvider>();
+      final loaded = provider.loadedDate;
+      final now = context.read<PrayerTimesProvider>().locationNow;
+      if (loaded != null &&
+          (loaded.year != now.year ||
+              loaded.month != now.month ||
+              loaded.day != now.day)) {
+        provider.refresh();
+      }
       setState(() {});
     });
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _countdownTimer.cancel();
     super.dispose();
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      context.read<PrayerTimesProvider>().refresh();
+    }
+  }
+
+  AppLocalizations get l10n =>
+      AppLocalizations.of(context) ?? AppLocalizationsAr();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'أوقات الصلاة',
+          l10n.prayerTitle,
           style: GoogleFonts.cairo(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
+        actions: [
+          IconButton(
+            tooltip: 'تعديل الموقع وطريقة الحساب',
+            icon: const Icon(Icons.edit_location_alt),
+            onPressed: () => showPrayerLocationDialog(
+              context,
+              context.read<PrayerTimesProvider>(),
+            ),
+          ),
+          IconButton(
+            tooltip: 'استخدام موقع الجهاز وإرساله لحساب المواقيت',
+            icon: const Icon(Icons.my_location),
+            onPressed: () =>
+                context.read<PrayerTimesProvider>().useDeviceLocation(),
+          ),
+        ],
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -77,7 +122,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Error loading prayer times',
+                      l10n.prayerLoadError,
                       style: GoogleFonts.cairo(fontSize: 16, color: Colors.red),
                     ),
                     const SizedBox(height: 4),
@@ -102,7 +147,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                         onPressed: () {
                           provider.fetchTodayForCurrentLocation();
                         },
-                        child: Text('Retry', style: GoogleFonts.cairo()),
+                        child: Text(l10n.retry, style: GoogleFonts.cairo()),
                       ),
                     ),
                   ],
@@ -114,7 +159,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
               return _buildPrayerTimesContent(provider);
             }
 
-            return const Center(child: Text('No data available'));
+            return Center(child: Text(l10n.choosePrayerLocation));
           },
         ),
       ),
@@ -123,13 +168,33 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
   Widget _buildPrayerTimesContent(PrayerTimesProvider provider) {
     final prayerTimes = provider.getMainPrayerTimes();
-    final now = DateTime.now();
+    final now = context.read<PrayerTimesProvider>().locationNow;
     final formattedDate = '${now.day}/${now.month}/${now.year}';
 
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              '${provider.locationLabel} • ${PrayerCalculationPolicy.methods[provider.selectedMethod]}\n'
+              '${provider.prayerTimes?.timezone ?? ""} • ${provider.selectedCoordinates?.latitude.toStringAsFixed(4)}, ${provider.selectedCoordinates?.longitude.toStringAsFixed(4)}',
+              textAlign: TextAlign.center,
+            ),
+          ),
+          if (provider.prayerTimes?.isCached == true)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                '${provider.prayerTimes!.isStale ? "مواقيت محفوظة قديمة؛ تعذر تحديثها" : "مواقيت محفوظة"} • ${provider.prayerTimes!.fetchedAt}',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          TextButton(
+            onPressed: provider.refresh,
+            child: const Text('تحديث المواقيت'),
+          ),
           // Next Prayer Card
           _buildNextPrayerCard(prayerTimes),
           const SizedBox(height: 24),
@@ -140,7 +205,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Today\'s Prayer Times',
+                  l10n.todayPrayerTimes,
                   style: GoogleFonts.cairo(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -183,7 +248,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
     return Container(
       margin: const EdgeInsets.all(16),
-      height: 320,
+      constraints: const BoxConstraints(minHeight: 280),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.brown.shade800,
@@ -231,8 +296,9 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(
                         nextPrayerTime,
@@ -376,9 +442,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
       'Isha': 'العشاء',
     };
 
-    final now = DateTime.now();
+    final now = context.read<PrayerTimesProvider>().locationNow;
     DateTime? nextPrayerTime;
-    String? nextPrayerNameEng;
     String? nextPrayerName;
 
     for (int i = 0; i < englishOrder.length; i++) {
@@ -389,27 +454,18 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
         final prayerDateTime = _parseTime(timeStr);
         if (prayerDateTime != null && prayerDateTime.isAfter(now)) {
           nextPrayerTime = prayerDateTime;
-          nextPrayerNameEng = prayerName;
           nextPrayerName = arabicNames[prayerName];
           break;
         }
       }
     }
 
-    // If no prayer found today, show first prayer of next day
     if (nextPrayerTime == null) {
-      nextPrayerNameEng = englishOrder[0];
-      nextPrayerName = arabicNames[englishOrder[0]]!;
-      if (prayerTimes[nextPrayerNameEng] != null &&
-          prayerTimes[nextPrayerNameEng] != 'N/A') {
-        nextPrayerTime = _parseTime(
-          prayerTimes[nextPrayerNameEng]!,
-        )?.add(const Duration(days: 1));
-      }
-    }
-
-    if (nextPrayerTime == null) {
-      return {'name': 'الفجر', 'time': 'N/A', 'remaining': 'N/A'};
+      return {
+        'name': 'الفجر غداً',
+        'time': '--:--',
+        'remaining': 'تتوفر المواقيت عند تحديث يوم الغد',
+      };
     }
 
     final timeRemaining = nextPrayerTime.difference(now);
@@ -450,8 +506,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
         if (hour == 12) hour = 0;
       }
 
-      final now = DateTime.now();
-      return DateTime(now.year, now.month, now.day, hour, minute);
+      final now = context.read<PrayerTimesProvider>().locationNow;
+      return prayerInstant(
+        now,
+        hour,
+        minute,
+        context.read<PrayerTimesProvider>().prayerTimes?.timezone,
+      );
     } catch (e) {
       return null;
     }

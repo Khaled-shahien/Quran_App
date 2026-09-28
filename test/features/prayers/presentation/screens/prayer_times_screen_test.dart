@@ -130,7 +130,13 @@ void main() {
 
   testWidgets('renders successful prayer times list', (tester) async {
     final repository = FakePrayerTimesRepository();
-    final provider = PrayerTimesProvider(repository: repository);
+    final provider = PrayerTimesProvider(
+      repository: repository,
+      locationService: const FixedPrayerLocationService(
+        latitude: 30,
+        longitude: 31,
+      ),
+    );
 
     await tester.pumpWidget(
       ChangeNotifierProvider<PrayerTimesProvider>.value(
@@ -142,7 +148,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('أوقات الصلاة'), findsOneWidget);
-    expect(find.text('Today\'s Prayer Times'), findsOneWidget);
+    expect(find.text('مواقيت اليوم'), findsOneWidget);
     expect(find.text('الفجر'), findsOneWidget);
     expect(find.text('الظهر'), findsOneWidget);
     expect(find.textContaining('05:00'), findsAtLeastNWidgets(1));
@@ -151,7 +157,13 @@ void main() {
 
   testWidgets('renders error state and retry action', (tester) async {
     final repository = FakePrayerTimesRepository(shouldThrow: true);
-    final provider = PrayerTimesProvider(repository: repository);
+    final provider = PrayerTimesProvider(
+      repository: repository,
+      locationService: const FixedPrayerLocationService(
+        latitude: 30,
+        longitude: 31,
+      ),
+    );
 
     await tester.pumpWidget(
       ChangeNotifierProvider<PrayerTimesProvider>.value(
@@ -163,10 +175,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byIcon(Icons.error_outline), findsOneWidget);
-    expect(find.text('Error loading prayer times'), findsOneWidget);
-    expect(find.text('Retry'), findsOneWidget);
+    expect(find.text('تعذر عرض مواقيت الصلاة'), findsOneWidget);
+    expect(find.text('إعادة المحاولة'), findsOneWidget);
 
-    await tester.tap(find.text('Retry'));
+    await tester.tap(find.text('إعادة المحاولة'));
     await tester.pumpAndSettle();
 
     expect(repository.calls, greaterThanOrEqualTo(2));
@@ -175,7 +187,13 @@ void main() {
   testWidgets('shows loading indicator while fetch is pending', (tester) async {
     final completer = Completer<void>();
     final repository = DelayedPrayerTimesRepository(completer: completer);
-    final provider = PrayerTimesProvider(repository: repository);
+    final provider = PrayerTimesProvider(
+      repository: repository,
+      locationService: const FixedPrayerLocationService(
+        latitude: 30,
+        longitude: 31,
+      ),
+    );
 
     await tester.pumpWidget(
       ChangeNotifierProvider<PrayerTimesProvider>.value(
@@ -189,14 +207,20 @@ void main() {
 
     completer.complete();
     await tester.pumpAndSettle();
-    expect(find.text('Today\'s Prayer Times'), findsOneWidget);
+    expect(find.text('مواقيت اليوم'), findsOneWidget);
   });
 
   testWidgets('renders all Arabic prayer names in success state', (
     tester,
   ) async {
     final repository = FakePrayerTimesRepository();
-    final provider = PrayerTimesProvider(repository: repository);
+    final provider = PrayerTimesProvider(
+      repository: repository,
+      locationService: const FixedPrayerLocationService(
+        latitude: 30,
+        longitude: 31,
+      ),
+    );
 
     await tester.pumpWidget(
       ChangeNotifierProvider<PrayerTimesProvider>.value(
@@ -229,12 +253,18 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('No data available'), findsOneWidget);
+    expect(find.text('حدد موقعك لعرض المواقيت'), findsOneWidget);
   });
 
   testWidgets('retry recovers from first failure to success', (tester) async {
     final repository = FlakyPrayerTimesRepository();
-    final provider = PrayerTimesProvider(repository: repository);
+    final provider = PrayerTimesProvider(
+      repository: repository,
+      locationService: const FixedPrayerLocationService(
+        latitude: 30,
+        longitude: 31,
+      ),
+    );
 
     await tester.pumpWidget(
       ChangeNotifierProvider<PrayerTimesProvider>.value(
@@ -244,18 +274,24 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Error loading prayer times'), findsOneWidget);
-    await tester.tap(find.text('Retry'));
+    expect(find.text('تعذر عرض مواقيت الصلاة'), findsOneWidget);
+    await tester.tap(find.text('إعادة المحاولة'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Today\'s Prayer Times'), findsOneWidget);
+    expect(find.text('مواقيت اليوم'), findsOneWidget);
     expect(find.text('الفجر'), findsOneWidget);
     expect(repository.calls, 2);
   });
 
   testWidgets('renders current date header in content card', (tester) async {
     final repository = FakePrayerTimesRepository();
-    final provider = PrayerTimesProvider(repository: repository);
+    final provider = PrayerTimesProvider(
+      repository: repository,
+      locationService: const FixedPrayerLocationService(
+        latitude: 30,
+        longitude: 31,
+      ),
+    );
 
     await tester.pumpWidget(
       ChangeNotifierProvider<PrayerTimesProvider>.value(

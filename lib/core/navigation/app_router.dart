@@ -1,3 +1,6 @@
+import '../../features/settings/presentation/screens/data_sources_screen.dart';
+import '../../features/onboarding/presentation/widgets/current_wird_widget.dart';
+import '../../features/quran/presentation/screens/quran_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -47,9 +50,28 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
   routes: <RouteBase>[
     GoRoute(
-      path: '/splash',
+      path: '/settings/data-sources',
       pageBuilder: (context, state) =>
-          _fadePage(state, const SplashScreen()),
+          _fadePage(state, const DataSourcesScreen()),
+    ),
+    GoRoute(
+      path: '/quran/search',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const QuranSearchScreen()),
+    ),
+    GoRoute(
+      path: '/khatma',
+      pageBuilder: (context, state) => _fadePage(
+        state,
+        Scaffold(
+          appBar: AppBar(title: const Text('الختمة الحالية')),
+          body: const SingleChildScrollView(child: CurrentWirdWidget()),
+        ),
+      ),
+    ),
+    GoRoute(
+      path: '/splash',
+      pageBuilder: (context, state) => _fadePage(state, const SplashScreen()),
     ),
     GoRoute(
       path: '/onboarding',

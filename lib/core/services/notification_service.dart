@@ -60,7 +60,7 @@ class NotificationService {
   static const String _alarmsChannelDescription =
       'تذكيرات يومية للأذكار والسور';
 
-  static const String _prayerChannelId = 'prayer_times_channel';
+  static const String _prayerChannelId = 'prayer_times_default_sound_v2';
   static const String _prayerChannelName = 'مواقيت الصلاة';
   static const String _prayerChannelDescription = 'إشعارات أوقات الصلاة الخمس';
 
@@ -209,7 +209,7 @@ class NotificationService {
         _prayerChannelName,
         description: _prayerChannelDescription,
         importance: Importance.max,
-        sound: RawResourceAndroidNotificationSound('adhan'),
+        // Platform default sound until a licensed adhan is bundled.
         playSound: true,
         enableVibration: true,
       ),
@@ -601,7 +601,7 @@ class NotificationService {
           importance: Importance.max,
           priority: Priority.high,
           icon: '@drawable/ic_notification',
-          sound: RawResourceAndroidNotificationSound('adhan'),
+          // Platform default sound until a licensed adhan is bundled.
           playSound: true,
           enableVibration: true,
           fullScreenIntent: true,
@@ -1003,7 +1003,10 @@ class NotificationService {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
 
-    developer.log('TEST NOTIFICATION: $title', name: 'sakina_app.notifications');
+    developer.log(
+      'TEST NOTIFICATION: $title',
+      name: 'sakina_app.notifications',
+    );
     developer.log('Body: $body', name: 'sakina_app.notifications');
 
     const AndroidNotificationDetails androidNotificationDetails =

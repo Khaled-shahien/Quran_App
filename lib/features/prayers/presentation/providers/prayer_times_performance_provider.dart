@@ -1,3 +1,4 @@
+import '../../domain/prayer_calculation_policy.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sakina_app/features/prayers/domain/Entities/'
     'prayer_times_entity.dart';
@@ -45,7 +46,7 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
     DateTime date,
     double latitude,
     double longitude, {
-    int calculationMethod = 5,
+    int calculationMethod = PrayerCalculationPolicy.defaultMethod,
   }) async {
     // Set loading state first
     _isLoadingNotifier.value = true;
@@ -106,7 +107,9 @@ class PrayerTimesPerformanceProvider extends ChangeNotifier
         _clock.now(),
         _prayerTimesNotifier.value!.latitude ?? 0.0,
         _prayerTimesNotifier.value!.longitude ?? 0.0,
-        calculationMethod: _prayerTimesNotifier.value!.calculationMethod ?? 5,
+        calculationMethod:
+            _prayerTimesNotifier.value!.calculationMethod ??
+            PrayerCalculationPolicy.defaultMethod,
       );
     }
   }

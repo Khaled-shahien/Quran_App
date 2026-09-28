@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _navigateAfterDelay() async {
-    await Future.delayed(const Duration(milliseconds: 10000));
+    await Future.delayed(const Duration(milliseconds: 3500));
     if (!mounted) return;
 
     final prefs = await SharedPreferences.getInstance();
@@ -78,10 +78,7 @@ class _SplashScreenState extends State<SplashScreen>
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'assets/images/logo.png',
-            fit: BoxFit.contain,
-          ),
+          Image.asset('assets/images/logo.png', fit: BoxFit.contain),
           SafeArea(
             child: IgnorePointer(
               child: FadeTransition(

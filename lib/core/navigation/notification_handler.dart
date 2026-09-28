@@ -21,13 +21,18 @@ void handleNotificationNavigation(String route, Map<String, dynamic>? data) {
       }
       break;
     case '/quran':
-      context.go('/quran');
+      final number = int.tryParse(data?['surahNumber']?.toString() ?? '');
+      context.go(
+        number != null && number >= 1 && number <= 114
+            ? '/quran/surah/$number'
+            : '/quran',
+      );
       break;
     case '/prayers':
       context.go('/prayers');
       break;
     case '/khatma':
-      context.go('/home');
+      context.go('/khatma');
       break;
     case '/':
     default:

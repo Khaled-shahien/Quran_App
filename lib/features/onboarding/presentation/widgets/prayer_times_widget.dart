@@ -1,3 +1,5 @@
+import '../../../prayers/domain/prayer_time_zone.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -20,19 +22,16 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
     super.initState();
     // Initialize with a default location (Cairo coordinates)
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       final prayerProvider = Provider.of<PrayerTimesProvider>(
         context,
         listen: false,
       );
-      prayerProvider.fetchPrayerTimes(
-        DateTime.now(),
-        30.0444, // Latitude for Cairo
-        31.2357, // Longitude for Cairo
-      );
+      prayerProvider.fetchTodayForCurrentLocation();
     });
 
     // Update countdown every second
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+    _countdownTimer = Timer.periodic(const Duration(minutes: 1), (_) {
       setState(() {});
     });
   }
@@ -70,6 +69,10 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                     fontWeight: FontWeight.w500,
                     color: Colors.red,
                   ),
+                ),
+                TextButton(
+                  onPressed: () => context.push('/prayers'),
+                  child: const Text('تحديد موقع الصلاة'),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -327,9 +330,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
       'Isha': 'العشاء',
     };
 
-    final now = DateTime.now();
+    final now = context.read<PrayerTimesProvider>().locationNow;
     DateTime? nextPrayerTime;
-    String? nextPrayerNameEng;
     String? nextPrayerName;
 
     for (int i = 0; i < englishOrder.length; i++) {
@@ -340,27 +342,18 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         final prayerDateTime = _parseTime(timeStr);
         if (prayerDateTime != null && prayerDateTime.isAfter(now)) {
           nextPrayerTime = prayerDateTime;
-          nextPrayerNameEng = prayerName;
           nextPrayerName = arabicNames[prayerName];
           break;
         }
       }
     }
 
-    // If no prayer found today, show first prayer of next day
     if (nextPrayerTime == null) {
-      nextPrayerNameEng = englishOrder[0];
-      nextPrayerName = arabicNames[englishOrder[0]]!;
-      if (prayerTimes[nextPrayerNameEng] != null &&
-          prayerTimes[nextPrayerNameEng] != 'N/A') {
-        nextPrayerTime = _parseTime(
-          prayerTimes[nextPrayerNameEng]!,
-        )?.add(const Duration(days: 1));
-      }
-    }
-
-    if (nextPrayerTime == null) {
-      return {'name': 'الفجر', 'time': 'N/A', 'remaining': 'N/A'};
+      return {
+        'name': 'الفجر غداً',
+        'time': '--:--',
+        'remaining': 'بانتظار مواقيت الغد',
+      };
     }
 
     final timeRemaining = nextPrayerTime.difference(now);
@@ -400,8 +393,13 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
         if (hour == 12) hour = 0;
       }
 
-      final now = DateTime.now();
-      return DateTime(now.year, now.month, now.day, hour, minute);
+      final now = context.read<PrayerTimesProvider>().locationNow;
+      return prayerInstant(
+        now,
+        hour,
+        minute,
+        context.read<PrayerTimesProvider>().prayerTimes?.timezone,
+      );
     } catch (e) {
       return null;
     }

@@ -1,3 +1,6 @@
+import 'package:sakina_app/features/quran/data/data_sources/local_quran_data_source.dart';
+import 'package:sakina_app/features/quran/data/repositories/ayah_repository.dart';
+import 'package:sakina_app/features/quran/domain/repositories/ayah_repository.dart';
 import 'dart:developer' as developer;
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -55,6 +58,12 @@ Future<void> setupServiceLocator() async {
     // ==========================================
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     getIt.registerSingleton<SharedPreferences>(prefs);
+    getIt.registerLazySingleton<AyahRepository>(
+      () => AyahRepositoryImpl(
+        localDataSource: LocalQuranDataSource(),
+        sharedPreferences: prefs,
+      ),
+    );
     getIt.registerLazySingleton<http.Client>(() => http.Client());
     getIt.registerLazySingleton<CachedApiService>(
       () => CachedApiService(getIt<SharedPreferences>()),

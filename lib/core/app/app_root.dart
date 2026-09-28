@@ -1,3 +1,5 @@
+import 'dart:async';
+import '../../l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/core/di/service_locator.dart';
@@ -40,7 +42,8 @@ class AppRoot extends StatefulWidget {
   State<AppRoot> createState() => _AppRootState();
 }
 
-class _AppRootState extends State<AppRoot> {
+class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
+  Timer? _prayerClockTimer;
   late final SharedPreferences _prefs;
   late final PrayerTimesRepository _prayerTimesRepository;
   late final PrayerNotificationScheduler _prayerNotificationScheduler;
@@ -65,6 +68,27 @@ class _AppRootState extends State<AppRoot> {
   void initState() {
     super.initState();
     _initializeProviders();
+    WidgetsBinding.instance.addObserver(this);
+    _prayerClockTimer = Timer.periodic(
+      const Duration(minutes: 1),
+      (_) => _prayerTimesProvider.updateClock(),
+    );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        _prayerTimesProvider.selectedCoordinates != null) {
+      _prayerTimesProvider.refresh();
+    }
+  }
+
+  @override
+  void dispose() {
+    _prayerClockTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    _prayerTimesProvider.dispose();
+    super.dispose();
   }
 
   void _initializeProviders() {
@@ -82,6 +106,7 @@ class _AppRootState extends State<AppRoot> {
 
     // Initialize providers with repositories
     _prayerTimesProvider = PrayerTimesProvider(
+      preferences: _prefs,
       repository: _prayerTimesRepository,
       notificationScheduler: _prayerNotificationScheduler,
     );
@@ -160,7 +185,9 @@ class _AppRootState extends State<AppRoot> {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: themeProvider.themeMode,
-            locale: const Locale('ar', 'SA'),
+            locale: const Locale('ar'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             routerConfig: appRouter,
             builder: (context, child) {
               return NoiseBackground(

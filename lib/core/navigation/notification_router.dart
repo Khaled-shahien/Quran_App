@@ -47,14 +47,14 @@ class NotificationRouter {
   /// Navigate to Duas screen
   static void _navigateToDuas(String dhikrType, Map<String, dynamic>? data) {
     if (_onNavigate != null) {
-      _onNavigate!('/duas', {'type': dhikrType, ...?data});
+      _onNavigate!('/duas', {...?data, 'type': dhikrType});
     }
   }
 
   /// Navigate to specific Surah
   static void _navigateToSurah(int surahNumber, Map<String, dynamic>? data) {
     if (_onNavigate != null) {
-      _onNavigate!('/quran', {'surahNumber': surahNumber, ...?data});
+      _onNavigate!('/quran', {...?data, 'surahNumber': surahNumber});
     }
   }
 

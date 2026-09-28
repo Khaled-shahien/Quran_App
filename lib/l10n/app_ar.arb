@@ -1,0 +1,12 @@
+{
+  "@@locale": "ar",
+  "prayerTitle": "أوقات الصلاة",
+  "prayerLoadError": "تعذر عرض مواقيت الصلاة",
+  "retry": "إعادة المحاولة",
+  "choosePrayerLocation": "حدد موقعك لعرض المواقيت",
+  "todayPrayerTimes": "مواقيت اليوم",
+  "searchQuran": "البحث في القرآن",
+  "searchAyah": "ابحث عن آية",
+  "searchHint": "يمكن البحث دون تشكيل",
+  "searchEmpty": "لا توجد نتائج. جرّب تعديل كلمات البحث"
+}

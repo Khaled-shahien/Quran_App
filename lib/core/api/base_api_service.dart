@@ -100,7 +100,8 @@ class BaseApiService {
     final uri = _buildUri(endpoint, queryParams);
 
     // Log the final resolved URL for debugging
-    _logger.d('Final resolved URL: $uri');
+    final logUri = uri.replace(query: '', fragment: '');
+    _logger.d('Final resolved URL: $logUri');
 
     // Merge headers
     final requestHeaders = {
@@ -109,7 +110,7 @@ class BaseApiService {
     };
 
     // Log the request
-    _logger.i('[$method] $uri');
+    _logger.i('[$method] $logUri');
     if (body != null) {
       _logger.d('Request Body: ${jsonEncode(body)}');
     }
@@ -147,7 +148,7 @@ class BaseApiService {
 
       // Log the response
       _logger.d('Response Status: ${response.statusCode}');
-      _logger.d('Response Body: ${response.body}');
+      // Responses may contain location or other private data.
 
       // Handle the response
       return _handleResponse(response);

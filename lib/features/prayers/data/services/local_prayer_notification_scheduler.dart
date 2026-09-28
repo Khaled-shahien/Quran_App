@@ -1,3 +1,4 @@
+import '../../domain/prayer_time_zone.dart';
 import 'dart:developer' as developer;
 
 import 'package:sakina_app/core/services/notification_service.dart';
@@ -53,6 +54,10 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
   final PrayerNotificationGateway _notificationGateway;
 
   @override
+  Future<void> cancelPrayerNotifications() =>
+      _notificationGateway.cancelAllPrayerNotifications();
+
+  @override
   Future<void> schedulePrayerNotifications({
     required PrayerTimesEntity prayerTimes,
     required DateTime date,
@@ -94,7 +99,11 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
     final Map<String, DateTime> schedule = <String, DateTime>{};
 
     void addPrayer(String arabicName, String? rawTime) {
-      final DateTime? parsed = _parsePrayerTime(rawTime, date);
+      final DateTime? parsed = _parsePrayerTime(
+        rawTime,
+        date,
+        prayerTimes.timezone,
+      );
       if (parsed == null) {
         developer.log(
           'Unable to parse prayer time for $arabicName: $rawTime',
@@ -115,7 +124,7 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
     return schedule;
   }
 
-  DateTime? _parsePrayerTime(String? rawTime, DateTime date) {
+  DateTime? _parsePrayerTime(String? rawTime, DateTime date, String? zone) {
     if (rawTime == null || rawTime.trim().isEmpty) {
       return null;
     }
@@ -139,6 +148,6 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
       return null;
     }
 
-    return DateTime(date.year, date.month, date.day, hour, minute);
+    return prayerInstant(date, hour, minute, zone);
   }
 }

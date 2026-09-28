@@ -196,25 +196,42 @@ void main() {
     expect(find.byIcon(Icons.segment), findsOneWidget);
   });
 
-  testWidgets('Qibla drawer item closes drawer and opens the in-app route', (tester) async {
-    final router = GoRouter(initialLocation: '/home', routes: [
-      GoRoute(path: '/home', builder: (_, _) => const HomeScreen()),
-      GoRoute(path: '/qibla', builder: (_, _) => const Scaffold(body: Text('Qibla route'))),
-    ]);
+  testWidgets('Qibla drawer item closes drawer and opens the in-app route', (
+    tester,
+  ) async {
+    final router = GoRouter(
+      initialLocation: '/home',
+      routes: [
+        GoRoute(path: '/home', builder: (_, _) => const HomeScreen()),
+        GoRoute(
+          path: '/qibla',
+          builder: (_, _) => const Scaffold(body: Text('Qibla route')),
+        ),
+      ],
+    );
     addTearDown(router.dispose);
     await tester.pumpWidget(await buildHome(router: router));
     await tester.pumpAndSettle();
     await tester.tap(find.byIcon(Icons.segment));
     await tester.pumpAndSettle();
-    await tester.scrollUntilVisible(find.text('اتجاه القبلة'), 300,
-      scrollable: find.descendant(of: find.byType(Drawer), matching: find.byType(Scrollable)));
+    await tester.scrollUntilVisible(
+      find.text('اتجاه القبلة'),
+      300,
+      scrollable: find.descendant(
+        of: find.byType(Drawer),
+        matching: find.byType(Scrollable),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('اتجاه القبلة'));
     await tester.pumpAndSettle();
     expect(find.text('Qibla route'), findsOneWidget);
     router.pop();
     await tester.pumpAndSettle();
-    expect(tester.state<ScaffoldState>(find.byType(Scaffold).first).isEndDrawerOpen, isFalse);
+    expect(
+      tester.state<ScaffoldState>(find.byType(Scaffold).first).isEndDrawerOpen,
+      isFalse,
+    );
   });
 
   testWidgets('HomeScreen opens drawer and shows settings sections', (
@@ -227,7 +244,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('المزيد'), findsOneWidget);
-    expect(find.text('دعم التطبيق'), findsOneWidget);
+    expect(find.text('قم بدعم التطبيق'), findsNothing);
     expect(find.text('الختمة الحالية'), findsOneWidget);
   });
 }

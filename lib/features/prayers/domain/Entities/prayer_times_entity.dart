@@ -2,6 +2,9 @@
 ///
 /// Domain entity representing prayer times for a specific date and location
 class PrayerTimesEntity {
+  final DateTime? fetchedAt;
+  final bool isStale;
+  final bool isCached;
   final String? fajr;
   final String? sunrise;
   final String? dhuhr;
@@ -17,6 +20,9 @@ class PrayerTimesEntity {
   final bool? lunarSighting;
 
   PrayerTimesEntity({
+    this.fetchedAt,
+    this.isStale = false,
+    this.isCached = false,
     this.fajr,
     this.sunrise,
     this.dhuhr,

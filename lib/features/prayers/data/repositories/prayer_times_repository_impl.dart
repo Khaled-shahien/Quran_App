@@ -1,3 +1,6 @@
+import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/errors/api_exception.dart';
 import '../../../../../core/errors/network_exception.dart';
@@ -20,6 +23,7 @@ class PrayerTimesRepositoryImpl implements PrayerTimesRepository {
   static const String _prayerTimesCacheKey = 'cached_prayer_times';
   static const String _prayerTimesCacheTimestampKey =
       'cached_prayer_times_timestamp';
+  static const String _prayerTimesCachePrefix = 'cached_prayer_times_';
   static const int _cacheDurationHours = 2; // Cache for 2 hours
 
   PrayerTimesRepositoryImpl({
@@ -38,6 +42,7 @@ class PrayerTimesRepositoryImpl implements PrayerTimesRepository {
     final gregorianDate = data?.date?.gregorian;
 
     return PrayerTimesEntity(
+      fetchedAt: DateTime.now(),
       fajr: timings?.fajr,
       sunrise: timings?.sunrise,
       dhuhr: timings?.dhuhr,
@@ -61,7 +66,7 @@ class PrayerTimesRepositoryImpl implements PrayerTimesRepository {
   /// - [latitude]: User's latitude
   /// - [longitude]: User's longitude
   /// - [calculationMethod]: Calculation method
-  ///   (default 3 for Muslim World League)
+  ///   (default Egyptian General Authority of Survey)
   ///
   /// Returns: Future<PrayerTimesEntity>
   /// Throws: NetworkException, ApiException
@@ -70,8 +75,14 @@ class PrayerTimesRepositoryImpl implements PrayerTimesRepository {
     DateTime date,
     double latitude,
     double longitude, {
-    int calculationMethod = 3,
+    int calculationMethod = PrayerCalculationPolicy.defaultMethod,
   }) async {
+    final cacheKey = _cacheKey(date, latitude, longitude, calculationMethod);
+    final cached = _readCachedPrayerTimes(cacheKey);
+    if (cached != null) {
+      return cached;
+    }
+
     try {
       // Fetch from API
       final response = await _apiService.getPrayerTimes(
@@ -82,7 +93,13 @@ class PrayerTimesRepositoryImpl implements PrayerTimesRepository {
       );
 
       if (response.status == 'OK' && response.data != null) {
-        return _responseToEntity(response);
+        final entity = _responseToEntity(response);
+        try {
+          await _writeCachedPrayerTimes(cacheKey, entity);
+        } catch (_) {
+          // Storage failure must not discard successfully fetched timings.
+        }
+        return entity;
       } else {
         throw ApiException(
           message: 'Failed to fetch prayer times: ${response.status}',
@@ -90,12 +107,95 @@ class PrayerTimesRepositoryImpl implements PrayerTimesRepository {
         );
       }
     } on NetworkException {
+      final stale = _readCachedPrayerTimes(cacheKey, allowStale: true);
+      if (stale != null) return stale;
       rethrow;
     } on ApiException {
+      final stale = _readCachedPrayerTimes(cacheKey, allowStale: true);
+      if (stale != null) return stale;
       rethrow;
     } catch (e) {
       throw ApiException(message: _errorHandler.handleError(e), code: 0);
     }
+  }
+
+  String _cacheKey(
+    DateTime date,
+    double latitude,
+    double longitude,
+    int calculationMethod,
+  ) {
+    final dateKey = date.toIso8601String().split('T').first;
+    return '$_prayerTimesCachePrefix${dateKey}_${latitude.toStringAsFixed(4)}_'
+        '${longitude.toStringAsFixed(4)}_$calculationMethod';
+  }
+
+  PrayerTimesEntity? _readCachedPrayerTimes(
+    String cacheKey, {
+    bool allowStale = false,
+  }) {
+    final timestamp = _prefs.getInt('${cacheKey}_timestamp');
+    final encoded = _prefs.getString(cacheKey);
+    if (timestamp == null || encoded == null) return null;
+
+    final age = DateTime.now().difference(
+      DateTime.fromMillisecondsSinceEpoch(timestamp),
+    );
+    if (age.isNegative || (!allowStale && age.inHours >= _cacheDurationHours)) {
+      return null;
+    }
+
+    try {
+      final json = jsonDecode(encoded) as Map<String, dynamic>;
+      return PrayerTimesEntity(
+        fetchedAt: DateTime.fromMillisecondsSinceEpoch(timestamp),
+        isCached: true,
+        isStale: age.inHours >= _cacheDurationHours,
+        fajr: json['fajr'] as String?,
+        sunrise: json['sunrise'] as String?,
+        dhuhr: json['dhuhr'] as String?,
+        asr: json['asr'] as String?,
+        maghrib: json['maghrib'] as String?,
+        isha: json['isha'] as String?,
+        imsak: json['imsak'] as String?,
+        midnight: json['midnight'] as String?,
+        latitude: (json['latitude'] as num?)?.toDouble(),
+        longitude: (json['longitude'] as num?)?.toDouble(),
+        timezone: json['timezone'] as String?,
+        calculationMethod: (json['calculationMethod'] as num?)?.toInt(),
+        lunarSighting: json['lunarSighting'] as bool?,
+      );
+    } on Object {
+      return null;
+    }
+  }
+
+  Future<void> _writeCachedPrayerTimes(
+    String cacheKey,
+    PrayerTimesEntity entity,
+  ) async {
+    await _prefs.setString(
+      cacheKey,
+      jsonEncode({
+        'fajr': entity.fajr,
+        'sunrise': entity.sunrise,
+        'dhuhr': entity.dhuhr,
+        'asr': entity.asr,
+        'maghrib': entity.maghrib,
+        'isha': entity.isha,
+        'imsak': entity.imsak,
+        'midnight': entity.midnight,
+        'latitude': entity.latitude,
+        'longitude': entity.longitude,
+        'timezone': entity.timezone,
+        'calculationMethod': entity.calculationMethod,
+        'lunarSighting': entity.lunarSighting,
+      }),
+    );
+    await _prefs.setInt(
+      '${cacheKey}_timestamp',
+      DateTime.now().millisecondsSinceEpoch,
+    );
   }
 
   /// Check if cache is valid (within 2 hours)
@@ -112,7 +212,14 @@ class PrayerTimesRepositoryImpl implements PrayerTimesRepository {
 
   /// Clear cached prayer times data
   Future<void> clearCache() async {
-    await _prefs.remove(_prayerTimesCacheKey);
-    await _prefs.remove(_prayerTimesCacheTimestampKey);
+    final keysToRemove = _prefs.getKeys().where(
+      (key) =>
+          key == _prayerTimesCacheKey ||
+          key == _prayerTimesCacheTimestampKey ||
+          key.startsWith(_prayerTimesCachePrefix),
+    );
+    for (final key in keysToRemove) {
+      await _prefs.remove(key);
+    }
   }
 }

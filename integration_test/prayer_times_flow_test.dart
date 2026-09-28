@@ -49,7 +49,13 @@ void main() {
 
   testWidgets('Prayer flow: load -> error -> retry -> display', (tester) async {
     final repository = FlakyPrayerTimesRepository();
-    final provider = PrayerTimesProvider(repository: repository);
+    final provider = PrayerTimesProvider(
+      repository: repository,
+      locationService: const FixedPrayerLocationService(
+        latitude: 30,
+        longitude: 31,
+      ),
+    );
 
     await tester.pumpWidget(
       ChangeNotifierProvider<PrayerTimesProvider>.value(
@@ -59,19 +65,17 @@ void main() {
     );
 
     await tester.pump();
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
     await tester.pumpAndSettle();
-    expect(find.text('Error loading prayer times'), findsOneWidget);
-    expect(find.text('Retry'), findsOneWidget);
+    expect(find.text('تعذر عرض مواقيت الصلاة'), findsOneWidget);
+    expect(find.text('إعادة المحاولة'), findsOneWidget);
 
-    await tester.tap(find.text('Retry'));
+    await tester.tap(find.text('إعادة المحاولة'));
     await tester.pump();
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
     await tester.pumpAndSettle();
 
-    expect(find.text('Today\'s Prayer Times'), findsOneWidget);
+    expect(find.text('مواقيت اليوم'), findsOneWidget);
     expect(find.text('الفجر'), findsOneWidget);
     expect(find.text('العشاء'), findsOneWidget);
     expect(find.textContaining('05:00'), findsOneWidget);

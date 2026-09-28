@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import '../../../../../core/api/base_api_service.dart';
 import '../../../../../core/api/api_logger.dart';
 import '../../../../../core/errors/api_exception.dart';
@@ -20,7 +21,7 @@ class PrayerTimesApiService extends BaseApiService {
   /// - [latitude]: User's latitude
   /// - [longitude]: User's longitude
   /// - [calculationMethod]: Calculation method
-  ///   (default 3 for Muslim World League)
+  ///   (default Egyptian General Authority of Survey)
   ///
   /// Returns: Future<PrayerTimesResponse>
   /// Throws: NetworkException, ApiException
@@ -28,7 +29,7 @@ class PrayerTimesApiService extends BaseApiService {
     DateTime date,
     double latitude,
     double longitude, {
-    int calculationMethod = 3,
+    int calculationMethod = PrayerCalculationPolicy.defaultMethod,
   }) async {
     try {
       // Format the date as DD-MM-YYYY
@@ -48,10 +49,7 @@ class PrayerTimesApiService extends BaseApiService {
       final url = '$_baseUrl$_timingsEndpoint/$formattedDate';
 
       // Log the API request
-      ApiLogger.logRequest(
-        method: 'GET',
-        url: '$url?${_buildQueryString(queryParams)}',
-      );
+      ApiLogger.logRequest(method: 'GET', url: url);
 
       // Make the API call with a base URL override.
       // This endpoint lives on a different host.
@@ -64,8 +62,8 @@ class PrayerTimesApiService extends BaseApiService {
       // Log the successful response
       ApiLogger.logResponse(
         statusCode: 200,
-        url: '$url?${_buildQueryString(queryParams)}',
-        body: response,
+        url: url,
+        // Response metadata contains precise coordinates; do not log it.
       );
 
       // Parse the response - the base service already decodes JSON
@@ -84,15 +82,5 @@ class PrayerTimesApiService extends BaseApiService {
 
       rethrow;
     }
-  }
-
-  /// Helper method to build query string for logging purposes
-  String _buildQueryString(Map<String, String> params) {
-    return params.entries
-        .map(
-          (e) =>
-              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}',
-        )
-        .join('&');
   }
 }

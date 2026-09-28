@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
@@ -57,6 +58,41 @@ class FakePrayerLocationService implements PrayerLocationService {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  test('unconfigured location never silently requests Cairo', () async {
+    final repository = FakePrayerTimesRepository();
+    final provider = PrayerTimesProvider(repository: repository);
+    await provider.fetchTodayForCurrentLocation();
+    expect(repository.lastLatitude, isNull);
+    expect(provider.hasError, isTrue);
+  });
+  test('manual coordinates and calculation method survive restart', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final repository = FakePrayerTimesRepository();
+    final first = PrayerTimesProvider(
+      repository: repository,
+      preferences: prefs,
+    );
+    await first.selectLocation(21.4, 39.8, 'مكة', 4);
+    final restored = PrayerTimesProvider(
+      repository: repository,
+      preferences: prefs,
+    );
+    await restored.fetchTodayForCurrentLocation();
+    expect(repository.lastLatitude, 21.4);
+    expect(repository.lastLongitude, 39.8);
+    expect(repository.lastCalculationMethod, 4);
+    expect(restored.locationLabel, 'مكة');
+    await expectLater(
+      restored.selectLocation(double.nan, 0, '', 4),
+      throwsArgumentError,
+    );
+    await expectLater(
+      restored.selectLocation(91, 0, '', 4),
+      throwsArgumentError,
+    );
+  });
   test('PrayerTimesProvider fetches and exposes main prayer times', () async {
     final repository = FakePrayerTimesRepository();
     final provider = PrayerTimesProvider(repository: repository);

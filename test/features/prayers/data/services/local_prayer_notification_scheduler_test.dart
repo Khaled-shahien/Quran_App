@@ -24,6 +24,25 @@ class FakePrayerNotificationGateway implements PrayerNotificationGateway {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test(
+    'schedules in the selected timezone rather than device timezone',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final gateway = FakePrayerNotificationGateway();
+      final scheduler = LocalPrayerNotificationScheduler(
+        prefs: await SharedPreferences.getInstance(),
+        notificationGateway: gateway,
+      );
+      await scheduler.schedulePrayerNotifications(
+        date: DateTime(2026, 1, 1),
+        prayerTimes: PrayerTimesEntity(fajr: '05:00', timezone: 'Asia/Riyadh'),
+      );
+      expect(
+        gateway.scheduledPrayerTimes!['الفجر']!.toUtc(),
+        DateTime.utc(2026, 1, 1, 2),
+      );
+    },
+  );
 
   test('schedules the five daily prayer notifications', () async {
     SharedPreferences.setMockInitialValues({});

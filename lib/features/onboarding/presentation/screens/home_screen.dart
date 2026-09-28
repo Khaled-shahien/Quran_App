@@ -24,7 +24,7 @@ import '../widgets/tab_switcher_widget.dart';
 import '../widgets/category_grid_widget.dart';
 import '../widgets/prayer_times_widget.dart';
 import '../../../prayers/presentation/providers/'
-    'prayer_times_performance_provider.dart';
+    'prayer_times_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -53,12 +53,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final prayerProvider = Provider.of<PrayerTimesPerformanceProvider>(
+      if (!mounted) return;
+      final prayerProvider = Provider.of<PrayerTimesProvider>(
         context,
         listen: false,
       );
-      // Fetch prayer times for Cairo by default
-      prayerProvider.fetchPrayerTimes(DateTime.now(), 30.0444, 31.2357);
+      // Use the same saved configuration as the prayer screen.
+      prayerProvider.fetchTodayForCurrentLocation();
     });
   }
 
@@ -124,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
       leading: IconButton(
         tooltip: 'بحث',
         icon: const Icon(Icons.search, size: 26),
-        onPressed: () => _showFeatureMessage('البحث قيد التطوير'),
+        onPressed: () => context.push('/quran/search'),
       ),
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: const [StretchMode.zoomBackground, StretchMode.fadeTitle],
@@ -755,15 +756,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return ListView(
       padding: const EdgeInsets.only(bottom: 20),
       children: [
-        // 1. دعم التطبيق
-        _buildSectionHeader('دعم التطبيق'),
         _buildMoreMenuItem(
-          title: 'قم بدعم التطبيق',
-          leadingIcon: const Icon(Icons.favorite, color: Colors.red),
-          onTap: () => launchMyUrl('https://example.com/donate'),
+          title: 'الخصوصية ومصادر المحتوى',
+          leadingIcon: Icon(Icons.privacy_tip_outlined, color: iconColor),
+          onTap: () {
+            Navigator.pop(context);
+            context.push('/settings/data-sources');
+          },
         ),
-        const Divider(height: 1),
-
         // 2. الختمة الحالية
         _buildSectionHeader('الختمة الحالية'),
         _buildMoreMenuItem(
@@ -1131,7 +1131,7 @@ class _PrayerTimeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Consumer<PrayerTimesPerformanceProvider>(
+    return Consumer<PrayerTimesProvider>(
       builder: (context, provider, child) {
         final prayerData = provider.getCurrentAndNextPrayer();
         final currentName = prayerData['currentName'] ?? '---';

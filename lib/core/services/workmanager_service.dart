@@ -240,7 +240,10 @@ class WorkManagerService {
         kRescheduleAlarmsPeriodicUniqueName,
       );
       await _workmanager.cancelByUniqueName(kRescheduleAlarmsOneOffUniqueName);
-      developer.log('Reschedule task cancelled', name: 'sakina_app.workmanager');
+      developer.log(
+        'Reschedule task cancelled',
+        name: 'sakina_app.workmanager',
+      );
     } catch (e) {
       developer.log(
         'Error cancelling reschedule task',

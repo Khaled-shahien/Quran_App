@@ -34,6 +34,28 @@ class FakePrayerTimesApiService extends PrayerTimesApiService {
   }
 }
 
+class CountingPrayerTimesApiService extends FakePrayerTimesApiService {
+  CountingPrayerTimesApiService({required super.response});
+
+  int calls = 0;
+
+  @override
+  Future<PrayerTimesResponse> getPrayerTimes(
+    DateTime date,
+    double latitude,
+    double longitude, {
+    int calculationMethod = 3,
+  }) async {
+    calls++;
+    return super.getPrayerTimes(
+      date,
+      latitude,
+      longitude,
+      calculationMethod: calculationMethod,
+    );
+  }
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -68,6 +90,46 @@ void main() {
   }
 
   group('PrayerTimesRepositoryImpl', () {
+    test(
+      'expired exact-key cache survives network failure and is labeled stale',
+      () async {
+        final online = PrayerTimesRepositoryImpl(
+          apiService: FakePrayerTimesApiService(response: successResponse()),
+          sharedPreferences: prefs,
+        );
+        final date = DateTime(2026, 9, 22);
+        await online.getPrayerTimes(date, 30, 31);
+        final timestampKey = prefs.getKeys().singleWhere(
+          (key) => key.endsWith('_timestamp'),
+        );
+        await prefs.setInt(
+          timestampKey,
+          DateTime.now()
+              .subtract(const Duration(hours: 3))
+              .millisecondsSinceEpoch,
+        );
+        final offline = PrayerTimesRepositoryImpl(
+          apiService: FakePrayerTimesApiService(
+            networkException: const NetworkException.noInternet(),
+          ),
+          sharedPreferences: prefs,
+        );
+        final result = await offline.getPrayerTimes(date, 30, 31);
+        expect(result.isStale, isTrue);
+        expect(result.isCached, isTrue);
+        expect(result.fetchedAt, isNotNull);
+        expect(result.fajr, '05:00');
+        await expectLater(
+          offline.getPrayerTimes(date.add(const Duration(days: 1)), 30, 31),
+          throwsA(isA<NetworkException>()),
+        );
+        await expectLater(
+          offline.getPrayerTimes(date, 21, 39),
+          throwsA(isA<NetworkException>()),
+        );
+      },
+    );
+
     test('returns mapped entity on API success', () async {
       final repository = PrayerTimesRepositoryImpl(
         apiService: FakePrayerTimesApiService(response: successResponse()),
@@ -154,5 +216,29 @@ void main() {
       expect(prefs.containsKey('cached_prayer_times'), isFalse);
       expect(prefs.containsKey('cached_prayer_times_timestamp'), isFalse);
     });
+
+    test(
+      'writes successful responses and serves them from the keyed cache',
+      () async {
+        final apiService = CountingPrayerTimesApiService(
+          response: successResponse(),
+        );
+        final repository = PrayerTimesRepositoryImpl(
+          apiService: apiService,
+          sharedPreferences: prefs,
+        );
+        final date = DateTime(2026, 3, 25);
+
+        final first = await repository.getPrayerTimes(date, 30.0, 31.0);
+        final second = await repository.getPrayerTimes(date, 30.0, 31.0);
+
+        expect(first, second);
+        expect(apiService.calls, 1);
+        expect(
+          prefs.getKeys().any((key) => key.startsWith('cached_prayer_times_')),
+          isTrue,
+        );
+      },
+    );
   });
 }

@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import '../Entities/prayer_times_entity.dart';
 
 /// Prayer Times Repository Interface
@@ -11,7 +12,7 @@ abstract class PrayerTimesRepository {
   /// - [latitude]: User's latitude
   /// - [longitude]: User's longitude
   /// - [calculationMethod]: Calculation method
-  ///   (default 3 for Muslim World League)
+  ///   (default Egyptian General Authority of Survey)
   ///
   /// Returns: Future<PrayerTimesEntity>
   /// Throws: NetworkException, ApiException
@@ -19,6 +20,6 @@ abstract class PrayerTimesRepository {
     DateTime date,
     double latitude,
     double longitude, {
-    int calculationMethod = 3,
+    int calculationMethod = PrayerCalculationPolicy.defaultMethod,
   });
 }
