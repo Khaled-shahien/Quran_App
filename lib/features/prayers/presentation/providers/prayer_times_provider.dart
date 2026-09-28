@@ -128,20 +128,28 @@ class PrayerTimesProvider extends ChangeNotifier {
         !PrayerCalculationPolicy.methods.containsKey(method)) {
       throw ArgumentError('Invalid prayer configuration');
     }
-    _requestId++;
+    if (_disposed) return;
+    final requestId = ++_requestId;
     _prayerTimes = null;
     await _notificationScheduler.cancelPrayerNotifications();
+    if (_disposed || requestId != _requestId) return;
     _selectedCoordinates = (latitude: latitude, longitude: longitude);
     locationLabel = label.trim().isEmpty ? 'موقع يدوي' : label.trim();
     selectedMethod = method;
     await _preferences?.setDouble('prayer_latitude', latitude);
+    if (_disposed || requestId != _requestId) return;
     await _preferences?.setDouble('prayer_longitude', longitude);
+    if (_disposed || requestId != _requestId) return;
     await _preferences?.setString('prayer_location_label', locationLabel);
+    if (_disposed || requestId != _requestId) return;
     await _preferences?.setInt('prayer_method', method);
+    if (_disposed || requestId != _requestId) return;
     await fetchTodayForCurrentLocation(calculationMethod: method);
   }
 
   Future<void> useDeviceLocation() async {
+    if (_disposed) return;
+    final requestId = ++_requestId;
     try {
       if (!await Geolocator.isLocationServiceEnabled()) {
         throw StateError('disabled');
@@ -157,6 +165,7 @@ class PrayerTimesProvider extends ChangeNotifier {
       final position = await Geolocator.getCurrentPosition().timeout(
         const Duration(seconds: 20),
       );
+      if (_disposed || requestId != _requestId) return;
       await selectLocation(
         position.latitude,
         position.longitude,
@@ -164,6 +173,8 @@ class PrayerTimesProvider extends ChangeNotifier {
         selectedMethod,
       );
     } catch (_) {
+      if (_disposed || requestId != _requestId) return;
+      _isLoading = false;
       _errorMessage =
           'تعذر تحميل المواقيت. حدد موقعك أو تحقق من الاتصال وأعد المحاولة.';
       notifyListeners();
@@ -199,6 +210,7 @@ class PrayerTimesProvider extends ChangeNotifier {
     double longitude, {
     int calculationMethod = PrayerCalculationPolicy.defaultMethod,
   }) async {
+    if (_disposed) return;
     final requestId = ++_requestId;
     _selectedCoordinates = (latitude: latitude, longitude: longitude);
     selectedMethod = calculationMethod;
@@ -255,10 +267,13 @@ class PrayerTimesProvider extends ChangeNotifier {
   Future<void> fetchTodayForCurrentLocation({
     int calculationMethod = PrayerCalculationPolicy.defaultMethod,
   }) async {
+    if (_disposed) return;
+    final requestId = ++_requestId;
     try {
       final coordinates =
           _selectedCoordinates ??
           await _locationService.getCurrentCoordinates();
+      if (_disposed || requestId != _requestId) return;
       await fetchPrayerTimes(
         locationNow,
         coordinates.latitude,
@@ -267,6 +282,9 @@ class PrayerTimesProvider extends ChangeNotifier {
             ? calculationMethod
             : selectedMethod,
       );
+      // fetchPrayerTimes advances the request once. A further advance means
+      // another operation owns the state, including any date correction.
+      if (_disposed || _requestId != requestId + 1) return;
       final localToday = locationNow;
       final date = loadedDate;
       if (date != null &&
@@ -281,6 +299,8 @@ class PrayerTimesProvider extends ChangeNotifier {
         );
       }
     } catch (_) {
+      if (_disposed || requestId != _requestId) return;
+      _isLoading = false;
       _errorMessage =
           'تعذر تحميل المواقيت. حدد موقعك أو تحقق من الاتصال وأعد المحاولة.';
       notifyListeners();

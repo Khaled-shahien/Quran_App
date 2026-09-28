@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
+import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
 
 class FakePrayerTimesRepository implements PrayerTimesRepository {
@@ -57,8 +60,107 @@ class FakePrayerLocationService implements PrayerLocationService {
   }
 }
 
+class PendingPrayerLocationService implements PrayerLocationService {
+  final result = Completer<Coordinates>();
+
+  @override
+  Future<Coordinates> getCurrentCoordinates() => result.future;
+}
+
+class PendingCancellationScheduler extends NoopPrayerNotificationScheduler {
+  final cancellations = <Completer<void>>[];
+
+  @override
+  Future<void> cancelPrayerNotifications() {
+    final completion = Completer<void>();
+    cancellations.add(completion);
+    return completion.future;
+  }
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test('late location lookup cannot replace a manual selection', () async {
+    final location = PendingPrayerLocationService();
+    final repository = FakePrayerTimesRepository();
+    final provider = PrayerTimesProvider(
+      repository: repository,
+      locationService: location,
+    );
+    addTearDown(provider.dispose);
+
+    final lookup = provider.fetchTodayForCurrentLocation();
+    await provider.selectLocation(21.4, 39.8, 'Makkah', 4);
+    location.result.complete((latitude: 30.0, longitude: 31.0));
+    await lookup;
+
+    expect(repository.lastLatitude, 21.4);
+    expect(provider.selectedCoordinates, (latitude: 21.4, longitude: 39.8));
+    expect(provider.locationLabel, 'Makkah');
+  });
+
+  test('late lookup failure cannot replace successful state', () async {
+    final location = PendingPrayerLocationService();
+    final provider = PrayerTimesProvider(
+      repository: FakePrayerTimesRepository(),
+      locationService: location,
+    );
+    addTearDown(provider.dispose);
+
+    final lookup = provider.fetchTodayForCurrentLocation();
+    await provider.selectLocation(21.4, 39.8, 'Makkah', 4);
+    location.result.completeError(StateError('Location unavailable'));
+    await lookup;
+
+    expect(provider.hasData, isTrue);
+    expect(provider.hasError, isFalse);
+  });
+
+  test(
+    'latest manual selection wins when cancellation finishes late',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final scheduler = PendingCancellationScheduler();
+      final repository = FakePrayerTimesRepository();
+      final provider = PrayerTimesProvider(
+        repository: repository,
+        preferences: prefs,
+        notificationScheduler: scheduler,
+      );
+      addTearDown(provider.dispose);
+
+      final older = provider.selectLocation(30, 31, 'Cairo', 5);
+      final newer = provider.selectLocation(21.4, 39.8, 'Makkah', 4);
+      scheduler.cancellations[1].complete();
+      await newer;
+      scheduler.cancellations[0].complete();
+      await older;
+
+      expect(repository.lastLatitude, 21.4);
+      expect(provider.locationLabel, 'Makkah');
+      expect(prefs.getDouble('prayer_latitude'), 21.4);
+      expect(prefs.getInt('prayer_method'), 4);
+    },
+  );
+
+  test(
+    'lookup completion after disposal does not fetch prayer times',
+    () async {
+      final location = PendingPrayerLocationService();
+      final repository = FakePrayerTimesRepository();
+      final provider = PrayerTimesProvider(
+        repository: repository,
+        locationService: location,
+      );
+      final lookup = provider.fetchTodayForCurrentLocation();
+      provider.dispose();
+      location.result.complete((latitude: 30.0, longitude: 31.0));
+      await lookup;
+
+      expect(repository.lastLatitude, isNull);
+    },
+  );
   test('unconfigured location never silently requests Cairo', () async {
     final repository = FakePrayerTimesRepository();
     final provider = PrayerTimesProvider(repository: repository);
