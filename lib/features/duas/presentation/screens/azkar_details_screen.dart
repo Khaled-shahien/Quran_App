@@ -29,7 +29,6 @@ class AzkarDetailsScreen extends StatelessWidget {
           button: true,
           label: 'الرجوع للشاشة السابقة',
           child: IconButton(
-            tooltip: 'رجوع',
             icon: Icon(
               Icons.arrow_back_ios,
               color: Theme.of(context).colorScheme.primary,

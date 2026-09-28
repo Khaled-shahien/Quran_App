@@ -170,31 +170,20 @@ class PrayerTimesProvider extends ChangeNotifier {
     if (_disposed) return;
     final requestId = ++_requestId;
     _prayerTimes = null;
-    _isLoading = true;
-    _errorMessage = null;
-    notifyListeners();
-    try {
-      await _notificationScheduler.cancelPrayerNotifications();
-      if (_disposed || requestId != _requestId) return;
-      _selectedCoordinates = (latitude: latitude, longitude: longitude);
-      locationLabel = label.trim().isEmpty ? 'موقع يدوي' : label.trim();
-      selectedMethod = method;
-      await _preferences?.setDouble('prayer_latitude', latitude);
-      if (_disposed || requestId != _requestId) return;
-      await _preferences?.setDouble('prayer_longitude', longitude);
-      if (_disposed || requestId != _requestId) return;
-      await _preferences?.setString('prayer_location_label', locationLabel);
-      if (_disposed || requestId != _requestId) return;
-      await _preferences?.setInt('prayer_method', method);
-      if (_disposed || requestId != _requestId) return;
-      await fetchTodayForCurrentLocation(calculationMethod: method);
-    } catch (_) {
-      if (_disposed || requestId != _requestId) return;
-      _isLoading = false;
-      _errorMessage =
-          'تعذر حفظ إعدادات الموقع أو تحديث التنبيهات. أعد المحاولة.';
-      notifyListeners();
-    }
+    await _notificationScheduler.cancelPrayerNotifications();
+    if (_disposed || requestId != _requestId) return;
+    _selectedCoordinates = (latitude: latitude, longitude: longitude);
+    locationLabel = label.trim().isEmpty ? 'موقع يدوي' : label.trim();
+    selectedMethod = method;
+    await _preferences?.setDouble('prayer_latitude', latitude);
+    if (_disposed || requestId != _requestId) return;
+    await _preferences?.setDouble('prayer_longitude', longitude);
+    if (_disposed || requestId != _requestId) return;
+    await _preferences?.setString('prayer_location_label', locationLabel);
+    if (_disposed || requestId != _requestId) return;
+    await _preferences?.setInt('prayer_method', method);
+    if (_disposed || requestId != _requestId) return;
+    await fetchTodayForCurrentLocation(calculationMethod: method);
   }
 
   Future<void> useDeviceLocation() async {
