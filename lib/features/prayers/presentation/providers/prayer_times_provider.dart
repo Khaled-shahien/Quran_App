@@ -169,20 +169,65 @@ class PrayerTimesProvider extends ChangeNotifier {
     }
     if (_disposed) return;
     final requestId = ++_requestId;
-    _prayerTimes = null;
-    await _notificationScheduler.cancelPrayerNotifications();
-    if (_disposed || requestId != _requestId) return;
+    final nextLabel = label.trim().isEmpty ? 'موقع يدوي' : label.trim();
+    final previousValues = <String, Object?>{};
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+    try {
+      await _notificationScheduler.cancelPrayerNotifications();
+      if (_disposed || requestId != _requestId) return;
+      final preferences = _preferences;
+      if (preferences != null) {
+        for (final key in [
+          'prayer_latitude',
+          'prayer_longitude',
+          'prayer_location_label',
+          'prayer_method',
+        ]) {
+          previousValues[key] = preferences.get(key);
+        }
+        final writes = <Future<bool> Function()>[
+          () => preferences.setDouble('prayer_latitude', latitude),
+          () => preferences.setDouble('prayer_longitude', longitude),
+          () => preferences.setString('prayer_location_label', nextLabel),
+          () => preferences.setInt('prayer_method', method),
+        ];
+        for (final write in writes) {
+          final saved = await write();
+          if (_disposed || requestId != _requestId) return;
+          if (!saved) throw StateError('Prayer configuration was not saved');
+        }
+      }
+    } catch (_) {
+      if (_disposed || requestId != _requestId) return;
+      // SharedPreferences writes are not transactional. Restore the snapshot
+      // where storage permits, without letting recovery errors escape either.
+      for (final entry in previousValues.entries) {
+        try {
+          final value = entry.value;
+          if (value is double) {
+            await _preferences!.setDouble(entry.key, value);
+          } else if (value is int) {
+            await _preferences!.setInt(entry.key, value);
+          } else if (value is String) {
+            await _preferences!.setString(entry.key, value);
+          } else {
+            await _preferences!.remove(entry.key);
+          }
+        } catch (_) {
+          // The localized retry below remains available during storage failure.
+        }
+        if (_disposed || requestId != _requestId) return;
+      }
+      _isLoading = false;
+      _errorMessage = 'تعذر حفظ موقع الصلاة. أعد اختيار الموقع وحاول مرة أخرى.';
+      notifyListeners();
+      return;
+    }
     _selectedCoordinates = (latitude: latitude, longitude: longitude);
-    locationLabel = label.trim().isEmpty ? 'موقع يدوي' : label.trim();
+    locationLabel = nextLabel;
     selectedMethod = method;
-    await _preferences?.setDouble('prayer_latitude', latitude);
-    if (_disposed || requestId != _requestId) return;
-    await _preferences?.setDouble('prayer_longitude', longitude);
-    if (_disposed || requestId != _requestId) return;
-    await _preferences?.setString('prayer_location_label', locationLabel);
-    if (_disposed || requestId != _requestId) return;
-    await _preferences?.setInt('prayer_method', method);
-    if (_disposed || requestId != _requestId) return;
     await fetchTodayForCurrentLocation(calculationMethod: method);
   }
 

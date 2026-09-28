@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'dart:async';
 
 import 'package:sakina_app/core/widgets/pulse_loader.dart';
+import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
@@ -121,12 +122,56 @@ class IdlePrayerTimesProvider extends PrayerTimesProvider {
   Map<String, String> getMainPrayerTimes() => <String, String>{};
 }
 
+class FailingCancellationScheduler extends NoopPrayerNotificationScheduler {
+  @override
+  Future<void> cancelPrayerNotifications() async {
+    throw StateError('Cancellation unavailable');
+  }
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
     GoogleFonts.config.allowRuntimeFetching = false;
   });
+
+  for (final brightness in Brightness.values) {
+    testWidgets('manual save error is visible in RTL $brightness', (
+      tester,
+    ) async {
+      final provider = PrayerTimesProvider(
+        repository: FakePrayerTimesRepository(),
+        locationService: const FixedPrayerLocationService(
+          latitude: 30,
+          longitude: 31,
+        ),
+        notificationScheduler: FailingCancellationScheduler(),
+      );
+      addTearDown(provider.dispose);
+      await tester.pumpWidget(
+        ChangeNotifierProvider<PrayerTimesProvider>.value(
+          value: provider,
+          child: MaterialApp(
+            theme: ThemeData(brightness: brightness),
+            home: const Directionality(
+              textDirection: TextDirection.rtl,
+              child: PrayerTimesScreen(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await provider.selectLocation(21.4, 39.8, 'مكة', 4);
+      await tester.pumpAndSettle();
+      expect(
+        find.text('تعذر حفظ موقع الصلاة. أعد اختيار الموقع وحاول مرة أخرى.'),
+        findsOneWidget,
+      );
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  }
 
   testWidgets('renders successful prayer times list', (tester) async {
     final repository = FakePrayerTimesRepository();

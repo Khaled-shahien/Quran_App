@@ -78,8 +78,134 @@ class PendingCancellationScheduler extends NoopPrayerNotificationScheduler {
   }
 }
 
+class FailingPreferences implements SharedPreferences {
+  bool fail = true;
+  bool returnFalse = false;
+  final values = <String, Object>{};
+
+  @override
+  Object? get(String key) => values[key];
+  @override
+  Future<bool> remove(String key) async {
+    values.remove(key);
+    return true;
+  }
+
+  @override
+  double? getDouble(String key) => null;
+  @override
+  String? getString(String key) => null;
+  @override
+  int? getInt(String key) => null;
+  @override
+  Future<bool> setDouble(String key, double value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<bool> setString(String key, String value) async {
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  Future<bool> setInt(String key, int value) async {
+    if (fail) {
+      if (returnFalse) return false;
+      throw StateError('Storage unavailable');
+    }
+    values[key] = value;
+    return true;
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test('cancellation failure retains data and permits retry', () async {
+    final scheduler = PendingCancellationScheduler();
+    final repository = FakePrayerTimesRepository();
+    final provider = PrayerTimesProvider(
+      repository: repository,
+      notificationScheduler: scheduler,
+    );
+    addTearDown(provider.dispose);
+    await provider.fetchPrayerTimes(DateTime(2026, 9, 28), 30, 31);
+    final previous = provider.prayerTimes;
+    var notifications = 0;
+    provider.addListener(() => notifications++);
+    final save = provider.selectLocation(21.4, 39.8, 'مكة', 4);
+    scheduler.cancellations.single.completeError(StateError('cancel failed'));
+    await save;
+    expect(provider.prayerTimes, same(previous));
+    expect(provider.selectedCoordinates, (latitude: 30.0, longitude: 31.0));
+    expect(provider.isLoading, isFalse);
+    expect(provider.errorMessage, contains('حاول مرة أخرى'));
+    expect(repository.lastLatitude, 30);
+    expect(notifications, 2);
+    final retry = provider.selectLocation(21.4, 39.8, 'مكة', 4);
+    scheduler.cancellations.last.complete();
+    await retry;
+    expect(provider.hasError, isFalse);
+    expect(repository.lastLatitude, 21.4);
+  });
+
+  for (final returnFalse in [false, true]) {
+    test(
+      'storage failure (false=$returnFalse) retains state and retries',
+      () async {
+        final preferences = FailingPreferences()..fail = false;
+        final repository = FakePrayerTimesRepository();
+        final provider = PrayerTimesProvider(
+          repository: repository,
+          preferences: preferences,
+        );
+        addTearDown(provider.dispose);
+        await provider.selectLocation(30, 31, 'القاهرة', 5);
+        final previous = provider.prayerTimes;
+        preferences.fail = true;
+        preferences.returnFalse = returnFalse;
+        await provider.selectLocation(21.4, 39.8, 'مكة', 4);
+        expect(provider.prayerTimes, same(previous));
+        expect(provider.locationLabel, 'القاهرة');
+        expect(preferences.values['prayer_latitude'], 30);
+        expect(preferences.values['prayer_longitude'], 31);
+        expect(preferences.values['prayer_location_label'], 'القاهرة');
+        expect(provider.selectedMethod, 5);
+        expect(provider.selectedCoordinates, (latitude: 30.0, longitude: 31.0));
+        expect(provider.isLoading, isFalse);
+        expect(provider.errorMessage, contains('تعذر حفظ موقع الصلاة'));
+        expect(repository.lastLatitude, 30);
+        preferences.fail = false;
+        await provider.selectLocation(21.4, 39.8, 'مكة', 4);
+        expect(provider.hasError, isFalse);
+        expect(provider.locationLabel, 'مكة');
+        expect(repository.lastLatitude, 21.4);
+      },
+    );
+  }
+
+  test('late cancellation failure cannot overwrite newer success', () async {
+    final scheduler = PendingCancellationScheduler();
+    final provider = PrayerTimesProvider(
+      repository: FakePrayerTimesRepository(),
+      notificationScheduler: scheduler,
+    );
+    addTearDown(provider.dispose);
+    final older = provider.selectLocation(30, 31, 'القاهرة', 5);
+    final newer = provider.selectLocation(21.4, 39.8, 'مكة', 4);
+    scheduler.cancellations.last.complete();
+    await newer;
+    scheduler.cancellations.first.completeError(StateError('late failure'));
+    await older;
+    expect(provider.locationLabel, 'مكة');
+    expect(provider.hasError, isFalse);
+    expect(provider.hasData, isTrue);
+    expect(provider.isLoading, isFalse);
+  });
   test('late GPS result cannot override manual city selection', () async {
     final location = PendingPrayerLocationService();
     final provider = PrayerTimesProvider(

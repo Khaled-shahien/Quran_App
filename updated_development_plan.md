@@ -123,7 +123,7 @@
 
 | ID | Original Task | Category | Orig. Priority | Current Status | Completion | Remaining Work | New Issues | Next Action |
 |---|---|---|---:|---|---:|---|---|---|
-| T01 | GPS flow | Prayer | P1 | B | 75% | Physical denial/travel tests | NF-001 | Fix error handling + device tests |
+| T01 | GPS flow | Prayer | P1 | B | 75% | Physical denial/travel tests | NF-001 resolved | Device tests; B-01 verified 2026-09-28 |
 | T02 | Location UI | Prayer | P1 | B | 75% | Policy and device UX | — | Scholarly method approval |
 | T03 | Release signing | Release | P0 | B | 50% | Keystore/IDs/signed artifact | — | Owner credentials |
 | T04 | Dark components | Theme | P1 | A | 100% | — | — | Maintenance |
@@ -196,7 +196,7 @@ The following tasks are verified complete at repository/test scope:
 
 | ID | Implemented | Remaining |
 |---|---|---|
-| T01 | GPS/manual/city selection, stale-request protection, request ordering | Physical permission denial, travel, NF-001 error handling |
+| T01 | GPS/manual/city selection, stale-request protection, request ordering | Physical permission denial, travel; NF-001 resolved by B-01 |
 | T02 | City catalog, coordinates, device location, calculation method UI | Scholarly method/madhab approval, policy documentation |
 | T03 | Gradle rejects debug fallback for release | Owner keystore, approved app ID, signed artifact |
 | T06 | Opt-in Crashlytics/Android plugin | Real Firebase project events, iOS upload, symbol verification |
@@ -277,7 +277,9 @@ The following tasks are verified complete at repository/test scope:
 
 ## 10. New Findings
 
-### NF-001 — Manual prayer configuration lacks controlled failure handling *(confirmed, carried from previous plan)*
+### NF-001 — Manual prayer configuration lacks controlled failure handling *(resolved: B-01 VERIFIED, 2026-09-28)*
+
+The evidence below records the original finding. See progress history for implementation and verification.
 
 **Evidence:** [prayer_times_provider.dart](file:///e:/Projects/01-personal/Quran-App/lib/features/prayers/presentation/providers/prayer_times_provider.dart) lines 157-187: `selectLocation()` awaits `_notificationScheduler.cancelPrayerNotifications()` and multiple `_preferences?.set*` calls **without** try-catch. If any throws, the exception propagates to the caller unhandled.  
 **Impact:** Storage or scheduler failure becomes an uncaught exception; user unsure if location was saved.  
@@ -390,7 +392,7 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 
 ### Phase 1 — Critical Fixes (Code)
 
-- Fix NF-001: Restore error handling in `selectLocation`
+- VERIFIED B-01 / NF-001: Restored error handling in `selectLocation` (2026-09-28)
 - Fix NF-003: Resolve surah lookup test failures (make full suite green)
 - Fix NF-004: Rotate YouTube API key if committed to git history; remove `.env` from any tracked state
 - Restore tooltips (NF-002)
@@ -474,7 +476,10 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | **Title** | Harden manual prayer failure handling |
 | **Category** | Prayer / Error Handling |
 | **Priority** | P1 |
-| **Current Status** | NF-001 confirmed |
+| **Current Status** | VERIFIED |
+| **Completion** | 100% |
+| **Last Updated** | 2026-09-28 |
+| **Remaining Work** | None for B-01; physical T01 tests remain separate. |
 | **Description** | `selectLocation()` in `PrayerTimesProvider` performs notification cancellation and 4 SharedPreferences writes without try-catch. Any failure propagates as an uncaught exception. |
 | **Why Needed** | Users selecting a new prayer location must receive confirmation or localized retry, not a crash. |
 | **Implementation Details** | Wrap lines 173-185 in try-catch with narrowly scoped error handling. On failure: keep previous state, set `_errorMessage` with localized text, call `notifyListeners()`. Add unit tests: scheduler-failure test, preference-write-failure test. |
@@ -756,3 +761,68 @@ graph TD
 15. Internal test → staged rollout
 
 > **The project has made substantial progress since the original audit.** 17/40 tasks are complete, and the architecture, navigation, settings, prayer configuration, dark mode, and font infrastructure are significantly improved. The remaining work is primarily owner-dependent decisions (identity, content approval, privacy), device verification (notifications, accessibility, sensors), and fixing 3 test failures + 2 minor regressions. No fundamental architecture or product problems remain.
+
+## 23. Live Incremental Master Status Table
+
+Original audit sections above remain historical except explicit task updates. T01 still requires device verification; no additional T01–T40 task is marked complete by this focused fix. Full-suite counts above were not rerun this session.
+
+| ID | Task | Priority | Status | Completion | Last Updated | Notes |
+|---|---|---|---|---:|---|---|
+| B-01 | Harden manual prayer failure handling | P1 | VERIFIED | 100% | 2026-09-28 | NF-001 resolved |
+| B-02 | Fix Quran surah lookup tests | P1 | NOT_STARTED | 0% | 2026-09-28 | Next actionable task |
+| B-03 | Verify API key security | P1 | NOT_STARTED | 0% | 2026-09-28 | Git history check |
+| B-04 | Restore tooltips | P2 | NOT_STARTED | 0% | 2026-09-28 | NF-002 |
+| B-05 | Identity and signing | P0 | BLOCKED | 0% | 2026-09-28 | Owner credentials and approved IDs |
+| B-06 | Content approval | P0 | BLOCKED | 0% | 2026-09-28 | Owner and qualified reviewer |
+| B-07 | Notification evidence | P0 | BLOCKED | 0% | 2026-09-28 | B-05 and physical devices |
+| B-08 | Privacy/store package | P0 | BLOCKED | 0% | 2026-09-28 | Owner URL, contact, assets, approval |
+| B-09 | Device accessibility/reliability | P0 | BLOCKED | 0% | 2026-09-28 | B-05 and devices |
+| B-10 | Isolate FCM | P1 | BLOCKED | 0% | 2026-09-28 | Product decision |
+
+# IMPLEMENTATION PROGRESS HISTORY
+
+## 2026-09-28 — B-01 — Harden manual prayer failure handling
+
+Status: VERIFIED
+Completion: 100%
+
+Implemented:
+- Catch cancellation and preference-write exceptions, including false write results.
+- Preserve active coordinates, label, method and prayer data until saves succeed.
+- Clear loading, publish Arabic retry guidance, and notify listeners on failure.
+- Attempt restoration of previous preferences after partial writes, with stale-request/disposal guards.
+
+Files Changed:
+- `lib/features/prayers/presentation/providers/prayer_times_provider.dart`
+- `test/features/prayers/presentation/providers/prayer_times_provider_test.dart`
+- `test/features/prayers/presentation/screens/prayer_times_screen_test.dart`
+- `updated_development_plan.md`
+
+Verification:
+- `flutter test test/features/prayers`: 39 passed, including six new cases.
+- `dart analyze lib test/features/prayers`: no issues.
+- Changed Dart files formatted; `git diff --check` passed.
+
+| Acceptance Criterion | Result | Evidence |
+|---|---|---|
+| Valid saves do not leak operational exceptions | PASS | Scheduler failure, thrown storage error, false write result tests |
+| Failed saves show localized retry | PASS | Arabic message assertions; light/dark RTL widget tests |
+| Previous active state is retained | PASS | Coordinates, label, method, data identity, and best-effort preference restoration assertions |
+| Successful saves fetch selected location | PASS | Retry tests assert repository coordinates; existing restart test passes |
+| Latest request remains authoritative | PASS | Late cancellation failure plus existing cancellation/GPS race tests |
+| Required new failure cases pass | PASS | Four provider cases and two widget cases added |
+
+Remaining Work: None for B-01.
+
+Notes:
+- Invalid programmer inputs still throw ArgumentError, preserving the existing validation contract.
+- SharedPreferences is not transactional: rollback is best effort during persistent storage failure. Physical notification behavior remains T14/B-07; canceled reminders are replenished by the next successful fetch.
+- No physical-device or full-suite verification claimed. The historical Quran lookup failures remain B-02. No other task implemented.
+
+### NEXT RECOMMENDED TASK
+
+- Task ID: B-02
+- Task Title: Fix Quran surah lookup test failures
+- Priority: P1
+- Reason: Next independent critical code fix in the plan, required for a green full suite.
+- Dependencies: None. Recheck failures before implementation; expected totals must include six B-01 additions.
