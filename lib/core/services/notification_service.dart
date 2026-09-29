@@ -10,6 +10,7 @@ import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../navigation/notification_router.dart';
+import '../../features/prayers/domain/prayer_notification_ids.dart';
 
 /// Notification Service for managing alarms and notifications.
 ///
@@ -654,11 +655,16 @@ class NotificationService {
     );
   }
 
-  /// Schedule all prayer notifications for the provided day.
+  /// Replace only this calendar day's slot, preserving future-day reminders.
   Future<void> scheduleAllPrayersToday({
     required Map<String, DateTime> prayerTimes,
   }) async {
-    await cancelAllPrayerNotifications();
+    if (prayerTimes.isEmpty) return;
+    final date = prayerTimes.values.first;
+    for (final legacyId in _prayerNotificationIdsByName.values) {
+      await cancelNotification(legacyId);
+      await cancelNotification(prayerNotificationId(legacyId, date));
+    }
 
     for (final MapEntry<String, DateTime> entry in prayerTimes.entries) {
       final int? id = _prayerNotificationIdsByName[entry.key];
@@ -672,7 +678,7 @@ class NotificationService {
       }
 
       await schedulePrayerNotification(
-        id: id,
+        id: prayerNotificationId(id, date),
         prayerName: entry.key,
         prayerTime: entry.value,
       );
@@ -714,7 +720,7 @@ class NotificationService {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
 
-    for (final int id in _prayerNotificationIdsByName.values) {
+    for (final int id in allPrayerNotificationIds()) {
       await flutterLocalNotificationsPlugin.cancel(id);
     }
 

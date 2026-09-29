@@ -7,31 +7,22 @@ import '../services/notification_facades.dart';
 /// Notification Provider for state management
 ///
 /// Manages:
-/// - Permission status
-/// - FCM token
 /// - Test notification controls
 /// - Pending notifications list
 class NotificationProvider extends ChangeNotifier {
   final SharedPreferences prefs;
   final LocalNotificationGateway _notificationGateway;
-  final MessagingGateway _messagingGateway;
-  final bool _messagingEnabled;
 
   bool _isInitialized = false;
   final bool _isLoading = false;
-  String? _fcmToken;
-  String? _permissionStatus;
   List<Map<String, dynamic>> _pendingNotifications = [];
   final List<String> _debugLogs = [];
 
   NotificationProvider({
     required this.prefs,
     LocalNotificationGateway? notificationGateway,
-    MessagingGateway? messagingGateway,
-  }) : _messagingEnabled = messagingGateway != null,
-       _notificationGateway =
-           notificationGateway ?? NotificationServiceGateway(),
-       _messagingGateway = messagingGateway ?? FirebaseMessagingGateway();
+  }) : _notificationGateway =
+           notificationGateway ?? NotificationServiceGateway();
 
   /// Initialize notification services
   Future<void> initialize() async {
@@ -40,9 +31,6 @@ class NotificationProvider extends ChangeNotifier {
     try {
       // Initialize local notifications first (fast)
       await _notificationGateway.initialize(requestPermissions: false);
-
-      // Initialize Firebase in background (non-blocking)
-      if (_messagingEnabled) _initializeFirebaseInBackground();
 
       _isInitialized = true;
       _addLog('Notification services initialized');
@@ -53,68 +41,10 @@ class NotificationProvider extends ChangeNotifier {
     }
   }
 
-  /// Initialize Firebase asynchronously without blocking UI
-  void _initializeFirebaseInBackground() {
-    Future.microtask(() async {
-      try {
-        // Firebase Core is already initialized in main.dart
-        await _initializeFirebaseWithRetry();
-
-        // Get FCM token after initialization
-        _fcmToken = await _messagingGateway.getToken();
-        if (_fcmToken != null) {
-          _addLog('FCM Token obtained');
-        }
-
-        // Check permission status
-        await _checkPermissionStatus();
-
-        notifyListeners();
-      } catch (e) {
-        _addLog('Background Firebase Messaging init error: $e');
-      }
-    });
-  }
-
-  Future<void> _initializeFirebaseWithRetry() async {
-    const int maxAttempts = 3;
-
-    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
-      try {
-        await _messagingGateway.initialize().timeout(
-          const Duration(seconds: 8),
-        );
-        return;
-      } catch (e) {
-        _addLog('Firebase init attempt $attempt/$maxAttempts failed: $e');
-        if (attempt == maxAttempts) {
-          rethrow;
-        }
-        await Future<void>.delayed(Duration(seconds: attempt * 2));
-      }
-    }
-  }
-
-  /// Check notification permissions
-  Future<void> _checkPermissionStatus() async {
-    try {
-      final settings = await _messagingGateway.getNotificationSettings();
-      _permissionStatus = settings.authorizationStatus.name;
-      notifyListeners();
-    } catch (e) {
-      _permissionStatus = 'unknown';
-      _addLog('Error checking permissions: $e');
-    }
-  }
-
   /// Request notification permissions
   Future<void> requestPermissions() async {
     try {
       await _notificationGateway.requestPermissions();
-      if (_messagingEnabled) {
-        await _initializeFirebaseWithRetry();
-        await _checkPermissionStatus();
-      }
       _addLog('Permissions requested');
     } catch (e) {
       _addLog('Error requesting permissions: $e');
@@ -244,26 +174,6 @@ class NotificationProvider extends ChangeNotifier {
     }
   }
 
-  /// Refresh FCM token
-  Future<void> refreshFCMToken() async {
-    try {
-      await _messagingGateway.refreshToken();
-      _fcmToken = await _messagingGateway.getToken();
-      _addLog('FCM token refreshed');
-      notifyListeners();
-    } catch (e) {
-      _addLog('Error refreshing FCM token: $e');
-    }
-  }
-
-  /// Copy FCM token to clipboard
-  Future<void> copyFCMToken() async {
-    if (_fcmToken != null) {
-      _addLog('FCM Token copied');
-      // Clipboard copying handled in UI
-    }
-  }
-
   /// Reschedule all alarms
   Future<void> rescheduleAllAlarms() async {
     try {
@@ -299,8 +209,6 @@ class NotificationProvider extends ChangeNotifier {
   // Getters
   bool get isInitialized => _isInitialized;
   bool get isLoading => _isLoading;
-  String? get fcmToken => _fcmToken;
-  String? get permissionStatus => _permissionStatus;
   List<Map<String, dynamic>> get pendingNotifications => _pendingNotifications;
   List<String> get debugLogs => _debugLogs;
 }

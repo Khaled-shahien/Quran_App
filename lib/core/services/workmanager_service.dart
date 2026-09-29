@@ -4,6 +4,10 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 import 'notification_service.dart';
+import '../../features/prayers/data/data_sources/prayer_times_api_service.dart';
+import '../../features/prayers/data/repositories/prayer_times_repository_impl.dart';
+import '../../features/prayers/data/services/local_prayer_notification_scheduler.dart';
+import '../../features/prayers/data/services/prayer_replenishment_service.dart';
 
 const String kRescheduleAlarmsTaskName = 'reschedule_alarms';
 const String kRescheduleAlarmsPeriodicUniqueName =
@@ -59,19 +63,20 @@ Future<void> _handleRescheduleAlarms({Map<String, dynamic>? inputData}) async {
 
   try {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     final int nowMs = DateTime.now().millisecondsSinceEpoch;
     final int lastRunMs = prefs.getInt(_kLastBackgroundRescheduleAtMsKey) ?? 0;
 
     // WorkManager can enqueue multiple near-identical startup jobs.
-    if (nowMs - lastRunMs < _kBackgroundRescheduleThrottleMs) {
+    if (inputData?['source'] != 'manual_settings_update' &&
+        nowMs >= lastRunMs &&
+        nowMs - lastRunMs < _kBackgroundRescheduleThrottleMs) {
       developer.log(
         'Skipping duplicate background reschedule execution',
         name: 'sakina_app.workmanager',
       );
       return;
     }
-
-    await prefs.setInt(_kLastBackgroundRescheduleAtMsKey, nowMs);
 
     final NotificationService notificationService = NotificationService();
     await notificationService.initialize(requestPermissions: false);
@@ -84,6 +89,17 @@ Future<void> _handleRescheduleAlarms({Map<String, dynamic>? inputData}) async {
       isBaqarahEnabled: prefs.getBool('baqarah_alarm_enabled') ?? false,
     );
 
+    await PrayerReplenishmentService(
+      preferences: prefs,
+      repository: PrayerTimesRepositoryImpl(
+        apiService: PrayerTimesApiService(),
+        sharedPreferences: prefs,
+      ),
+      scheduler: LocalPrayerNotificationScheduler(prefs: prefs),
+    ).replenish();
+    // A failed fetch/schedule must remain retryable by WorkManager.
+    await prefs.setInt(_kLastBackgroundRescheduleAtMsKey, nowMs);
+
     developer.log(
       'Alarms rescheduled successfully',
       name: 'sakina_app.workmanager',
@@ -95,6 +111,7 @@ Future<void> _handleRescheduleAlarms({Map<String, dynamic>? inputData}) async {
       level: 1000,
       error: e,
     );
+    rethrow;
   }
 }
 

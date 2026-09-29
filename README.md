@@ -18,7 +18,7 @@ Use clean and aligned screenshots.
 - 🔹 **Hadith Section** - Read hadith collections from local assets.
 - 🔹 **Tasbih Counter** - Digital tasbih with simple interaction flow.
 - 🔹 **Khatma Tracking** - Track recitation progress and reminders.
-- 🔹 **Notifications** - Local notifications + Firebase Messaging integration.
+- 🔹 **Notifications** - Local scheduled reminders.
 - 🔹 **Dark/Light Theme** - Theme switching with persisted settings.
 
 ## 🛠️ Technologies & Packages
@@ -27,7 +27,7 @@ Use clean and aligned screenshots.
 
 - Flutter
 - Dart
-- Firebase (Core + Messaging)
+- Firebase (Core + optional Analytics/Crashlytics)
 - Material 3
 
 ### 📦 Key Packages
@@ -52,7 +52,7 @@ lib/
 │   ├── errors/            # Error models and handlers
 │   ├── navigation/        # Router and notification routing
 │   ├── providers/         # Global providers (settings, notifications)
-│   ├── services/          # Notification, FCM, background services
+│   ├── services/          # Notification and background services
 │   ├── theme/             # Colors, typography, themes
 │   ├── utils/             # Shared utility functions
 │   └── widgets/           # Reusable widgets
@@ -143,7 +143,7 @@ Contains shared logic:
 - Constants
 - Themes
 - Shared widgets
-- Services (notifications, background tasks, FCM)
+- Services (notifications and background tasks)
 
 ### 🔹 Feature Layer
 
@@ -155,10 +155,10 @@ Each feature is isolated and modular:
 
 ## 🔐 Backend / API / Firebase Integration
 
-- 🔑 Authentication -> Not enabled yet (Firebase project is configured for messaging/core usage)
+- 🔑 Authentication -> Not enabled yet (Firebase is used for optional monitoring)
 - ☁️ Database -> Local assets + SharedPreferences cache (Firestore not used currently)
 - 🌐 APIs -> Prayer times and Quran metadata integrations via http services
-- 🔔 Messaging -> Firebase Cloud Messaging + local notification scheduling
+- 🔔 Messaging -> Local notification scheduling; remote push is not supported
 
 ## 📱 Responsive Design
 
@@ -236,6 +236,6 @@ owner unless a license is added in a future change.
    - Provider
    - http
    - google_fonts
-   - Firebase Messaging
+   - Optional Firebase monitoring
 - Architecture:
    - Feature-first + Clean Architecture

@@ -172,9 +172,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mainNavigationShellMessage2 => 'الأذكار';
 
   @override
-  String get firebaseMessagingServiceMessage1 => 'إشعار جديد';
-
-  @override
   String get notificationServiceMessage1 => 'إشعارات سكينة';
 
   @override
@@ -1528,12 +1525,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notificationTestScreenMessage2 => 'حالة الصلاحيات';
 
   @override
-  String get notificationTestScreenMessage3 => 'الحالة';
-
-  @override
-  String get notificationTestScreenMessage4 => 'غير معروفة';
-
-  @override
   String get notificationTestScreenMessage5 => 'جاهزية الخدمة';
 
   @override
@@ -1555,19 +1546,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notificationTestScreenMessage11 => 'إلغاء الكل';
 
   @override
-  String get notificationTestScreenMessage12 => 'إشعارات الدفع (FCM)';
-
-  @override
   String get notificationTestScreenMessage13 => 'طلب الصلاحيات';
 
   @override
-  String get notificationTestScreenMessage14 => 'رمز FCM:';
-
-  @override
   String get notificationTestScreenMessage15 => 'تحديث';
-
-  @override
-  String get notificationTestScreenMessage16 => 'نسخ';
 
   @override
   String get notificationTestScreenMessage17 => 'الإشعارات المجدولة';
@@ -1623,16 +1605,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notificationTestScreenMessage32 => 'تم طلب الصلاحيات';
 
   @override
-  String get notificationTestScreenMessage33 => 'تم تحديث الرمز';
-
-  @override
-  String get notificationTestScreenMessage34 => 'تم نسخ الرمز';
-
-  @override
   String get notificationTestScreenMessage35 => 'تم إعادة جدولة جميع المنبهات';
-
-  @override
-  String get notificationTestScreenMessage36 => 'غير متاح';
 
   @override
   String get settingsScreenMessage1 => 'المظهر والقراءة';

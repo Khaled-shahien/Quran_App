@@ -189,10 +189,6 @@
   "@mainNavigationShellMessage2": {
     "description": "Display text used in lib/core/navigation/main_navigation_shell.dart."
   },
-  "firebaseMessagingServiceMessage1": "إشعار جديد",
-  "@firebaseMessagingServiceMessage1": {
-    "description": "Display text used in lib/core/services/firebase_messaging_service.dart."
-  },
   "notificationServiceMessage1": "إشعارات سكينة",
   "@notificationServiceMessage1": {
     "description": "Display text used in lib/core/services/notification_service.dart."
@@ -2079,14 +2075,6 @@
   "@notificationTestScreenMessage2": {
     "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
   },
-  "notificationTestScreenMessage3": "الحالة",
-  "@notificationTestScreenMessage3": {
-    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
-  },
-  "notificationTestScreenMessage4": "غير معروفة",
-  "@notificationTestScreenMessage4": {
-    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
-  },
   "notificationTestScreenMessage5": "جاهزية الخدمة",
   "@notificationTestScreenMessage5": {
     "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
@@ -2115,24 +2103,12 @@
   "@notificationTestScreenMessage11": {
     "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
   },
-  "notificationTestScreenMessage12": "إشعارات الدفع (FCM)",
-  "@notificationTestScreenMessage12": {
-    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
-  },
   "notificationTestScreenMessage13": "طلب الصلاحيات",
   "@notificationTestScreenMessage13": {
     "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
   },
-  "notificationTestScreenMessage14": "رمز FCM:",
-  "@notificationTestScreenMessage14": {
-    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
-  },
   "notificationTestScreenMessage15": "تحديث",
   "@notificationTestScreenMessage15": {
-    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
-  },
-  "notificationTestScreenMessage16": "نسخ",
-  "@notificationTestScreenMessage16": {
     "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
   },
   "notificationTestScreenMessage17": "الإشعارات المجدولة",
@@ -2209,20 +2185,8 @@
   "@notificationTestScreenMessage32": {
     "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
   },
-  "notificationTestScreenMessage33": "تم تحديث الرمز",
-  "@notificationTestScreenMessage33": {
-    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
-  },
-  "notificationTestScreenMessage34": "تم نسخ الرمز",
-  "@notificationTestScreenMessage34": {
-    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
-  },
   "notificationTestScreenMessage35": "تم إعادة جدولة جميع المنبهات",
   "@notificationTestScreenMessage35": {
-    "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
-  },
-  "notificationTestScreenMessage36": "غير متاح",
-  "@notificationTestScreenMessage36": {
     "description": "Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart."
   },
   "settingsScreenMessage1": "المظهر والقراءة",

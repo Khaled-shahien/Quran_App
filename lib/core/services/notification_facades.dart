@@ -1,7 +1,5 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'firebase_messaging_service.dart';
 import 'notification_service.dart';
 
 /// Abstraction for local notification operations used by providers.
@@ -123,49 +121,5 @@ class NotificationServiceGateway implements LocalNotificationGateway {
       isMulkEnabled: isMulkEnabled,
       isBaqarahEnabled: isBaqarahEnabled,
     );
-  }
-}
-
-/// Abstraction for FCM operations used by providers.
-abstract class MessagingGateway {
-  /// Initializes Firebase messaging and handlers.
-  Future<void> initialize();
-
-  /// Returns the current FCM device token if available.
-  Future<String?> getToken();
-
-  /// Reads the current notification permission/settings state.
-  Future<NotificationSettings> getNotificationSettings();
-
-  /// Forces FCM token refresh and backend sync hooks.
-  Future<void> refreshToken();
-}
-
-/// Adapter that forwards [MessagingGateway] calls to [FirebaseMessagingService].
-class FirebaseMessagingGateway implements MessagingGateway {
-  final FirebaseMessagingService _firebaseMessagingService;
-
-  FirebaseMessagingGateway({FirebaseMessagingService? firebaseMessagingService})
-    : _firebaseMessagingService =
-          firebaseMessagingService ?? FirebaseMessagingService();
-
-  @override
-  Future<String?> getToken() {
-    return _firebaseMessagingService.getToken();
-  }
-
-  @override
-  Future<NotificationSettings> getNotificationSettings() {
-    return _firebaseMessagingService.getNotificationSettings();
-  }
-
-  @override
-  Future<void> initialize() {
-    return _firebaseMessagingService.initialize();
-  }
-
-  @override
-  Future<void> refreshToken() {
-    return _firebaseMessagingService.refreshToken();
   }
 }

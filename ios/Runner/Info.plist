@@ -2,7 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>FirebaseMessagingAutoInitEnabled</key><false/>
     <key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key><false/>
     <key>FirebaseCrashlyticsCollectionEnabled</key><false/>
     <key>GOOGLE_ANALYTICS_IDFA_COLLECTION_ENABLED</key><false/>
@@ -73,15 +72,11 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	
-	<!-- Background Modes for Firebase Messaging -->
+	<!-- Background fetch for local reminder maintenance -->
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
-		<string>remote-notification</string>
 	</array>
 	
-	<!-- Firebase Cloud Messaging Configuration -->
-	<key>FirebaseAppDelegateProxyEnabled</key>
-	<true/>
 </dict>
 </plist>

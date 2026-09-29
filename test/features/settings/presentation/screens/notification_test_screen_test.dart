@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -104,38 +102,11 @@ class FakeLocalNotificationGateway implements LocalNotificationGateway {
   }
 }
 
-class FakeMessagingGateway implements MessagingGateway {
-  FakeMessagingGateway({this.token = 'fake-fcm-token'});
-
-  int refreshCalls = 0;
-  final String? token;
-
-  @override
-  Future<void> initialize() async {}
-
-  @override
-  Future<String?> getToken() async => token;
-
-  @override
-  Future<NotificationSettings> getNotificationSettings() async {
-    throw Exception('not needed for this widget test');
-  }
-
-  @override
-  Future<void> refreshToken() async {
-    refreshCalls++;
-  }
-}
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  Future<
-    (NotificationProvider, FakeLocalNotificationGateway, FakeMessagingGateway)
-  >
-  buildProvider({
+  Future<(NotificationProvider, FakeLocalNotificationGateway)> buildProvider({
     FakeLocalNotificationGateway? localGateway,
-    FakeMessagingGateway? messagingGateway,
   }) async {
     SharedPreferences.setMockInitialValues(<String, Object>{
       'morning_alarm_enabled': true,
@@ -145,14 +116,12 @@ void main() {
     });
     final prefs = await SharedPreferences.getInstance();
     final local = localGateway ?? FakeLocalNotificationGateway();
-    final messaging = messagingGateway ?? FakeMessagingGateway();
 
     final provider = NotificationProvider(
       prefs: prefs,
       notificationGateway: local,
-      messagingGateway: messaging,
     );
-    return (provider, local, messaging);
+    return (provider, local);
   }
 
   testWidgets('renders all main notification sections', (tester) async {
@@ -171,7 +140,8 @@ void main() {
     expect(find.text('اختبار الإشعارات'), findsOneWidget);
     expect(find.text('حالة الصلاحيات'), findsOneWidget);
     expect(find.text('الإشعارات المحلية'), findsOneWidget);
-    expect(find.text('إشعارات الدفع (FCM)'), findsOneWidget);
+    expect(find.textContaining('FCM'), findsNothing);
+    expect(find.byIcon(Icons.copy), findsNothing);
     expect(find.text('الإشعارات المجدولة'), findsOneWidget);
     expect(find.text('التحكم في المنبهات'), findsOneWidget);
     expect(find.text('سجلات التصحيح'), findsOneWidget);
@@ -232,13 +202,12 @@ void main() {
     expect(local.updateAllAlarmsCalls, 1);
   });
 
-  testWidgets('requests permission and refreshes token from push section', (
+  testWidgets('requests local permission only after explicit action', (
     tester,
   ) async {
     final tuple = await buildProvider();
     final provider = tuple.$1;
     final local = tuple.$2;
-    final messaging = tuple.$3;
 
     await tester.pumpWidget(
       ChangeNotifierProvider<NotificationProvider>.value(
@@ -248,19 +217,11 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(local.requestPermissionsCalls, 0);
     await tester.tap(find.text('طلب الصلاحيات'));
     await tester.pumpAndSettle();
 
-    await tester.scrollUntilVisible(
-      find.text('رمز FCM:'),
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.tap(find.text('تحديث').first);
-    await tester.pumpAndSettle();
-
     expect(local.requestPermissionsCalls, 1);
-    expect(messaging.refreshCalls, 1);
   });
 
   testWidgets('can cancel a single pending notification from list', (
@@ -357,88 +318,6 @@ void main() {
 
     expect(find.textContaining('تم إعادة جدولة جميع المنبهات'), findsOneWidget);
     expect(local.updateAllAlarmsCalls, 0);
-  });
-
-  testWidgets('copies FCM token to clipboard and shows success snackbar', (
-    tester,
-  ) async {
-    final clipboardCalls = <MethodCall>[];
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(SystemChannels.platform, (call) async {
-          if (call.method == 'Clipboard.setData') {
-            clipboardCalls.add(call);
-          }
-          return null;
-        });
-
-    final tuple = await buildProvider();
-    final provider = tuple.$1;
-
-    await tester.pumpWidget(
-      ChangeNotifierProvider<NotificationProvider>.value(
-        value: provider,
-        child: const MaterialApp(home: NotificationTestScreen()),
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    await tester.scrollUntilVisible(
-      find.text('نسخ'),
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.tap(find.text('نسخ'));
-    await tester.pumpAndSettle();
-
-    expect(clipboardCalls, hasLength(1));
-    expect(
-      clipboardCalls.single.arguments,
-      containsPair('text', 'fake-fcm-token'),
-    );
-    expect(find.text('تم نسخ الرمز'), findsOneWidget);
-
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(SystemChannels.platform, null);
-  });
-
-  testWidgets('does not copy token when FCM token is unavailable', (
-    tester,
-  ) async {
-    final clipboardCalls = <MethodCall>[];
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(SystemChannels.platform, (call) async {
-          if (call.method == 'Clipboard.setData') {
-            clipboardCalls.add(call);
-          }
-          return null;
-        });
-
-    final tuple = await buildProvider(
-      messagingGateway: FakeMessagingGateway(token: null),
-    );
-    final provider = tuple.$1;
-
-    await tester.pumpWidget(
-      ChangeNotifierProvider<NotificationProvider>.value(
-        value: provider,
-        child: const MaterialApp(home: NotificationTestScreen()),
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    await tester.scrollUntilVisible(
-      find.text('نسخ'),
-      300,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.tap(find.text('نسخ'));
-    await tester.pumpAndSettle();
-
-    expect(clipboardCalls, isEmpty);
-    expect(find.text('تم نسخ الرمز'), findsNothing);
-
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(SystemChannels.platform, null);
   });
 
   testWidgets('refresh button in pending section reloads scheduled list', (

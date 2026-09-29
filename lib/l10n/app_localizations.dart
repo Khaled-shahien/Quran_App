@@ -418,12 +418,6 @@ abstract class AppLocalizations {
   /// **'الأذكار'**
   String get mainNavigationShellMessage2;
 
-  /// Display text used in lib/core/services/firebase_messaging_service.dart.
-  ///
-  /// In ar, this message translates to:
-  /// **'إشعار جديد'**
-  String get firebaseMessagingServiceMessage1;
-
   /// Display text used in lib/core/services/notification_service.dart.
   ///
   /// In ar, this message translates to:
@@ -2825,18 +2819,6 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'الحالة'**
-  String get notificationTestScreenMessage3;
-
-  /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
-  ///
-  /// In ar, this message translates to:
-  /// **'غير معروفة'**
-  String get notificationTestScreenMessage4;
-
-  /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
-  ///
-  /// In ar, this message translates to:
   /// **'جاهزية الخدمة'**
   String get notificationTestScreenMessage5;
 
@@ -2879,32 +2861,14 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'إشعارات الدفع (FCM)'**
-  String get notificationTestScreenMessage12;
-
-  /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
-  ///
-  /// In ar, this message translates to:
   /// **'طلب الصلاحيات'**
   String get notificationTestScreenMessage13;
 
   /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'رمز FCM:'**
-  String get notificationTestScreenMessage14;
-
-  /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
-  ///
-  /// In ar, this message translates to:
   /// **'تحديث'**
   String get notificationTestScreenMessage15;
-
-  /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
-  ///
-  /// In ar, this message translates to:
-  /// **'نسخ'**
-  String get notificationTestScreenMessage16;
 
   /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
   ///
@@ -3005,26 +2969,8 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'تم تحديث الرمز'**
-  String get notificationTestScreenMessage33;
-
-  /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم نسخ الرمز'**
-  String get notificationTestScreenMessage34;
-
-  /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
-  ///
-  /// In ar, this message translates to:
   /// **'تم إعادة جدولة جميع المنبهات'**
   String get notificationTestScreenMessage35;
-
-  /// Display text used in lib/features/settings/presentation/screens/notification_test_screen.dart.
-  ///
-  /// In ar, this message translates to:
-  /// **'غير متاح'**
-  String get notificationTestScreenMessage36;
 
   /// Display text used in lib/features/settings/presentation/screens/settings_screen.dart.
   ///

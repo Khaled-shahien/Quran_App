@@ -1,6 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sakina_app/core/providers/notification_provider.dart';
@@ -14,6 +13,8 @@ class FakeLocalNotificationGateway implements LocalNotificationGateway {
   }) : _pending = pending ?? <PendingNotificationRequest>[];
 
   int initializeCalls = 0;
+  bool throwOnInitialize = false;
+  bool? initializationRequestedPermissions;
   int requestPermissionCalls = 0;
   int testNotificationCalls = 0;
   int oneTimeScheduleCalls = 0;
@@ -47,6 +48,8 @@ class FakeLocalNotificationGateway implements LocalNotificationGateway {
   @override
   Future<void> initialize({bool requestPermissions = false}) async {
     initializeCalls++;
+    initializationRequestedPermissions = requestPermissions;
+    if (throwOnInitialize) throw Exception('initialization failed');
   }
 
   @override
@@ -89,60 +92,50 @@ class FakeLocalNotificationGateway implements LocalNotificationGateway {
   }
 }
 
-class FakeMessagingGateway implements MessagingGateway {
-  FakeMessagingGateway({this.initialToken = 'token-123', this.refreshedToken});
-
-  int initializeCalls = 0;
-  int refreshTokenCalls = 0;
-  final String? initialToken;
-  final String? refreshedToken;
-  String? _token;
-
-  @override
-  Future<String?> getToken() async {
-    _token ??= initialToken;
-    return _token;
-  }
-
-  @override
-  Future<NotificationSettings> getNotificationSettings() async {
-    throw Exception('not needed in this test context');
-  }
-
-  @override
-  Future<void> initialize() async {
-    initializeCalls++;
-  }
-
-  @override
-  Future<void> refreshToken() async {
-    refreshTokenCalls++;
-    _token = refreshedToken ?? initialToken;
-  }
-}
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('NotificationProvider initializes with injected gateways', () async {
-    SharedPreferences.setMockInitialValues({});
-    final prefs = await SharedPreferences.getInstance();
-    final notifications = FakeLocalNotificationGateway();
-    final messaging = FakeMessagingGateway();
+  test(
+    'NotificationProvider initializes locally without Firebase or permission prompts',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final notifications = FakeLocalNotificationGateway();
 
+      final provider = NotificationProvider(
+        prefs: prefs,
+        notificationGateway: notifications,
+      );
+
+      await provider.initialize();
+
+      expect(provider.isInitialized, isTrue);
+      expect(notifications.initializeCalls, 1);
+      expect(notifications.initializationRequestedPermissions, isFalse);
+      expect(notifications.requestPermissionCalls, 0);
+      provider.dispose();
+    },
+  );
+
+  test('failed local initialization can be retried without Firebase', () async {
+    SharedPreferences.setMockInitialValues({});
+    final notifications = FakeLocalNotificationGateway()
+      ..throwOnInitialize = true;
     final provider = NotificationProvider(
-      prefs: prefs,
+      prefs: await SharedPreferences.getInstance(),
       notificationGateway: notifications,
-      messagingGateway: messaging,
     );
+    addTearDown(provider.dispose);
 
     await provider.initialize();
-    await Future<void>.delayed(const Duration(milliseconds: 20));
+    expect(provider.isInitialized, isFalse);
+    expect(provider.debugLogs.join('\n'), contains('Error initializing'));
 
+    notifications.throwOnInitialize = false;
+    await provider.initialize();
     expect(provider.isInitialized, isTrue);
-    expect(notifications.initializeCalls, 1);
-    expect(messaging.initializeCalls, greaterThanOrEqualTo(1));
-    expect(provider.fcmToken, 'token-123');
+    expect(notifications.initializeCalls, 2);
+    expect(notifications.requestPermissionCalls, 0);
   });
 
   test(
@@ -160,7 +153,6 @@ void main() {
       final provider = NotificationProvider(
         prefs: prefs,
         notificationGateway: notifications,
-        messagingGateway: FakeMessagingGateway(),
       );
 
       await provider.scheduleTestNotification(id: 1, title: 't', body: 'b');
@@ -181,17 +173,14 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     final notifications = FakeLocalNotificationGateway();
-    final messaging = FakeMessagingGateway();
 
     final provider = NotificationProvider(
       prefs: prefs,
       notificationGateway: notifications,
-      messagingGateway: messaging,
     );
 
     await provider.initialize();
     await provider.initialize();
-    await Future<void>.delayed(const Duration(milliseconds: 20));
 
     expect(provider.isInitialized, isTrue);
     expect(notifications.initializeCalls, 1);
@@ -209,7 +198,6 @@ void main() {
     final provider = NotificationProvider(
       prefs: prefs,
       notificationGateway: notifications,
-      messagingGateway: FakeMessagingGateway(),
     );
 
     final first = await provider.getPendingNotifications();
@@ -221,26 +209,6 @@ void main() {
     final second = await provider.getPendingNotifications();
     expect(notifications.cancelCalls, 1);
     expect(second, isEmpty);
-  });
-
-  test('refreshFCMToken requests refresh and updates token value', () async {
-    SharedPreferences.setMockInitialValues({});
-    final prefs = await SharedPreferences.getInstance();
-    final messaging = FakeMessagingGateway(
-      initialToken: 'old-token',
-      refreshedToken: 'new-token',
-    );
-
-    final provider = NotificationProvider(
-      prefs: prefs,
-      notificationGateway: FakeLocalNotificationGateway(),
-      messagingGateway: messaging,
-    );
-
-    await provider.refreshFCMToken();
-
-    expect(messaging.refreshTokenCalls, 1);
-    expect(provider.fcmToken, 'new-token');
   });
 
   test('rescheduleAllAlarms swallows gateway errors safely', () async {
@@ -255,7 +223,6 @@ void main() {
     final provider = NotificationProvider(
       prefs: prefs,
       notificationGateway: FakeLocalNotificationGateway(throwOnUpdateAll: true),
-      messagingGateway: FakeMessagingGateway(),
     );
 
     await provider.rescheduleAllAlarms();
@@ -273,7 +240,6 @@ void main() {
     final provider = NotificationProvider(
       prefs: prefs,
       notificationGateway: FakeLocalNotificationGateway(throwOnCancelAll: true),
-      messagingGateway: FakeMessagingGateway(),
     );
 
     await provider.cancelAllNotifications();

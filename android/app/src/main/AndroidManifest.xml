@@ -30,25 +30,9 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         
-        <meta-data android:name="firebase_messaging_auto_init_enabled" android:value="false" />
         <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
         <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
-        <!-- Firebase Cloud Messaging default channel -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="sakina_app_channel" />
-        
-        <!-- Default notification icon -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:value="@drawable/ic_notification" />
-        
-        <!-- Default notification color -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:value="@color/notification_color" />
-        
         <activity
             android:name=".MainActivity"
             android:exported="true"

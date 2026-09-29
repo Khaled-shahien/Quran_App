@@ -1,6 +1,5 @@
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/providers/notification_provider.dart';
@@ -45,11 +44,12 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
                   title: l10nOf(context).notificationTestScreenMessage2,
                   icon: Icons.verified_user_outlined,
                   children: [
-                    _InfoRow(
-                      label: l10nOf(context).notificationTestScreenMessage3,
-                      value:
-                          provider.permissionStatus ??
-                          l10nOf(context).notificationTestScreenMessage4,
+                    FilledButton.icon(
+                      onPressed: () => _requestPermissions(provider),
+                      icon: const Icon(Icons.lock_open_outlined),
+                      label: Text(
+                        l10nOf(context).notificationTestScreenMessage13,
+                      ),
                     ),
                     _InfoRow(
                       label: l10nOf(context).notificationTestScreenMessage5,
@@ -87,54 +87,6 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
                           icon: const Icon(Icons.delete_sweep_outlined),
                           label: Text(
                             l10nOf(context).notificationTestScreenMessage11,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                _SectionCard(
-                  title: l10nOf(context).notificationTestScreenMessage12,
-                  icon: Icons.cloud_queue,
-                  children: [
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        FilledButton.icon(
-                          onPressed: () => _requestPermissions(provider),
-                          icon: const Icon(Icons.lock_open_outlined),
-                          label: Text(
-                            l10nOf(context).notificationTestScreenMessage13,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _InfoRow(
-                            label: l10nOf(
-                              context,
-                            ).notificationTestScreenMessage14,
-                            value: _maskedToken(provider.fcmToken),
-                          ),
-                        ),
-                        TextButton.icon(
-                          onPressed: () => _refreshFcmToken(provider),
-                          icon: const Icon(Icons.refresh),
-                          label: Text(
-                            l10nOf(context).notificationTestScreenMessage15,
-                          ),
-                        ),
-                        TextButton.icon(
-                          onPressed: provider.fcmToken == null
-                              ? null
-                              : () => _copyFcmToken(provider),
-                          icon: const Icon(Icons.copy),
-                          label: Text(
-                            l10nOf(context).notificationTestScreenMessage16,
                           ),
                         ),
                       ],
@@ -268,22 +220,6 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
     _showSnackBar(appL10n.notificationTestScreenMessage32);
   }
 
-  Future<void> _refreshFcmToken(NotificationProvider provider) async {
-    await provider.refreshFCMToken();
-    if (!mounted) return;
-    _showSnackBar(appL10n.notificationTestScreenMessage33);
-  }
-
-  Future<void> _copyFcmToken(NotificationProvider provider) async {
-    final token = provider.fcmToken;
-    if (token == null || token.isEmpty) return;
-
-    await Clipboard.setData(ClipboardData(text: token));
-    await provider.copyFCMToken();
-    if (!mounted) return;
-    _showSnackBar(appL10n.notificationTestScreenMessage34);
-  }
-
   Future<void> _cancelNotification(
     NotificationProvider provider,
     int id,
@@ -302,14 +238,6 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  String _maskedToken(String? token) {
-    if (token == null || token.isEmpty) {
-      return appL10n.notificationTestScreenMessage36;
-    }
-    if (token.length <= 8) return '********';
-    return '${token.substring(0, 4)}...${token.substring(token.length - 4)}';
   }
 }
 

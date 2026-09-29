@@ -43,7 +43,9 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
   LocalPrayerNotificationScheduler({
     required SharedPreferences prefs,
     PrayerNotificationGateway? notificationGateway,
+    Future<void> Function()? onScheduled,
   }) : _prefs = prefs,
+       _onScheduled = onScheduled,
        _notificationGateway =
            notificationGateway ??
            NotificationServicePrayerNotificationGateway();
@@ -53,6 +55,7 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
 
   final SharedPreferences _prefs;
   final PrayerNotificationGateway _notificationGateway;
+  final Future<void> Function()? _onScheduled;
 
   @override
   Future<void> cancelPrayerNotifications() =>
@@ -75,7 +78,7 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
       return;
     }
 
-    final Map<String, DateTime> schedule = _buildPrayerSchedule(
+    final Map<String, DateTime> schedule = buildPrayerSchedule(
       prayerTimes: prayerTimes,
       date: date,
     );
@@ -91,9 +94,11 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
     }
 
     await _notificationGateway.scheduleAllPrayersToday(prayerTimes: schedule);
+    await _onScheduled?.call();
   }
 
-  Map<String, DateTime> _buildPrayerSchedule({
+  /// Parses a day's API timings without mutating pending notifications.
+  static Map<String, DateTime> buildPrayerSchedule({
     required PrayerTimesEntity prayerTimes,
     required DateTime date,
   }) {
@@ -125,7 +130,11 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
     return schedule;
   }
 
-  DateTime? _parsePrayerTime(String? rawTime, DateTime date, String? zone) {
+  static DateTime? _parsePrayerTime(
+    String? rawTime,
+    DateTime date,
+    String? zone,
+  ) {
     if (rawTime == null || rawTime.trim().isEmpty) {
       return null;
     }

@@ -39,7 +39,6 @@ import 'package:sakina_app/features/media/presentation/providers/audio_provider.
 import 'package:sakina_app/features/media/presentation/providers/video_provider.dart';
 
 import 'package:sakina_app/core/services/notification_service.dart';
-import 'package:sakina_app/core/services/firebase_messaging_service.dart';
 import 'package:sakina_app/core/services/workmanager_service.dart';
 
 /// Global instance for dependency injection based on GetIt.
@@ -192,14 +191,12 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<PrayerNotificationScheduler>(
       () => LocalPrayerNotificationScheduler(
         prefs: getIt<SharedPreferences>(),
+        onScheduled: () =>
+            WorkManagerService().registerImmediateRescheduleTask(),
         notificationGateway: NotificationServicePrayerNotificationGateway(
           notificationService: getIt<NotificationService>(),
         ),
       ),
-    );
-
-    getIt.registerLazySingleton<FirebaseMessagingService>(
-      () => FirebaseMessagingService(),
     );
 
     getIt.registerLazySingleton<WorkManagerService>(() => WorkManagerService());

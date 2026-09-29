@@ -12,17 +12,17 @@
 | **Previous plan update** | 2026-09-28 (docs/production-fix-progress.md) |
 | **Current re-audit date** | 2026-09-28 |
 | **Original tracked tasks** | 40 (T01–T40) |
-| **STATUS A — Completed** | 20 (T10, T18 and T24 verified at repository/test scope) |
+| **STATUS A - Completed** | 21 (including T11 at repository/test scope) |
 | **STATUS B — Partially Completed** | 15 |
-| **STATUS D — Needs Rework** | 1 (T11) |
+| **STATUS D - Needs Rework** | 0 |
 | **STATUS F — Blocked** | 4 (T34, T35, T37, T39) |
 | **STATUS C — Not Implemented** | 0 |
 | **STATUS E — No Longer Applicable** | 0 |
 | **STATUS G — Unable to Verify** | Runtime/device limitations overlap the statuses above; not an additional task count |
 | **New findings this re-audit** | 5 (NF-001 through NF-005) |
-| **Confirmed test failures** | 0 - T18 full regression on 2026-09-28 |
-| **Static analysis** | `dart analyze lib`: **no issues** |
-| **Full test suite** | **285 tests: 285 passed, 0 failed** (2026-09-28) |
+| **Confirmed test failures** | 0 - three repository steps, 2026-09-29 |
+| **Static analysis** | `dart analyze lib test integration_test`: **no issues** |
+| **Full test suite** | **300 tests: 300 passed, 0 failed** (2026-09-29); 15 Python gate tests also pass |
 | **Current production blockers** | 5 categories (identity/signing, content, notifications, privacy/store, device evidence) |
 | **Production readiness** | **NOT READY** |
 
@@ -133,10 +133,10 @@
 | T08 | Privacy | Privacy | P0 | B | 75% | Owner/contact/public URL | — | Owner approval |
 | T09 | Settings | UI/UX | P1 | A | 100% | — | — | Maintenance |
 | T10 | Quran search | Feature | P1 | VERIFIED | 100% | None | NF-003 resolved | Maintenance; verified 2026-09-28 via B-02 |
-| T11 | FCM decision | Architecture | P1 | D | 75% | Dormant code/dependency cleanup | — | Remove or isolate FCM |
+| T11 | FCM decision | Architecture | P1 | A | 100% | None at repository/test scope | B-10 verified | Local-only; removed push code/dependency, 2026-09-29 |
 | T12 | Content provenance | Content | P0 | B | 75% | Sources/reviewer approval | — | Owner/scholar review |
 | T13 | Diagnostic route | Debug | P1 | A | 100% | — | — | Maintenance |
-| T14 | Device notifications | Notifications | P0 | B | 50% | Physical matrix + future-day replenishment | — | Device testing |
+| T14 | Device notifications | Reliability | P0 | B | 50% | Physical delivery and OS scheduling evidence | Three-day replenishment implemented | Repository slice R-01 verified; signed-device matrix still pending |
 | T15 | Primary navigation | Navigation | P2 | A | 100% | — | — | Maintenance |
 | T16 | Continue reading | Feature | P2 | A | 100% | — | — | Maintenance |
 | T17 | Refresh | Feature | P2 | A | 100% | — | — | Maintenance |
@@ -202,12 +202,12 @@ The following tasks are verified complete at repository/test scope:
 | T01 | GPS/manual/city selection, stale-request protection, request ordering | Physical permission denial, travel; NF-001 resolved by B-01 |
 | T02 | City catalog, coordinates, device location, calculation method UI | Scholarly method/madhab approval, policy documentation |
 | T03 | Gradle rejects debug fallback for release | Owner keystore, approved app ID, signed artifact |
-| T06 | Opt-in Crashlytics/Android plugin | Real Firebase project events, iOS upload, symbol verification |
-| T07 | Allowlisted events (app_open, settings_open) | Dashboard validation, retention policy |
+| T06 | Opt-in Crashlytics; consent failure/ordering regression tests | Real Firebase project events, iOS upload, symbol verification |
+| T07 | Allowlisted events and tested consent/redaction behavior | Dashboard validation, retention policy |
 | T08 | Arabic draft policy, data inventory, in-app sources page | Owner contact, retention approval, public URL |
 | T10 | VERIFIED via B-02: verse, surah name/number search | None at repository/test scope |
 | T12 | SHA-256 hashes, in-app disclosure, release gate | Source, edition, license, reviewer sign-off |
-| T14 | Scheduling/routing code, boot receivers | Physical delivery matrix, future-day replenishment |
+| T14 | Scheduling/routing, boot receivers, three-day background replenishment | Physical delivery matrix and OS background execution |
 | T24 | VERIFIED — Complete bidi/icon direction audit | None at repository/test scope; physical screen-reader evidence remains B-09/T31 |
 | T27 | Semantics labels on settings + icon tooltips | Complete screen-reader audit across all screens |
 | T31 | Automated target/contrast/large-text checks | Physical TalkBack/VoiceOver audit |
@@ -254,7 +254,9 @@ The following tasks are verified complete at repository/test scope:
 
 ## 8. Items Requiring Rework
 
-### T11 — FCM Decision (STATUS D, 75%)
+### T11 - FCM Decision (resolved by B-10, 2026-09-29)
+
+**Current status:** VERIFIED at repository/test scope. The following records the historical finding; the messaging dependency, service, token controls and native push configuration have now been removed. Artifact-size comparison remains unmeasured.
 
 **Original Finding:** FCM token backend registration was a placeholder.  
 **Implementation:** Local reminders selected for production. Startup messaging/token registration and native auto-init disabled. Dormant diagnostic code/dependency retained.  
@@ -674,7 +676,8 @@ No confirmed navigation, theme, RTL, Firebase, notification delivery, or data in
 | **Title** | Isolate or remove dormant FCM code and dependency |
 | **Category** | Architecture |
 | **Priority** | P1 |
-| **Current Status** | T11 (STATUS D) |
+| **Current Status** | VERIFIED at repository/test scope, 2026-09-29 |
+| **Completion** | 100% repository cleanup; signed artifact size comparison not measured |
 | **Description** | `firebase_messaging` in pubspec.yaml, `firebase_messaging_service.dart` (370 lines), and `firebaseMessagingBackgroundHandler` entry point remain despite production using local-only notifications. |
 | **Why Needed** | Clean architecture, smaller bundle, no privacy/audit confusion. |
 | **Implementation Details** | Remove `firebase_messaging` from dependencies, delete `firebase_messaging_service.dart`, update any remaining imports. If FCM might be needed later, document the decision and feature-flag it. |
@@ -789,7 +792,7 @@ graph TD
 
 ## 23. Live Incremental Master Status Table
 
-Historical comparison sections retain original audit observations. Live tables and the latest history entry take precedence. B-02 also closes T10 at repository/test scope; T01 and T38 still require physical verification. Latest full suite: 285/285 passed (T24). Original master-task completion is 20/40 (50% fully complete); NF-005 is an additional finding and does not close a separate T01-T40 task.
+Historical comparison sections retain original audit observations. Live tables and the latest history entry take precedence. B-02 also closes T10 at repository/test scope; T01 and T38 still require physical verification. Latest full suite: 300/300 passed (three repository steps, 2026-09-29), plus 15 Python gate tests. Original master-task completion is 21/40 (52.5% fully complete); NF-005 is an additional finding and does not close a separate T01-T40 task.
 
 | ID | Task | Priority | Status | Completion | Last Updated | Notes |
 |---|---|---|---|---:|---|---|
@@ -799,14 +802,22 @@ Historical comparison sections retain original audit observations. Live tables a
 | B-04 | Restore tooltips | P2 | VERIFIED | 100% | 2026-09-28 | NF-002 resolved; hover/semantics/navigation verified in both themes and RTL |
 | B-05 | Identity and signing | P0 | BLOCKED | 0% | 2026-09-28 | Owner credentials and approved IDs |
 | B-06 | Content approval | P0 | BLOCKED | 0% | 2026-09-28 | Owner and qualified reviewer |
-| B-07 | Notification evidence | P0 | BLOCKED | 0% | 2026-09-28 | B-05 and physical devices |
+| B-07 | Notification evidence | P0 | BLOCKED | 0% | 2026-09-29 | Rechecked: only emulator; sample identity; no signing properties or approved signed-install evidence |
 | B-08 | Privacy/store package | P0 | BLOCKED | 0% | 2026-09-28 | Owner URL, contact, assets, approval |
-| B-09 | Device accessibility/reliability | P0 | BLOCKED | 0% | 2026-09-28 | B-05 and devices |
-| B-10 | Isolate FCM | P1 | BLOCKED | 0% | 2026-09-28 | Product decision |
+| B-09 | Device accessibility/reliability | P0 | BLOCKED | 0% | 2026-09-29 | Rechecked: no physical phone or approved signed build; no TalkBack/VoiceOver/Qibla result claimed |
+| B-10 | Remove dormant FCM | P1 | VERIFIED | 100% | 2026-09-29 | Local-only code/dependencies; 22 focused and 283 full tests pass; artifact size unmeasured |
 | NF-005 | Expand ARB UI localization | P2 | VERIFIED | 100% | 2026-09-28 | 519 messages; 4 new tests; full suite 242/242; content/identifier exclusions documented |
 | T18 | Media cached/offline behavior | P2 | VERIFIED | 100% | 2026-09-28 | 40/40 focused and 279/279 full tests; six-hour cache policy, corrupt-payload recovery and retry UX |
 | T24 | Complete bidi/icon direction audit | P2 | VERIFIED | 100% | 2026-09-28 | 6 new direction tests; icon/text direction fixes; golden baselines updated; full suite 285/285 |
 | T37 | Physical-device performance profiling | P2 | BLOCKED | 50% | 2026-09-28 | Explicitly deferred by user; physical phone still required; no hardware measurements collected |
+
+Repository substeps authorized on 2026-09-29 (do not close their parent release tasks):
+
+| ID | Parent scope | Status | Evidence |
+|---|---|---|---|
+| R-01 | B-07/T14 prayer replenishment | VERIFIED at repository/test scope | Three-day worker, date slots, 9 new regressions |
+| R-02 | T06/T07 monitoring consent | VERIFIED at repository/test scope | Serialized changes, SDK rollback, 8 new regressions |
+| R-03 | T36/T38 release-gate validation | VERIFIED at repository/test scope | 15 CLI fixture tests and CI enforcement |
 
 # IMPLEMENTATION PROGRESS HISTORY
 
@@ -1267,3 +1278,222 @@ Remaining Work: None for T24 at repository/test scope. Physical screen-reader ev
 - Reason: Next independent code task. T11/B-10 has STATUS D (needs rework) and is in Phase 3 of the roadmap. All P2 code tasks (T18, NF-005, T24) are now complete. B-03 is explicitly deferred; owner/device P0 gates remain blocked. B-10 requires a product decision on push notifications but the plan already states "local reminders selected for production" — the cleanup can proceed.
 - Dependencies: Product decision on push notifications (already made per T11 description: local-only for production).
 - B-10 was not implemented in this session. STOP.
+
+## 2026-09-29 - Incremental batch: B-10, B-07, B-09
+
+Selection: Resumed the latest T24 checkpoint at clean HEAD e6fbee8. The user
+requested only the next three tasks. B-10 was the explicitly named next task;
+B-07 and B-09 are the next pending, non-deferred entries in implementation
+order (#9 and #10). B-03 and T37 retain the user's earlier deferrals. Earlier
+owner-dependent gates remain blocked. No fourth task was started.
+
+### 1. B-10 / T11 - Remove dormant FCM
+
+Status: VERIFIED at repository/test scope. Completion: 100% for cleanup.
+
+Acceptance established: remove the messaging dependency and every reachable
+push/token entry point; preserve local scheduling, explicit permission requests,
+routing, and opt-in monitoring; remove unsupported push claims from current
+product documentation and diagnostic UI. Signed artifact size is not measured.
+
+Implemented:
+- Removed firebase_messaging and its two transitive messaging packages, without
+  changing any other dependency version; regenerated macOS plugin registration.
+- Deleted the messaging service/background entry point, DI registration,
+  MessagingGateway adapters, provider initialization/retry/token APIs and token UI.
+- Removed Android FCM metadata and iOS remote-notification background mode and
+  push-specific configuration. Local receivers and background fetch remain.
+- Moved the local permission request button into the diagnostic permissions card.
+  Removed the FCM-backed status row that had no active production data source;
+  no replacement permission-granted claim is shown.
+- Removed nine unused localization resources and regenerated localization output.
+- Updated README, privacy inventory and release requirements to state local-only
+  notification support. Optional Analytics/Crashlytics and native collection-off
+  defaults remain unchanged; production telemetry delivery is not verified here.
+
+Verification:
+- flutter pub remove firebase_messaging: succeeded; exactly three packages removed.
+- flutter gen-l10n: succeeded.
+- Focused provider, diagnostic screen, routing and prayer scheduler tests: 22/22 pass.
+- Startup test asserts no permission prompt; added failed-initialization retry test;
+  diagnostic permission test asserts no request before the explicit tap.
+- dart analyze lib test integration_test: no issues.
+- Formatting: 237 files checked, zero changes.
+- flutter test --no-pub --reporter expanded: 283/283 pass, zero failures.
+  Previous count was 285; removed three obsolete push-token tests and added one
+  local recovery test. Existing goldens, RTL, settings and localization pass.
+- No firebase_messaging, FirebaseMessagingService, MessagingGateway or
+  remote-notification references remain in lib, native app configuration,
+  macOS registration, pubspec.yaml or pubspec.lock.
+- git diff --check: passed.
+
+Changed-file scope: notification service/facade/provider/DI, diagnostic screen,
+Android/iOS configuration, generated macOS registration, pubspec and lockfile,
+ARB/generated localizations, two notification test files, README, privacy and
+release documentation, and this plan. No religious assets or credentials changed.
+
+Limitations: No native signed build, binary-size comparison, physical notification
+run or production Firebase verification was performed. Removing dependencies is
+not evidence of a measured artifact-size reduction. Those release gates stay open.
+
+### 2. B-07 / T14 - Physical notification delivery
+
+Status: BLOCKED, 0% for B-07 (T14 remains partial). No implementation completion.
+
+Prerequisite check after B-10:
+- flutter devices --machine: Android emulator-5554, emulator=true, API 36 x64;
+  remaining targets are Windows, Chrome and Edge. No physical phone.
+- Android SDK adb devices -l: only emulator-5554; no physical/unauthorized phone.
+- android/key.properties is absent; applicationId remains com.example.sakina_app.
+  No approved signed-install evidence is recorded in the release/device documents.
+- Reviewed DEVICE_QA_AND_OPERATIONS.md and RELEASE_REQUIREMENTS.md. Delivery,
+  denial/recovery, exact alarms, taps, reboot, upgrade, timezone and closed-app
+  next-day replenishment remain unverified. Existing local tests do not close them.
+
+Required input: approved identity/signing and a signed QA build (B-05), authorized
+physical Android devices, and approved prayer policy for next-day verification.
+Future-day replenishment remains unfinished; it was not silently counted as done.
+No device settings were changed and no substitute emulator result is claimed.
+
+### 3. B-09 / T31 / T35 - Physical accessibility and Qibla reliability
+
+Status: BLOCKED, 0% for B-09. No implementation completion.
+
+The same device/build inventory prevents execution of the required physical
+TalkBack/VoiceOver, sensor/Qibla, large-text, reduced-motion and signed-install
+matrix. Existing automated RTL and golden tests pass in the B-10 regression but
+are not physical accessibility evidence. No hardware finding can be fixed or
+marked verified without a run.
+
+Required input: B-05 approved signed build, physical target phones, and iOS launch
+scope if VoiceOver is required. All physical acceptance cases remain NOT RUN.
+
+### NEXT RECOMMENDED TASK
+
+B-07 (resume) once B-05 and physical device prerequisites are supplied; then B-09.
+B-03 key rotation and T37 profiling remain explicitly deferred. Batch stopped
+with one implemented task and two confirmed blockers, not three completed tasks.
+Original task completion: 21/40 (52.5%). Production remains NOT READY.
+
+## 2026-09-29 - Three authorized repository steps (R-01, R-02, R-03)
+
+Authorization and scope:
+- Resumed from B-10 with its uncommitted changes intact; did not repeat that task.
+- Rechecked prerequisites: ADB still lists only emulator-5554, signing properties
+  are absent and Android identity remains com.example.sakina_app.
+- User explicitly selected "Proceed with those three repository steps": future-day
+  prayer replenishment, monitoring opt-in/out verification, release-gate validation.
+- These are bounded implementation slices of existing T14, T06/T07 and T36/T38.
+  B-07/B-09 physical acceptance remains BLOCKED; B-03 and T37 remain deferred.
+
+### R-01 - Future-day prayer replenishment
+
+Status: VERIFIED at repository/test scope.
+Acceptance: fetch real timings for today and two future calendar days from saved
+coordinates/method, use the selected timezone, avoid day-ID collisions, honor
+reminder disablement, reject incomplete data and allow failed work to retry.
+
+Implemented:
+- PrayerReplenishmentService reloads persisted settings, validates coordinates and
+  method, discovers the API timezone, corrects device/location date differences,
+  and fetches each of three dates separately. It never requests background GPS.
+- Rejects missing/unknown timezones and incomplete five-prayer responses before
+  mutating schedules. Network failure leaves already queued days in place.
+- Rechecks saved settings after fetching so obsolete results cannot schedule after
+  a detected location/method/enablement change.
+- Seven weekday slots hold five prayer IDs each. Replacing today's slot preserves
+  future dates. Cancellation covers every slot plus five legacy IDs for migration.
+- Boot/periodic work invokes replenishment. Successful foreground prayer scheduling
+  requests immediate background replenishment; manual work bypasses duplicate-run
+  throttling. Throttle timestamp is written only after successful completion, and
+  worker errors now propagate to the callback's retry result.
+- Privacy inventory and Arabic draft disclose background use of saved coordinates.
+
+Files: new prayer_replenishment_service.dart and prayer_notification_ids.dart;
+local_prayer_notification_scheduler.dart, notification_service.dart,
+workmanager_service.dart, service_locator.dart; new replenishment test file;
+privacy/device/release documentation.
+
+Verification: first focused prayer suite 47/47 passed; final full suite includes
+9 new cases covering calendar/year rollover, DST, ID uniqueness/cancellation,
+disablement, invalid/missing location, failed-fetch recovery, missing timezone,
+incomplete timings and in-flight settings changes. Final full suite 300/300 passes.
+
+Limits: OS scheduling is best effort. The queue covers three days, not indefinite
+offline operation. No physical boot/terminated-delivery test, OEM battery matrix,
+iOS background execution, approved prayer policy or signed build is claimed.
+Preference reload guards are not a cross-process transaction; device QA must
+exercise settings changes while native schedule calls are in progress.
+
+### R-02 - Monitoring opt-in/out verification and failure recovery
+
+Status: VERIFIED at repository/test scope.
+Acceptance: no collection without configuration/consent, saved consent restoration,
+allowlisted events only, redacted errors, prompt opt-out, recoverable SDK/storage
+failures, and latest toggle winning over a slow earlier operation.
+
+Implemented:
+- Added an injectable MonitoringGateway; production still uses existing Firebase
+  Analytics/Crashlytics packages and the existing configuration flag.
+- Serialized consent changes with request revisions. Immediately disables Dart
+  forwarding while changing consent. Stores off before SDK work; reports enabled
+  only after successful SDK configuration and preference persistence.
+- Attempts both SDK disable operations and pending-data cleanup even if one fails.
+  Failed opt-in/storage writes attempt rollback and remain retryable.
+- Initialization is idempotent after success; existing event allowlist and
+  exception-type-only forwarding remain in place.
+
+Files: monitoring_service.dart, new monitoring_gateway.dart and
+new test/core/services/monitoring_service_test.dart.
+Verification: 8/8 focused tests pass; full suite passes. Tests cover default off,
+unconfigured startup, restored opt-in/allowlist, opt-out SDK failure, partial
+opt-in failure/retry, false preference write, overlapping toggles and redaction.
+Limits: Fake SDK boundary tests do not verify real server receipt/deletion,
+Firebase identities, dashboards, symbols or retention. Permanent SDK/storage
+failures still surface to the existing localized settings recovery UI.
+
+### R-03 - Release-gate validation
+
+Status: VERIFIED at repository/test scope.
+Acceptance: complete synthetic fixtures pass; missing/modified collections,
+pending metadata, mismatched/missing identities, debug signing and malformed
+configuration fail without claiming production readiness.
+
+Implemented:
+- Added 15 isolated subprocess tests for the actual Python gate entrypoints using
+  temporary synthetic fixtures; no production identities or approvals fabricated.
+- Content gate now requires schema version 1 and exactly four unique tracked
+  collection paths. Rejects missing/duplicate collections, malformed input,
+  out-of-root resolved paths and whitespace-wrapped pending-review metadata.
+- Identity gate checks real Gradle applicationId assignments instead of matching
+  approved IDs in comments, and reports missing/malformed configuration cleanly.
+- Added gate tests to quality and release-readiness workflows.
+
+Files: scripts/verify_content.py, scripts/verify_release.py,
+scripts/tests/test_release_gates.py, both GitHub workflow files, release docs.
+Verification:
+- Initial 15-test run: 8 passed, 7 failed, reproducing the gate weaknesses.
+- After fixes: 15/15 Python tests pass using installed Python 3.14 through uv.
+- Actual content integrity gate: passes all four unchanged asset hashes.
+- Actual --require-approved gate: intentionally fails for all four pending reviews.
+- Actual identity gate: intentionally fails for missing owner identity variables,
+  sample/mismatched configuration and absent required native configuration.
+- No signed-artifact, religious authenticity or owner-approval claim follows from
+  synthetic fixture acceptance. Native identity checking is a static gate only.
+
+### Final batch verification and checkpoint
+
+- dart format --output=none --set-exit-if-changed lib test integration_test:
+  242 files checked, zero changes.
+- dart analyze lib test integration_test: no issues.
+- flutter test --no-pub --reporter expanded: 300/300 passed, zero failures.
+- Python CLI gate fixtures: 15/15 passed; real content integrity passed.
+- git diff --check: passed.
+- 17 new Flutter regressions; no dependency changes in this batch. Religious
+  content bytes and approval metadata unchanged. Previous B-10 changes preserved.
+
+Exactly three repository steps implemented. No fourth task started. Original
+release-task completion remains 21/40 (52.5%); production remains NOT READY.
+Next: B-05 approved identity/signing and physical devices to unblock B-07 delivery
+and B-09 accessibility/Qibla evidence. Monitoring additionally needs the approved
+Firebase project. B-03 and T37 retain their explicit deferrals.

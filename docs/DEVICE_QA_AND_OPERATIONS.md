@@ -21,8 +21,11 @@ delivery. Tap each notification and verify the exact destination. Repeat with
 permission denied, exact-alarm access disabled, battery saver, reboot and upgrade.
 For prayer times compare the explicitly selected city's method and timezone with
 the provider response, including travel, DST and midnight rollover. Check the
-following day without opening the app: daily prayer replenishment is not yet
-established and remains a release risk.
+following day without opening the app. The background worker now queues today
+and the next two calendar days from saved coordinates and the selected method,
+using the API timezone. Periodic execution remains OS-controlled: test delayed
+jobs, offline gaps longer than the queued window, and location/setting changes
+while a job runs. Physical delivery and iOS background execution remain unverified.
 
 ## Performance and accessibility
 
