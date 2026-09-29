@@ -34,9 +34,9 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
       appBar: AppBar(
         title: Text(
           l10nOf(context).khatmaDurationScreenMessage1,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Cairo',
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
@@ -45,7 +45,9 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
             false, // In RTL, this puts it to the left of the back button
         backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -210,7 +212,7 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -218,11 +220,11 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                 ),
                 child: Text(
                   l10nOf(context).khatmaDurationScreenMessage14,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
               ),

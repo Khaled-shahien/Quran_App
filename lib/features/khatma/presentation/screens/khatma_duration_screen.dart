@@ -87,9 +87,9 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
       appBar: AppBar(
         title: Text(
           l10nOf(context).khatmaDurationScreenMessage1,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Cairo',
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
@@ -97,7 +97,9 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
         centerTitle: false,
         backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -261,10 +263,10 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                       : l10nOf(context).khatmaDurationScreenMessage12(
                           ((_remainingUnits / _dailyTarget).ceil()).toString(),
                         ),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Cairo',
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -314,7 +316,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -322,11 +324,11 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 ),
                 child: Text(
                   l10nOf(context).khatmaDurationScreenMessage14,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
               ),
@@ -350,13 +352,13 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: active
-              ? AppColors.primary.withValues(alpha: 0.12)
+              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: active
-                ? AppColors.primary
-                : AppColors.primary.withValues(alpha: 0.3),
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
           ),
         ),
         child: Column(
@@ -364,20 +366,20 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
           children: [
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Cairo',
                 fontWeight: FontWeight.bold,
-                color: AppColors.primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               textAlign: TextAlign.right,
             ),
             const SizedBox(height: 2),
             Text(
               subtitle,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 12,
-                color: AppColors.primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               textAlign: TextAlign.right,
             ),
@@ -415,11 +417,11 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 appL10n.khatmaDurationScreenMessage16(
                   (_durationDays).toString(),
                 ),
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
@@ -430,7 +432,9 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: cardColor,
-                border: Border.all(color: AppColors.primary),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -438,27 +442,31 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 children: [
                   GestureDetector(
                     onTap: () => setState(() => _durationDays++),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Icon(
                         Icons.add,
-                        color: AppColors.primary,
+                        color: Theme.of(context).colorScheme.primary,
                         size: 20,
                       ),
                     ),
                   ),
-                  Container(width: 1, height: 30, color: AppColors.primary),
+                  Container(
+                    width: 1,
+                    height: 30,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   GestureDetector(
                     onTap: () {
                       if (_durationDays > 1) {
                         setState(() => _durationDays--);
                       }
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Icon(
                         Icons.remove,
-                        color: AppColors.primary,
+                        color: Theme.of(context).colorScheme.primary,
                         size: 20,
                       ),
                     ),
@@ -498,11 +506,11 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
               alignment: Alignment.center,
               child: Text(
                 '${_formatDouble(_dailyTarget)} $_unitLabel',
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
@@ -513,7 +521,9 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: cardColor,
-                border: Border.all(color: AppColors.primary),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -528,16 +538,20 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                         );
                       });
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Icon(
                         Icons.add,
-                        color: AppColors.primary,
+                        color: Theme.of(context).colorScheme.primary,
                         size: 20,
                       ),
                     ),
                   ),
-                  Container(width: 1, height: 30, color: AppColors.primary),
+                  Container(
+                    width: 1,
+                    height: 30,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -547,11 +561,11 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                         );
                       });
                     },
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Icon(
                         Icons.remove,
-                        color: AppColors.primary,
+                        color: Theme.of(context).colorScheme.primary,
                         size: 20,
                       ),
                     ),
@@ -609,11 +623,11 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 child: Text(
                   '${_reminderHour.toString().padLeft(2, '0')}:'
                   '${_reminderMinute.toString().padLeft(2, '0')}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),

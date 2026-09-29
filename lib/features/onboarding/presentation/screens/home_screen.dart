@@ -1,3 +1,4 @@
+import '../widgets/alarms/alarm_time_picker_dialog.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -346,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
     required Widget leadingIcon,
     required bool value,
     required ValueChanged<bool> onChanged,
-    String? rightSubtitle,
+    String? alarmType,
   }) {
     return Semantics(
       label: title,
@@ -401,19 +402,44 @@ class _HomeScreenState extends State<HomeScreen> {
                     activeThumbColor: AppColors.primary,
                   ),
                 ),
-                if (rightSubtitle != null) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    rightSubtitle,
-                    style: TextStyle(
-                      fontFamily: 'Cairo',
-                      fontSize: 12,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.5),
+                if (alarmType != null)
+                  FutureBuilder<Map<String, int>>(
+                    future: context.read<SettingsProvider>().getAlarmTime(
+                      alarmType,
                     ),
+                    builder: (context, snapshot) {
+                      final time = snapshot.data;
+                      final label = time == null
+                          ? '--:--'
+                          : TimeOfDay(
+                              hour: time['hour']!,
+                              minute: time['minute']!,
+                            ).format(context);
+                      return TextButton(
+                        key: ValueKey('alarm-time-$alarmType'),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary.withValues(alpha: 0.6),
+                          textStyle: const TextStyle(
+                            fontFamily: 'Cairo',
+                            fontSize: 12,
+                          ),
+                        ),
+                        onPressed: () => showDialog<void>(
+                          context: context,
+                          builder: (_) => AlarmTimePickerDialog(
+                            alarmType: alarmType,
+                            title: title,
+                          ),
+                        ),
+                        child: Tooltip(
+                          message: appL10n.alarmMenuItemMessage1(title),
+                          child: Text(label),
+                        ),
+                      );
+                    },
                   ),
-                ],
               ],
             ),
           ],
@@ -922,7 +948,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildMoreMenuSwitch(
           title: appL10n.homeScreenMessage39,
           subtitle: appL10n.homeScreenMessage40,
-          rightSubtitle: appL10n.homeReminderTime1,
+          alarmType: 'morning',
           leadingIcon: Icon(Icons.wb_sunny, color: iconColor),
           value: settingsProvider.isMorningAlarmEnabled,
           onChanged: (val) => settingsProvider.toggleMorningAlarm(val),
@@ -930,7 +956,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildMoreMenuSwitch(
           title: appL10n.homeScreenMessage41,
           subtitle: appL10n.homeScreenMessage42,
-          rightSubtitle: appL10n.homeReminderTime2,
+          alarmType: 'evening',
           leadingIcon: Icon(Icons.nightlight_round, color: iconColor),
           value: settingsProvider.isEveningAlarmEnabled,
           onChanged: (val) => settingsProvider.toggleEveningAlarm(val),
@@ -942,7 +968,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildMoreMenuSwitch(
           title: appL10n.homeScreenMessage44,
           subtitle: appL10n.homeScreenMessage45,
-          rightSubtitle: appL10n.homeReminderTime3,
+          alarmType: 'mulk',
           leadingIcon: Icon(Icons.notifications, color: iconColor),
           value: settingsProvider.isMulkAlarmEnabled,
           onChanged: (val) => settingsProvider.toggleMulkAlarm(val),
@@ -950,7 +976,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildMoreMenuSwitch(
           title: appL10n.homeScreenMessage46,
           subtitle: appL10n.homeScreenMessage47,
-          rightSubtitle: appL10n.homeReminderTime4,
+          alarmType: 'baqarah',
           leadingIcon: Icon(Icons.notifications, color: iconColor),
           value: settingsProvider.isBaqarahAlarmEnabled,
           onChanged: (val) => settingsProvider.toggleBaqarahAlarm(val),

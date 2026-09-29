@@ -486,7 +486,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
       elevation: 0,
       leading: _buildAppBarIconButton(
         tooltip: appL10n.appStringsMessage13,
-        icon: Icons.arrow_back_ios,
+        icon: Icons.arrow_back_ios_new,
         color: primary,
         onPressed: () => Navigator.pop(context),
       ),
@@ -920,7 +920,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                       child: Divider(color: primary.withValues(alpha: 0.28)),
                     ),
                     const SizedBox(width: AppSpacing.md),
-                    Flexible(
+                    Expanded(
                       flex: 4,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -1249,6 +1249,7 @@ class _ReaderNavButton extends StatelessWidget {
       onPressed: onPressed,
       icon: Icon(
         icon,
+        textDirection: TextDirection.ltr,
         color: onPressed == null ? color.withValues(alpha: 0.35) : color,
       ),
     );

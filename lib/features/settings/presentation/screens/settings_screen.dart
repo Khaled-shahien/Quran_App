@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/providers/settings_provider.dart';
-import '../../../../core/theme/theme_provider.dart';
 import '../../../../core/services/notification_service.dart';
 import '../../../../core/services/monitoring_service.dart';
-import '../../../prayers/presentation/providers/prayer_times_provider.dart';
-import '../../../prayers/presentation/screens/prayer_location_dialog.dart';
 import '../../../onboarding/presentation/widgets/alarms/alarm_menu_item.dart';
 import '../widgets/reading_preferences.dart';
+import '../widgets/settings_controls.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -27,71 +25,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsProvider>();
-    final theme = context.watch<ThemeProvider>();
-    final prayer = context.watch<PrayerTimesProvider>();
     return Scaffold(
       appBar: AppBar(title: Text(l10nOf(context).appStringsMessage16)),
       body: SafeArea(
         child: ListView(
           children: [
             _SectionTitle(l10nOf(context).settingsScreenMessage1),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: DropdownButtonFormField<ThemeMode>(
-                isExpanded: true,
-                initialValue: theme.themeMode,
-                decoration: InputDecoration(
-                  labelText: l10nOf(context).settingsScreenMessage2,
-                ),
-                items: [
-                  DropdownMenuItem(
-                    value: ThemeMode.system,
-                    child: Text(l10nOf(context).settingsScreenMessage3),
-                  ),
-                  DropdownMenuItem(
-                    value: ThemeMode.light,
-                    child: Text(l10nOf(context).settingsScreenMessage4),
-                  ),
-                  DropdownMenuItem(
-                    value: ThemeMode.dark,
-                    child: Text(l10nOf(context).settingsScreenMessage5),
-                  ),
-                ],
-                onChanged: (value) {
-                  if (value != null) theme.setThemeMode(value);
-                },
-              ),
-            ),
+            const ThemePreference(),
             ReadingPreferencesPanel(preferences: settings.prefs),
             _SectionTitle(l10nOf(context).mainNavigationShellMessage1),
-            ListTile(
-              leading: const Icon(Icons.location_on_outlined),
-              title: Text(l10nOf(context).settingsScreenMessage6),
-              subtitle: Text(prayer.locationLabel),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => showPrayerLocationDialog(context, prayer),
-            ),
-            SwitchListTile(
-              title: Text(l10nOf(context).settingsScreenMessage7),
-              subtitle: Text(l10nOf(context).settingsScreenMessage8),
-              value:
-                  settings.prefs.getBool('prayer_notifications_enabled') ??
-                  true,
-              onChanged: (enabled) async {
-                await settings.prefs.setBool(
-                  'prayer_notifications_enabled',
-                  enabled,
-                );
-                if (mounted) setState(() {});
-                if (enabled) {
-                  await NotificationService.instance.requestPermissions();
-                  await prayer.refresh();
-                } else {
-                  await NotificationService.instance
-                      .cancelAllPrayerNotifications();
-                }
-              },
-            ),
+            const PrayerPreferences(),
             _SectionTitle(l10nOf(context).settingsScreenMessage9),
             for (final alarm in [
               (
@@ -147,44 +90,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ],
             _SectionTitle(l10nOf(context).settingsScreenMessage12),
-            if (MonitoringService.instance.available)
-              ListenableBuilder(
-                listenable: MonitoringService.instance,
-                builder: (context, _) => SwitchListTile(
-                  title: Text(l10nOf(context).settingsScreenMessage13),
-                  subtitle: Text(l10nOf(context).settingsScreenMessage14),
-                  value: MonitoringService.instance.enabled,
-                  onChanged: (value) async {
-                    try {
-                      await MonitoringService.instance.setEnabled(value);
-                    } catch (_) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              l10nOf(context).settingsScreenMessage15,
-                            ),
-                          ),
-                        );
-                      }
-                    }
-                  },
-                ),
-              ),
+            const MonitoringPreference(),
             ListTile(
               leading: const Icon(Icons.privacy_tip_outlined),
               title: Text(l10nOf(context).homeScreenMessage25),
               onTap: () => context.push('/settings/data-sources'),
             ),
-            ListTile(
-              leading: const Icon(Icons.info_outline),
-              title: Text(l10nOf(context).settingsScreenMessage16),
-              onTap: () => showAboutDialog(
-                context: context,
-                applicationName: l10nOf(context).appConstantsMessage1,
-                children: [Text(l10nOf(context).settingsScreenMessage17)],
-              ),
-            ),
+            const AboutAppTile(),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/onboarding/presentation/widgets/alarms/alarm_time_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -246,5 +247,27 @@ void main() {
     expect(find.text('المزيد'), findsOneWidget);
     expect(find.text('قم بدعم التطبيق'), findsNothing);
     expect(find.text('الختمة الحالية'), findsOneWidget);
+  });
+  testWidgets('drawer opens the saved time for each alarm', (tester) async {
+    await tester.pumpWidget(await buildHome());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.segment));
+    await tester.pumpAndSettle();
+    final scrollable = find
+        .descendant(of: find.byType(Drawer), matching: find.byType(Scrollable))
+        .first;
+    for (final type in ['morning', 'evening', 'mulk', 'baqarah']) {
+      final button = find.byKey(ValueKey('alarm-time-$type'));
+      await tester.scrollUntilVisible(button, 200, scrollable: scrollable);
+      await tester.pumpAndSettle();
+      await tester.tap(button);
+      await tester.pumpAndSettle();
+      final dialog = find.byType(AlarmTimePickerDialog);
+      expect(tester.widget<AlarmTimePickerDialog>(dialog).alarmType, type);
+      expect(find.byType(FilledButton), findsOneWidget);
+      Navigator.of(tester.element(dialog)).pop();
+      await tester.pumpAndSettle();
+    }
+    expect(tester.takeException(), isNull);
   });
 }
