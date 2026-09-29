@@ -2,9 +2,29 @@
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'https://api.alquran.cloud/v1';
-  static const String quranBaseUrl = 'https://api.alquran.cloud/v1';
-  static const String prayerTimesBaseUrl = 'https://api.aladhan.com/v1';
+  static const String _defaultQuranBaseUrl = 'https://api.alquran.cloud/v1';
+  static const String _defaultPrayerTimesBaseUrl = 'https://api.aladhan.com/v1';
+
+  static String get baseUrl => quranBaseUrl;
+  static String get quranBaseUrl =>
+      _configuredUrl('QURAN_API_BASE_URL', _defaultQuranBaseUrl);
+  static String get prayerTimesBaseUrl =>
+      _configuredUrl('PRAYER_API_BASE_URL', _defaultPrayerTimesBaseUrl);
+
+  static String _configuredUrl(String key, String fallback) {
+    const values = <String, String>{
+      'QURAN_API_BASE_URL': String.fromEnvironment('QURAN_API_BASE_URL'),
+      'PRAYER_API_BASE_URL': String.fromEnvironment('PRAYER_API_BASE_URL'),
+    };
+    final configured = values[key]!.trim();
+    final parsed = Uri.tryParse(configured);
+    if (configured.isEmpty || parsed == null || !parsed.hasScheme) {
+      return fallback;
+    }
+    return configured.endsWith('/')
+        ? configured.substring(0, configured.length - 1)
+        : configured;
+  }
 
   static const int connectTimeout = 30000;
   static const int receiveTimeout = 30000;

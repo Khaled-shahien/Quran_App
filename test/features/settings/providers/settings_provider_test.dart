@@ -120,4 +120,32 @@ void main() {
       expect(fakeRescheduleTaskService.lastSource, 'set_alarm_time_evening');
     },
   );
+
+  test('SettingsProvider ignores malformed persisted alarm values', () async {
+    SharedPreferences.setMockInitialValues({
+      'morning_alarm_enabled': 'not-a-bool',
+      'evening_alarm_enabled': 123,
+      'mulk_alarm_enabled': true,
+      'baqarah_alarm_enabled': 'false',
+    });
+    final prefs = await SharedPreferences.getInstance();
+
+    final provider = SettingsProvider(
+      prefs: prefs,
+      alarmScheduler: FakeAlarmScheduler(),
+      rescheduleTaskService: FakeRescheduleTaskService(),
+    );
+
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+
+    expect(provider.isMorningAlarmEnabled, isFalse);
+    expect(provider.isEveningAlarmEnabled, isFalse);
+    expect(provider.isMulkAlarmEnabled, isTrue);
+    expect(provider.isBaqarahAlarmEnabled, isFalse);
+
+    expect(prefs.getBool('morning_alarm_enabled'), isFalse);
+    expect(prefs.getBool('evening_alarm_enabled'), isFalse);
+    expect(prefs.getBool('mulk_alarm_enabled'), isTrue);
+    expect(prefs.getBool('baqarah_alarm_enabled'), isFalse);
+  });
 }

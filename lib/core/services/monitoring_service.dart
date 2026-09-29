@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../config/app_environment.dart';
 import 'monitoring_gateway.dart';
 
 /// Optional monitoring. Never includes location, Quran queries or reading history.
@@ -9,7 +10,7 @@ class MonitoringService extends ChangeNotifier {
     : _gateway = gateway ?? FirebaseMonitoringGateway(),
       _configurationEnabled = configurationEnabled ?? configured;
   static final instance = MonitoringService();
-  static const configured = bool.fromEnvironment('ENABLE_FIREBASE_MONITORING');
+  static bool get configured => AppConfig.enableFirebaseMonitoring;
   final MonitoringGateway _gateway;
   final bool _configurationEnabled;
   Future<void> _pending = Future<void>.value();

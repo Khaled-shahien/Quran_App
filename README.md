@@ -133,6 +133,25 @@ flutter run --dart-define-from-file=.env
 The API values are optional for features that do not call their corresponding
 services. Keep `.env` local and never commit real credentials.
 
+### 🏭 Environment profiles
+
+The app now supports explicit startup profiles via build-time configuration:
+
+```bash
+flutter run --dart-define=APP_ENV=development
+flutter run --dart-define=APP_ENV=staging
+flutter run --dart-define=APP_ENV=production
+```
+
+Production builds may also enable Firebase monitoring with:
+
+```bash
+flutter run --dart-define=APP_ENV=production --dart-define=ENABLE_FIREBASE_MONITORING=true
+```
+
+This keeps local defaults separate from release defaults and makes environment
+behavior reviewable before shipping.
+
 ## 📁 Project Structure
 
 ### 🔹 Core Layer
@@ -155,10 +174,19 @@ Each feature is isolated and modular:
 
 ## 🔐 Backend / API / Firebase Integration
 
-- 🔑 Authentication -> Not enabled yet (Firebase is used for optional monitoring)
+- 🔑 Authentication -> Not enabled yet; the app is intentionally local-first and non-authenticated
 - ☁️ Database -> Local assets + SharedPreferences cache (Firestore not used currently)
 - 🌐 APIs -> Prayer times and Quran metadata integrations via http services
 - 🔔 Messaging -> Local notification scheduling; remote push is not supported
+
+## 📘 Product and Release Documentation
+
+- [docs/DEVELOPMENT_PLAN_AUDIT.md](docs/DEVELOPMENT_PLAN_AUDIT.md) - current evidence-based status of all 28 development-plan tasks.
+- [docs/ARCHITECTURE_BOUNDARIES.md](docs/ARCHITECTURE_BOUNDARIES.md) - current ownership rules for providers, repositories, and shared services.
+- [docs/LIFECYCLE_ASSUMPTIONS.md](docs/LIFECYCLE_ASSUMPTIONS.md) - expected behavior across resume, restart, migration, and background scheduling.
+- [docs/APP_SCOPE_AND_AUTH.md](docs/APP_SCOPE_AND_AUTH.md) - defines the app’s explicit local-only product scope and authentication policy.
+- [docs/RELEASE_VALIDATION_MATRIX.md](docs/RELEASE_VALIDATION_MATRIX.md) - documents the required validation gates for public releases.
+- [docs/PRODUCTION_DIAGNOSTICS_POLICY.md](docs/PRODUCTION_DIAGNOSTICS_POLICY.md) - outlines the safe operational monitoring policy.
 
 ## 📱 Responsive Design
 

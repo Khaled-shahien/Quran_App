@@ -49,6 +49,21 @@ Page<void> _fadePage(GoRouterState state, Widget child) {
   return buildFadeSlidePage<void>(state: state, child: child);
 }
 
+Map<String, dynamic>? _routeExtra(Object? value) {
+  if (value is! Map) return null;
+  return <String, dynamic>{
+    for (final entry in value.entries)
+      if (entry.key is String) entry.key as String: entry.value,
+  };
+}
+
+int? _routeInt(Map<String, dynamic>? extra, String key) {
+  final value = extra?[key];
+  if (value is num && value.isFinite) return value.toInt();
+  if (value is String) return int.tryParse(value);
+  return null;
+}
+
 final GoRouter appRouter = GoRouter(
   navigatorKey: appNavigatorKey,
   initialLocation: '/splash',
@@ -119,19 +134,17 @@ final GoRouter appRouter = GoRouter(
         final int? surahNumber = int.tryParse(
           state.pathParameters['number'] ?? '',
         );
-        final Map<String, dynamic>? extra =
-            state.extra as Map<String, dynamic>?;
-        final SurahEntity? surah = extra?['surah'] as SurahEntity?;
-        final int? initialSurahNumber = (extra?['initialSurahNumber'] as num?)
-            ?.toInt();
-        final int? initialAyahNumber = (extra?['initialAyahNumber'] as num?)
-            ?.toInt();
-        final int? initialPageNumber = (extra?['initialPageNumber'] as num?)
-            ?.toInt();
+        final Map<String, dynamic>? extra = _routeExtra(state.extra);
+        final SurahEntity? surah = extra?['surah'] is SurahEntity
+            ? extra!['surah'] as SurahEntity
+            : null;
+        final int? initialSurahNumber = _routeInt(extra, 'initialSurahNumber');
+        final int? initialAyahNumber = _routeInt(extra, 'initialAyahNumber');
+        final int? initialPageNumber = _routeInt(extra, 'initialPageNumber');
         final String? rangeTrackingUnit =
             extra?['rangeTrackingUnit'] as String?;
-        final int? rangeFromUnit = (extra?['rangeFromUnit'] as num?)?.toInt();
-        final int? rangeToUnit = (extra?['rangeToUnit'] as num?)?.toInt();
+        final int? rangeFromUnit = _routeInt(extra, 'rangeFromUnit');
+        final int? rangeToUnit = _routeInt(extra, 'rangeToUnit');
 
         if (surahNumber == null) {
           return _fadePage(
@@ -183,8 +196,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/azkar/details',
       pageBuilder: (context, state) {
-        final Map<String, dynamic>? extra =
-            state.extra as Map<String, dynamic>?;
+        final Map<String, dynamic>? extra = _routeExtra(state.extra);
         return _fadePage(
           state,
           AzkarDetailsScreen(
@@ -214,7 +226,9 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/hadeath/details/:index',
       pageBuilder: (context, state) {
-        final HadeathEntity? hadeath = state.extra as HadeathEntity?;
+        final HadeathEntity? hadeath = state.extra is HadeathEntity
+            ? state.extra as HadeathEntity
+            : null;
         final int? index = int.tryParse(state.pathParameters['index'] ?? '');
 
         if (index == null) {
@@ -288,11 +302,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/khatma/duration',
       pageBuilder: (context, state) {
-        final Map<String, dynamic>? extra =
-            state.extra as Map<String, dynamic>?;
+        final Map<String, dynamic>? extra = _routeExtra(state.extra);
         final String startMode =
             extra?['startMode'] as String? ?? l10nOf(context).appRouterMessage4;
-        final int? startJuz = extra?['startJuz'] as int?;
+        final int? startJuz = _routeInt(extra, 'startJuz');
 
         return _fadePage(
           state,

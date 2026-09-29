@@ -88,6 +88,16 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
     _prayerClockTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     _prayerTimesProvider.dispose();
+    _prayerTimesPerformanceProvider.dispose();
+    _hadeathProvider.dispose();
+    _favoritesProvider.dispose();
+    _themeProvider.dispose();
+    _azkarProvider.dispose();
+    _duasProvider.dispose();
+    _bookmarkProvider.dispose();
+    _settingsProvider.dispose();
+    _khatmaProvider.dispose();
+    _notificationProvider.dispose();
     super.dispose();
   }
 

@@ -45,4 +45,24 @@ void main() {
     expect(prefs.getString('bookmark_surah_name'), isNull);
     expect(prefs.getInt('bookmark_page_index'), isNull);
   });
+
+  test('BookmarkProvider discards malformed persisted bookmark values', () async {
+    SharedPreferences.setMockInitialValues({
+      'bookmark_surah_number': 'bad-value',
+      'bookmark_surah_name': 42,
+      'bookmark_page_index': 'bad-page',
+    });
+    final prefs = await SharedPreferences.getInstance();
+
+    final provider = BookmarkProvider(prefs: prefs);
+
+    expect(provider.hasBookmark, isFalse);
+    expect(provider.surahNumber, isNull);
+    expect(provider.surahName, isNull);
+    expect(provider.pageIndex, isNull);
+
+    expect(prefs.get('bookmark_surah_number'), isNull);
+    expect(prefs.getString('bookmark_surah_name'), isNull);
+    expect(prefs.getInt('bookmark_page_index'), isNull);
+  });
 }

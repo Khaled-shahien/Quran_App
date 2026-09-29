@@ -7,17 +7,34 @@ import '../services/monitoring_service.dart';
 import 'package:sakina_app/firebase_options.dart';
 import 'package:sakina_app/core/di/service_locator.dart';
 import 'package:sakina_app/core/services/notification_service.dart';
+import 'package:sakina_app/core/services/preference_schema.dart';
 
 import 'package:sakina_app/core/services/workmanager_service.dart';
+
+enum AppInitializationStage {
+  none,
+  firebase,
+  dependencyInjection,
+  monitoring,
+  backgroundServices,
+}
 
 /// AppInitializer is responsible for orchestrating the app's boot sequence.
 /// It establishes Firebase, sets up Dependency Injection, and launches
 /// background services in the correct order.
 class AppInitializer {
   static bool _isInitialized = false;
+  static bool _isDegradedBoot = false;
+  static AppInitializationStage _currentStage = AppInitializationStage.none;
 
   /// Returns whether the app has finished initializing.
   static bool get isInitialized => _isInitialized;
+
+  /// Returns whether startup degraded gracefully after an optional service failed.
+  static bool get isDegradedBoot => _isDegradedBoot;
+
+  /// Returns the last completed phase during startup.
+  static AppInitializationStage get currentStage => _currentStage;
 
   /// Entry point for all initialization logic.
   static Future<void> initialize() async {
@@ -26,15 +43,36 @@ class AppInitializer {
       return;
     }
 
-    await _initializeFirebase();
-    await _setupDependencyInjection();
-    if (Firebase.apps.isNotEmpty) {
-      await MonitoringService.instance.initialize(getIt<SharedPreferences>());
-    }
-    await _initializeBackgroundServices();
+    _isDegradedBoot = false;
+    _currentStage = AppInitializationStage.firebase;
 
-    _isInitialized = true;
-    developer.log('App initialization complete', name: 'sakina_app.init');
+    try {
+      await _initializeFirebase();
+      _currentStage = AppInitializationStage.dependencyInjection;
+      await _setupDependencyInjection();
+      await PreferenceSchema.migrate(getIt<SharedPreferences>());
+
+      if (Firebase.apps.isNotEmpty) {
+        _currentStage = AppInitializationStage.monitoring;
+        await MonitoringService.instance.initialize(getIt<SharedPreferences>());
+      }
+
+      _currentStage = AppInitializationStage.backgroundServices;
+      await _initializeBackgroundServices();
+
+      _isInitialized = true;
+      developer.log('App initialization complete', name: 'sakina_app.init');
+    } catch (error) {
+      _isDegradedBoot = true;
+      _currentStage = AppInitializationStage.none;
+      developer.log(
+        'Startup failed in required phase; app will continue in degraded mode',
+        name: 'sakina_app.init',
+        error: error,
+        level: 1000,
+      );
+      rethrow;
+    }
   }
 
   /// Initializes the Firebase app instance.
@@ -82,11 +120,11 @@ class AppInitializer {
   /// Bootstraps local services sequentially.
   static Future<void> _initializeBackgroundServices() async {
     try {
-      // Assuming getIt is loaded successfully
       final notificationService = getIt<NotificationService>();
       try {
         await notificationService.initialize(requestPermissions: false);
       } catch (error) {
+        _isDegradedBoot = true;
         developer.log(
           'Notification initialization error',
           name: 'sakina_app.init',
@@ -95,13 +133,23 @@ class AppInitializer {
         );
       }
 
-      // Initialize background task scheduler for boot/update alarm recovery.
       final workManagerService = getIt<WorkManagerService>();
       await workManagerService.initialize();
-      await workManagerService.registerBootRescheduleTask();
+      try {
+        await workManagerService.registerBootRescheduleTask();
+      } catch (error) {
+        _isDegradedBoot = true;
+        developer.log(
+          'WorkManager boot reschedule unavailable',
+          name: 'sakina_app.init',
+          level: 1000,
+          error: error,
+        );
+      }
 
       developer.log('Background services initialized', name: 'sakina_app.init');
     } catch (e) {
+      _isDegradedBoot = true;
       developer.log(
         'Background services initialization error',
         name: 'sakina_app.init',

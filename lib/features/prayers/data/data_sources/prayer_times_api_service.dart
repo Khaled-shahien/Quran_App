@@ -1,4 +1,5 @@
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
+import '../../../../../core/api/api_constants.dart';
 import '../../../../../core/api/base_api_service.dart';
 import '../../../../../core/api/api_logger.dart';
 import '../../../../../core/errors/api_exception.dart';
@@ -11,7 +12,6 @@ import '../models/prayer_times_response.dart';
 /// This service fetches prayer times from the AlAdhan API
 /// based on location and date.
 class PrayerTimesApiService extends BaseApiService {
-  static const String _baseUrl = 'https://api.aladhan.com/v1';
   static const String _timingsEndpoint = '/timings';
 
   /// Get prayer times for a specific date and location
@@ -46,7 +46,8 @@ class PrayerTimesApiService extends BaseApiService {
       };
 
       // Build the complete URL for logging
-      final url = '$_baseUrl$_timingsEndpoint/$formattedDate';
+      final url =
+          '${ApiConstants.prayerTimesBaseUrl}$_timingsEndpoint/$formattedDate';
 
       // Log the API request
       ApiLogger.logRequest(method: 'GET', url: url);
@@ -76,7 +77,7 @@ class PrayerTimesApiService extends BaseApiService {
       // Log the error
       ApiLogger.logError(
         error: e,
-        url: '$_baseUrl$_timingsEndpoint',
+        url: '${ApiConstants.prayerTimesBaseUrl}$_timingsEndpoint',
         stackTrace: stackTrace,
       );
 

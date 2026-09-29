@@ -128,6 +128,9 @@ class WorkManagerService {
 
   final Workmanager _workmanager = Workmanager();
   bool _isInitialized = false;
+  bool _isPeriodicTaskRegistered = false;
+  bool _isBootTaskRegistered = false;
+  DateTime? _lastImmediateRescheduleAt;
 
   /// Initialize WorkManager
   Future<void> initialize() async {
@@ -156,6 +159,8 @@ class WorkManagerService {
 
   /// Register boot reschedule task
   Future<void> registerRescheduleTask() async {
+    if (_isPeriodicTaskRegistered) return;
+
     try {
       final Constraints constraints = Constraints(
         networkType: NetworkType.notRequired,
@@ -175,6 +180,7 @@ class WorkManagerService {
         inputData: {'source': 'periodic'},
       );
 
+      _isPeriodicTaskRegistered = true;
       developer.log(
         'Reschedule task registered',
         name: 'sakina_app.workmanager',
@@ -193,6 +199,8 @@ class WorkManagerService {
   Future<void> registerBootRescheduleTask({
     String source = 'boot_or_update',
   }) async {
+    if (_isBootTaskRegistered) return;
+
     try {
       final Constraints constraints = Constraints(
         networkType: NetworkType.notRequired,
@@ -209,6 +217,7 @@ class WorkManagerService {
         backoffPolicyDelay: const Duration(minutes: 5),
         inputData: {'source': source},
       );
+      _isBootTaskRegistered = true;
       developer.log(
         'Boot reschedule task registered',
         name: 'sakina_app.workmanager',
@@ -227,6 +236,19 @@ class WorkManagerService {
   Future<void> registerImmediateRescheduleTask({
     String source = 'manual_settings_update',
   }) async {
+    final DateTime now = DateTime.now();
+    final DateTime? last = _lastImmediateRescheduleAt;
+    if (last != null && now.difference(last) < const Duration(seconds: 20)) {
+      developer.log(
+        'Skipping duplicate immediate reschedule request from $source',
+        name: 'sakina_app.workmanager',
+        level: 900,
+      );
+      return;
+    }
+
+    _lastImmediateRescheduleAt = now;
+
     try {
       await _workmanager.registerOneOffTask(
         '${kRescheduleAlarmsOneOffUniqueName}_manual',

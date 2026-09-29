@@ -22,10 +22,52 @@ class BookmarkProvider extends ChangeNotifier {
 
   bool get hasBookmark => _surahNumber != null && _pageIndex != null;
 
+  int? _validatedInt(String key) {
+    final value = prefs.get(key);
+
+    if (value is int) {
+      return value;
+    }
+
+    if (value is num && value.isFinite) {
+      final parsed = value.toInt();
+      prefs.setInt(key, parsed);
+      return parsed;
+    }
+
+    if (value is String) {
+      final parsed = int.tryParse(value);
+      if (parsed != null) {
+        prefs.setInt(key, parsed);
+        return parsed;
+      }
+    }
+
+    prefs.remove(key);
+    return null;
+  }
+
+  String? _validatedString(String key) {
+    final value = prefs.get(key);
+
+    if (value is String && value.trim().isNotEmpty) {
+      return value;
+    }
+
+    prefs.remove(key);
+    return null;
+  }
+
   void _loadBookmark() {
-    _surahNumber = prefs.getInt(_surahNumberKey);
-    _surahName = prefs.getString(_surahNameKey);
-    _pageIndex = prefs.getInt(_pageIndexKey);
+    _surahNumber = _validatedInt(_surahNumberKey);
+    _surahName = _validatedString(_surahNameKey);
+    _pageIndex = _validatedInt(_pageIndexKey);
+
+    if (_surahNumber == null || _pageIndex == null) {
+      _surahName = null;
+      prefs.remove(_surahNameKey);
+    }
+
     notifyListeners();
   }
 

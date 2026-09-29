@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/alarm_scheduler.dart';
 import '../services/alarm_reschedule_task_service.dart';
+import '../services/notification_scheduling_coordinator.dart';
 
 class SettingsProvider extends ChangeNotifier {
   final SharedPreferences prefs;
-  final AlarmScheduler _alarmScheduler;
-  final AlarmRescheduleTaskService _rescheduleTaskService;
+  final NotificationSchedulingCoordinator _schedulingCoordinator;
 
   // Alarm keys
   static const String _morningAlarmKey = 'morning_alarm_enabled';
@@ -26,9 +26,13 @@ class SettingsProvider extends ChangeNotifier {
     required this.prefs,
     AlarmScheduler? alarmScheduler,
     AlarmRescheduleTaskService? rescheduleTaskService,
-  }) : _alarmScheduler = alarmScheduler ?? NotificationAlarmScheduler(),
-       _rescheduleTaskService =
-           rescheduleTaskService ?? WorkManagerAlarmRescheduleTaskService() {
+    NotificationSchedulingCoordinator? schedulingCoordinator,
+  }) : _schedulingCoordinator = schedulingCoordinator ??
+           NotificationSchedulingCoordinator(
+             alarmScheduler: alarmScheduler ?? NotificationAlarmScheduler(),
+             rescheduleTaskService:
+                 rescheduleTaskService ?? WorkManagerAlarmRescheduleTaskService(),
+           ) {
     _loadSettings();
   }
 
@@ -37,11 +41,54 @@ class SettingsProvider extends ChangeNotifier {
   bool get isMulkAlarmEnabled => _isMulkAlarmEnabled;
   bool get isBaqarahAlarmEnabled => _isBaqarahAlarmEnabled;
 
+  static bool _validatedBoolValue(
+    SharedPreferences preferences,
+    String key, {
+    required bool fallback,
+  }) {
+    final value = preferences.get(key);
+
+    if (value is bool) {
+      return value;
+    }
+
+    if (value is String) {
+      final normalized = value.trim().toLowerCase();
+      if (normalized == 'true') {
+        preferences.setBool(key, true);
+        return true;
+      }
+      if (normalized == 'false') {
+        preferences.setBool(key, false);
+        return false;
+      }
+    }
+
+    preferences.setBool(key, fallback);
+    return fallback;
+  }
+
   void _loadSettings() async {
-    _isMorningAlarmEnabled = prefs.getBool(_morningAlarmKey) ?? false;
-    _isEveningAlarmEnabled = prefs.getBool(_eveningAlarmKey) ?? false;
-    _isMulkAlarmEnabled = prefs.getBool(_mulkAlarmKey) ?? false;
-    _isBaqarahAlarmEnabled = prefs.getBool(_baqarahAlarmKey) ?? false;
+    _isMorningAlarmEnabled = _validatedBoolValue(
+      prefs,
+      _morningAlarmKey,
+      fallback: false,
+    );
+    _isEveningAlarmEnabled = _validatedBoolValue(
+      prefs,
+      _eveningAlarmKey,
+      fallback: false,
+    );
+    _isMulkAlarmEnabled = _validatedBoolValue(
+      prefs,
+      _mulkAlarmKey,
+      fallback: false,
+    );
+    _isBaqarahAlarmEnabled = _validatedBoolValue(
+      prefs,
+      _baqarahAlarmKey,
+      fallback: false,
+    );
 
     notifyListeners();
 
@@ -51,13 +98,17 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   Future<void> _syncAlarmsFromSettings() async {
-    await _alarmScheduler.initialize(requestPermissions: false);
-    await _updateAllAlarms();
+    await _schedulingCoordinator.syncFromSettings(
+      isMorningEnabled: _isMorningAlarmEnabled,
+      isEveningEnabled: _isEveningAlarmEnabled,
+      isMulkEnabled: _isMulkAlarmEnabled,
+      isBaqarahEnabled: _isBaqarahAlarmEnabled,
+    );
   }
 
   /// Update all alarms based on current settings
   Future<void> _updateAllAlarms() async {
-    await _alarmScheduler.updateAllAlarms(
+    await _schedulingCoordinator.syncFromSettings(
       isMorningEnabled: _isMorningAlarmEnabled,
       isEveningEnabled: _isEveningAlarmEnabled,
       isMulkEnabled: _isMulkAlarmEnabled,
@@ -71,11 +122,7 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
 
     unawaited(_updateAllAlarms());
-    unawaited(
-      _rescheduleTaskService.registerImmediateRescheduleTask(
-        source: 'toggle_morning',
-      ),
-    );
+    unawaited(_schedulingCoordinator.requestReschedule('toggle_morning'));
   }
 
   Future<void> toggleEveningAlarm(bool value) async {
@@ -84,11 +131,7 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
 
     unawaited(_updateAllAlarms());
-    unawaited(
-      _rescheduleTaskService.registerImmediateRescheduleTask(
-        source: 'toggle_evening',
-      ),
-    );
+    unawaited(_schedulingCoordinator.requestReschedule('toggle_evening'));
   }
 
   Future<void> toggleMulkAlarm(bool value) async {
@@ -97,11 +140,7 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
 
     unawaited(_updateAllAlarms());
-    unawaited(
-      _rescheduleTaskService.registerImmediateRescheduleTask(
-        source: 'toggle_mulk',
-      ),
-    );
+    unawaited(_schedulingCoordinator.requestReschedule('toggle_mulk'));
   }
 
   Future<void> toggleBaqarahAlarm(bool value) async {
@@ -110,11 +149,7 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
 
     unawaited(_updateAllAlarms());
-    unawaited(
-      _rescheduleTaskService.registerImmediateRescheduleTask(
-        source: 'toggle_baqarah',
-      ),
-    );
+    unawaited(_schedulingCoordinator.requestReschedule('toggle_baqarah'));
   }
 
   /// Set custom alarm time for a specific type
@@ -130,64 +165,45 @@ class SettingsProvider extends ChangeNotifier {
       name: 'sakina_app.settings',
     );
 
-    // Save the new time
-    await _alarmScheduler.saveAlarmTime(type: type, hour: hour, minute: minute);
-    developer.log(
-      'Saved alarm time to preferences',
-      name: 'sakina_app.settings',
-    );
+    final enabled = switch (type) {
+      'morning' => _isMorningAlarmEnabled,
+      'evening' => _isEveningAlarmEnabled,
+      'mulk' => _isMulkAlarmEnabled,
+      'baqarah' => _isBaqarahAlarmEnabled,
+      _ => throw ArgumentError('Unknown alarm type: $type'),
+    };
 
-    // Reschedule only the selected alarm to avoid unnecessary work.
+    await _schedulingCoordinator.setAlarmTime(
+      type: type,
+      enabled: enabled,
+      hour: hour,
+      minute: minute,
+    );
+    developer.log('Saved and rescheduled alarm time', name: 'sakina_app.settings');
+
+    // Keep the background schedule in sync after the selected alarm changes.
     switch (type) {
       case 'morning':
-        await _alarmScheduler.rescheduleSingleAlarm(
-          type: type,
-          enabled: _isMorningAlarmEnabled,
-          hour: hour,
-          minute: minute,
-        );
         developer.log(
           'Rescheduled morning adhkar alarm',
           name: 'sakina_app.settings',
         );
         break;
       case 'evening':
-        await _alarmScheduler.rescheduleSingleAlarm(
-          type: type,
-          enabled: _isEveningAlarmEnabled,
-          hour: hour,
-          minute: minute,
-        );
         developer.log(
           'Rescheduled evening adhkar alarm',
           name: 'sakina_app.settings',
         );
         break;
       case 'mulk':
-        await _alarmScheduler.rescheduleSingleAlarm(
-          type: type,
-          enabled: _isMulkAlarmEnabled,
-          hour: hour,
-          minute: minute,
-        );
         developer.log('Rescheduled mulk alarm', name: 'sakina_app.settings');
         break;
       case 'baqarah':
-        await _alarmScheduler.rescheduleSingleAlarm(
-          type: type,
-          enabled: _isBaqarahAlarmEnabled,
-          hour: hour,
-          minute: minute,
-        );
         developer.log('Rescheduled baqarah alarm', name: 'sakina_app.settings');
         break;
     }
 
-    unawaited(
-      _rescheduleTaskService.registerImmediateRescheduleTask(
-        source: 'set_alarm_time_$type',
-      ),
-    );
+    unawaited(_schedulingCoordinator.requestReschedule('set_alarm_time_$type'));
 
     notifyListeners();
     developer.log('Alarm time set completed', name: 'sakina_app.settings');
@@ -195,6 +211,6 @@ class SettingsProvider extends ChangeNotifier {
 
   /// Get saved alarm time
   Future<Map<String, int>> getAlarmTime(String type) async {
-    return await _alarmScheduler.getAlarmTime(type);
+    return await _schedulingCoordinator.getAlarmTime(type);
   }
 }
