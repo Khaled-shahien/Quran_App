@@ -14,7 +14,7 @@ class FakePrayerNotificationGateway implements PrayerNotificationGateway {
   }
 
   @override
-  Future<void> scheduleAllPrayersToday({
+  Future<void> scheduleAllPrayersForDate({
     required Map<String, DateTime> prayerTimes,
   }) async {
     scheduleCalls++;

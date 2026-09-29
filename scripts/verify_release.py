@@ -43,6 +43,28 @@ try:
     app_ids = [value.strip('"') for value in ids if 'RunnerTests' not in value]
     if not app_ids or any(value != expected['RELEASE_IOS_ID'] for value in app_ids):
         errors.append('Xcode application bundle identity mismatch')
+
+    firebase_options = (root / 'lib/firebase_options.dart').read_text(encoding='utf-8')
+
+    def dart_options(platform):
+        match = re.search(
+            rf'static const FirebaseOptions {platform} = FirebaseOptions\((.*?)\);',
+            firebase_options,
+            flags=re.S,
+        )
+        return match.group(1) if match else ''
+
+    android_options = dart_options('android')
+    ios_options = dart_options('ios')
+    android_project = re.search(r"projectId:\s*'([^']+)'", android_options)
+    ios_project = re.search(r"projectId:\s*'([^']+)'", ios_options)
+    ios_bundle = re.search(r"iosBundleId:\s*'([^']+)'", ios_options)
+    if not android_project or android_project.group(1) != expected['RELEASE_FIREBASE_PROJECT']:
+        errors.append('Dart Android Firebase project mismatch')
+    if not ios_project or ios_project.group(1) != expected['RELEASE_FIREBASE_PROJECT']:
+        errors.append('Dart iOS Firebase project mismatch')
+    if not ios_bundle or ios_bundle.group(1) != expected['RELEASE_IOS_ID']:
+        errors.append('Dart iOS Firebase bundle identity mismatch')
 except (OSError, ValueError, KeyError, TypeError, AttributeError, plistlib.InvalidFileException) as error:
     errors.append(f'Missing or invalid platform configuration ({type(error).__name__})')
 

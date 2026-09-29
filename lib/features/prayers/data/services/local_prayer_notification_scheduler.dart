@@ -8,7 +8,7 @@ import 'package:sakina_app/features/prayers/domain/services/prayer_notification_
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class PrayerNotificationGateway {
-  Future<void> scheduleAllPrayersToday({
+  Future<void> scheduleAllPrayersForDate({
     required Map<String, DateTime> prayerTimes,
   });
 
@@ -30,10 +30,10 @@ class NotificationServicePrayerNotificationGateway
   }
 
   @override
-  Future<void> scheduleAllPrayersToday({
+  Future<void> scheduleAllPrayersForDate({
     required Map<String, DateTime> prayerTimes,
   }) {
-    return _notificationService.scheduleAllPrayersToday(
+    return _notificationService.scheduleAllPrayersForDate(
       prayerTimes: prayerTimes,
     );
   }
@@ -93,7 +93,7 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
       return;
     }
 
-    await _notificationGateway.scheduleAllPrayersToday(prayerTimes: schedule);
+    await _notificationGateway.scheduleAllPrayersForDate(prayerTimes: schedule);
     await _onScheduled?.call();
   }
 

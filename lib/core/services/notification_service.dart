@@ -655,8 +655,8 @@ class NotificationService {
     );
   }
 
-  /// Replace only this calendar day's slot, preserving future-day reminders.
-  Future<void> scheduleAllPrayersToday({
+  /// Replace only the supplied calendar day's slot, preserving other days.
+  Future<void> scheduleAllPrayersForDate({
     required Map<String, DateTime> prayerTimes,
   }) async {
     if (prayerTimes.isEmpty) return;

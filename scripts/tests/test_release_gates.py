@@ -48,6 +48,17 @@ class ReleaseGatesTest(unittest.TestCase):
             'GOOGLE_APP_ID': 'fixture-app'}).decode())
         self.write('ios/Runner.xcodeproj/project.pbxproj',
                    'PRODUCT_BUNDLE_IDENTIFIER = org.fixture.sakina;\n')
+                self.write('lib/firebase_options.dart', """
+class DefaultFirebaseOptions {
+    static const FirebaseOptions android = FirebaseOptions(
+        projectId: 'fixture-project',
+    );
+    static const FirebaseOptions ios = FirebaseOptions(
+        projectId: 'fixture-project',
+        iosBundleId: 'org.fixture.sakina',
+    );
+}
+""")
 
     def write(self, name, value):
         path = self.root / name
@@ -135,6 +146,20 @@ class ReleaseGatesTest(unittest.TestCase):
     def test_incomplete_ios_configuration_is_rejected(self):
         self.write('ios/Runner/GoogleService-Info.plist', plistlib.dumps({}).decode())
         self.assert_blocked(self.run_gate('verify_release.py'))
+
+        def test_mismatched_dart_firebase_options_are_rejected(self):
+                self.write('lib/firebase_options.dart', """
+class DefaultFirebaseOptions {
+    static const FirebaseOptions android = FirebaseOptions(
+        projectId: 'other-project',
+    );
+    static const FirebaseOptions ios = FirebaseOptions(
+        projectId: 'fixture-project',
+        iosBundleId: 'org.wrong.app',
+    );
+}
+""")
+                self.assert_blocked(self.run_gate('verify_release.py'))
 
 
 if __name__ == '__main__':
