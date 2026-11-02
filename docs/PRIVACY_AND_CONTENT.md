@@ -5,11 +5,11 @@ Implementation inventory, not a legally approved privacy policy. Publication rem
 | Data | Purpose and storage | Deletion/control |
 |---|---|---|
 | Selected prayer coordinates, label and method | Local SharedPreferences; coordinates sent to Aladhan on foreground refresh and background replenishment of today plus two future days; background work uses saved coordinates, not GPS | Change location in Prayer; disabling prayer reminders stops background prayer fetches; clearing app storage removes local preferences |
-| Qibla location | Device location for direction calculation | Revoke location permission in OS settings |
+| Device location | Used for Qibla direction, and for prayer times when the user chooses "use my location"; saved as the prayer location in that case | Revoke location permission in OS settings |
 | Prayer response cache | Local date/location/method cache with retrieval timestamp; old same-day cache labeled stale | Clearing app storage removes cache |
 | Bookmarks, favorites, Khatma, preferences | Local SharedPreferences | Existing feature controls; clearing app storage removes all local state |
 | Notification schedules | OS/plugin schedule storage | OS notification settings and existing notification controls |
-| Optional crash/usage reports | Disabled by default; supported mobile builds require `ENABLE_FIREBASE_MONITORING=true` and user opt-in. Sends exception types/stacks and app/settings-open events, not reading/search/location values | Settings opt-out disables collection, deletes unsent reports and resets local analytics data; server retention needs owner approval |
+| Optional crash/usage reports | Disabled by default; supported mobile builds require `APP_ENV=production` or `ENABLE_FIREBASE_MONITORING=true`, plus user opt-in. Sends exception types/stacks and app/settings-open events, not reading/search/location values | Settings opt-out disables collection, deletes unsent reports and resets local analytics data; server retention needs owner approval |
 | Push notifications | Not supported; messaging dependency, handlers and token controls removed | Local reminders do not register push tokens; optional monitoring is separately controlled |
 | Media/network requests | Aladhan, configured media sources and externally opened links; Firebase when configured for optional monitoring | Network services receive request metadata; their retention is not controlled by this repository |
 

@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
+import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
 import 'package:sakina_app/features/prayers/presentation/screens/prayer_times_screen.dart';

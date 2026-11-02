@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/constants/app_strings.dart';
+import '../../domain/first_run_state.dart';
 
 import '../widgets/onboarding_page.dart';
 
@@ -52,7 +53,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       if (!mounted) return;
-      await prefs.setBool('onboarding_complete', true);
+      await prefs.setBool(onboardingCompleteKey, true);
       if (mounted) context.go('/home');
     } catch (_) {
       if (mounted) {

@@ -3,7 +3,7 @@ import '../../domain/prayer_time_zone.dart';
 import 'dart:developer' as developer;
 
 import 'package:sakina_app/core/services/notification_service.dart';
-import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
+import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

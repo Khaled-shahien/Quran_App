@@ -27,11 +27,13 @@ class SettingsProvider extends ChangeNotifier {
     AlarmScheduler? alarmScheduler,
     AlarmRescheduleTaskService? rescheduleTaskService,
     NotificationSchedulingCoordinator? schedulingCoordinator,
-  }) : _schedulingCoordinator = schedulingCoordinator ??
+  }) : _schedulingCoordinator =
+           schedulingCoordinator ??
            NotificationSchedulingCoordinator(
              alarmScheduler: alarmScheduler ?? NotificationAlarmScheduler(),
              rescheduleTaskService:
-                 rescheduleTaskService ?? WorkManagerAlarmRescheduleTaskService(),
+                 rescheduleTaskService ??
+                 WorkManagerAlarmRescheduleTaskService(),
            ) {
     _loadSettings();
   }
@@ -179,7 +181,10 @@ class SettingsProvider extends ChangeNotifier {
       hour: hour,
       minute: minute,
     );
-    developer.log('Saved and rescheduled alarm time', name: 'sakina_app.settings');
+    developer.log(
+      'Saved and rescheduled alarm time',
+      name: 'sakina_app.settings',
+    );
 
     // Keep the background schedule in sync after the selected alarm changes.
     switch (type) {

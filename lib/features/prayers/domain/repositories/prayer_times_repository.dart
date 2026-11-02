@@ -1,5 +1,5 @@
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
-import '../Entities/prayer_times_entity.dart';
+import '../entities/prayer_times_entity.dart';
 
 /// Prayer Times Repository Interface
 ///

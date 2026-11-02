@@ -30,7 +30,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>نستخدم موقعك أثناء فتح شاشة القبلة لحساب اتجاه الكعبة من مكانك.</string>
+	<string>نستخدم موقعك عند طلبك لحساب اتجاه القبلة ومواقيت الصلاة لمكانك.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -72,6 +72,12 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	
+	<!-- Must match kRescheduleAlarmsPeriodicUniqueName in workmanager_service.dart -->
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>reschedule_alarms_periodic_task</string>
+	</array>
+
 	<!-- Background fetch for local reminder maintenance -->
 	<key>UIBackgroundModes</key>
 	<array>

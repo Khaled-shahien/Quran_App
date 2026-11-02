@@ -110,14 +110,14 @@ graph TD
 
 - GoRouter-based named routes
 - Home hub with feature navigation cards
-- Notification routing support for deep links
+- In-app routing for notification taps (the app declares no external deep links)
 
 ## 🚀 Getting Started
 
 ### 📌 Prerequisites
 
-- Flutter SDK `^3.8.0`
-- Dart SDK (compatible with Flutter SDK)
+- Flutter SDK `>=3.44.0` (CI currently pins `3.48.0-0.5.pre` on the beta channel)
+- Dart SDK bundled with that Flutter version (`pubspec.lock` requires `>=3.13.0`)
 - Android Studio or VS Code
 
 ### ⚙️ Installation
@@ -130,8 +130,9 @@ copy .env.example .env
 flutter run --dart-define-from-file=.env
 ```
 
-The API values are optional for features that do not call their corresponding
-services. Keep `.env` local and never commit real credentials.
+`YOUTUBE_API_KEY` is only needed by the video screen. Keep `.env` local and never
+commit real credentials. CI runs `dart run scripts/check_secrets.dart` to reject
+credential-shaped values in tracked files.
 
 ### 🏭 Environment profiles
 
@@ -188,6 +189,9 @@ Each feature is isolated and modular:
 - [docs/RELEASE_VALIDATION_MATRIX.md](docs/RELEASE_VALIDATION_MATRIX.md) - documents the required validation gates for public releases.
 - [docs/PRODUCTION_DIAGNOSTICS_POLICY.md](docs/PRODUCTION_DIAGNOSTICS_POLICY.md) - outlines the safe operational monitoring policy.
 
+Some older documents mention `AUDIT_REPORT.md` and `updated_development_plan.md`.
+Those files were removed from the repository and survive only in git history.
+
 ## 📱 Responsive Design
 
 The app supports multiple platforms:
@@ -216,7 +220,7 @@ flutter analyze
 
 - Unit Tests
 - Widget Tests
-- Integration Tests (planned expansion)
+- Integration Tests (`integration_test/`; run on a device, not in CI)
 
 ## 🤝 Contributing
 
@@ -258,7 +262,7 @@ owner unless a license is added in a future change.
    - Prayer Times
    - Tasbih Counter
    - Dark/Light Mode
-   - Localization-ready (AR/EN)
+   - Arabic-only localization
 - Technologies:
    - Flutter
    - Provider

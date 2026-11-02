@@ -79,7 +79,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed &&
         _prayerTimesProvider.selectedCoordinates != null) {
-      _prayerTimesProvider.refresh();
+      _prayerTimesProvider.refreshIfNeeded();
     }
   }
 
@@ -146,6 +146,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
     _notificationProvider.initialize();
 
     // Set notification navigation callback
+    NotificationRouter.hold();
     NotificationRouter.setNavigationCallback(handleNotificationNavigation);
   }
 

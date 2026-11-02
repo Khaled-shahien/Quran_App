@@ -34,12 +34,6 @@ class ApiConstants {
     'Accept': 'application/json',
   };
 
-  /// Optional API keys supplied with `--dart-define-from-file=.env`.
-  ///
-  /// No fallback values are stored in source control.
-  static const String quranApiKey = String.fromEnvironment('QURAN_API_KEY');
-  static const String prayerApiKey = String.fromEnvironment('PRAYER_API_KEY');
-
   static const String languageParam = 'language';
   static const String editionParam = 'edition';
   static const String methodParam = 'method';

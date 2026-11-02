@@ -2324,6 +2324,18 @@
   "@homeReminderTime4": {
     "description": "Existing reminder preview time."
   },
+  "startupFailureTitle": "تعذر تشغيل التطبيق",
+  "@startupFailureTitle": {
+    "description": "Title of the screen shown when required startup fails."
+  },
+  "startupFailureMessage": "حدث خطأ أثناء التحضير. حاول مرة أخرى، وإذا استمرت المشكلة فأعد تشغيل الجهاز.",
+  "@startupFailureMessage": {
+    "description": "Explanation on the startup failure screen."
+  },
+  "startupFailureRetry": "إعادة المحاولة",
+  "@startupFailureRetry": {
+    "description": "Retry button on the startup failure screen."
+  },
   "applicationTitle": "Sakina",
   "@applicationTitle": {
     "description": "Application title."

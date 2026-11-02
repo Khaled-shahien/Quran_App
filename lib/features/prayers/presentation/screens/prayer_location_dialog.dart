@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../../../quran/domain/services/quran_search.dart';
+import '../../../onboarding/presentation/widgets/notification_permission_dialog.dart';
 import '../../domain/prayer_calculation_policy.dart';
 import '../providers/prayer_times_provider.dart';
 
@@ -169,6 +170,9 @@ Future<void> showPrayerLocationDialog(
   name.dispose();
   latitude.dispose();
   longitude.dispose();
+  if (provider.hasData && context.mounted) {
+    await promptForNotificationPermissionOnce(context);
+  }
 }
 
 String? _coordinateError(String? input, double max) {

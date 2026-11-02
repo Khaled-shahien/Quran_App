@@ -1,7 +1,7 @@
 import 'package:sakina_app/l10n/localization.dart';
 import '../../domain/prayer_calculation_policy.dart';
 import 'package:flutter/foundation.dart';
-import 'package:sakina_app/features/prayers/domain/Entities/'
+import 'package:sakina_app/features/prayers/domain/entities/'
     'prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/'
     'prayer_times_repository.dart';

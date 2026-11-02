@@ -43,6 +43,9 @@ jobs:
           dart format --output=none --set-exit-if-changed
           lib test integration_test
 
+      - name: Scan tracked files for credentials
+        run: dart run scripts/check_secrets.dart
+
       - name: Verify religious content integrity
         run: python3 scripts/verify_content.py
 

@@ -8,7 +8,7 @@ import '../../../../../core/api/api_error_handler.dart';
 import '../data_sources/prayer_times_api_service.dart';
 import '../models/prayer_times_response.dart';
 import '../../domain/repositories/prayer_times_repository.dart';
-import '../../domain/Entities/prayer_times_entity.dart';
+import '../../domain/entities/prayer_times_entity.dart';
 
 /// Prayer Times Repository Implementation
 ///
@@ -196,6 +196,20 @@ class PrayerTimesRepositoryImpl implements PrayerTimesRepository {
       '${cacheKey}_timestamp',
       DateTime.now().millisecondsSinceEpoch,
     );
+    await _removeExpiredDays(keep: cacheKey);
+  }
+
+  /// Timings are only reused for their own date, so older days are dead weight.
+  /// Two days of margin cover locations ahead of or behind the device date.
+  Future<void> _removeExpiredDays({required String keep}) async {
+    final cutoff = DateTime.now().subtract(const Duration(days: 2));
+    final datedKey = RegExp('^$_prayerTimesCachePrefix(\\d{4}-\\d{2}-\\d{2})_');
+    for (final key in _prefs.getKeys().toList()) {
+      if (key.startsWith(keep)) continue;
+      final match = datedKey.firstMatch(key);
+      final date = match == null ? null : DateTime.tryParse(match.group(1)!);
+      if (date != null && date.isBefore(cutoff)) await _prefs.remove(key);
+    }
   }
 
   /// Check if cache is valid (within 2 hours)

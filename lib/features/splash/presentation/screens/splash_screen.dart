@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/navigation/notification_router.dart';
+import '../../../onboarding/domain/first_run_state.dart';
+
 /// Animated splash screen that displays the Sakina logo
 /// before navigating to onboarding or home screen.
 class SplashScreen extends StatefulWidget {
@@ -53,14 +56,10 @@ class _SplashScreenState extends State<SplashScreen>
     final prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
 
-    final hasSeenOnboarding =
-        prefs.getBool('has_seen_notification_permission') ?? false;
-
-    if (hasSeenOnboarding) {
-      context.go('/home');
-    } else {
-      context.go('/onboarding');
-    }
+    final completed = hasCompletedOnboarding(prefs);
+    context.go(completed ? '/home' : '/onboarding');
+    // A tap that launched the app opens over home, never over first-run setup.
+    NotificationRouter.release(dropPending: !completed);
   }
 
   @override

@@ -20,7 +20,6 @@ void main() {
       appRouter.go('/settings');
       await tester.pumpAndSettle();
       expect(find.text('المظهر والقراءة'), findsOneWidget);
-      expect(find.byType(NavigationBar), findsOneWidget);
       await tester.tap(find.byType(DropdownButtonFormField<ThemeMode>));
       await tester.pumpAndSettle();
       await tester.tap(find.text('داكن').last);

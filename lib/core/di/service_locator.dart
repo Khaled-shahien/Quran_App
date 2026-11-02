@@ -52,6 +52,9 @@ final GetIt getIt = GetIt.instance;
 /// singletons so they share instances but load strictly upon access.
 Future<void> setupServiceLocator() async {
   try {
+    // A startup retry must not fail on registrations from the failed attempt.
+    await getIt.reset();
+
     // ==========================================
     // Core / External Utilities
     // ==========================================

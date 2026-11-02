@@ -4,7 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import 'package:flutter/foundation.dart';
-import 'package:sakina_app/features/prayers/domain/Entities/'
+import 'package:sakina_app/features/prayers/domain/entities/'
     'prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/'
     'prayer_times_repository.dart';
@@ -379,6 +379,17 @@ class PrayerTimesProvider extends ChangeNotifier {
   }
 
   Future<void> refresh() => fetchTodayForCurrentLocation();
+
+  /// Resume path: fresh timings for the current day need no network call,
+  /// rescheduling or loading state.
+  Future<void> refreshIfNeeded() async {
+    final prayerTimes = _prayerTimes;
+    if (prayerTimes == null || prayerTimes.isStale) {
+      await refresh();
+    } else {
+      updateClock();
+    }
+  }
 
   void updateClock() {
     if (_prayerTimes == null || _isLoading) return;

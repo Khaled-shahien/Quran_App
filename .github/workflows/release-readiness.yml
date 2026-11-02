@@ -20,6 +20,7 @@ jobs:
           channel: beta
           cache: true
       - run: flutter pub get
+      - run: dart run scripts/check_secrets.dart
       - run: dart format --output=none --set-exit-if-changed lib test integration_test
       - run: flutter analyze --no-pub
       - run: flutter test --no-pub

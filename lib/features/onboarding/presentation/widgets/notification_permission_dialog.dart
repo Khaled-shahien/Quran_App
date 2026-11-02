@@ -4,6 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/providers/notification_provider.dart';
+import '../../domain/first_run_state.dart';
+
+/// Explains reminders once, when a saved prayer location first makes them
+/// useful, instead of asking for permission during onboarding.
+Future<void> promptForNotificationPermissionOnce(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+  if ((prefs.getBool(notificationPromptSeenKey) ?? false) ||
+      !(prefs.getBool('prayer_notifications_enabled') ?? true) ||
+      !context.mounted) {
+    return;
+  }
+  await showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) => NotificationPermissionDialog(
+      onFinish: () => Navigator.of(dialogContext).pop(),
+    ),
+  );
+}
 
 class NotificationPermissionDialog extends StatelessWidget {
   final VoidCallback onFinish;
@@ -117,7 +136,7 @@ class NotificationPermissionDialog extends StatelessWidget {
     bool accept,
   ) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('has_seen_notification_permission', true);
+    await prefs.setBool(notificationPromptSeenKey, true);
 
     if (accept) {
       if (context.mounted) {

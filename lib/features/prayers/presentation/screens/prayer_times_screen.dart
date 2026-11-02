@@ -3,6 +3,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../l10n/app_localizations_ar.dart';
 import '../../domain/prayer_time_zone.dart';
 import 'prayer_location_dialog.dart';
+import '../../../onboarding/presentation/widgets/notification_permission_dialog.dart';
 import '../../domain/prayer_calculation_policy.dart';
 import 'package:flutter/material.dart';
 
@@ -97,8 +98,13 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
           IconButton(
             tooltip: l10nOf(context).prayerTimesScreenMessage2,
             icon: const Icon(Icons.my_location),
-            onPressed: () =>
-                context.read<PrayerTimesProvider>().useDeviceLocation(),
+            onPressed: () async {
+              final provider = context.read<PrayerTimesProvider>();
+              await provider.useDeviceLocation();
+              if (provider.hasData && context.mounted) {
+                await promptForNotificationPermissionOnce(context);
+              }
+            },
           ),
         ],
         centerTitle: true,

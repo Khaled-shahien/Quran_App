@@ -3152,6 +3152,24 @@ abstract class AppLocalizations {
   /// **'PM 08:30'**
   String get homeReminderTime4;
 
+  /// Title of the screen shown when required startup fails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تشغيل التطبيق'**
+  String get startupFailureTitle;
+
+  /// Explanation on the startup failure screen.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدث خطأ أثناء التحضير. حاول مرة أخرى، وإذا استمرت المشكلة فأعد تشغيل الجهاز.'**
+  String get startupFailureMessage;
+
+  /// Retry button on the startup failure screen.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة المحاولة'**
+  String get startupFailureRetry;
+
   /// Application title.
   ///
   /// In ar, this message translates to:

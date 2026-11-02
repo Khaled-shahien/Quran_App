@@ -1708,5 +1708,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeReminderTime4 => 'PM 08:30';
 
   @override
+  String get startupFailureTitle => 'تعذر تشغيل التطبيق';
+
+  @override
+  String get startupFailureMessage =>
+      'حدث خطأ أثناء التحضير. حاول مرة أخرى، وإذا استمرت المشكلة فأعد تشغيل الجهاز.';
+
+  @override
+  String get startupFailureRetry => 'إعادة المحاولة';
+
+  @override
   String get applicationTitle => 'Sakina';
 }

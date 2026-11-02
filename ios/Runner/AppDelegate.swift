@@ -10,12 +10,18 @@ import CoreLocation
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    GeneratedPluginRegistrant.register(with: self)
     
     WorkmanagerPlugin.setPluginRegistrantCallback { registry in
         GeneratedPluginRegistrant.register(with: registry)
     }
     
+    // BGTaskScheduler requires handlers before launch finishes. The identifier
+    // matches kRescheduleAlarmsPeriodicUniqueName in workmanager_service.dart.
+    WorkmanagerPlugin.registerPeriodicTask(
+      withIdentifier: "reschedule_alarms_periodic_task",
+      earliestBeginInSeconds: NSNumber(value: 12 * 60 * 60)
+    )
+
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
     }

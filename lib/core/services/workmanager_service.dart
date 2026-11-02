@@ -31,6 +31,8 @@ void callbackDispatcher() {
     try {
       switch (task) {
         case kRescheduleAlarmsTaskName:
+        // iOS reports periodic work by its unique name, not its task name.
+        case kRescheduleAlarmsPeriodicUniqueName:
           await _handleRescheduleAlarms(inputData: inputData);
           break;
         default:

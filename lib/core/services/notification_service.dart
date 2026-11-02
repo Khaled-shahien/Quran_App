@@ -10,6 +10,7 @@ import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../navigation/notification_router.dart';
+import 'local_timezone_fallback.dart';
 import '../../features/prayers/domain/prayer_notification_ids.dart';
 
 /// Notification Service for managing alarms and notifications.
@@ -97,6 +98,7 @@ class NotificationService {
   bool _isPluginAvailable = true;
   String? _lastAppliedAlarmStateSignature;
   Future<void>? _initFuture;
+  bool _launchNotificationHandled = false;
 
   /// Initialize the notification service.
   Future<void> initialize({bool requestPermissions = false}) async {
@@ -167,10 +169,11 @@ class NotificationService {
       final String timezoneName = await FlutterTimezone.getLocalTimezone();
       tz.setLocalLocation(tz.getLocation(timezoneName));
     } catch (e) {
-      // Fallback to Africa/Cairo as explicitly required for time-based calculations
-      tz.setLocalLocation(tz.getLocation('Africa/Cairo'));
+      tz.setLocalLocation(
+        fallbackLocationForOffset(DateTime.now().timeZoneOffset),
+      );
       developer.log(
-        'Failed to resolve local timezone, falling back to Africa/Cairo',
+        'Failed to resolve local timezone, using current UTC offset',
         name: 'sakina_app.notifications',
         level: 900,
         error: e,
@@ -294,7 +297,30 @@ class NotificationService {
 
   /// Handle notification tap.
   void _onNotificationTapped(NotificationResponse response) {
-    final String payload = response.payload ?? '';
+    routeNotificationPayload(response.payload);
+  }
+
+  /// Routes the notification that launched a terminated app, once per process.
+  /// `onDidReceiveNotificationResponse` does not report this tap.
+  Future<void> deliverLaunchNotification() async {
+    if (_launchNotificationHandled) return;
+    await initialize(requestPermissions: false);
+    if (!_isPluginAvailable) return;
+    _launchNotificationHandled = true;
+    routeLaunchDetails(
+      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails(),
+    );
+  }
+
+  @visibleForTesting
+  static void routeLaunchDetails(NotificationAppLaunchDetails? details) {
+    if (details == null || !details.didNotificationLaunchApp) return;
+    routeNotificationPayload(details.notificationResponse?.payload);
+  }
+
+  @visibleForTesting
+  static void routeNotificationPayload(String? rawPayload) {
+    final String payload = rawPayload ?? '';
     if (payload.isEmpty) {
       NotificationRouter.handleNotification(type: 'general');
       return;
@@ -434,7 +460,6 @@ class NotificationService {
           icon: '@drawable/ic_notification',
           playSound: true,
           enableVibration: true,
-          fullScreenIntent: true,
           category: AndroidNotificationCategory.alarm,
         );
 
@@ -612,7 +637,6 @@ class NotificationService {
           // Platform default sound until a licensed adhan is bundled.
           playSound: true,
           enableVibration: true,
-          fullScreenIntent: true,
           category: AndroidNotificationCategory.alarm,
         );
 

@@ -90,6 +90,29 @@ void main() {
   }
 
   group('PrayerTimesRepositoryImpl', () {
+    test('saving timings removes days that can no longer be reused', () async {
+      final today = DateTime.now();
+      final old = today.subtract(const Duration(days: 5));
+      final oldDate = old.toIso8601String().split('T').first;
+      final oldKey = 'cached_prayer_times_${oldDate}_30.0000_31.0000_5';
+      await prefs.setString(oldKey, '{}');
+      await prefs.setInt('${oldKey}_timestamp', 1);
+      await prefs.setBool('prayer_notifications_enabled', true);
+
+      await PrayerTimesRepositoryImpl(
+        apiService: FakePrayerTimesApiService(response: successResponse()),
+        sharedPreferences: prefs,
+      ).getPrayerTimes(today, 30, 31);
+
+      expect(prefs.containsKey(oldKey), isFalse);
+      expect(prefs.containsKey('${oldKey}_timestamp'), isFalse);
+      expect(prefs.getBool('prayer_notifications_enabled'), isTrue);
+      final kept = prefs.getKeys().where(
+        (key) => key.startsWith('cached_prayer_times_'),
+      );
+      expect(kept, hasLength(2));
+    });
+
     test(
       'expired exact-key cache survives network failure and is labeled stale',
       () async {

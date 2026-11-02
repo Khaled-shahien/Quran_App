@@ -21,7 +21,7 @@ import 'package:sakina_app/features/khatma/data/repositories/khatma_repository.d
 import 'package:sakina_app/features/khatma/presentation/providers/khatma_provider.dart';
 import 'package:sakina_app/features/onboarding/presentation/providers/favorites_provider.dart';
 import 'package:sakina_app/features/onboarding/presentation/screens/home_screen.dart';
-import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
+import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_performance_provider.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';

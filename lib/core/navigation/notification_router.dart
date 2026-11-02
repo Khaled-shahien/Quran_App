@@ -7,6 +7,24 @@ typedef NavigationCallback =
 /// Routes users to appropriate screens based on notification payload
 class NotificationRouter {
   static NavigationCallback? _onNavigate;
+  static bool _held = false;
+  static ({String type, Map<String, dynamic>? data})? _pending;
+
+  /// Keep taps until startup routing has finished, so it cannot replace them.
+  static void hold() {
+    _held = true;
+  }
+
+  /// Deliver the latest held tap, or discard it when it must not interrupt
+  /// the screen startup routing chose.
+  static void release({bool dropPending = false}) {
+    _held = false;
+    final pending = _pending;
+    _pending = null;
+    if (pending != null && !dropPending) {
+      handleNotification(type: pending.type, data: pending.data);
+    }
+  }
 
   /// Set navigation callback
   static void setNavigationCallback(NavigationCallback callback) {
@@ -18,6 +36,10 @@ class NotificationRouter {
     required String type,
     Map<String, dynamic>? data,
   }) {
+    if (_held || _onNavigate == null) {
+      _pending = (type: type, data: data);
+      return;
+    }
     switch (type) {
       case 'morning_adhkar':
         _navigateToDuas('morning', data);
@@ -82,5 +104,7 @@ class NotificationRouter {
   /// Clear navigation callback
   static void clearNavigationCallback() {
     _onNavigate = null;
+    _held = false;
+    _pending = null;
   }
 }

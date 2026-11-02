@@ -66,7 +66,7 @@ class AppInitializer {
       _isDegradedBoot = true;
       _currentStage = AppInitializationStage.none;
       developer.log(
-        'Startup failed in required phase; app will continue in degraded mode',
+        'Startup failed in required phase',
         name: 'sakina_app.init',
         error: error,
         level: 1000,
@@ -123,6 +123,7 @@ class AppInitializer {
       final notificationService = getIt<NotificationService>();
       try {
         await notificationService.initialize(requestPermissions: false);
+        await notificationService.deliverLaunchNotification();
       } catch (error) {
         _isDegradedBoot = true;
         developer.log(

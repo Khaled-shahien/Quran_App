@@ -12,7 +12,7 @@ The existing sample Android identifier and inconsistent Firebase/iOS identities 
 
 Set repository variables `RELEASE_ANDROID_ID`, `RELEASE_IOS_ID`, and `RELEASE_FIREBASE_PROJECT` to the approved matrix. Run `python scripts/verify_release.py`; the tag/manual `release-readiness.yml` workflow runs the same native identity gate. This does not replace signed artifact inspection or Firebase Dart-options verification.
 
-The release workflow also requires `python scripts/verify_content.py --require-approved`. Pending content provenance intentionally blocks that gate. Monitoring is integrated but disabled unless built with `--dart-define=ENABLE_FIREBASE_MONITORING=true`; even then it requires user opt-in. Verify real Firebase events/crashes and opt-out on the approved project before enabling it in a public build. iOS additionally needs its native Crashlytics upload setup and macOS build verification.
+The release workflow also requires `python scripts/verify_content.py --require-approved`. Pending content provenance intentionally blocks that gate. Monitoring is integrated but disabled unless built with `--dart-define=APP_ENV=production` or `--dart-define=ENABLE_FIREBASE_MONITORING=true`; even then it requires user opt-in. Verify real Firebase events/crashes and opt-out on the approved project before enabling it in a public build. iOS additionally needs its native Crashlytics upload setup and macOS build verification.
 
 Store copy and screenshot requirements are drafted in `STORE_LISTING_AR.md`. Device evidence and rollout monitoring instructions are in `DEVICE_QA_AND_OPERATIONS.md`. Current verification uses Flutter 3.48.0-0.5.pre (beta); select and verify the production SDK before publishing.
 

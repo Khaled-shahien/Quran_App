@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sakina_app/features/prayers/data/services/prayer_replenishment_service.dart';
-import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
+import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_notification_ids.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_time_zone.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';

@@ -6,7 +6,7 @@ import 'dart:async';
 
 import 'package:sakina_app/core/widgets/pulse_loader.dart';
 import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
-import 'package:sakina_app/features/prayers/domain/Entities/prayer_times_entity.dart';
+import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
 import 'package:sakina_app/features/prayers/presentation/screens/prayer_times_screen.dart';
