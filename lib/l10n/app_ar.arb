@@ -1039,7 +1039,7 @@
   "@homeScreenMessage47": {
     "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
   },
-  "homeScreenMessage48": "تطبيق ختمة",
+  "homeScreenMessage48": "تطبيق سكينة",
   "@homeScreenMessage48": {
     "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
   },
@@ -1059,7 +1059,7 @@
   "@homeScreenMessage52": {
     "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
   },
-  "homeScreenMessage53": "mailto:contact@quranapp.com?subject=تطبيق ختمة - تواصل",
+  "homeScreenMessage53": "mailto:contact@quranapp.com?subject=تطبيق سكينة - تواصل",
   "@homeScreenMessage53": {
     "description": "Display text used in lib/features/onboarding/presentation/screens/home_screen.dart."
   },

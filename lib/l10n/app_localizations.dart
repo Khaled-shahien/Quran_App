@@ -1489,7 +1489,7 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'تطبيق ختمة'**
+  /// **'تطبيق سكينة'**
   String get homeScreenMessage48;
 
   /// Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.
@@ -1519,7 +1519,7 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'mailto:contact@quranapp.com?subject=تطبيق ختمة - تواصل'**
+  /// **'mailto:contact@quranapp.com?subject=تطبيق سكينة - تواصل'**
   String get homeScreenMessage53;
 
   /// Display text used in lib/features/onboarding/presentation/screens/home_screen.dart.

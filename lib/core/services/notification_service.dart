@@ -123,7 +123,7 @@ class NotificationService {
 
   Future<void> _doInitialize() async {
     try {
-      tzdata.initializeTimeZones();
+      if (!tz.timeZoneDatabase.isInitialized) tzdata.initializeTimeZones();
       await _configureLocalTimezone();
 
       const AndroidInitializationSettings androidInit =

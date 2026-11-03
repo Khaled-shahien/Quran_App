@@ -972,7 +972,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const Divider(height: 1),
 
-        // 9. تطبيق ختمة
+        // 9. تطبيق سكينة
         _buildSectionHeader(appL10n.homeScreenMessage48),
         _buildMoreMenuItem(
           title: appL10n.appStringsMessage6,

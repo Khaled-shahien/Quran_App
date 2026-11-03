@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Notification icons are referenced by name from Dart only, so release
+     resource shrinking would delete them and every schedule call would fail
+     with "invalid_icon". -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_notification,@mipmap/ic_launcher" />

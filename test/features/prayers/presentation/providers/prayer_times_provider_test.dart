@@ -221,6 +221,23 @@ void main() {
     expect(provider.locationLabel, 'Makkah');
     expect(provider.isLoading, isFalse);
   });
+  test('resume during the permission dialog keeps the GPS lookup', () async {
+    final location = PendingPrayerLocationService();
+    final repository = FakePrayerTimesRepository();
+    final provider = PrayerTimesProvider(
+      repository: repository,
+      deviceLocationService: location,
+    );
+    addTearDown(provider.dispose);
+    final gps = provider.useDeviceLocation();
+    // The system permission dialog pauses and resumes the app.
+    await provider.refreshIfNeeded();
+    location.result.complete((latitude: 30.0, longitude: 31.0));
+    await gps;
+    expect(provider.hasError, isFalse);
+    expect(provider.hasData, isTrue);
+    expect(repository.lastLatitude, 30.0);
+  });
   test(
     'GPS denial leaves manual fallback available and clears loading',
     () async {

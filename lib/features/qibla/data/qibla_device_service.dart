@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:sakina_app/core/services/device_position_resolver.dart';
 
 class QiblaHeading {
   const QiblaHeading(this.degrees, {this.needsCalibration = false});
@@ -22,18 +23,7 @@ class QiblaDeviceService {
   Future<bool> openLocationSettings() => Geolocator.openLocationSettings();
   Future<bool> openAppSettings() => Geolocator.openAppSettings();
 
-  Future<Position> currentPosition() => Geolocator.getCurrentPosition(
-    locationSettings: !kIsWeb && defaultTargetPlatform == TargetPlatform.android
-        ? AndroidSettings(
-            forceLocationManager: true,
-            accuracy: LocationAccuracy.high,
-            timeLimit: const Duration(seconds: 25),
-          )
-        : const LocationSettings(
-            accuracy: LocationAccuracy.high,
-            timeLimit: Duration(seconds: 25),
-          ),
-  );
+  Future<Position> currentPosition() => DevicePositionResolver().resolve();
 
   Stream<QiblaHeading> headings(Position position) =>
       const EventChannel('sakina/qibla_heading')

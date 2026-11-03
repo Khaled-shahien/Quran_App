@@ -1,14 +1,11 @@
 import 'package:timezone/data/latest.dart' as data;
 import 'package:timezone/timezone.dart' as tz;
 
-bool _initialized = false;
-
 tz.Location? prayerLocation(String? name) {
   if (name == null || name.isEmpty) return null;
-  if (!_initialized) {
-    data.initializeTimeZones();
-    _initialized = true;
-  }
+  // Loading the database resets tz.local to UTC. Reloading it after the
+  // notification service set the device zone would shift every alarm.
+  if (!tz.timeZoneDatabase.isInitialized) data.initializeTimeZones();
   // Reject an unknown API timezone instead of silently scheduling in device time.
   return tz.getLocation(name);
 }

@@ -769,7 +769,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeScreenMessage47 => 'وقت منبه سورة البقرة';
 
   @override
-  String get homeScreenMessage48 => 'تطبيق ختمة';
+  String get homeScreenMessage48 => 'تطبيق سكينة';
 
   @override
   String get homeScreenMessage49 => 'اللغة';
@@ -786,7 +786,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get homeScreenMessage53 =>
-      'mailto:contact@quranapp.com?subject=تطبيق ختمة - تواصل';
+      'mailto:contact@quranapp.com?subject=تطبيق سكينة - تواصل';
 
   @override
   String get homeScreenMessage54 => 'تابعنا على تويتر';

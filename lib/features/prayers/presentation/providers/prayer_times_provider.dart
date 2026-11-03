@@ -2,6 +2,7 @@ import 'package:sakina_app/l10n/localization.dart';
 import '../../domain/prayer_time_zone.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sakina_app/core/services/device_position_resolver.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sakina_app/features/prayers/domain/entities/'
@@ -48,9 +49,7 @@ class DevicePrayerLocationService implements PrayerLocationService {
     if (permission == LocationPermission.denied) {
       throw PrayerLocationException(appL10n.prayerTimesProviderMessage3);
     }
-    final position = await Geolocator.getCurrentPosition().timeout(
-      const Duration(seconds: 20),
-    );
+    final position = await DevicePositionResolver().resolve();
     return (latitude: position.latitude, longitude: position.longitude);
   }
 }
@@ -232,7 +231,15 @@ class PrayerTimesProvider extends ChangeNotifier {
     await fetchTodayForCurrentLocation(calculationMethod: method);
   }
 
-  Future<void> useDeviceLocation() async {
+  /// The location permission dialog pauses and resumes the app. Resume
+  /// refreshes check this so they do not supersede the lookup that the dialog
+  /// belongs to, which would make the first tap after granting access fail.
+  Future<void>? _deviceLocationRequest;
+
+  Future<void> useDeviceLocation() => _deviceLocationRequest ??=
+      _useDeviceLocation().whenComplete(() => _deviceLocationRequest = null);
+
+  Future<void> _useDeviceLocation() async {
     if (_disposed) return;
     final requestId = ++_requestId;
     _isLoading = true;
@@ -386,6 +393,7 @@ class PrayerTimesProvider extends ChangeNotifier {
   /// Resume path: fresh timings for the current day need no network call,
   /// rescheduling or loading state.
   Future<void> refreshIfNeeded() async {
+    if (_deviceLocationRequest != null) return;
     final prayerTimes = _prayerTimes;
     if (prayerTimes == null || prayerTimes.isStale) {
       await refresh();

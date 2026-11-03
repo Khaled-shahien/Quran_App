@@ -66,7 +66,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      context.read<PrayerTimesProvider>().refresh();
+      context.read<PrayerTimesProvider>().refreshIfNeeded();
     }
   }
 
