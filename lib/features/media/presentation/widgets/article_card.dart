@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/features/media/domain/entities/article.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:sakina_app/core/utils/external_links.dart';
 
 class ArticleCard extends StatelessWidget {
   const ArticleCard({super.key, required this.article});
@@ -112,10 +112,7 @@ class ArticleCard extends StatelessWidget {
   }
 
   Future<void> _openArticle(BuildContext context) async {
-    final uri = Uri.tryParse(article.link);
-    if (uri == null) return;
-
-    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    final opened = await openWebUrl(article.link);
     if (!opened && context.mounted) {
       _showLaunchError(context);
     }

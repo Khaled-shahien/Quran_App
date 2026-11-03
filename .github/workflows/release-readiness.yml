@@ -21,7 +21,7 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: dart run scripts/check_secrets.dart
-      - run: dart format --output=none --set-exit-if-changed lib test integration_test
+      - run: dart format --output=none --set-exit-if-changed lib test integration_test scripts
       - run: flutter analyze --no-pub
       - run: flutter test --no-pub
       - run: python3 -m unittest discover -s scripts/tests -v

@@ -248,6 +248,36 @@ void main() {
     expect(find.text('قم بدعم التطبيق'), findsNothing);
     expect(find.text('الختمة الحالية'), findsOneWidget);
   });
+  testWidgets('unavailable drawer items show the coming soon message', (
+    tester,
+  ) async {
+    await tester.pumpWidget(await buildHome());
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.segment));
+    await tester.pumpAndSettle();
+    final scrollable = find
+        .descendant(of: find.byType(Drawer), matching: find.byType(Scrollable))
+        .first;
+    const message = 'هذه الميزة ستتوفر قريباً إن شاء الله';
+    for (final title in [
+      'الإتصال بنا',
+      'تابعنا على تويتر',
+      'تابعنا على انستقرام',
+      'انشر التطبيق',
+      'قيم تطبيق سكينة',
+    ]) {
+      final item = find.text(title);
+      await tester.scrollUntilVisible(item, 200, scrollable: scrollable);
+      await tester.pumpAndSettle();
+      await tester.tap(item);
+      await tester.pump();
+      expect(find.text(message), findsOneWidget, reason: title);
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+      expect(find.text(message), findsNothing, reason: title);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('drawer opens the saved time for each alarm', (tester) async {
     await tester.pumpWidget(await buildHome());
     await tester.pumpAndSettle();

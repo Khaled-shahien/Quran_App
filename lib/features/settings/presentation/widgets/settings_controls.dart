@@ -8,6 +8,22 @@ import '../../../../core/services/monitoring_service.dart';
 import '../../../prayers/presentation/providers/prayer_times_provider.dart';
 import '../../../prayers/presentation/screens/prayer_location_dialog.dart';
 
+/// Enabling a reminder asks for permission. A refusal is explained, because
+/// the switch stays on but the reminder could not be delivered.
+Future<void> requestNotificationPermissionWithFeedback(
+  BuildContext context, {
+  Future<bool> Function()? request,
+}) async {
+  final granted =
+      await (request ?? NotificationService.instance.requestPermissions)();
+  if (granted || !context.mounted) return;
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(l10nOf(context).notificationPermissionDeniedMessage),
+    ),
+  );
+}
+
 class ThemePreference extends StatelessWidget {
   const ThemePreference({super.key});
   @override
@@ -74,7 +90,9 @@ class _PrayerPreferencesState extends State<PrayerPreferences> {
             );
             if (mounted) setState(() {});
             if (enabled) {
-              await NotificationService.instance.requestPermissions();
+              if (context.mounted) {
+                await requestNotificationPermissionWithFeedback(context);
+              }
               await prayer.refresh();
             } else {
               await NotificationService.instance.cancelAllPrayerNotifications();

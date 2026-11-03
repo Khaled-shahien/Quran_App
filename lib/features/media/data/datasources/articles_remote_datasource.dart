@@ -1,6 +1,5 @@
 import 'package:sakina_app/l10n/localization.dart';
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -188,11 +187,34 @@ class ArticlesRemoteDataSource {
     final isoDate = DateTime.tryParse(value);
     if (isoDate != null) return isoDate;
 
-    try {
-      return HttpDate.parse(value);
-    } on FormatException {
-      return DateTime.now();
-    }
+    return _parseRfc822Date(value.trim()) ?? DateTime.now();
+  }
+
+  /// RSS dates may use numeric offsets, which `HttpDate.parse` rejects.
+  DateTime? _parseRfc822Date(String value) {
+    final match = RegExp(
+      r'^(?:[A-Za-z]{3},\s*)?(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})\s+'
+      r'(\d{2}):(\d{2})(?::(\d{2}))?\s*(?:([+-])(\d{2})(\d{2})|[A-Za-z]+)?$',
+    ).firstMatch(value);
+    if (match == null) return null;
+    const months = 'janfebmaraprmayjunjulaugsepoctnovdec';
+    final monthIndex = months.indexOf(match[2]!.toLowerCase());
+    if (monthIndex < 0 || monthIndex % 3 != 0) return null;
+
+    final utc = DateTime.utc(
+      int.parse(match[3]!),
+      monthIndex ~/ 3 + 1,
+      int.parse(match[1]!),
+      int.parse(match[4]!),
+      int.parse(match[5]!),
+      int.parse(match[6] ?? '0'),
+    );
+    if (match[7] == null) return utc;
+    final offset = Duration(
+      hours: int.parse(match[8]!),
+      minutes: int.parse(match[9]!),
+    );
+    return match[7] == '+' ? utc.subtract(offset) : utc.add(offset);
   }
 }
 

@@ -53,3 +53,7 @@ android/key.properties
 !.env.example
 # Widget Preview related
 .widget_preview/
+
+# Local-only env overrides.
+*.local
+key.properties

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/providers/settings_provider.dart';
-import '../../../../core/services/notification_service.dart';
 import '../../../../core/services/monitoring_service.dart';
 import '../../../onboarding/presentation/widgets/alarms/alarm_menu_item.dart';
 import '../widgets/reading_preferences.dart';
@@ -75,7 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 value: alarm.enabled,
                 onChanged: (enabled) async {
                   if (enabled) {
-                    await NotificationService.instance.requestPermissions();
+                    await requestNotificationPermissionWithFeedback(context);
                   }
                   await alarm.toggle(enabled);
                 },

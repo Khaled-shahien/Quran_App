@@ -41,7 +41,7 @@ jobs:
       - name: Verify formatting
         run: >-
           dart format --output=none --set-exit-if-changed
-          lib test integration_test
+          lib test integration_test scripts
 
       - name: Scan tracked files for credentials
         run: dart run scripts/check_secrets.dart

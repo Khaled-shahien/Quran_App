@@ -130,9 +130,14 @@ copy .env.example .env
 flutter run --dart-define-from-file=.env
 ```
 
-`YOUTUBE_API_KEY` is only needed by the video screen. Keep `.env` local and never
-commit real credentials. CI runs `dart run scripts/check_secrets.dart` to reject
-credential-shaped values in tracked files.
+### 🔑 API keys
+
+- **Where the key lives:** `YOUTUBE_API_KEY` goes in your local `.env`, which is ignored by git. It is only needed by the video screen. `.env.example` is tracked and must keep an empty value.
+- **How to run:** `flutter run --dart-define-from-file=.env`
+- **Enable the pre-commit scan once per clone:** `git config core.hooksPath .githooks`
+- **Never write a key** in docs, plans, issues, commit messages, or chat logs.
+
+CI runs `dart run scripts/check_secrets.dart` on all tracked files, and the hook runs it with `--staged`. Neither scans git history. Any key compiled into the app can be extracted from the APK, so restrict it to the YouTube Data API and set a daily quota.
 
 ### 🏭 Environment profiles
 

@@ -37,11 +37,12 @@ class VideoRemoteDataSource {
           'maxResults': '20',
           'relevanceLanguage': 'ar',
           'safeSearch': 'strict',
-          'key': _apiKey,
         });
 
+    // A header keeps the key out of the URL, and so out of any exception text
+    // or log line that includes the URL.
     final response = await _client
-        .get(uri)
+        .get(uri, headers: <String, String>{'X-Goog-Api-Key': _apiKey})
         .timeout(const Duration(seconds: 15));
 
     if (response.statusCode == 403) {

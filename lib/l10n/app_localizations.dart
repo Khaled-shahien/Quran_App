@@ -3170,6 +3170,12 @@ abstract class AppLocalizations {
   /// **'إعادة المحاولة'**
   String get startupFailureRetry;
 
+  /// Shown when a reminder is enabled but notification permission was refused.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُمنح إذن الإشعارات، لذلك لن تصلك التذكيرات. يمكنك تفعيله من إعدادات الجهاز.'**
+  String get notificationPermissionDeniedMessage;
+
   /// Application title.
   ///
   /// In ar, this message translates to:

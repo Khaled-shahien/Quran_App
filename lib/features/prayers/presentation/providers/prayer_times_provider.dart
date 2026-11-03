@@ -131,22 +131,25 @@ class PrayerTimesProvider extends ChangeNotifier {
            deviceLocationService ?? const DevicePrayerLocationService(),
        _notificationScheduler =
            notificationScheduler ?? const NoopPrayerNotificationScheduler() {
-    final lat = preferences?.getDouble('prayer_latitude');
-    final lon = preferences?.getDouble('prayer_longitude');
-    if (lat != null &&
-        lon != null &&
+    // This runs while the root widget builds, so wrongly typed stored values
+    // must read as "not configured" rather than throw.
+    final lat = preferences?.get('prayer_latitude');
+    final lon = preferences?.get('prayer_longitude');
+    if (lat is double &&
+        lon is double &&
         lat.isFinite &&
         lon.isFinite &&
         lat.abs() <= 90 &&
         lon.abs() <= 180) {
       _selectedCoordinates = (latitude: lat, longitude: lon);
-      locationLabel =
-          preferences?.getString('prayer_location_label') ??
-          appL10n.prayerTimesProviderMessage5;
+      final label = preferences?.get('prayer_location_label');
+      locationLabel = label is String
+          ? label
+          : appL10n.prayerTimesProviderMessage5;
     }
-    final method = preferences?.getInt('prayer_method');
-    if (PrayerCalculationPolicy.methods.containsKey(method)) {
-      selectedMethod = method!;
+    final method = preferences?.get('prayer_method');
+    if (method is int && PrayerCalculationPolicy.methods.containsKey(method)) {
+      selectedMethod = method;
     }
   }
 

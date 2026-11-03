@@ -13,17 +13,22 @@ import '../errors/network_exception.dart';
 /// Provides common functionality for all API services including
 /// HTTP client setup, request execution, error handling, and logging.
 class BaseApiService {
+  static const Duration requestTimeout = Duration(seconds: 15);
+
   final http.Client _httpClient;
   final Logger _logger;
   final Connectivity _connectivity;
+  final Duration _timeout;
 
   BaseApiService({
     http.Client? httpClient,
     Logger? logger,
     Connectivity? connectivity,
+    Duration timeout = requestTimeout,
   }) : _httpClient = httpClient ?? http.Client(),
        _logger = logger ?? Logger(),
-       _connectivity = connectivity ?? Connectivity();
+       _connectivity = connectivity ?? Connectivity(),
+       _timeout = timeout;
 
   /// Executes an HTTP GET request
   Future<Map<String, dynamic>> get(
@@ -116,28 +121,28 @@ class BaseApiService {
     }
 
     try {
-      http.Response response;
+      final Future<http.Response> request;
 
       switch (method) {
         case 'GET':
-          response = await _httpClient.get(uri, headers: requestHeaders);
+          request = _httpClient.get(uri, headers: requestHeaders);
           break;
         case 'POST':
-          response = await _httpClient.post(
+          request = _httpClient.post(
             uri,
             headers: requestHeaders,
             body: body != null ? jsonEncode(body) : null,
           );
           break;
         case 'PUT':
-          response = await _httpClient.put(
+          request = _httpClient.put(
             uri,
             headers: requestHeaders,
             body: body != null ? jsonEncode(body) : null,
           );
           break;
         case 'DELETE':
-          response = await _httpClient.delete(uri, headers: requestHeaders);
+          request = _httpClient.delete(uri, headers: requestHeaders);
           break;
         default:
           throw ApiException(
@@ -145,6 +150,8 @@ class BaseApiService {
             code: 0,
           );
       }
+
+      final response = await request.timeout(_timeout);
 
       // Log the response
       _logger.d('Response Status: ${response.statusCode}');
@@ -170,6 +177,10 @@ class BaseApiService {
     } on TimeoutException {
       _logger.e('TimeoutException: Request timed out');
       throw const NetworkException.timeout();
+    } on http.ClientException {
+      // The message can include the request URL and its coordinates.
+      _logger.e('ClientException: connection failed');
+      throw const NetworkException.serverUnreachable();
     } catch (e) {
       _logger.e('API Request failed: $e');
       rethrow;

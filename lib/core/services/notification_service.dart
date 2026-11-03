@@ -99,6 +99,7 @@ class NotificationService {
   String? _lastAppliedAlarmStateSignature;
   Future<void>? _initFuture;
   bool _launchNotificationHandled = false;
+  Future<void> _alarmUpdates = Future<void>.value();
 
   /// Initialize the notification service.
   Future<void> initialize({bool requestPermissions = false}) async {
@@ -114,11 +115,13 @@ class NotificationService {
       return;
     }
 
-    _initFuture = _doInitialize(requestPermissions);
+    _initFuture = _doInitialize();
     await _initFuture;
+    // Outside _doInitialize: requesting awaits initialization to finish.
+    if (requestPermissions) await this.requestPermissions();
   }
 
-  Future<void> _doInitialize(bool requestPermissions) async {
+  Future<void> _doInitialize() async {
     try {
       tzdata.initializeTimeZones();
       await _configureLocalTimezone();
@@ -140,10 +143,6 @@ class NotificationService {
       );
 
       await _createAndroidNotificationChannels();
-
-      if (requestPermissions) {
-        await this.requestPermissions();
-      }
 
       _isPluginAvailable = true;
       developer.log(
@@ -241,10 +240,11 @@ class NotificationService {
     );
   }
 
-  /// Request runtime notification permissions.
-  Future<void> requestPermissions() async {
+  /// Request runtime notification permissions. Returns false only when the
+  /// platform reports that notifications were refused.
+  Future<bool> requestPermissions() async {
     await initialize(requestPermissions: false);
-    if (!_isPluginAvailable || kIsWeb) return;
+    if (!_isPluginAvailable || kIsWeb) return true;
 
     final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
         flutterLocalNotificationsPlugin
@@ -260,6 +260,8 @@ class NotificationService {
         'Android notification permission granted: $granted',
         name: 'sakina_app.notifications',
       );
+      // Exact timing is pointless, and a Settings detour unwelcome, after a no.
+      if (granted == false) return false;
 
       try {
         final bool? exactAlarmPermission = await androidImplementation
@@ -287,12 +289,76 @@ class NotificationService {
     if (iosImplementation != null &&
         (defaultTargetPlatform == TargetPlatform.iOS ||
             defaultTargetPlatform == TargetPlatform.macOS)) {
-      await iosImplementation.requestPermissions(
+      final bool? granted = await iosImplementation.requestPermissions(
         alert: true,
         badge: true,
         sound: true,
       );
+      if (granted == false) return false;
     }
+    return true;
+  }
+
+  /// Exact access can be denied or revoked. Scheduling exactly would then
+  /// throw, so a slightly late reminder is the fallback to no reminder at all.
+  @visibleForTesting
+  static AndroidScheduleMode scheduleModeFor({
+    required bool? canScheduleExact,
+  }) => canScheduleExact == false
+      ? AndroidScheduleMode.inexactAllowWhileIdle
+      : AndroidScheduleMode.exactAllowWhileIdle;
+
+  Future<AndroidScheduleMode> _androidScheduleMode() async {
+    final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+        flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin
+            >();
+    if (androidImplementation == null) {
+      return scheduleModeFor(canScheduleExact: null);
+    }
+    try {
+      return scheduleModeFor(
+        canScheduleExact: await androidImplementation
+            .canScheduleExactNotifications(),
+      );
+    } catch (e) {
+      developer.log(
+        'Exact alarm access check failed',
+        name: 'sakina_app.notifications',
+        level: 900,
+        error: e,
+      );
+      return scheduleModeFor(canScheduleExact: false);
+    }
+  }
+
+  /// The next wall-clock [hour]:[minute] at least two minutes after [now].
+  /// Calendar arithmetic keeps the time correct across a daylight-saving
+  /// change, which adding 24 hours would shift by an hour.
+  @visibleForTesting
+  static tz.TZDateTime nextDailyOccurrence(
+    tz.TZDateTime now,
+    int hour,
+    int minute,
+  ) {
+    final tz.TZDateTime today = tz.TZDateTime(
+      now.location,
+      now.year,
+      now.month,
+      now.day,
+      hour,
+      minute,
+    );
+    if (!today.isBefore(now.add(const Duration(minutes: 2)))) return today;
+    return tz.TZDateTime(
+      now.location,
+      now.year,
+      now.month,
+      now.day + 1,
+      hour,
+      minute,
+    );
   }
 
   /// Handle notification tap.
@@ -415,20 +481,8 @@ class NotificationService {
         );
 
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate = tz.TZDateTime(
-      tz.local,
-      now.year,
-      now.month,
-      now.day,
-      hour,
-      minute,
-    );
-
+    final tz.TZDateTime scheduledDate = nextDailyOccurrence(now, hour, minute);
     final tz.TZDateTime twoMinutesFromNow = now.add(const Duration(minutes: 2));
-
-    if (scheduledDate.isBefore(twoMinutesFromNow)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
 
     final String formattedTime = _formatTimeHHmm(hour, minute);
     final String triggerTime = _formatTimeHHmm(
@@ -490,7 +544,7 @@ class NotificationService {
       localizedContent.body,
       scheduledDate,
       notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: await _androidScheduleMode(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: serializedPayload,
@@ -591,7 +645,7 @@ class NotificationService {
       body,
       scheduleAtLocal,
       notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: await _androidScheduleMode(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: serializedPayload,
@@ -667,7 +721,7 @@ class NotificationService {
       appL10n.notificationServiceMessage18,
       scheduledDate,
       notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: await _androidScheduleMode(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: serializedPayload,
@@ -862,8 +916,27 @@ class NotificationService {
 
   // ==================== UPDATE ALL ALARMS ====================
 
-  /// Update all active alarms based on settings.
+  /// Update all active alarms based on settings. Updates run one at a time so
+  /// a quick second toggle cannot have its cancellation overtaken by the first.
   Future<void> updateAllAlarms({
+    required bool isMorningEnabled,
+    required bool isEveningEnabled,
+    required bool isMulkEnabled,
+    required bool isBaqarahEnabled,
+  }) {
+    final Future<void> update = _alarmUpdates.then(
+      (_) => _applyAlarmState(
+        isMorningEnabled: isMorningEnabled,
+        isEveningEnabled: isEveningEnabled,
+        isMulkEnabled: isMulkEnabled,
+        isBaqarahEnabled: isBaqarahEnabled,
+      ),
+    );
+    _alarmUpdates = update.catchError((Object _) {});
+    return update;
+  }
+
+  Future<void> _applyAlarmState({
     required bool isMorningEnabled,
     required bool isEveningEnabled,
     required bool isMulkEnabled,

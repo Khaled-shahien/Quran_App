@@ -207,7 +207,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
       case 'ربع':
         final int? hizbQuarter = (ayah['hizbQuarter'] as num?)?.toInt();
         if (hizbQuarter == null) return null;
-        return ((hizbQuarter - 1) ~/ 2) + 1;
+        return ((hizbQuarter - 1) ~/ 4) + 1;
       case 'juz':
       case 'جزء':
         return (ayah['juz'] as num?)?.toInt();

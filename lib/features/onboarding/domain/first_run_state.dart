@@ -7,6 +7,7 @@ const String onboardingCompleteKey = 'onboarding_complete';
 const String notificationPromptSeenKey = 'has_seen_notification_permission';
 
 /// Older installs recorded first-run completion only through the prompt flag.
+/// `get` keeps a wrongly typed stored value from breaking launch routing.
 bool hasCompletedOnboarding(SharedPreferences preferences) =>
-    (preferences.getBool(onboardingCompleteKey) ?? false) ||
-    (preferences.getBool(notificationPromptSeenKey) ?? false);
+    preferences.get(onboardingCompleteKey) == true ||
+    preferences.get(notificationPromptSeenKey) == true;

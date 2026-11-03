@@ -4,39 +4,36 @@ import 'package:sakina_app/core/navigation/app_router.dart';
 /// Handles navigation triggered by notification taps
 ///
 /// This function routes the user to the appropriate screen based on
-/// the notification route and payload data.
+/// the notification route and payload data. Targets open above home because
+/// their back buttons pop, and a sole page has nothing to return to.
 void handleNotificationNavigation(String route, Map<String, dynamic>? data) {
   final context = appNavigatorKey.currentContext;
   if (context == null) return;
 
+  final router = GoRouter.of(context);
+  final location = _locationFor(route, data);
+  router.go('/home');
+  if (location != '/home') router.push(location);
+}
+
+String _locationFor(String route, Map<String, dynamic>? data) {
   switch (route) {
     case '/duas':
       final String? dhikrType = data?['type']?.toString();
-      if (dhikrType == 'morning') {
-        context.go('/duas/morning');
-      } else if (dhikrType == 'evening') {
-        context.go('/duas/evening');
-      } else {
-        context.go('/duas');
-      }
-      break;
+      if (dhikrType == 'morning') return '/duas/morning';
+      if (dhikrType == 'evening') return '/duas/evening';
+      return '/duas';
     case '/quran':
       final number = int.tryParse(data?['surahNumber']?.toString() ?? '');
-      context.go(
-        number != null && number >= 1 && number <= 114
-            ? '/quran/surah/$number'
-            : '/quran',
-      );
-      break;
+      return number != null && number >= 1 && number <= 114
+          ? '/quran/surah/$number'
+          : '/quran';
     case '/prayers':
-      context.go('/prayers');
-      break;
+      return '/prayers';
     case '/khatma':
-      context.go('/khatma');
-      break;
+      return '/khatma';
     case '/':
     default:
-      context.go('/home');
-      break;
+      return '/home';
   }
 }

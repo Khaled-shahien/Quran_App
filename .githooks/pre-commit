@@ -1,0 +1,10 @@
+#!/bin/sh
+# Blocks a commit when staged content contains a credential-shaped value.
+# Enable once per clone: git config core.hooksPath .githooks
+
+if ! command -v dart >/dev/null 2>&1; then
+  echo "pre-commit: dart not found on PATH; cannot scan for credentials." >&2
+  exit 1
+fi
+
+exec dart scripts/check_secrets.dart --staged

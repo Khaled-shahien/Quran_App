@@ -92,7 +92,15 @@ class PrayerTimesRepositoryImpl implements PrayerTimesRepository {
         calculationMethod: calculationMethod,
       );
 
-      if (response.status == 'OK' && response.data != null) {
+      final timings = response.data?.timings;
+      // An incomplete day must not replace usable timings in the cache.
+      if (response.status == 'OK' &&
+          timings != null &&
+          timings.fajr != null &&
+          timings.dhuhr != null &&
+          timings.asr != null &&
+          timings.maghrib != null &&
+          timings.isha != null) {
         final entity = _responseToEntity(response);
         try {
           await _writeCachedPrayerTimes(cacheKey, entity);
@@ -115,6 +123,9 @@ class PrayerTimesRepositoryImpl implements PrayerTimesRepository {
       if (stale != null) return stale;
       rethrow;
     } catch (e) {
+      // Malformed payloads are as recoverable as network failures.
+      final stale = _readCachedPrayerTimes(cacheKey, allowStale: true);
+      if (stale != null) return stale;
       throw ApiException(message: _errorHandler.handleError(e), code: 0);
     }
   }

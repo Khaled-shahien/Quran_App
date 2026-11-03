@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -791,15 +789,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _showOverlayMessage(appL10n.homeScreenMessage24);
     }
 
-    Future<void> launchMyUrl(String url) async {
-      final Uri uri = Uri.parse(url);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        showComingSoon(); // Fallback
-      }
-    }
-
     final Color iconColor = Theme.of(context).colorScheme.primary;
 
     return ListView(
@@ -1026,7 +1015,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage52,
           leadingIcon: Icon(Icons.info_outline, color: iconColor),
-          onTap: () => launchMyUrl(appL10n.homeScreenMessage53),
+          onTap: showComingSoon,
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage54,
@@ -1034,7 +1023,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Icons.flutter_dash,
             color: Colors.lightBlue,
           ), // Placeholder for Twitter
-          onTap: () => launchMyUrl('https://twitter.com/quranapp'),
+          onTap: showComingSoon,
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage55,
@@ -1042,23 +1031,17 @@ class _HomeScreenState extends State<HomeScreen> {
             Icons.camera_alt,
             color: Colors.purple,
           ), // Placeholder for Instagram
-          onTap: () => launchMyUrl('https://instagram.com/quranapp'),
+          onTap: showComingSoon,
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage56,
           leadingIcon: Icon(Icons.share, color: iconColor),
-          onTap: () {
-            SharePlus.instance.share(
-              ShareParams(text: appL10n.homeScreenMessage57),
-            );
-          },
+          onTap: showComingSoon,
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage58,
           leadingIcon: Icon(Icons.thumb_up_alt_outlined, color: iconColor),
-          onTap: () => launchMyUrl(
-            'https://play.google.com/store/apps/details?id=com.quranapp',
-          ),
+          onTap: showComingSoon,
         ),
       ],
     );

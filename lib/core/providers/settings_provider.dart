@@ -99,24 +99,28 @@ class SettingsProvider extends ChangeNotifier {
     unawaited(_syncAlarmsFromSettings());
   }
 
+  /// These run unawaited, so failures must be handled here. The next launch
+  /// or background reschedule retries from the saved settings.
   Future<void> _syncAlarmsFromSettings() async {
-    await _schedulingCoordinator.syncFromSettings(
-      isMorningEnabled: _isMorningAlarmEnabled,
-      isEveningEnabled: _isEveningAlarmEnabled,
-      isMulkEnabled: _isMulkAlarmEnabled,
-      isBaqarahEnabled: _isBaqarahAlarmEnabled,
-    );
+    try {
+      await _schedulingCoordinator.syncFromSettings(
+        isMorningEnabled: _isMorningAlarmEnabled,
+        isEveningEnabled: _isEveningAlarmEnabled,
+        isMulkEnabled: _isMulkAlarmEnabled,
+        isBaqarahEnabled: _isBaqarahAlarmEnabled,
+      );
+    } catch (error) {
+      developer.log(
+        'Alarm sync failed',
+        name: 'sakina_app.settings',
+        level: 1000,
+        error: error,
+      );
+    }
   }
 
   /// Update all alarms based on current settings
-  Future<void> _updateAllAlarms() async {
-    await _schedulingCoordinator.syncFromSettings(
-      isMorningEnabled: _isMorningAlarmEnabled,
-      isEveningEnabled: _isEveningAlarmEnabled,
-      isMulkEnabled: _isMulkAlarmEnabled,
-      isBaqarahEnabled: _isBaqarahAlarmEnabled,
-    );
-  }
+  Future<void> _updateAllAlarms() => _syncAlarmsFromSettings();
 
   Future<void> toggleMorningAlarm(bool value) async {
     _isMorningAlarmEnabled = value;

@@ -568,3 +568,236 @@ Until step 6, the key in public history still works. Deleting the key is what en
 
 **Run on any device**
 - All five `integration_test/` files, including the corrected `production_flow_test.dart`.
+
+---
+
+## 11. Production Readiness Audit and Remediation (2026-11-03)
+
+Sections 1–10 are preserved as history. Where they disagree with this section, this section reflects the code as of this audit. In particular, section 10's "uncommitted on top of `ab686ba`" is out of date: that work is now in commit `cfc5f8c`.
+
+### 11.1 Verdict
+
+**Not production-ready.** The code is in better shape, and all automated checks that can run on this machine pass, but device behavior is unverified, iOS has never been built here, and store, identity, and content approvals are outstanding.
+
+| Area | Status | Basis |
+| --- | --- | --- |
+| Repository/code | **Passing local checks; not release-approved** | Analyzer, formatter, secret scan, and 375 tests pass. Audit coverage was partial (see 11.3). GitHub CI has not been re-run on these uncommitted changes |
+| Android build | **Debug builds; release not attempted** | `flutter build apk --debug` succeeded. Release needs `android/key.properties`, which does not exist |
+| Android device behavior | **Unverified** | No test or scenario finished on a device in this audit |
+| iOS build | **Unverified** | Needs a Mac. There is no tracked Podfile, Swift package reference, or real Firebase plist |
+| iOS device behavior | **Unverified** | Needs a Mac and a device |
+| Store/account/policy | **Blocked** | `com.example.*` IDs, no signing, exact-alarm eligibility and other declarations open |
+| Content approval | **Blocked** | `content_manifest.json` approval is pending; no named sources or reviewer |
+
+### 11.2 Baseline and how existing work was preserved
+
+| Item | Value |
+| --- | --- |
+| Branch and commit | `main` at `cfc5f8c`, level with `origin/main` |
+| Staged changes | None at the start; none added. Nothing was committed, pushed, or published |
+| Existing unstaged changes | `lib/features/onboarding/presentation/screens/home_screen.dart` and `test/features/onboarding/presentation/screens/home_screen_test.dart`: drawer links replaced by a "coming soon" message, with a test |
+| Preservation | A baseline diff was saved before any edit and compared after formatting and all code changes, ignoring whitespace: identical. All other edits avoid these two files |
+| Host | Windows 11, Flutter `3.48.0-0.5.pre` (beta), Dart 3.14.0. No working Python (the Microsoft Store alias only). No Mac |
+
+### 11.3 Scope and limits
+
+- **Read in full:** startup, notification service and routing, WorkManager service, prayer provider, repository, API, scheduler and replenishment, Khatma provider and repository, Qibla controller and device service, media data sources, base API service, monitoring service, manifest, Gradle config, `Info.plist`, `AppDelegate.swift`, `BootReceiver.kt`.
+- **Read in part or by targeted search:** `home_screen.dart`, `surah_details_screen.dart`, `settings_*`, `khatma_duration_screen.dart`, `khatma_model.dart`, `khatma_quran_locator.dart`, and the accessibility and navigation patterns found by search.
+- **Not reviewed line by line:** `QiblaCompass.kt`, `qibla_screen.dart`, `prayer_times_screen.dart`, `prayer_location_dialog.dart`, `quran_screen.dart`, Quran data sources, Quran search internals, hadith and duas features, `DEVELOPMENT_PLAN.md`, and `web/`, `windows/`, `macos/`, `linux/`. The Phase B journeys for these are therefore **not** fully traced.
+- **UI/UX:** assessed from code only. No screen was inspected visually, so contrast, RTL rendering, and layout have no visual evidence beyond the widget tests.
+- **Religious content:** no text was changed or assessed for authenticity.
+
+### 11.4 New findings
+
+Severity reflects the effect on users or release. "Fixed" means changed in the repository and checked as listed. It does not mean seen working on a device.
+
+| ID | Finding | Category, severity | Status | Evidence and change | Tests |
+| --- | --- | --- | --- | --- | --- |
+| A1 | **A 60-hizb Khatma plan ended about halfway through the Quran.** The data has 240 quarters (1 hizb = 4), but units were computed as `(quarter - 1) ~/ 2 + 1` and starts as `(unit - 1) * 2 + 1`. Hizb 60 resolved to quarter 119, Surah 18 | Confirmed defect, code. **Critical** | Fixed; see limitation | `khatma_quran_locator.dart:51,227`, `surah_details_screen.dart:210` now use 4. Checked against `assets/quran_master.json`. No text changed | `khatma_hizb_mapping_test.dart` |
+| A2 | **Back after a notification tap had no page to return to.** `context.go` left one page, and target screens' back buttons call `Navigator.pop` | Confirmed defect from code, code. **High** | Fixed; needs device check | `notification_handler.dart:9` now opens the target above `/home`, also giving the system back button a home to return to | `notification_handler_test.dart`, using a test router, not the app's real screens |
+| A3 | **Reminders could fail entirely when exact alarms are denied.** Scheduling always requested exact mode, and the plugin throws without access. `SCHEDULE_EXACT_ALARM` is denied by default on Android 14+, so removing `USE_EXACT_ALARM` (F10) would have broken every reminder for new installs | Confirmed defect, code and policy. **High** | Fixed; needs device check | `notification_service.dart` `scheduleModeFor`, `_androidScheduleMode` fall back to inexact timing, which can arrive late | `notification_scheduling_rules_test.dart` covers mode selection only |
+| A4 | **CI fails on every push.** The secret scanner flagged its own test at `check_secrets_test.dart:21`, stopping the latest run (`cfc5f8c`) before analyze and test. The last six runs all failed; only the latest cause was inspected | Confirmed defect, test. **High** | Fixed locally; CI not re-run | Header string split so the file no longer matches | Scan passes locally. Later CI steps needing Python are unverified |
+| A5 | **All prayer API requests could wait forever.** `BaseApiService` set no timeout, so its `TimeoutException` handler could not run. Non-socket `ClientException` also skipped stale fallback, and its text can include the request URL with coordinates | Confirmed defect, code. **High** | Fixed | `base_api_service.dart`: 15-second timeout, mapped to `NetworkException` | `base_api_service_test.dart` |
+| A6 | **RSS feeds using numeric date offsets were likely dropped whole.** `HttpDate.parse` expects GMT and throws `HttpException`, which the code did not catch. Whether live feeds use such dates was not checked | Likely defect, code. **Medium** | Fixed | `articles_remote_datasource.dart` `_parseRfc822Date` | New case in `articles_remote_datasource_test.dart` |
+| A7 | **Feed-supplied links could launch any URL scheme**, such as `intent:` or `file:`. Audio also used a throwing `Uri.parse` | Confirmed security issue, code. **Medium** | Fixed | New `core/utils/external_links.dart` allows only `http`/`https` with a host; used by all three media widgets. A rejected article or video link now shows the existing error | `external_links_test.dart` covers the helper, not the widgets |
+| A8 | **Malformed or incomplete prayer responses bypassed usable cached timings**, and incomplete days were cached | Confirmed defect, code. **Medium** | Fixed | `prayer_times_repository_impl.dart`: requires all five timings; generic failures try the stale cache | `prayer_times_stale_fallback_test.dart` |
+| A9 | **Khatma reminder text went stale.** Its body names the range, but finishing a wird did not reschedule it. A scheduling failure also interrupted plan creation after the plan was saved | Confirmed defect, code. **Medium** | Fixed | `khatma_provider.dart` | `khatma_reminder_lifecycle_test.dart` |
+| A10 | **A Khatma reminder could be set with no permission request.** The explanation appeared only after choosing a prayer location | Confirmed defect, code. **Medium** | Fixed | `khatma_duration_screen.dart` shows the existing one-time dialog after creating a plan | No test through this screen; the dialog itself is tested |
+| A11 | **Refused permission looked like success.** The switch stayed on with no explanation | Confirmed defect, UX. **Medium** | Partially fixed | `settings_controls.dart` `requestNotificationPermissionWithFeedback`, plus new Arabic text for your review | `notification_dialog_layout_test.dart` |
+| A12 | **The home drawer's reminder switches never request permission** (`home_screen.dart:943-971`) | Confirmed defect, code. **Medium** | Deferred | Not changed because this file holds your in-progress edits. Call `requestNotificationPermissionWithFeedback` when enabling, as `settings_screen.dart` does | None |
+| A13 | **Quick reminder toggles could race**, leaving a disabled reminder scheduled. Failures in these unawaited calls were also uncaught | Confirmed from code, code. **Medium** | Fixed | `notification_service.dart` serializes `updateAllAlarms`; `settings_provider.dart` catches and logs | Failure handling tested in `settings_provider_alarm_failure_test.dart`. Serialization has no direct test |
+| A14 | **Daily reminders could fire an hour off once across a DST change**, from adding 24 hours | Confirmed defect, code. **Low** | Fixed | `nextDailyOccurrence` uses calendar arithmetic | `notification_scheduling_rules_test.dart` |
+| A15 | **`initialize(requestPermissions: true)` as the first call would deadlock.** No current caller does this | Confirmed latent defect, code. **Low** | Fixed | Request moved outside the initialization future | `notification_scheduling_rules_test.dart` |
+| A16 | **Wrongly typed stored values could break launch**, as typed getters throw during routing and root widget setup | Likely defect, code. **Low** | Partially fixed | `first_run_state.dart`, `prayer_times_provider.dart` constructor. `ThemeProvider`, `FavoritesProvider`, and replenishment still use typed getters | `startup_corrupted_preferences_test.dart` |
+| A17 | **The permission dialog could overflow** with large text on a small screen | Likely defect, accessibility. **Low** | Fixed | Scrollable content, minimum instead of fixed button heights | `notification_dialog_layout_test.dart` at 320×480, 2× text |
+| A18 | **Advertising-related permissions reach the merged manifest**: `AD_ID`, `ACCESS_ADSERVICES_ATTRIBUTION`, `ACCESS_ADSERVICES_AD_ID`, and install referrer, presumably from Firebase Analytics. This matters for Play declarations and the privacy draft | Confirmed configuration, policy. **Medium** | Blocked on decision | Debug merged manifest inspected. No change | None |
+| A19 | **Your in-progress home change leaves `share_plus` unused** in `lib/`, if kept. The drawer would also ship several "coming soon" items, which a store reviewer may question | Maintenance, product. **Low** | Your decision | `pubspec.yaml:57`. No change | None |
+| A20 | **No iOS privacy manifest in `ios/Runner`.** Apple's page could not be read by the fetch tool, so the exact requirement is **not confirmed** from an official source here | Unknown, policy. **Medium** | Blocked | Confirm in Apple's docs and App Store Connect | None |
+| A21 | **Existing hizb plans keep stored positions from the old mapping** until the next finished wird, and their progress was counted under the old mapping | Migration concern from the A1 fix. **Medium** | Decision needed if already published | Not migrated. No effect on unpublished builds | None |
+| A22 | **Media caches are deleted on expiry before refetching**, so expired content is lost offline. Up to four sequential feed timeouts can also delay the article screen by about a minute | Maintenance, code. **Low** | Deferred | `cached_api_service.dart`, `articles_remote_datasource.dart` | Existing tests only |
+| A23 | **No `errorBuilder` on the router.** No deep links exist, so only an internal bug could reach it | Maintenance. **Low** | Deferred | `app_router.dart` | None |
+
+### 11.5 Prior findings, re-verified
+
+"Fixed" is carried over only where this audit re-read the evidence.
+
+| ID | Status | Evidence now |
+| --- | --- | --- |
+| F1 | **Partially fixed; see 11.13** | Key rotated and restricted by the owner. Deletion of the old key is still to be confirmed by the owner |
+| F2 | Fixed; needs device verification | `first_run_state.dart`, `splash_screen.dart:59`; tests pass |
+| F3 | Fixed; needs device verification | `BootReceiver.kt:60-61` uses plugin constants; compiled in the debug build |
+| F4 | Fixed; needs device verification | `deliverLaunchNotification`, `NotificationRouter.hold/release`. See A2 for back behavior |
+| F5 | Fixed | `app_startup.dart`, tests pass |
+| F6 | **Blocked** | Unchanged |
+| F7 | Partially fixed; blocked | CI still pins beta `3.48.0-0.5.pre` |
+| F8 | Fixed in code; needs device verification | No `NavigationBar` reference remains in `production_flow_test.dart`. Not run |
+| F9 | Fixed in code; cannot verify here | The `registerPeriodicTask(withIdentifier:earliestBeginInSeconds:)` signature exists in `workmanager_apple` 0.9.6, and the identifier is in `Info.plist`. Never compiled |
+| F10 | Partially fixed; policy blocked | Merged manifest still has both exact-alarm permissions. See 11.9 |
+| F11 | Fixed; wording blocked on your approval | `Info.plist:33` |
+| F12 | Fixed | `docs/RELEASE_REQUIREMENTS.md:15` names both enabling flags and the opt-in. `app_environment.dart` itself was not re-read in this audit |
+| F13 | Fixed | `notification_service.dart`, existing tests |
+| F14 | Not reproduced | Per section 10; not re-tested |
+| F15 | Fixed | `refreshIfNeeded`, `app_root.dart:82`; tests pass |
+| F16 | Deferred, hypothesis | See 11.8 |
+| F17 | Fixed | Removed files are absent; analyzer clean |
+| F18 | Deferred | Largest: `home_screen.dart` 1,225 lines, `surah_details_screen.dart` 1,160 |
+| F19 | Fixed | No reader files excluded; analyzer clean |
+| F20 | Fixed | `_removeExpiredDays`; tests pass |
+| F21 | **Blocked on decision** | `allowBackup` is still not set in the app manifest |
+| F22 | Partially addressed, deferred | Still regex parsing. A6 fixes one fragility |
+| F23 | Fixed | No `android/build` files tracked |
+| F24 | Partially fixed; decision needed | Recommendation in 11.10 |
+| F25 | Fixed; needs device verification | Manifest `exported="false"` |
+| F26 | Fixed in code; cannot verify here | One registration remains in `AppDelegate.swift:33`, plus the background registrant callback. Never compiled |
+| F27 | Fixed in code; needs device verification | `workmanager_service.dart:34-36` |
+| F28 | **Blocked on policy** | Still in merged manifest. See 11.9 |
+
+### 11.6 Critical journeys: what each kind of evidence covers
+
+| Journey | Code reviewed | Automated tests | Still needs a device or service |
+| --- | --- | --- | --- |
+| First launch, onboarding | Yes | Splash, onboarding, prompt | Fresh install, upgrade |
+| Quran reader, bookmarks | Partly | Screen and provider tests | Performance, restoration. Search internals not reviewed |
+| Prayer times | Provider, repository, API | Offline, stale, malformed, timeout | Live AlAdhan, location, DST |
+| Reminders | Yes | Mode choice, next occurrence, ID logic | Exact alarms, reboot, OEM battery limits |
+| Qibla | Controller and device service; native Android not reviewed | Controller tests | Sensor accuracy, calibration |
+| Khatma | Provider, repository, locator | Lifecycle, hizb mapping | Reminder delivery. Reading a full hizb range in the reader |
+| Notification taps | Yes | Router, handler, launch details | Foreground, background, terminated |
+| Media | Data sources, link handling | Parsing, cache, links | Live feeds, YouTube quota, new key |
+
+### 11.7 Security and privacy
+
+- **F1 remains the top external risk.** A key compiled into a mobile client can always be extracted. Restrictions and quotas limit the damage but do not make it secret.
+- **Monitoring:** consent defaults to off and native collection is off in both platform configs. Only error type and stack are sent, and events are limited to an allowlist (`monitoring_service.dart`). A18 still affects declarations.
+- **Logging:** prayer request logs exclude the query string holding coordinates. A5 removes a path where a URL could enter an exception. Four `debugPrint` calls remain; none logs coordinates directly. The RSS one logs an error object, which could include a public feed URL.
+- **Location:** foreground only in Dart, no background permission declared. Coordinates are stored in plain `SharedPreferences` and may be backed up (F21).
+- **Scanner limits:** `check_secrets.dart` covers tracked files for two patterns. It does not scan git history or other credential formats.
+- **No secret values were printed or written.** CI log output was filtered to redact Google-format keys, and `.env` was not read.
+
+### 11.8 Performance
+
+| Item | Measured or inferred | Result |
+| --- | --- | --- |
+| `jsonDecode` of `quran_master.json` | **Measured on this desktop host only**, in the Dart VM | 95 ms first run, then 30–38 ms. Says nothing reliable about a low-end phone |
+| Repeated decoding on the main isolate (F16) | Inferred | Hypothesis. Profile opening a surah on a low-end Android device in profile mode before adding isolates or caching |
+| Large HTTP bodies in `SharedPreferences` | Inferred | Hypothesis. Check the prefs file size after visiting media screens, then startup time |
+
+No optimizations were made.
+
+### 11.9 Policy sources consulted (2026-11-03)
+
+| Topic | What the source says | Consequence |
+| --- | --- | --- |
+| [Play exact alarm policy](https://support.google.com/googleplay/android-developer/answer/16558241) | `USE_EXACT_ALARM` is for alarm or timer apps and calendar apps showing event notifications, with a Play Console declaration and review | **Eligibility of a prayer-reminder app is not clear.** You decide; Google makes the final call |
+| [Android 14 exact alarm change](https://developer.android.com/about/versions/14/changes/schedule-exact-alarms) | `SCHEDULE_EXACT_ALARM` is denied by default for most new installs; apps should check and degrade gracefully | Basis for A3 |
+| [Play target API requirement](https://support.google.com/googleplay/android-developer/answer/11926878) | API 36 for new apps and updates from August 31, 2026 | The merged manifest targets 36: currently met |
+| [Foreground service types](https://developer.android.com/develop/background-work/services/fgs/service-types) | Types must be declared, and Play Console declarations apply when targeting Android 14+ | `FOREGROUND_SERVICE_LOCATION`, `DATA_SYNC`, and `SHORT_SERVICE` are merged in; review with F28 |
+| [Apple privacy manifests](https://developer.apple.com/documentation/bundleresources/privacy-manifest-files) | **Could not be read** | A20 stays unconfirmed |
+
+### 11.10 Validation
+
+Results are from the final code state, except the search and policy steps above.
+
+| Command | Result |
+| --- | --- |
+| `flutter analyze --no-pub` | **Passed:** no issues |
+| `dart format --output=none --set-exit-if-changed lib test integration_test scripts/check_secrets.dart` | **Passed:** 261 files, 0 changed |
+| `dart run scripts/check_secrets.dart` | **Passed.** Failed at baseline (A4) |
+| `flutter test --no-pub` | **Passed:** 375. Baseline was 343 |
+| `flutter build apk --debug --no-pub` | **Passed:** APK built. The output included a Kotlin Gradle plugin version warning that should be read before upgrading tools |
+| `flutter gen-l10n` | Completed; only the new message was intended to change |
+| `flutter test integration_test/*` on `emulator-5554` | **Not run to completion, no results.** First attempt could not start because the emulator had exited. The second was stopped by you. The third was stopped by me because your VS Code debug session was using the emulator |
+| `flutter test integration_test/...` on Windows | Not re-run; failed while loading in the earlier remediation, which is not a test failure |
+| `python3 scripts/verify_content.py`, `verify_release.py`, gate tests | **Not run:** no working Python. CI runs them, so CI could still fail on them. `verify_release.py` and `--require-approved` are expected to block by design |
+| `flutter build apk --release`, app bundle | **Not run:** no signing config |
+| iOS build | **Not run:** needs macOS |
+| GitHub Actions | Not re-run; nothing was pushed |
+
+### 11.11 Actions and decisions needed from you
+
+Recommendations below are not applied.
+
+| Item | Needed | Recommendation |
+| --- | --- | --- |
+| F1 | Revoke the YouTube key and issue a replacement, using the steps in section 10 | Do this first. History rewriting is optional, disruptive, and does not replace revocation |
+| A1, A21 | Was any build with hizb plans released? | If so, I can add a migration. If not, no action |
+| F6 | Publication status, final app and bundle IDs, target platforms, signing, Apple team | Choose before registering Firebase apps |
+| F7 | Flutter version to release on | A stable channel release, tested before release |
+| F10, A3 | Are exact prayer alarms a required feature? | Decide with Play's policy page. If you doubt eligibility, remove `USE_EXACT_ALARM`; A3 now gives a late-reminder fallback, but test it first |
+| F21 | Backup scope | Keep bookmarks and Khatma progress, exclude coordinates, using rules or separate storage |
+| F28, A18 | Should monitoring ship, and which permissions stay? | If there are no ads, consider removing advertising permissions, then match the privacy policy and Play Data safety form |
+| F11, A11 | Approve the Arabic location text and the new permission-denied message | |
+| Content | Sources, licenses, named reviewer | Also have the reviewer confirm the hizb boundaries used by A1 |
+| A12, A19 | Finish or adjust your home screen change | Add the drawer permission request; remove `share_plus` if sharing stays out |
+| F24 | Plan authority | `DEVELOPMENT_PLAN.md` as roadmap, this file as remediation log. No plans were changed |
+| A20 | Apple privacy manifest | Confirm on the Mac build |
+
+### 11.12 Device verification matrix
+
+Nothing below has been verified.
+
+| Check | Android | iOS |
+| --- | --- | --- |
+| All five integration tests | Required | Required |
+| Fresh install and upgrade from an older build | Required | Required |
+| Notification permission: grant, deny, revoke | Required, API 33+ | Required |
+| Enable reminder after refusal shows the new message | Required | Required |
+| Tap in foreground, background, terminated, for each type; then back to home | Required | Required |
+| Locked-screen delivery | Required | Required |
+| Exact access removed: reminder still arrives, possibly late | Required, with `USE_EXACT_ALARM` removed in a test build | Not applicable |
+| Battery restrictions, OEM behavior | Required | Not applicable |
+| Reboot and app update rescheduling (Logcat `reschedule_alarms`) | Required | Not applicable |
+| Background refresh | WorkManager | `BGTaskScheduler`, debugger-triggered |
+| Location and compass: grant, deny, permanent denial, no sensor | Required | Required |
+| Offline: stale prayer times, media errors, recovery | Required | Required |
+| Hizb Khatma: unit 60 opens at Surah 87 and completion reaches the end | Required | Required |
+| Small screen, large text, TalkBack or VoiceOver, RTL | Required | Required |
+| App launches at all, `AppDelegate` and plugins work | Required | **Required first** |
+
+### 11.13 F1 follow-up: key rotation and leak prevention (2026-11-03)
+
+No key value appears in this report. Key checks printed only lengths, match counts, HTTP status codes, and Google's error reason.
+
+**Status**
+- The owner created a replacement key restricted to YouTube Data API v3.
+- The old key remains in the public history of commits `1b31792` and `cbe5823`. History was not rewritten.
+- A live request with the old key returned HTTP 400 (`badRequest`). This suggests Google no longer accepts it, but **deletion is for the owner to confirm in Google Cloud**.
+
+**Incident found during this work (A24, fixed)**
+- The new key was in the working copy of the tracked `.env.example`, and `.env` still held the old key.
+- It was unstaged and appears in no commit, so it was not published.
+- With the owner's approval, a script moved the value into `.env` without displaying it, and `.env.example` now has an empty value.
+
+**Prevention measures**
+
+| Area | Change |
+| --- | --- |
+| Ignore rules | `.env` and `.env.*` were already ignored, except `.env.example`. Added `*.local` and `key.properties` at any depth |
+| Key transport | `video_remote_datasource.dart` sends the `X-Goog-Api-Key` header instead of the `key=` query parameter. A key in the URL could reach `http.ClientException` text. No active log, monitoring, or cache path exposing it was found: the repository maps these errors to fixed messages, monitoring sends only the error type and stack, and cache keys use the search query |
+| Scanner | `scripts/check_secrets.dart` covers all tracked text outside generated files, plus private keys, tracked signing and env files, and env-style secret assignments. It adds `--staged`, which reads the index. Git failure is an error, not a clean scan |
+| Hook | `.githooks/pre-commit`, enabled per clone with `git config core.hooksPath .githooks` |
+| CI | Both workflows already ran the scanner before analyze and test; `scripts` was added to their format checks. A history scanner was not added, because the old key would need a baseline |
+
+**Header support:** [Google's API key guide](https://docs.cloud.google.com/docs/authentication/api-keys-use) says to use `x-goog-api-key` for REST calls and warns that the query parameter exposes keys through URL scans. The [YouTube API reference](https://developers.google.com/youtube/v3/docs) documents only the `key` parameter, so a live search request with the header was also tried: HTTP 200 with a result. If Google changes this undocumented-for-YouTube behavior, the video screen would need to return to the parameter.
+
+**Residual risk:** any key compiled into the app can be extracted from the APK. The API restriction and a daily quota are the real protection, and a backend proxy is the only full fix if that risk ever matters. The scanner also does not read history, and it recognizes only the listed credential formats.

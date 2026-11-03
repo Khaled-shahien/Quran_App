@@ -2336,6 +2336,10 @@
   "@startupFailureRetry": {
     "description": "Retry button on the startup failure screen."
   },
+  "notificationPermissionDeniedMessage": "لم يُمنح إذن الإشعارات، لذلك لن تصلك التذكيرات. يمكنك تفعيله من إعدادات الجهاز.",
+  "@notificationPermissionDeniedMessage": {
+    "description": "Shown when a reminder is enabled but notification permission was refused."
+  },
   "applicationTitle": "Sakina",
   "@applicationTitle": {
     "description": "Application title."

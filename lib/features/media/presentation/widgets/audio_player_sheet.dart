@@ -5,7 +5,7 @@ import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/features/media/domain/entities/reciter.dart';
 import 'package:sakina_app/features/media/domain/entities/surah_audio.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:sakina_app/core/utils/external_links.dart';
 
 class AudioPlayerSheet extends StatelessWidget {
   const AudioPlayerSheet({
@@ -138,10 +138,7 @@ class _SurahAudioTile extends StatelessWidget {
   }
 
   Future<void> _openAudio(BuildContext context) async {
-    final opened = await launchUrl(
-      Uri.parse(surah.audioUrl),
-      mode: LaunchMode.externalApplication,
-    );
+    final opened = await openWebUrl(surah.audioUrl);
     if (!opened && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

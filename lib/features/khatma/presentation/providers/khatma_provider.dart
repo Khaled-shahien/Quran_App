@@ -1,5 +1,6 @@
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as developer;
 import 'dart:math' as math;
 import '../../domain/models/khatma_model.dart';
 import '../../domain/models/wird_reading_position.dart';
@@ -185,9 +186,8 @@ class KhatmaProvider extends ChangeNotifier {
     _activeKhatma = updatedKhatma;
     _savedWirdPosition = null;
 
-    if (completed) {
-      await _reminderService.cancelReminder(_khatmaReminderNotificationId);
-    }
+    // The reminder text names the current range, so it moves with the plan.
+    await _scheduleKhatmaReminder(updatedKhatma);
 
     notifyListeners();
   }
@@ -331,27 +331,37 @@ class KhatmaProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// A saved plan stays valid when its reminder cannot be scheduled.
   Future<void> _scheduleKhatmaReminder(KhatmaModel khatma) async {
-    if (khatma.isCompleted) {
-      await _reminderService.cancelReminder(_khatmaReminderNotificationId);
-      return;
-    }
+    try {
+      if (khatma.isCompleted) {
+        await _reminderService.cancelReminder(_khatmaReminderNotificationId);
+        return;
+      }
 
-    await _reminderService.scheduleDailyReminder(
-      notificationId: _khatmaReminderNotificationId,
-      title: appL10n.khatmaProviderMessage1,
-      body: appL10n.khatmaProviderMessage2(
-        (khatma.amountValue).toString(),
-        (khatma.todayFromUnit).toString(),
-        (khatma.todayToUnit).toString(),
-      ),
-      hour: khatma.reminderHour,
-      minute: khatma.reminderMinute,
-      payload: 'khatma',
-      payloadData: <String, dynamic>{
-        'feature': 'khatma',
-        'khatmaId': khatma.id,
-      },
-    );
+      await _reminderService.scheduleDailyReminder(
+        notificationId: _khatmaReminderNotificationId,
+        title: appL10n.khatmaProviderMessage1,
+        body: appL10n.khatmaProviderMessage2(
+          (khatma.amountValue).toString(),
+          (khatma.todayFromUnit).toString(),
+          (khatma.todayToUnit).toString(),
+        ),
+        hour: khatma.reminderHour,
+        minute: khatma.reminderMinute,
+        payload: 'khatma',
+        payloadData: <String, dynamic>{
+          'feature': 'khatma',
+          'khatmaId': khatma.id,
+        },
+      );
+    } catch (error) {
+      developer.log(
+        'Khatma reminder scheduling failed',
+        name: 'sakina_app.khatma',
+        level: 1000,
+        error: error,
+      );
+    }
   }
 }

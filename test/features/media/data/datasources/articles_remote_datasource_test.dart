@@ -17,6 +17,27 @@ void main() {
     prefs = await SharedPreferences.getInstance();
   });
 
+  test('accepts RSS dates with numeric offsets', () async {
+    final client = MockClient(
+      (_) async => http.Response.bytes(
+        utf8.encode('''
+<rss><channel><item>
+  <title>a</title><link>https://example.com/a</link>
+  <pubDate>Mon, 01 Jul 2024 10:00:00 +0300</pubDate>
+</item></channel></rss>'''),
+        200,
+      ),
+    );
+
+    final articles = await ArticlesRemoteDataSource(
+      client: client,
+      cache: CachedApiService(prefs),
+    ).getArticles();
+
+    expect(articles, isNotEmpty);
+    expect(articles.first.pubDate, DateTime.utc(2024, 7, 1, 7));
+  });
+
   test('loads and parses RSS articles from available feeds', () async {
     final client = MockClient((request) async {
       const body = '''

@@ -1718,5 +1718,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get startupFailureRetry => 'إعادة المحاولة';
 
   @override
+  String get notificationPermissionDeniedMessage =>
+      'لم يُمنح إذن الإشعارات، لذلك لن تصلك التذكيرات. يمكنك تفعيله من إعدادات الجهاز.';
+
+  @override
   String get applicationTitle => 'Sakina';
 }

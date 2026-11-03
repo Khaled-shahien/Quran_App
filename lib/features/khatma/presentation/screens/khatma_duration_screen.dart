@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import 'package:provider/provider.dart';
+import '../../../onboarding/presentation/widgets/notification_permission_dialog.dart';
 import '../providers/khatma_provider.dart';
 import '../../domain/models/khatma_model.dart';
 
@@ -301,6 +302,11 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                   );
 
                   await provider.startNewKhatma(newKhatma);
+
+                  if (!context.mounted) return;
+                  // A plan's daily reminder needs the same one-time permission
+                  // explanation as a first prayer location.
+                  await promptForNotificationPermissionOnce(context);
 
                   if (!context.mounted) return;
 

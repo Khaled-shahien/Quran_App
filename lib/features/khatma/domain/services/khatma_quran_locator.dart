@@ -48,7 +48,7 @@ class KhatmaQuranLocator {
         );
         break;
       case KhatmaTrackingUnit.hizb:
-        final int targetQuarter = ((unitIndex.clamp(1, 60) - 1) * 2) + 1;
+        final int targetQuarter = ((unitIndex.clamp(1, 60) - 1) * 4) + 1;
         _scanQuran(
           quran,
           pick: (surah, ayah) {
@@ -224,7 +224,7 @@ class KhatmaQuranLocator {
       case KhatmaTrackingUnit.hizb:
         final int? hizbQuarter = (ayah['hizbQuarter'] as num?)?.toInt();
         if (hizbQuarter == null) return null;
-        return ((hizbQuarter - 1) ~/ 2) + 1;
+        return ((hizbQuarter - 1) ~/ 4) + 1;
       case KhatmaTrackingUnit.juz:
         return (ayah['juz'] as num?)?.toInt();
     }
