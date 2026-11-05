@@ -69,11 +69,17 @@ class FixedPrayerLocationService implements PrayerLocationService {
   }
 }
 
+/// No prayer location has been chosen yet. This is a normal first-run state,
+/// not an error.
+class PrayerLocationNotConfiguredException implements Exception {
+  const PrayerLocationNotConfiguredException();
+}
+
 class UnconfiguredPrayerLocationService implements PrayerLocationService {
   const UnconfiguredPrayerLocationService();
   @override
   Future<Coordinates> getCurrentCoordinates() async =>
-      throw StateError('Select a prayer location first');
+      throw const PrayerLocationNotConfiguredException();
 }
 
 /// Prayer Times Provider
@@ -99,6 +105,11 @@ class PrayerTimesProvider extends ChangeNotifier {
   int _requestId = 0;
   bool _disposed = false;
   bool _isLoading = false;
+  bool _needsLocation = false;
+
+  /// True until the user picks a location; screens show a friendly prompt
+  /// instead of an error.
+  bool get needsLocation => _needsLocation && _selectedCoordinates == null;
 
   @override
   void notifyListeners() {
@@ -380,6 +391,12 @@ class PrayerTimesProvider extends ChangeNotifier {
           calculationMethod: selectedMethod,
         );
       }
+    } on PrayerLocationNotConfiguredException {
+      if (_disposed || requestId != _requestId) return;
+      _isLoading = false;
+      _needsLocation = true;
+      _errorMessage = null;
+      notifyListeners();
     } catch (_) {
       if (_disposed || requestId != _requestId) return;
       _isLoading = false;

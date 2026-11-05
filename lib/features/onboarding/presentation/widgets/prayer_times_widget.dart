@@ -56,6 +56,36 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           );
         }
 
+        if (provider.needsLocation) {
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.location_on_outlined,
+                  size: 40,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  l10nOf(context).choosePrayerLocation,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Cairo',
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                FilledButton.tonal(
+                  onPressed: () => context.push('/prayers'),
+                  child: Text(l10nOf(context).prayerTimesWidgetMessage2),
+                ),
+              ],
+            ),
+          );
+        }
+
         if (provider.hasError) {
           return Padding(
             padding: const EdgeInsets.all(16),

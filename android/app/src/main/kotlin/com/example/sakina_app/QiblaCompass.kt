@@ -101,6 +101,8 @@ class QiblaCompass(private val activity: Activity) : EventChannel.StreamHandler,
         val orientation = SensorManager.getOrientation(remapped, FloatArray(3))
         val heading = (Math.toDegrees(orientation[0].toDouble()) + declination + 360) % 360
         sink?.success(mapOf("heading" to heading,
-            "needsCalibration" to (accuracy < SensorManager.SENSOR_STATUS_ACCURACY_HIGH)))
+            // Many devices never report HIGH for the rotation vector, which
+            // kept the hint on permanently. MEDIUM is accurate enough here.
+            "needsCalibration" to (accuracy < SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM)))
     }
 }

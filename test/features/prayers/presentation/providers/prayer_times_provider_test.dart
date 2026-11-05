@@ -39,6 +39,13 @@ class FakePrayerTimesRepository implements PrayerTimesRepository {
   }
 }
 
+class _FailingLocationService implements PrayerLocationService {
+  const _FailingLocationService();
+  @override
+  Future<Coordinates> getCurrentCoordinates() async =>
+      throw const PrayerLocationException('GPS unavailable');
+}
+
 class FakePrayerTimesClock implements PrayerTimesClock {
   FakePrayerTimesClock(this._now);
 
@@ -345,7 +352,30 @@ void main() {
     final provider = PrayerTimesProvider(repository: repository);
     await provider.fetchTodayForCurrentLocation();
     expect(repository.lastLatitude, isNull);
+    // First run asks for a location instead of reporting a failure.
+    expect(provider.hasError, isFalse);
+    expect(provider.needsLocation, isTrue);
+    expect(provider.isLoading, isFalse);
+  });
+  test('choosing a location clears the needs-location prompt', () async {
+    final provider = PrayerTimesProvider(
+      repository: FakePrayerTimesRepository(),
+    );
+    await provider.fetchTodayForCurrentLocation();
+    expect(provider.needsLocation, isTrue);
+
+    await provider.selectLocation(30.0444, 31.2357, 'القاهرة', 5);
+
+    expect(provider.needsLocation, isFalse);
+  });
+  test('a real lookup failure is still reported as an error', () async {
+    final provider = PrayerTimesProvider(
+      repository: FakePrayerTimesRepository(),
+      locationService: const _FailingLocationService(),
+    );
+    await provider.fetchTodayForCurrentLocation();
     expect(provider.hasError, isTrue);
+    expect(provider.needsLocation, isFalse);
   });
   test('manual coordinates and calculation method survive restart', () async {
     SharedPreferences.setMockInitialValues({});
