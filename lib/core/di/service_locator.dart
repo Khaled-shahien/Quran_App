@@ -33,6 +33,7 @@ import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_reposito
 import 'package:sakina_app/features/hadeath/data/repositories/hadeath_repository_impl.dart';
 
 import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
+import 'package:sakina_app/features/duas/data/repositories/adhan_adhkar_repository.dart';
 import 'package:sakina_app/features/duas/data/repositories/duas_repository.dart';
 import 'package:sakina_app/features/khatma/data/repositories/khatma_repository.dart';
 import 'package:sakina_app/features/media/data/datasources/articles_remote_datasource.dart';
@@ -138,6 +139,10 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<AzkarRepository>(() => AzkarRepositoryImpl());
 
     getIt.registerLazySingleton<DuasRepository>(() => DuasRepositoryImpl());
+
+    getIt.registerLazySingleton<AdhanAdhkarRepository>(
+      () => AdhanAdhkarRepositoryImpl(),
+    );
 
     getIt.registerLazySingleton<KhatmaRepository>(
       () => KhatmaRepositoryImpl(prefs: getIt<SharedPreferences>()),

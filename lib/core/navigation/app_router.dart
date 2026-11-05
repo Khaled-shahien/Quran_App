@@ -30,6 +30,8 @@ import '../../features/media/presentation/providers/articles_provider.dart';
 
 import '../../features/media/presentation/providers/video_provider.dart';
 import '../../features/media/presentation/screens/articles_screen.dart';
+import '../../features/duas/data/repositories/adhan_adhkar_repository.dart';
+import '../../features/duas/presentation/screens/after_adhan_screen.dart';
 import '../../features/recitation/presentation/screens/recitation_downloads_screen.dart';
 import '../../features/recitation/presentation/screens/recitation_screen.dart';
 import '../../features/media/presentation/screens/video_screen.dart';
@@ -289,6 +291,16 @@ final GoRouter appRouter = GoRouter(
     ),
     // In-app Quran recitation (replaces the old external-link audio list).
     GoRoute(path: '/media/audio', redirect: (context, state) => '/recitation'),
+    GoRoute(
+      path: '/after-adhan',
+      pageBuilder: (context, state) => _fadePage(
+        state,
+        AfterAdhanScreen(
+          repository: getIt<AdhanAdhkarRepository>(),
+          prayerName: state.uri.queryParameters['prayer'],
+        ),
+      ),
+    ),
     GoRoute(
       path: '/recitation',
       pageBuilder: (context, state) =>

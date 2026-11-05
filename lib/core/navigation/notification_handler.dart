@@ -29,7 +29,14 @@ String _locationFor(String route, Map<String, dynamic>? data) {
           ? '/quran/surah/$number'
           : '/quran';
     case '/prayers':
-      return '/prayers';
+      // A prayer-time alert opens the adhan adhkar (dua after the adhan).
+      final String? prayer = data?['prayerName']?.toString();
+      return prayer == null || prayer.isEmpty
+          ? '/prayers'
+          : Uri(
+              path: '/after-adhan',
+              queryParameters: {'prayer': prayer},
+            ).toString();
     case '/khatma':
       return '/khatma';
     case '/':

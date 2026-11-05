@@ -30,6 +30,7 @@ void main() {
           '/duas/morning',
           '/quran/surah/:number',
           '/prayers',
+          '/after-adhan',
           '/khatma',
         ])
           GoRoute(path: path, builder: (_, state) => _page(state.uri.path)),
@@ -46,6 +47,7 @@ void main() {
         ('/duas', {'type': 'morning'}, '/duas/morning'),
         ('/quran', {'surahNumber': 67}, '/quran/surah/67'),
         ('/prayers', null, '/prayers'),
+        ('/prayers', {'prayerName': 'الفجر'}, '/after-adhan'),
         ('/khatma', null, '/khatma'),
       ]) {
     testWidgets('a tap on $expected can go back to home', (tester) async {

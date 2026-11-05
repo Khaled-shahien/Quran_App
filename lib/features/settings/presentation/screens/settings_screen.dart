@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/presentation/widgets/adhan_preferences.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -35,6 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ReadingPreferencesPanel(preferences: settings.prefs),
             _SectionTitle(l10nOf(context).mainNavigationShellMessage1),
             const PrayerPreferences(),
+            const AdhanPreferences(),
             _SectionTitle(l10nOf(context).recitationSettings),
             ListTile(
               leading: const Icon(Icons.headphones_rounded),

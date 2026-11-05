@@ -21,6 +21,12 @@ import 'package:sakina_app/features/quran/data/repositories/tasbih_repository_im
 import 'package:sakina_app/features/quran/presentation/providers/tasbih_controller.dart';
 import 'package:sakina_app/core/audio/recitation_audio_engine.dart';
 import 'package:sakina_app/core/utils/surah_names.dart';
+import 'package:sakina_app/core/services/notification_service.dart';
+import 'package:sakina_app/features/prayers/data/repositories/adhan_settings_store.dart';
+import 'package:sakina_app/features/prayers/presentation/providers/adhan_settings_controller.dart';
+import 'package:sakina_app/features/prayers/presentation/providers/prayer_arrival_watcher.dart';
+import 'package:sakina_app/features/prayers/presentation/widgets/adhan_preferences.dart';
+import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
 import 'package:sakina_app/features/recitation/domain/repositories/recitation_repository.dart';
 import 'package:sakina_app/features/recitation/presentation/providers/recitation_controller.dart';
 import 'package:sakina_app/features/recitation/presentation/providers/recitation_downloads_controller.dart';
@@ -81,12 +87,85 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     _prayerClockTimer = Timer.periodic(
       const Duration(minutes: 1),
-      (_) => _prayerTimesProvider.updateClock(),
+      (_) => _onClockTick(),
     );
+  }
+
+  final PrayerArrivalWatcher _arrivalWatcher = PrayerArrivalWatcher();
+  AppLifecycleState _lifecycle = AppLifecycleState.resumed;
+
+  void _onClockTick() {
+    _prayerTimesProvider.updateClock();
+    final arrived = _arrivalWatcher.tick(
+      _prayerTimesProvider.nextPrayer,
+      DateTime.now(),
+    );
+    if (arrived != null && _lifecycle == AppLifecycleState.resumed) {
+      _onPrayerArrived(arrived);
+    }
+  }
+
+  /// While the app is open at prayer time: pause recitation (it must never
+  /// play over the adhan) and offer the adhan adhkar and to resume.
+  Future<void> _onPrayerArrived(NextPrayer prayer) async {
+    final settings = AdhanSettingsStore(_prefs).read();
+    final daily = DailyPrayer.values.where(
+      (p) => appL10n.prayerName(p) == prayer.name,
+    );
+    if (daily.isNotEmpty &&
+        settings.modeFor(daily.first) == PrayerAlertMode.silent) {
+      return;
+    }
+    final navContext = appNavigatorKey.currentContext;
+    if (navContext == null) return;
+    final recitation = Provider.of<RecitationController?>(
+      navContext,
+      listen: false,
+    );
+    final paused = await recitation?.pauseForInterruption() ?? false;
+    if (!navContext.mounted) return;
+    final messenger = ScaffoldMessenger.maybeOf(navContext);
+    if (messenger == null) return;
+    final l10n = l10nOf(navContext);
+    messenger
+      ..clearMaterialBanners()
+      ..showMaterialBanner(
+        MaterialBanner(
+          content: Text(l10n.prayerTimeArrived(prayer.name)),
+          leading: const Icon(Icons.mosque_rounded),
+          actions: [
+            TextButton(
+              onPressed: () {
+                messenger.hideCurrentMaterialBanner();
+                appRouter.push(
+                  Uri(
+                    path: '/after-adhan',
+                    queryParameters: {'prayer': prayer.name},
+                  ).toString(),
+                );
+              },
+              child: Text(l10n.afterAdhanOpen),
+            ),
+            if (paused)
+              TextButton(
+                onPressed: () {
+                  messenger.hideCurrentMaterialBanner();
+                  recitation?.resumeAfterInterruption();
+                },
+                child: Text(l10n.recitationResume),
+              ),
+            TextButton(
+              onPressed: messenger.hideCurrentMaterialBanner,
+              child: Text(l10n.appStringsMessage8),
+            ),
+          ],
+        ),
+      );
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    _lifecycle = state;
     if (state == AppLifecycleState.resumed &&
         _prayerTimesProvider.selectedCoordinates != null) {
       _prayerTimesProvider.refreshIfNeeded();
@@ -208,6 +287,20 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
             surahName: (surah) =>
                 appL10n.surahAudioModelMessage1(surahNameAr(surah) ?? '$surah'),
           )..initialize(),
+        ),
+        ChangeNotifierProvider<AdhanSettingsController>(
+          create: (_) => AdhanSettingsController(
+            store: AdhanSettingsStore(_prefs),
+            platform: AdhanPlatform(
+              reschedule: _prayerTimesProvider.refresh,
+              canScheduleExact:
+                  NotificationService.instance.canScheduleExactAlarms,
+              requestExact:
+                  NotificationService.instance.requestExactAlarmPermission,
+              scheduleTest:
+                  NotificationService.instance.scheduleTestPrayerAlert,
+            ),
+          ),
         ),
         ChangeNotifierProvider<RecitationDownloadsController>(
           create: (_) => RecitationDownloadsController(

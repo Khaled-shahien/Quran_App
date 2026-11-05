@@ -51,6 +51,16 @@
       "reviewer": null,
       "approvalDate": null,
       "evidenceUrl": null
+    },
+    {
+      "path": "assets/adhan_adhkar.json",
+      "sha256": "6cf1e8e6c96cd11f3e49c505254f0c770e55eae4ed40c5c1a2e79b45bc8a30a8",
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null
     }
   ]
 }

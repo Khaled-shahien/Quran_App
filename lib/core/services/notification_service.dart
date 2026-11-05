@@ -284,24 +284,9 @@ class NotificationService {
         'Android notification permission granted: $granted',
         name: 'sakina_app.notifications',
       );
-      // Exact timing is pointless, and a Settings detour unwelcome, after a no.
+      // Exact alarms are requested separately, from a screen that first
+      // explains why (see requestExactAlarmPermission).
       if (granted == false) return false;
-
-      try {
-        final bool? exactAlarmPermission = await androidImplementation
-            .requestExactAlarmsPermission();
-        developer.log(
-          'Android exact alarm permission granted: $exactAlarmPermission',
-          name: 'sakina_app.notifications',
-        );
-      } catch (e) {
-        developer.log(
-          'Exact alarm permission request unavailable',
-          name: 'sakina_app.notifications',
-          level: 900,
-          error: e,
-        );
-      }
     }
 
     final IOSFlutterLocalNotificationsPlugin? iosImplementation =
@@ -321,6 +306,50 @@ class NotificationService {
       if (granted == false) return false;
     }
     return true;
+  }
+
+  /// Whether prayer alerts can fire at the exact minute. Null when the
+  /// platform has no such restriction (iOS, Android before 12).
+  Future<bool?> canScheduleExactAlarms() async {
+    await initialize(requestPermissions: false);
+    if (!_isPluginAvailable ||
+        defaultTargetPlatform != TargetPlatform.android) {
+      return null;
+    }
+    try {
+      return await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.canScheduleExactNotifications();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Opens the system "Alarms & reminders" page. Call only after explaining
+  /// why to the user. Returns the new state when known.
+  Future<bool?> requestExactAlarmPermission() async {
+    await initialize(requestPermissions: false);
+    if (!_isPluginAvailable ||
+        defaultTargetPlatform != TargetPlatform.android) {
+      return null;
+    }
+    try {
+      return await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.requestExactAlarmsPermission();
+    } catch (error) {
+      developer.log(
+        'Exact alarm permission request unavailable',
+        name: 'sakina_app.notifications',
+        level: 900,
+        error: error,
+      );
+      return null;
+    }
   }
 
   /// Exact access can be denied or revoked. Scheduling exactly would then
