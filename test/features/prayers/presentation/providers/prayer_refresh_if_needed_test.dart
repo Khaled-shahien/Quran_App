@@ -96,7 +96,8 @@ void main() {
 
   test('missing timings are fetched on resume', () async {
     await provider.refreshIfNeeded();
-    expect(repository.calls, 1);
+    // Today plus tomorrow (for the Fajr after Isha).
+    expect(repository.calls, 2);
     expect(provider.hasData, isTrue);
   });
 

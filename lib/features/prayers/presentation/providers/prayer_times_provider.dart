@@ -355,16 +355,19 @@ class PrayerTimesProvider extends ChangeNotifier {
       timeZone: selectedTimeZone,
     );
     if (_disposed || requestId != _requestId) return;
-    final tomorrowResult = await _repository.getPrayerTimes(
-      DateTime(date.year, date.month, date.day + 1),
-      latitude,
-      longitude,
-      calculationMethod: calculationMethod,
-      madhab: asrMadhab,
-      timeZone: selectedTimeZone,
-    );
-    if (_disposed || requestId != _requestId) return;
-    _tomorrowPrayerTimes = tomorrowResult.valueOrNull;
+    _tomorrowPrayerTimes = null;
+    if (result.isSuccess) {
+      final tomorrowResult = await _repository.getPrayerTimes(
+        DateTime(date.year, date.month, date.day + 1),
+        latitude,
+        longitude,
+        calculationMethod: calculationMethod,
+        madhab: asrMadhab,
+        timeZone: selectedTimeZone,
+      );
+      if (_disposed || requestId != _requestId) return;
+      _tomorrowPrayerTimes = tomorrowResult.valueOrNull;
+    }
     switch (result) {
       case Success(:final value):
         loadedDate = date;

@@ -378,7 +378,8 @@ void main() {
 
     expect(find.text('مواقيت اليوم'), findsOneWidget);
     expect(find.text('الفجر'), findsOneWidget);
-    expect(repository.calls, 2);
+    // Failed attempt (today only), then success (today + tomorrow's Fajr).
+    expect(repository.calls, 3);
   });
 
   testWidgets('renders current date header in content card', (tester) async {

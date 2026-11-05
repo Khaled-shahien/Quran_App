@@ -11,6 +11,9 @@ import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_
 
 class FakePrayerTimesRepository implements PrayerTimesRepository {
   DateTime? lastDate;
+
+  /// Every requested day in order (today, then tomorrow for the next Fajr).
+  final List<DateTime> dates = <DateTime>[];
   double? lastLatitude;
   double? lastLongitude;
   int? lastCalculationMethod;
@@ -40,6 +43,7 @@ class FakePrayerTimesRepository implements PrayerTimesRepository {
     int calculationMethod = 3,
   }) async {
     lastDate = date;
+    dates.add(date);
     lastLatitude = latitude;
     lastLongitude = longitude;
     lastCalculationMethod = calculationMethod;
@@ -455,7 +459,7 @@ void main() {
 
       await provider.fetchTodayForCurrentLocation(calculationMethod: 4);
 
-      expect(repository.lastDate, DateTime(2026, 3, 24));
+      expect(repository.dates, [DateTime(2026, 3, 24), DateTime(2026, 3, 25)]);
       expect(repository.lastLatitude, closeTo(21.3891, 0.0001));
       expect(repository.lastLongitude, closeTo(39.8579, 0.0001));
       expect(repository.lastCalculationMethod, 4);
@@ -470,6 +474,11 @@ void main() {
     await provider.fetchPrayerTimes(DateTime(2026, 3, 20), 30.0, 31.0);
     await provider.refresh();
 
-    expect(repository.lastDate, DateTime(2026, 4, 1));
+    expect(repository.dates, [
+      DateTime(2026, 3, 20),
+      DateTime(2026, 3, 21),
+      DateTime(2026, 4, 1),
+      DateTime(2026, 4, 2),
+    ]);
   });
 }
