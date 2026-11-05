@@ -24,14 +24,28 @@ flutter analyze
 ### Android release validation
 
 ```bash
-flutter build appbundle --release
+flutter build appbundle --release \
+  --obfuscate --split-debug-info=build/symbols/android \
+  --dart-define=APP_ENV=production \
+  --dart-define-from-file=.env
 ```
 
 ### iOS release validation
 
 ```bash
-flutter build ios --release
+flutter build ipa --release \
+  --obfuscate --split-debug-info=build/symbols/ios \
+  --dart-define=APP_ENV=production \
+  --dart-define-from-file=.env
 ```
+
+`--obfuscate` hides Dart symbol names in the shipped binary. Keep the matching
+`build/symbols/<platform>` folder for every published build (outside the
+repository; `app.*.symbols` is git-ignored): it is the only way to read crash
+stack traces, e.g. `flutter symbolize -i <trace> -d build/symbols/android/app.android-arm64.symbols`.
+If Crashlytics is enabled, upload the same symbols with
+`firebase crashlytics:symbols:upload --app=<app id> build/symbols/<platform>`.
+`.env` supplies `YOUTUBE_API_KEY` and is never committed.
 
 > The iOS path requires a valid Apple signing context, provisioning profile, and Xcode environment.
 
