@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -536,16 +537,18 @@ class CurrentWirdWidget extends StatelessWidget {
 
     if (!context.mounted) return;
 
-    context.push(
-      '/quran/surah/${targetSurah.number}',
-      extra: <String, dynamic>{
-        'surah': targetSurah,
-        'initialSurahNumber': targetSurahNumber,
-        'initialAyahNumber': targetAyahNumber,
-        'rangeTrackingUnit': khatma.trackingUnit.storageValue,
-        'rangeFromUnit': khatma.todayFromUnit,
-        'rangeToUnit': khatma.todayToUnit,
-      },
+    unawaited(
+      context.push(
+        '/quran/surah/${targetSurah.number}',
+        extra: <String, dynamic>{
+          'surah': targetSurah,
+          'initialSurahNumber': targetSurahNumber,
+          'initialAyahNumber': targetAyahNumber,
+          'rangeTrackingUnit': khatma.trackingUnit.storageValue,
+          'rangeFromUnit': khatma.todayFromUnit,
+          'rangeToUnit': khatma.todayToUnit,
+        },
+      ),
     );
   }
 

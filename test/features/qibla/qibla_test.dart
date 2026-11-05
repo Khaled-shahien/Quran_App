@@ -16,6 +16,7 @@ class FakeQiblaDevice extends QiblaDeviceService {
   LocationPermission access = LocationPermission.whileInUse;
   Completer<Position>? pendingPosition;
   final readings = StreamController<QiblaHeading>.broadcast();
+  Future<void> close() => readings.close();
   @override
   bool get isSupported => supported;
   @override

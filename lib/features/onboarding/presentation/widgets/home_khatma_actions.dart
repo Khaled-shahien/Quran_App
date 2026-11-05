@@ -213,18 +213,20 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
 
     if (!mounted) return;
 
-    context.push(
-      '/quran/surah/${targetSurah.number}',
-      extra: <String, dynamic>{
-        'surah': targetSurah,
-        'initialSurahNumber': position.surahNumber,
-        'initialAyahNumber': position.ayahNumber,
-        'rangeTrackingUnit': khatma.trackingUnit.storageValue,
-        'rangeFromUnit': unitIndex,
-        'rangeToUnit': khatma.todayToUnit < unitIndex
-            ? unitIndex
-            : khatma.todayToUnit,
-      },
+    unawaited(
+      context.push(
+        '/quran/surah/${targetSurah.number}',
+        extra: <String, dynamic>{
+          'surah': targetSurah,
+          'initialSurahNumber': position.surahNumber,
+          'initialAyahNumber': position.ayahNumber,
+          'rangeTrackingUnit': khatma.trackingUnit.storageValue,
+          'rangeFromUnit': unitIndex,
+          'rangeToUnit': khatma.todayToUnit < unitIndex
+              ? unitIndex
+              : khatma.todayToUnit,
+        },
+      ),
     );
   }
 }

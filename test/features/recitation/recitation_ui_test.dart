@@ -79,7 +79,7 @@ void main() {
   ) async {
     repository.offline = true;
     await controller.playSurah(1);
-    controller.selectReciter(controller.reciters.first);
+    await controller.selectReciter(controller.reciters.first);
     await tester.pumpWidget(miniPlayerHost());
     // No chapter loaded offline, so the bar stays hidden; a loaded surah
     // that then loses the network shows the message instead.

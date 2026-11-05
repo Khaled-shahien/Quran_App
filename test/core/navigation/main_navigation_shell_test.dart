@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -41,7 +42,7 @@ void main() {
         await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
         expect(find.byType(NavigationBar), findsNothing);
         expect(find.text('Content /home'), findsOneWidget);
-        router.push('/quran');
+        unawaited(router.push('/quran'));
         await tester.pumpAndSettle();
         expect(find.text('Content /quran'), findsOneWidget);
         expect(find.byType(NavigationBar), findsNothing);

@@ -85,7 +85,13 @@ class FakeEngine implements RecitationAudioEngine {
   Future<void> setSpeed(double s) async => speed = s;
 
   @override
-  Future<void> dispose() async {}
+  Future<void> dispose() async {
+    await positions.close();
+    await status.close();
+    await playingCtrl.close();
+    await errors.close();
+    await remote.close();
+  }
 }
 
 ChapterRecitation chapter(int surah, int ayahs) => ChapterRecitation(

@@ -311,85 +311,12 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
     );
   }
 
-  void _showAddTasbeehDialog() {
-    TextEditingController controller = TextEditingController();
-    showDialog(
+  Future<void> _showAddTasbeehDialog() async {
+    final String? text = await showDialog<String>(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog.adaptive(
-          title: Text(
-            l10nOf(context).tasbeehScreenMessage9,
-            style: TextStyle(
-              fontFamily: 'Cairo',
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 18,
-            ),
-          ),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: l10nOf(context).tasbeehScreenMessage10,
-              hintStyle: const TextStyle(fontFamily: 'Cairo'),
-              filled: true,
-              fillColor: Theme.of(context).scaffoldBackgroundColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(
-                  AppConstants.kBorderRadiusMedium,
-                ),
-                borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 1,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(
-                  AppConstants.kBorderRadiusMedium,
-                ),
-                borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 2,
-                ),
-              ),
-            ),
-            textAlign: TextAlign.right,
-            style: TextStyle(
-              fontFamily: 'Cairo',
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                l10nOf(context).appStringsMessage9,
-                style: const TextStyle(fontFamily: 'Cairo', color: Colors.red),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (controller.text.trim().isNotEmpty) {
-                  _controller.add(controller.text);
-                  Navigator.of(context).pop();
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-              ),
-              child: Text(
-                l10nOf(context).tasbeehScreenMessage11,
-                style: const TextStyle(
-                  fontFamily: 'Cairo',
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
+      builder: (_) => const _AddPhraseDialog(),
     );
+    if (text != null && mounted) _controller.add(text);
   }
 
   Widget _tasbeehRow({
@@ -499,6 +426,96 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Owns its text controller so it is disposed with the dialog.
+class _AddPhraseDialog extends StatefulWidget {
+  const _AddPhraseDialog();
+
+  @override
+  State<_AddPhraseDialog> createState() => _AddPhraseDialogState();
+}
+
+class _AddPhraseDialogState extends State<_AddPhraseDialog> {
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog.adaptive(
+      title: Text(
+        l10nOf(context).tasbeehScreenMessage9,
+        style: TextStyle(
+          fontFamily: 'Cairo',
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.primary,
+          fontSize: 18,
+        ),
+      ),
+      content: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: l10nOf(context).tasbeehScreenMessage10,
+          hintStyle: const TextStyle(fontFamily: 'Cairo'),
+          filled: true,
+          fillColor: Theme.of(context).scaffoldBackgroundColor,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(
+              AppConstants.kBorderRadiusMedium,
+            ),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+              width: 1,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(
+              AppConstants.kBorderRadiusMedium,
+            ),
+            borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+              width: 2,
+            ),
+          ),
+        ),
+        textAlign: TextAlign.right,
+        style: TextStyle(
+          fontFamily: 'Cairo',
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            l10nOf(context).appStringsMessage9,
+            style: const TextStyle(fontFamily: 'Cairo', color: Colors.red),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (controller.text.trim().isNotEmpty) {
+              Navigator.of(context).pop(controller.text);
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ),
+          child: Text(
+            l10nOf(context).tasbeehScreenMessage11,
+            style: const TextStyle(fontFamily: 'Cairo', color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -75,6 +75,8 @@ void main() {
   });
 
   resetUndoTests();
+
+  addPhraseTests();
 }
 
 void resetUndoTests() {
@@ -99,5 +101,29 @@ void resetUndoTests() {
     await tester.tap(find.text('تراجع'));
     await tester.pump();
     expect(controller.count, 1);
+  });
+}
+
+void addPhraseTests() {
+  testWidgets('a phrase added from the dialog appears and is saved', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    tester.view.physicalSize = const Size(1080, 1920);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final controller = await _controller();
+    await tester.pumpWidget(_app(controller));
+    await tester.tap(find.text('إضافة جديد'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'أستغفر الله');
+    await tester.tap(find.text('إضافة'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsNothing);
+    expect(controller.phrases.last.customText, 'أستغفر الله');
+    expect(tester.takeException(), isNull);
   });
 }

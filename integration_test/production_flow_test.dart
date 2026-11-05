@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -25,7 +26,7 @@ void main() {
       await tester.tap(find.text('داكن').last);
       await tester.pumpAndSettle();
       expect(prefs.getString('theme_mode'), 'dark');
-      appRouter.push('/quran/search');
+      unawaited(appRouter.push('/quran/search'));
       await tester.pumpAndSettle();
       expect(find.byType(QuranSearchScreen), findsOneWidget);
       await tester.enterText(find.byType(TextField), 'الفاتحة');

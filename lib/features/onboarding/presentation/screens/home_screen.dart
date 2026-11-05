@@ -1,3 +1,4 @@
+import 'dart:async';
 import '../widgets/alarms/alarm_time_picker_dialog.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
@@ -726,18 +727,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (!mounted) return;
 
-    context.push(
-      '/quran/surah/${targetSurah.number}',
-      extra: <String, dynamic>{
-        'surah': targetSurah,
-        'initialSurahNumber': position.surahNumber,
-        'initialAyahNumber': position.ayahNumber,
-        'rangeTrackingUnit': khatma.trackingUnit.storageValue,
-        'rangeFromUnit': unitIndex,
-        'rangeToUnit': khatma.todayToUnit < unitIndex
-            ? unitIndex
-            : khatma.todayToUnit,
-      },
+    unawaited(
+      context.push(
+        '/quran/surah/${targetSurah.number}',
+        extra: <String, dynamic>{
+          'surah': targetSurah,
+          'initialSurahNumber': position.surahNumber,
+          'initialAyahNumber': position.ayahNumber,
+          'rangeTrackingUnit': khatma.trackingUnit.storageValue,
+          'rangeFromUnit': unitIndex,
+          'rangeToUnit': khatma.todayToUnit < unitIndex
+              ? unitIndex
+              : khatma.todayToUnit,
+        },
+      ),
     );
   }
 
@@ -749,7 +752,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (!bookmarkProvider.hasBookmark) {
       _showFeatureMessage(appL10n.homeScreenMessage20);
-      context.push('/quran');
+      unawaited(context.push('/quran'));
       return;
     }
 
@@ -777,13 +780,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (targetSurah == null) {
         _showFeatureMessage(appL10n.homeScreenMessage22);
-        context.push('/quran');
+        unawaited(context.push('/quran'));
         return;
       }
 
-      context.push(
-        '/quran/surah/$surahNumber',
-        extra: <String, dynamic>{'surah': targetSurah},
+      unawaited(
+        context.push(
+          '/quran/surah/$surahNumber',
+          extra: <String, dynamic>{'surah': targetSurah},
+        ),
       );
     } catch (_) {
       if (!mounted) return;
