@@ -11,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/surah_entity.dart';
 import '../../domain/services/basmala.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../settings/presentation/providers/reading_mode_controller.dart';
 import '../../../recitation/presentation/providers/recitation_controller.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../settings/presentation/widgets/reading_preferences.dart';
@@ -53,7 +55,9 @@ class _SurahVerseData {
   });
 }
 
-class SurahDetailsScreen extends StatefulWidget {
+/// The Quran reader. In night-reading mode the whole reader (page, ayah
+/// markers, headers, app bar) uses the warm low-blue night theme.
+class SurahDetailsScreen extends StatelessWidget {
   final SurahEntity surah;
   final int surahNumber;
   final int? initialSurahNumber;
@@ -76,10 +80,49 @@ class SurahDetailsScreen extends StatefulWidget {
   });
 
   @override
-  State<SurahDetailsScreen> createState() => _SurahDetailsScreenState();
+  Widget build(BuildContext context) {
+    final body = _SurahReaderBody(
+      surah: surah,
+      surahNumber: surahNumber,
+      initialSurahNumber: initialSurahNumber,
+      initialAyahNumber: initialAyahNumber,
+      initialPageNumber: initialPageNumber,
+      rangeTrackingUnit: rangeTrackingUnit,
+      rangeFromUnit: rangeFromUnit,
+      rangeToUnit: rangeToUnit,
+    );
+    // Optional so the reader still works where the setting is not provided.
+    final night = context.watch<ReadingModeController?>()?.night ?? false;
+    return night ? Theme(data: AppTheme.nightReadingTheme, child: body) : body;
+  }
 }
 
-class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
+class _SurahReaderBody extends StatefulWidget {
+  final SurahEntity surah;
+  final int surahNumber;
+  final int? initialSurahNumber;
+  final int? initialAyahNumber;
+  final int? initialPageNumber;
+  final String? rangeTrackingUnit;
+  final int? rangeFromUnit;
+  final int? rangeToUnit;
+
+  const _SurahReaderBody({
+    required this.surah,
+    required this.surahNumber,
+    this.initialSurahNumber,
+    this.initialAyahNumber,
+    this.initialPageNumber,
+    this.rangeTrackingUnit,
+    this.rangeFromUnit,
+    this.rangeToUnit,
+  });
+
+  @override
+  State<_SurahReaderBody> createState() => _SurahDetailsScreenState();
+}
+
+class _SurahDetailsScreenState extends State<_SurahReaderBody> {
   List<_SurahPageData> _surahPages = [];
   bool _isLoading = true;
   String? _error;
@@ -518,7 +561,10 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
     final ThemeData theme = Theme.of(context);
     final Color paperColor = theme.scaffoldBackgroundColor;
     final Color textColor = theme.colorScheme.primary;
-    final Color pageSurface = theme.brightness == Brightness.dark
+    final bool night = context.watch<ReadingModeController?>()?.night ?? false;
+    final Color pageSurface = night
+        ? AppTheme.nightPage
+        : theme.brightness == Brightness.dark
         ? const Color(0xFF1A1A1A)
         : const Color(0xFFFFFCF5);
     final Color pageBorder = theme.colorScheme.primary.withValues(alpha: 0.22);
@@ -1251,6 +1297,24 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                         setLocalState(() {});
                       },
                     ),
+                    if (Provider.of<ReadingModeController?>(
+                          context,
+                          listen: false,
+                        )
+                        case final mode?)
+                      SwitchListTile(
+                        value: mode.night,
+                        onChanged: (value) async {
+                          await mode.setNight(value);
+                          setLocalState(() {});
+                        },
+                        title: Text(
+                          l10nOf(context).readingNightMode,
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: Text(l10nOf(context).readingNightModeHint),
+                      ),
                     SwitchListTile(
                       value: _showVerseMarkers,
                       onChanged: (value) {

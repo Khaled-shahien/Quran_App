@@ -2616,5 +2616,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "readingNightMode": "وضع القراءة الليلية",
+  "readingNightModeHint": "صفحة دافئة بإضاءة أهدأ للقراءة ليلاً"
 }

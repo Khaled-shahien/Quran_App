@@ -24,6 +24,7 @@ import 'package:sakina_app/core/utils/surah_names.dart';
 import 'package:sakina_app/core/services/notification_service.dart';
 import 'package:sakina_app/features/prayers/data/repositories/adhan_settings_store.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/adhan_settings_controller.dart';
+import 'package:sakina_app/features/settings/presentation/providers/reading_mode_controller.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_arrival_watcher.dart';
 import 'package:sakina_app/features/prayers/presentation/widgets/adhan_preferences.dart';
 import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
@@ -287,6 +288,9 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
             surahName: (surah) =>
                 appL10n.surahAudioModelMessage1(surahNameAr(surah) ?? '$surah'),
           )..initialize(),
+        ),
+        ChangeNotifierProvider<ReadingModeController>(
+          create: (_) => ReadingModeController(_prefs),
         ),
         ChangeNotifierProvider<AdhanSettingsController>(
           create: (_) => AdhanSettingsController(

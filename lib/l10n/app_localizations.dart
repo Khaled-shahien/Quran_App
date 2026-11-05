@@ -3763,6 +3763,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{title}، تم {done} من {total}. اضغط مرتين للعدّ'**
   String adhkarItemSemantics(String title, String done, String total);
+
+  /// No description provided for @readingNightMode.
+  ///
+  /// In ar, this message translates to:
+  /// **'وضع القراءة الليلية'**
+  String get readingNightMode;
+
+  /// No description provided for @readingNightModeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'صفحة دافئة بإضاءة أهدأ للقراءة ليلاً'**
+  String get readingNightModeHint;
 }
 
 class _AppLocalizationsDelegate

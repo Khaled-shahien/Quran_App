@@ -57,6 +57,33 @@ class AppTheme {
     );
   }
 
+  /// Warm, low-blue palette for reading the Quran at night. Text on page
+  /// contrast is about 12:1 (WCAG AAA).
+  static const Color nightPaper = Color(0xFF17120D);
+  static const Color nightPage = Color(0xFF221A12);
+  static const Color nightText = Color(0xFFE9D8B9);
+
+  static ThemeData get nightReadingTheme {
+    final base = darkTheme;
+    return base.copyWith(
+      scaffoldBackgroundColor: nightPaper,
+      colorScheme: base.colorScheme.copyWith(
+        primary: nightText,
+        onPrimary: nightPaper,
+        surface: nightPaper,
+        onSurface: nightText,
+        surfaceContainerHigh: nightPage,
+      ),
+      appBarTheme: base.appBarTheme.copyWith(
+        backgroundColor: nightPaper,
+        foregroundColor: nightText,
+      ),
+      bottomSheetTheme: base.bottomSheetTheme.copyWith(
+        backgroundColor: nightPage,
+      ),
+    );
+  }
+
   static ThemeData get darkTheme {
     ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: AppColors.darkPrimary,

@@ -1,6 +1,9 @@
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../providers/reading_mode_controller.dart';
 
 /// Shared reading preferences used by settings and the Quran reader.
 class ReadingPreferences {
@@ -66,6 +69,13 @@ class _ReadingPreferencesPanelState extends State<ReadingPreferencesPanel> {
             setState(() {});
           },
         ),
+        if (context.watch<ReadingModeController?>() case final mode?)
+          SwitchListTile(
+            title: Text(l10nOf(context).readingNightMode),
+            subtitle: Text(l10nOf(context).readingNightModeHint),
+            value: mode.night,
+            onChanged: mode.setNight,
+          ),
       ],
     );
   }

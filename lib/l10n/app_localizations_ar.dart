@@ -2057,4 +2057,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String adhkarItemSemantics(String title, String done, String total) {
     return '$title، تم $done من $total. اضغط مرتين للعدّ';
   }
+
+  @override
+  String get readingNightMode => 'وضع القراءة الليلية';
+
+  @override
+  String get readingNightModeHint => 'صفحة دافئة بإضاءة أهدأ للقراءة ليلاً';
 }
