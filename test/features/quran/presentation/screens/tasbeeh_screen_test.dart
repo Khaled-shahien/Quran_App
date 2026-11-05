@@ -65,8 +65,8 @@ void main() {
 
     final first = await _controller();
     await tester.pumpWidget(_app(first));
-    await tester.tap(find.byType(FloatingActionButton));
-    await tester.tap(find.byType(FloatingActionButton));
+    await tester.tap(find.byKey(const Key('tasbih-tap-area')));
+    await tester.tap(find.byKey(const Key('tasbih-tap-area')));
     await tester.pump();
     expect(find.text('02'), findsOneWidget);
     await first.saved;
@@ -94,7 +94,7 @@ void resetUndoTests() {
 
     final controller = await _controller();
     await tester.pumpWidget(_app(controller));
-    await tester.tap(find.byType(FloatingActionButton));
+    await tester.tap(find.byKey(const Key('tasbih-tap-area')));
     await tester.pump();
     expect(controller.count, 1);
 
@@ -121,7 +121,7 @@ void addPhraseTests() {
 
     final controller = await _controller();
     await tester.pumpWidget(_app(controller));
-    await tester.tap(find.text('إضافة جديد'));
+    await tester.tap(find.byTooltip('إضافة جديد'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'أستغفر الله');
     await tester.tap(find.text('إضافة'));
@@ -141,7 +141,9 @@ double _lum(Color c) {
 
 void contrastTests() {
   for (final dark in [false, true]) {
-    testWidgets('count button text is readable (dark=$dark)', (tester) async {
+    testWidgets('the count is readable on the tap area (dark=$dark)', (
+      tester,
+    ) async {
       SharedPreferences.setMockInitialValues(<String, Object>{});
       final controller = await _controller();
       await tester.pumpWidget(
@@ -153,10 +155,10 @@ void contrastTests() {
           ),
         ),
       );
-      final fab = tester.widget<FloatingActionButton>(
-        find.byType(FloatingActionButton),
-      );
-      final a = _lum(fab.foregroundColor!), b = _lum(fab.backgroundColor!);
+      // The count is drawn in primary on the secondary tap area.
+      final scheme =
+          (dark ? AppTheme.darkTheme : AppTheme.lightTheme).colorScheme;
+      final a = _lum(scheme.primary), b = _lum(scheme.secondary);
       final ratio = (math.max(a, b) + 0.05) / (math.min(a, b) + 0.05);
       expect(ratio, greaterThanOrEqualTo(4.5));
     });

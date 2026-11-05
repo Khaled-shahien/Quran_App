@@ -3799,6 +3799,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الصلاة القادمة {prayer} بعد {duration}، الساعة {time}'**
   String homeNextPrayerSemantics(String prayer, String duration, String time);
+
+  /// No description provided for @tasbihTapHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط في أي مكان هنا للعدّ'**
+  String get tasbihTapHint;
 }
 
 class _AppLocalizationsDelegate

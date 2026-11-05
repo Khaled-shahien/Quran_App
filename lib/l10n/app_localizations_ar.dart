@@ -2081,4 +2081,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String homeNextPrayerSemantics(String prayer, String duration, String time) {
     return 'الصلاة القادمة $prayer بعد $duration، الساعة $time';
   }
+
+  @override
+  String get tasbihTapHint => 'اضغط في أي مكان هنا للعدّ';
 }

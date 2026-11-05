@@ -34,254 +34,163 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
   Widget build(BuildContext context) {
     final controller = context.watch<TasbihController>();
     final l10n = l10nOf(context);
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final phrases = controller.phrases;
     final selected = controller.selected;
+    final count = controller.count;
+    final target = selected?.target ?? 0;
+    final phraseText = selected == null ? '' : tasbihPhraseText(selected, l10n);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        centerTitle: true,
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          tooltip: l10n.appStringsMessage13,
+          icon: Icon(Icons.arrow_back_ios, color: scheme.primary),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(
+            tooltip: l10n.tasbeehScreenMessage7,
+            icon: Icon(Icons.add_rounded, color: scheme.primary),
+            onPressed: _showAddTasbeehDialog,
+          ),
+          IconButton(
+            tooltip: l10n.tasbeehScreenMessage8,
+            icon: Icon(Icons.refresh, color: scheme.error),
+            onPressed: _resetCounters,
+          ),
+        ],
         title: Text(
-          l10nOf(context).tasbeehScreenMessage5,
+          l10n.tasbeehScreenMessage5,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
+            color: scheme.primary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
         ),
-        centerTitle: true,
       ),
       body: SafeArea(
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: Padding(
-            padding: const EdgeInsets.all(AppConstants.kPaddingLarge),
+            padding: const EdgeInsets.all(AppConstants.kPaddingMedium),
             child: Column(
               children: [
-                // Tasbeeh phrases list
+                // One large tap area: count without looking at the screen.
+                Expanded(
+                  flex: 3,
+                  child: Semantics(
+                    container: true,
+                    button: true,
+                    label: phraseText,
+                    value: target > 0
+                        ? l10n.adhkarProgress('$count', '$target')
+                        : '$count',
+                    excludeSemantics: true,
+                    child: Material(
+                      color: scheme.secondary,
+                      borderRadius: BorderRadius.circular(
+                        AppConstants.kBorderRadiusLarge,
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: InkWell(
+                        key: const Key('tasbih-tap-area'),
+                        onTap: selected == null ? null : _incrementCounter,
+                        child: Center(
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(
+                              AppConstants.kPaddingLarge,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  count.toString().padLeft(2, '0'),
+                                  style: TextStyle(
+                                    fontSize: 64,
+                                    fontWeight: FontWeight.w800,
+                                    color: scheme.primary,
+                                    height: 1.1,
+                                  ),
+                                ),
+                                Text(
+                                  phraseText,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontFamily: 'Amiri',
+                                    fontSize: 28,
+                                    color: scheme.primary,
+                                    height: 1.5,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: AppConstants.kPaddingSmall,
+                                ),
+                                if (target > 0) ...[
+                                  const SizedBox(
+                                    height: AppConstants.kPaddingSmall,
+                                  ),
+                                  SizedBox(
+                                    width: 160,
+                                    child: LinearProgressIndicator(
+                                      value: (count / target).clamp(0.0, 1.0),
+                                      minHeight: 6,
+                                      borderRadius: BorderRadius.circular(3),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    l10n.adhkarProgress('$count', '$target'),
+                                    style: theme.textTheme.bodyMedium,
+                                  ),
+                                ],
+                                const SizedBox(height: 4),
+                                Text(
+                                  l10n.tasbihTapHint,
+                                  textAlign: TextAlign.center,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: scheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppConstants.kPaddingSmall),
+                // Phrases: tap to choose, swipe to delete (with undo).
                 Expanded(
                   flex: 2,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: scheme.secondary,
                       borderRadius: BorderRadius.circular(
                         AppConstants.kBorderRadiusLarge,
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: 0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(
-                        AppConstants.kPaddingMedium,
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              l10nOf(context).appStringsMessage30,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const SizedBox(height: AppConstants.kPaddingSmall),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: phrases.length,
-                              itemBuilder: (context, index) {
-                                final phrase = phrases[index];
-
-                                return _tasbeehRow(
-                                  itemKey: phrase.id,
-                                  index: index,
-                                  title: tasbihPhraseText(phrase, l10n),
-                                  counter: phrase.count.toString(),
-                                  isCompleted: phrase.isComplete,
-                                  isSelected: index == controller.selectedIndex,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                    padding: const EdgeInsets.all(AppConstants.kPaddingSmall),
+                    child: ListView.builder(
+                      itemCount: phrases.length,
+                      itemBuilder: (context, index) {
+                        final phrase = phrases[index];
+                        return _tasbeehRow(
+                          itemKey: phrase.id,
+                          index: index,
+                          title: tasbihPhraseText(phrase, l10n),
+                          counter: phrase.count.toString(),
+                          isCompleted: phrase.isComplete,
+                          isSelected: index == controller.selectedIndex,
+                        );
+                      },
                     ),
                   ),
-                ),
-
-                const SizedBox(height: AppConstants.kPaddingLarge),
-
-                // Current tasbeeh display
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Theme.of(
-                            context,
-                          ).colorScheme.primary.withAlpha((0.2 * 255).round()),
-                          Theme.of(context).colorScheme.secondary,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        AppConstants.kBorderRadiusLarge,
-                      ),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.primary,
-                        width: 1.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: 0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        selected == null
-                            ? ''
-                            : tasbihPhraseText(selected, l10n),
-                        style: TextStyle(
-                          fontFamily: 'Amiri',
-                          fontSize: 28,
-                          color: Theme.of(context).colorScheme.primary,
-                          height: 1.5,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: AppConstants.kPaddingMedium),
-
-                // Counter display
-                Container(
-                  width: 130,
-                  height: 130,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.primary.withValues(alpha: 0.2),
-                        blurRadius: 15,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 2,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      controller.count.toString().padLeft(2, '0'),
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: AppConstants.kPaddingMedium),
-
-                // Increment button
-                FloatingActionButton.extended(
-                  onPressed: _incrementCounter,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  label: Text(l10nOf(context).tasbeehScreenMessage6),
-                  icon: const Icon(Icons.add),
-                ),
-
-                const SizedBox(height: AppConstants.kPaddingSmall),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Add new tasbeeh button
-                    ElevatedButton.icon(
-                      onPressed: _showAddTasbeehDialog,
-                      icon: const Icon(Icons.add),
-                      label: Text(
-                        l10nOf(context).tasbeehScreenMessage7,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.onPrimary,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppConstants.kPaddingMedium,
-                          vertical: AppConstants.kPaddingSmall,
-                        ),
-                      ),
-                    ),
-                    // Reset button
-                    OutlinedButton.icon(
-                      onPressed: _resetCounters,
-                      icon: Icon(
-                        Icons.refresh,
-                        color: Theme.of(context).colorScheme.error,
-                        size: 18,
-                      ),
-                      label: Text(
-                        l10nOf(context).tasbeehScreenMessage8,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.error,
-                          fontSize: 14,
-                        ),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: Theme.of(context).colorScheme.error,
-                          width: 1.5,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppConstants.kPaddingMedium,
-                          vertical: AppConstants.kPaddingSmall,
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),

@@ -124,9 +124,14 @@ class _AdhkarList extends StatelessWidget {
           if (p == null) return const SizedBox.shrink();
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: Row(
+            // Wraps instead of overflowing with large system text.
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
               children: [
-                Expanded(
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
                     p.allComplete
                         ? l10n.adhkarCompleted(p.category)
