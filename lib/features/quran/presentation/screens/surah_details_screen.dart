@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/surah_entity.dart';
 import '../../domain/services/basmala.dart';
+import '../../../recitation/presentation/providers/recitation_controller.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../settings/presentation/widgets/reading_preferences.dart';
 import '../../../khatma/presentation/providers/khatma_provider.dart';
@@ -125,10 +126,84 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
     _showVerseMarkers = prefs.getBool(ReadingPreferences.markersKey) ?? true;
   }
 
+  /// Optional so the reader also works where no player is provided.
+  RecitationController? _recitation;
+  ({int surah, int ayah})? _highlighted;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final controller = Provider.of<RecitationController?>(
+      context,
+      listen: false,
+    );
+    if (!identical(controller, _recitation)) {
+      _recitation?.removeListener(_onRecitationChanged);
+      _recitation = controller?..addListener(_onRecitationChanged);
+    }
+  }
+
   @override
   void dispose() {
+    _recitation?.removeListener(_onRecitationChanged);
     _pageController.dispose();
     super.dispose();
+  }
+
+  /// Highlights the ayah being recited and turns to its page.
+  void _onRecitationChanged() {
+    final c = _recitation;
+    if (c == null || !mounted) return;
+    final surah = c.surah;
+    final ayah = c.currentAyah;
+    final next = surah == null || ayah == null || !c.isActive
+        ? null
+        : (surah: surah, ayah: ayah);
+    if (next == _highlighted) {
+      setState(() {}); // play/pause icon
+      return;
+    }
+    setState(() => _highlighted = next);
+    if (next == null) return;
+    final page = _surahPages.indexWhere(
+      (p) => p.verses.any(
+        (v) => v.surahNumber == next.surah && v.verseNumber == next.ayah,
+      ),
+    );
+    if (page >= 0 && page != _currentSurahPage && _pageController.hasClients) {
+      final reduceMotion = MediaQuery.of(context).disableAnimations;
+      if (reduceMotion) {
+        _pageController.jumpToPage(page);
+      } else {
+        _pageController.animateToPage(
+          page,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
+  }
+
+  bool get _recitingThisPage {
+    final c = _recitation;
+    final lead = _currentPageLeadVerse;
+    return c != null &&
+        c.isPlaying &&
+        lead != null &&
+        c.surah == lead.surahNumber;
+  }
+
+  Future<void> _toggleRecitation() async {
+    final c = _recitation;
+    final lead = _currentPageLeadVerse;
+    if (c == null || lead == null) return;
+    if (_recitingThisPage) {
+      await c.pause();
+    } else if (c.surah == lead.surahNumber && c.isActive) {
+      await c.togglePlay();
+    } else {
+      await c.playSurah(lead.surahNumber, fromAyah: lead.verseNumber);
+    }
   }
 
   void _focusInitialTarget() {
@@ -575,6 +650,17 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
         ),
       ),
       actions: [
+        if (_recitation != null)
+          _buildAppBarIconButton(
+            tooltip: _recitingThisPage
+                ? appL10n.recitationPause
+                : appL10n.recitationListenFromHere,
+            icon: _recitingThisPage
+                ? Icons.pause_rounded
+                : Icons.headphones_rounded,
+            color: primary,
+            onPressed: _toggleRecitation,
+          ),
         _buildAppBarIconButton(
           tooltip: appL10n.surahDetailsScreenMessage1,
           icon: Icons.tune,
@@ -884,7 +970,22 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
         spans.add(const TextSpan(text: '\n'));
       }
 
-      spans.add(TextSpan(text: '${verse.text}  '));
+      final bool reciting =
+          _highlighted?.surah == verse.surahNumber &&
+          _highlighted?.ayah == verse.verseNumber;
+      spans.add(
+        TextSpan(
+          text: '${verse.text}  ',
+          // The ayah being recited, so listeners can follow along.
+          style: reciting
+              ? TextStyle(
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primary.withValues(alpha: 0.16),
+                )
+              : null,
+        ),
+      );
 
       if (_showVerseMarkers) {
         spans.add(

@@ -27,10 +27,11 @@ import '../../features/islamic_guide/presentation/screens/islamic_guide_screen.d
 import '../../features/khatma/presentation/screens/khatma_duration_screen.dart';
 import '../../features/khatma/presentation/screens/khatma_location_screen.dart';
 import '../../features/media/presentation/providers/articles_provider.dart';
-import '../../features/media/presentation/providers/audio_provider.dart';
+
 import '../../features/media/presentation/providers/video_provider.dart';
 import '../../features/media/presentation/screens/articles_screen.dart';
-import '../../features/media/presentation/screens/audio_screen.dart';
+import '../../features/recitation/presentation/screens/recitation_downloads_screen.dart';
+import '../../features/recitation/presentation/screens/recitation_screen.dart';
 import '../../features/media/presentation/screens/video_screen.dart';
 import '../../features/onboarding/presentation/screens/home_screen.dart';
 import '../../features/onboarding/presentation/screens/media_screen.dart';
@@ -286,15 +287,17 @@ final GoRouter appRouter = GoRouter(
         ),
       ),
     ),
+    // In-app Quran recitation (replaces the old external-link audio list).
+    GoRoute(path: '/media/audio', redirect: (context, state) => '/recitation'),
     GoRoute(
-      path: '/media/audio',
-      pageBuilder: (context, state) => _fadePage(
-        state,
-        ChangeNotifierProvider<AudioProvider>(
-          create: (_) => getIt<AudioProvider>()..loadReciters(),
-          child: const AudioScreen(),
-        ),
-      ),
+      path: '/recitation',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const RecitationScreen()),
+    ),
+    GoRoute(
+      path: '/recitation/downloads',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const RecitationDownloadsScreen()),
     ),
     GoRoute(
       path: '/media/videos',

@@ -88,6 +88,9 @@ class RecitationController extends ChangeNotifier {
   bool get isActive => _chapter != null && _status != RecitationStatus.idle;
   bool get isPlaying => _status == RecitationStatus.playing;
 
+  /// Number of ayahs in the playing surah (0 when nothing is loaded).
+  int get ayahCount => _chapter?.timings.length ?? 0;
+
   /// Where the listener stopped last time (survives restarts).
   ({int surah, int ayah})? get resumePoint {
     final s = _resumeSurah;

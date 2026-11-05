@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sakina_app/features/media/domain/entities/video.dart';
@@ -60,23 +61,23 @@ class VideoProvider extends ChangeNotifier {
     _channels = <VideoChannel>[];
     notifyListeners();
 
-    try {
-      _videos = await _getIslamicVideos(_selectedQuery);
-    } on MissingApiKeyException catch (error) {
-      _videos = <Video>[];
-      _fallbackMessage = error.message;
-      _channels = fallbackChannels;
-    } on QuotaExceededException catch (error) {
-      _videos = <Video>[];
-      _fallbackMessage = error.message;
-      _channels = fallbackChannels;
-    } catch (error) {
-      _videos = <Video>[];
-      _errorMessage = _messageFrom(error);
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+    switch (await _getIslamicVideos(_selectedQuery)) {
+      case Success(:final value):
+        _videos = value;
+      case Err(:final failure):
+        _videos = <Video>[];
+        switch (failure.cause) {
+          // Without a key or quota, show the official channels instead.
+          case MissingApiKeyException(:final message) ||
+              QuotaExceededException(:final message):
+            _fallbackMessage = message;
+            _channels = fallbackChannels;
+          case final cause:
+            _errorMessage = _messageFrom(cause ?? failure);
+        }
     }
+    _isLoading = false;
+    notifyListeners();
   }
 
   String _messageFrom(Object error) {

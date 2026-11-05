@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/core/services/cached_api_service.dart';
 import 'package:sakina_app/features/media/data/datasources/articles_remote_datasource.dart';
-import 'package:sakina_app/features/media/data/datasources/audio_remote_datasource.dart';
 import 'package:sakina_app/features/media/data/datasources/video_remote_datasource.dart';
 import 'package:sakina_app/features/media/data/repositories/media_repository_impl.dart';
 import 'package:sakina_app/features/media/domain/errors/media_exception.dart';
@@ -15,9 +15,6 @@ const articleBody =
     '<rss><channel><item><title>Article</title>'
     '<link>https://example.com/article</link>'
     '<pubDate>2026-09-28T10:00:00Z</pubDate></item></channel></rss>';
-const audioBody =
-    '{"reciters":[{"id":1,"name":"Reciter","moshaf":'
-    '[{"server":"https://example.com/","surah_list":"1,2","name":"Reading"}]}]}';
 const videoBody =
     '{"items":[{"id":{"videoId":"video1"},"snippet":'
     '{"title":"Video","channelTitle":"Channel"}}]}';
@@ -38,8 +35,6 @@ void main() {
       if (offline) throw const SocketException('offline');
       final body = malformed
           ? '<html>Service unavailable</html>'
-          : request.url.host == 'mp3quran.net'
-          ? (empty ? '{"reciters":[]}' : audioBody)
           : request.url.host == 'www.googleapis.com'
           ? (empty ? '{"items":[]}' : videoBody)
           : (empty ? '<rss><channel></channel></rss>' : articleBody);
@@ -52,7 +47,6 @@ void main() {
         client: client,
         cache: cache,
       ),
-      audioDataSource: AudioRemoteDataSource(client: client, cache: cache),
       videoDataSource: VideoRemoteDataSource(
         client: client,
         cache: cache,
@@ -83,11 +77,10 @@ void main() {
     }
   }
 
-  for (final kind in ['articles', 'audio', 'video']) {
+  for (final kind in ['articles', 'video']) {
     Future<List<Object>> load() async => switch (kind) {
-      'articles' => repository.getArticles(),
-      'audio' => repository.getReciters(),
-      _ => repository.getIslamicVideos('query'),
+      'articles' => unwrap(repository.getArticles()),
+      _ => unwrap(repository.getIslamicVideos('query')),
     };
     group(kind, () {
       test('valid empty result is cacheable offline', () async {
@@ -172,37 +165,26 @@ void main() {
   }
 
   test('video cache can be browsed without an API key', () async {
-    await repository.getIslamicVideos('query');
+    await unwrap(repository.getIslamicVideos('query'));
     final before = requests;
     repository = createRepository(apiKey: '');
     offline = true;
-    expect(await repository.getIslamicVideos('query'), hasLength(1));
+    expect(await unwrap(repository.getIslamicVideos('query')), hasLength(1));
     expect(requests, before);
     await expectLater(
-      repository.getIslamicVideos('other query'),
+      unwrap(repository.getIslamicVideos('other query')),
       throwsA(isA<MissingApiKeyException>()),
     );
   });
 
   test('video cache is query-specific', () async {
-    await repository.getIslamicVideos('query');
+    await unwrap(repository.getIslamicVideos('query'));
     offline = true;
     await expectLater(
-      repository.getIslamicVideos('another query'),
+      unwrap(repository.getIslamicVideos('another query')),
       throwsA(isA<MediaException>()),
     );
-    expect(await repository.getIslamicVideos('query'), hasLength(1));
-  });
-
-  test('cached reciter generates audio URLs without HTTP', () async {
-    await repository.getReciters();
-    offline = true;
-    final before = requests;
-    final reciters = await repository.getReciters();
-    final audios = await repository.getSurahAudios(reciters.single);
-    expect(audios, hasLength(2));
-    expect(audios.first.audioUrl, 'https://example.com/001.mp3');
-    expect(requests, before);
+    expect(await unwrap(repository.getIslamicVideos('query')), hasLength(1));
   });
 
   test('RSS returns available feeds when another source fails', () async {
@@ -229,10 +211,18 @@ void main() {
     () async {
       statusCode = 403;
       await expectLater(
-        repository.getIslamicVideos('query'),
+        unwrap(repository.getIslamicVideos('query')),
         throwsA(isA<QuotaExceededException>()),
       );
       expect(prefs.getKeys(), isEmpty);
     },
   );
 }
+
+/// Returns the value or throws the friendly MediaException the repository
+/// carries as the failure's cause, matching the original expectations.
+Future<List<T>> unwrap<T>(Future<Result<List<T>>> result) async =>
+    switch (await result) {
+      Success(:final value) => value,
+      Err(:final failure) => throw failure.cause ?? failure,
+    };

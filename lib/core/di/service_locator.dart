@@ -36,16 +36,15 @@ import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart
 import 'package:sakina_app/features/duas/data/repositories/duas_repository.dart';
 import 'package:sakina_app/features/khatma/data/repositories/khatma_repository.dart';
 import 'package:sakina_app/features/media/data/datasources/articles_remote_datasource.dart';
-import 'package:sakina_app/features/media/data/datasources/audio_remote_datasource.dart';
+
 import 'package:sakina_app/features/media/data/datasources/video_remote_datasource.dart';
 import 'package:sakina_app/features/media/data/repositories/media_repository_impl.dart';
 import 'package:sakina_app/features/media/domain/repositories/media_repository.dart';
 import 'package:sakina_app/features/media/domain/usecases/get_articles.dart';
 import 'package:sakina_app/features/media/domain/usecases/get_islamic_videos.dart';
-import 'package:sakina_app/features/media/domain/usecases/get_reciters.dart';
-import 'package:sakina_app/features/media/domain/usecases/get_surah_audios.dart';
+
 import 'package:sakina_app/features/media/presentation/providers/articles_provider.dart';
-import 'package:sakina_app/features/media/presentation/providers/audio_provider.dart';
+
 import 'package:sakina_app/features/media/presentation/providers/video_provider.dart';
 
 import 'package:sakina_app/core/services/notification_service.dart';
@@ -100,13 +99,6 @@ Future<void> setupServiceLocator() async {
       ),
     );
 
-    getIt.registerLazySingleton<AudioRemoteDataSource>(
-      () => AudioRemoteDataSource(
-        client: getIt<http.Client>(),
-        cache: getIt<CachedApiService>(),
-      ),
-    );
-
     getIt.registerLazySingleton<VideoRemoteDataSource>(
       () => VideoRemoteDataSource(
         client: getIt<http.Client>(),
@@ -154,7 +146,7 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<MediaRepository>(
       () => MediaRepositoryImpl(
         articlesDataSource: getIt<ArticlesRemoteDataSource>(),
-        audioDataSource: getIt<AudioRemoteDataSource>(),
+
         videoDataSource: getIt<VideoRemoteDataSource>(),
       ),
     );
@@ -166,12 +158,7 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<GetArticles>(
       () => GetArticles(getIt<MediaRepository>()),
     );
-    getIt.registerLazySingleton<GetReciters>(
-      () => GetReciters(getIt<MediaRepository>()),
-    );
-    getIt.registerLazySingleton<GetSurahAudios>(
-      () => GetSurahAudios(getIt<MediaRepository>()),
-    );
+
     getIt.registerLazySingleton<GetIslamicVideos>(
       () => GetIslamicVideos(getIt<MediaRepository>()),
     );
@@ -183,12 +170,7 @@ Future<void> setupServiceLocator() async {
     getIt.registerFactory<ArticlesProvider>(
       () => ArticlesProvider(getArticles: getIt<GetArticles>()),
     );
-    getIt.registerFactory<AudioProvider>(
-      () => AudioProvider(
-        getReciters: getIt<GetReciters>(),
-        getSurahAudios: getIt<GetSurahAudios>(),
-      ),
-    );
+
     getIt.registerFactory<VideoProvider>(
       () => VideoProvider(getIslamicVideos: getIt<GetIslamicVideos>()),
     );

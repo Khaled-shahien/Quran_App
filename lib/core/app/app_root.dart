@@ -23,6 +23,8 @@ import 'package:sakina_app/core/audio/recitation_audio_engine.dart';
 import 'package:sakina_app/core/utils/surah_names.dart';
 import 'package:sakina_app/features/recitation/domain/repositories/recitation_repository.dart';
 import 'package:sakina_app/features/recitation/presentation/providers/recitation_controller.dart';
+import 'package:sakina_app/features/recitation/presentation/providers/recitation_downloads_controller.dart';
+import 'package:sakina_app/features/recitation/presentation/widgets/recitation_mini_player.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_repository.dart';
 import 'package:sakina_app/features/hadeath/presentation/providers/hadeath_provider.dart';
@@ -207,6 +209,11 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
                 appL10n.surahAudioModelMessage1(surahNameAr(surah) ?? '$surah'),
           )..initialize(),
         ),
+        ChangeNotifierProvider<RecitationDownloadsController>(
+          create: (_) => RecitationDownloadsController(
+            repository: getIt<RecitationRepository>(),
+          ),
+        ),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
@@ -222,7 +229,17 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
             supportedLocales: AppLocalizations.supportedLocales,
             routerConfig: appRouter,
             builder: (context, child) {
-              return NoiseBackground(child: child!);
+              return NoiseBackground(
+                child: Column(
+                  children: [
+                    Expanded(child: child!),
+                    // Stays visible on every screen while a surah is loaded.
+                    RecitationMiniPlayer(
+                      sheetContext: () => appNavigatorKey.currentContext,
+                    ),
+                  ],
+                ),
+              );
             },
           );
         },

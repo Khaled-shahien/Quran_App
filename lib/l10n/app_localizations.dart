@@ -3331,6 +3331,234 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تلاوة القرآن الكريم'**
   String get recitationChannelName;
+
+  /// No description provided for @recitationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تلاوة القرآن'**
+  String get recitationTitle;
+
+  /// No description provided for @recitationPlay.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشغيل التلاوة'**
+  String get recitationPlay;
+
+  /// No description provided for @recitationPause.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف مؤقت'**
+  String get recitationPause;
+
+  /// No description provided for @recitationStop.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف التلاوة وإغلاق المشغّل'**
+  String get recitationStop;
+
+  /// No description provided for @recitationNextAyah.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآية التالية'**
+  String get recitationNextAyah;
+
+  /// No description provided for @recitationPreviousAyah.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآية السابقة'**
+  String get recitationPreviousAyah;
+
+  /// No description provided for @recitationNowPlaying.
+  ///
+  /// In ar, this message translates to:
+  /// **'{surah} • الآية {ayah}'**
+  String recitationNowPlaying(String surah, String ayah);
+
+  /// No description provided for @recitationLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التحميل…'**
+  String get recitationLoading;
+
+  /// No description provided for @recitationOffline.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد اتصال بالإنترنت. حمّل السورة لتستمع إليها بدون إنترنت.'**
+  String get recitationOffline;
+
+  /// No description provided for @recitationError.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تشغيل التلاوة'**
+  String get recitationError;
+
+  /// No description provided for @recitationReciter.
+  ///
+  /// In ar, this message translates to:
+  /// **'القارئ'**
+  String get recitationReciter;
+
+  /// No description provided for @recitationSpeed.
+  ///
+  /// In ar, this message translates to:
+  /// **'سرعة التلاوة'**
+  String get recitationSpeed;
+
+  /// No description provided for @recitationSpeedValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value}×'**
+  String recitationSpeedValue(String value);
+
+  /// No description provided for @recitationRepeat.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكرار'**
+  String get recitationRepeat;
+
+  /// No description provided for @recitationRepeatOff.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون تكرار'**
+  String get recitationRepeatOff;
+
+  /// No description provided for @recitationRepeatTimes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} مرات'**
+  String recitationRepeatTimes(String count);
+
+  /// No description provided for @recitationRepeatFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من الآية'**
+  String get recitationRepeatFrom;
+
+  /// No description provided for @recitationRepeatTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى الآية'**
+  String get recitationRepeatTo;
+
+  /// No description provided for @recitationRepeatStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ التكرار'**
+  String get recitationRepeatStart;
+
+  /// No description provided for @recitationRepeating.
+  ///
+  /// In ar, this message translates to:
+  /// **'تكرار الآيات {from} إلى {to}: {count} مرات'**
+  String recitationRepeating(String from, String to, String count);
+
+  /// No description provided for @recitationDownload.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحميل للاستماع بدون إنترنت'**
+  String get recitationDownload;
+
+  /// No description provided for @recitationDownloadConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجم الملف {size}. هل تريد تحميله؟'**
+  String recitationDownloadConfirm(String size);
+
+  /// No description provided for @recitationDownloadAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحميل'**
+  String get recitationDownloadAction;
+
+  /// No description provided for @recitationDownloading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التحميل {percent}٪'**
+  String recitationDownloading(String percent);
+
+  /// No description provided for @recitationDownloaded.
+  ///
+  /// In ar, this message translates to:
+  /// **'محمّلة للاستماع بدون إنترنت'**
+  String get recitationDownloaded;
+
+  /// No description provided for @recitationDownloadFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل السورة. تحقق من الاتصال وحاول مرة أخرى.'**
+  String get recitationDownloadFailed;
+
+  /// No description provided for @recitationDownloadsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التلاوات المحمّلة'**
+  String get recitationDownloadsTitle;
+
+  /// No description provided for @recitationDownloadsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد سور محمّلة بعد. يمكنك تحميل أي سورة من صفحة التلاوة.'**
+  String get recitationDownloadsEmpty;
+
+  /// No description provided for @recitationDeleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حذف {surah}'**
+  String recitationDeleted(String surah);
+
+  /// No description provided for @recitationDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف التحميل'**
+  String get recitationDelete;
+
+  /// No description provided for @recitationSizeMb.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} ميجابايت'**
+  String recitationSizeMb(String value);
+
+  /// No description provided for @recitationStyleMurattal.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرتّل'**
+  String get recitationStyleMurattal;
+
+  /// No description provided for @recitationStyleMujawwad.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجوّد'**
+  String get recitationStyleMujawwad;
+
+  /// No description provided for @recitationStyleMuallim.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلّم'**
+  String get recitationStyleMuallim;
+
+  /// No description provided for @recitationListenFromHere.
+  ///
+  /// In ar, this message translates to:
+  /// **'استمع من هذه الصفحة'**
+  String get recitationListenFromHere;
+
+  /// No description provided for @recitationSource.
+  ///
+  /// In ar, this message translates to:
+  /// **'التلاوات من Quran.com'**
+  String get recitationSource;
+
+  /// No description provided for @recitationSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'التلاوة'**
+  String get recitationSettings;
+
+  /// No description provided for @recitationManageDownloads.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة التلاوات المحمّلة'**
+  String get recitationManageDownloads;
 }
 
 class _AppLocalizationsDelegate

@@ -2425,5 +2425,108 @@
   "asrMadhabTitle": "حساب وقت العصر",
   "asrMadhabStandard": "الجمهور (الشافعي والمالكي والحنبلي)",
   "asrMadhabHanafi": "الحنفي",
-  "recitationChannelName": "تلاوة القرآن الكريم"
+  "recitationChannelName": "تلاوة القرآن الكريم",
+  "recitationTitle": "تلاوة القرآن",
+  "recitationPlay": "تشغيل التلاوة",
+  "recitationPause": "إيقاف مؤقت",
+  "recitationStop": "إيقاف التلاوة وإغلاق المشغّل",
+  "recitationNextAyah": "الآية التالية",
+  "recitationPreviousAyah": "الآية السابقة",
+  "recitationNowPlaying": "{surah} • الآية {ayah}",
+  "@recitationNowPlaying": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationLoading": "جارٍ التحميل…",
+  "recitationOffline": "لا يوجد اتصال بالإنترنت. حمّل السورة لتستمع إليها بدون إنترنت.",
+  "recitationError": "تعذر تشغيل التلاوة",
+  "recitationReciter": "القارئ",
+  "recitationSpeed": "سرعة التلاوة",
+  "recitationSpeedValue": "{value}×",
+  "@recitationSpeedValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationRepeat": "التكرار",
+  "recitationRepeatOff": "بدون تكرار",
+  "recitationRepeatTimes": "{count} مرات",
+  "@recitationRepeatTimes": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationRepeatFrom": "من الآية",
+  "recitationRepeatTo": "إلى الآية",
+  "recitationRepeatStart": "ابدأ التكرار",
+  "recitationRepeating": "تكرار الآيات {from} إلى {to}: {count} مرات",
+  "@recitationRepeating": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationDownload": "تحميل للاستماع بدون إنترنت",
+  "recitationDownloadConfirm": "حجم الملف {size}. هل تريد تحميله؟",
+  "@recitationDownloadConfirm": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationDownloadAction": "تحميل",
+  "recitationDownloading": "جارٍ التحميل {percent}٪",
+  "@recitationDownloading": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationDownloaded": "محمّلة للاستماع بدون إنترنت",
+  "recitationDownloadFailed": "تعذر تحميل السورة. تحقق من الاتصال وحاول مرة أخرى.",
+  "recitationDownloadsTitle": "التلاوات المحمّلة",
+  "recitationDownloadsEmpty": "لا توجد سور محمّلة بعد. يمكنك تحميل أي سورة من صفحة التلاوة.",
+  "recitationDeleted": "تم حذف {surah}",
+  "@recitationDeleted": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationDelete": "حذف التحميل",
+  "recitationSizeMb": "{value} ميجابايت",
+  "@recitationSizeMb": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationStyleMurattal": "مرتّل",
+  "recitationStyleMujawwad": "مجوّد",
+  "recitationStyleMuallim": "معلّم",
+  "recitationListenFromHere": "استمع من هذه الصفحة",
+  "recitationSource": "التلاوات من Quran.com",
+  "recitationSettings": "التلاوة",
+  "recitationManageDownloads": "إدارة التلاوات المحمّلة"
 }

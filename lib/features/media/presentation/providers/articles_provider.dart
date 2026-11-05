@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sakina_app/features/media/domain/entities/article.dart';
@@ -34,16 +35,16 @@ class ArticlesProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    try {
-      _allArticles = await _getArticles();
-      _applySourceFilter(_selectedSource);
-    } catch (error) {
-      _articles = <Article>[];
-      _errorMessage = _messageFrom(error);
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+    switch (await _getArticles()) {
+      case Success(:final value):
+        _allArticles = value;
+        _applySourceFilter(_selectedSource);
+      case Err(:final failure):
+        _articles = <Article>[];
+        _errorMessage = _messageFrom(failure.cause ?? failure);
     }
+    _isLoading = false;
+    notifyListeners();
   }
 
   void filterBySource(String? sourceName) {

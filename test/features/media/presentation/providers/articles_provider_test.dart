@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/features/media/domain/entities/article.dart';
 import 'package:sakina_app/features/media/domain/errors/media_exception.dart';
 import 'package:sakina_app/features/media/domain/repositories/media_repository.dart';
@@ -11,7 +12,10 @@ class _ArticlesRepository implements MediaRepository {
   Future<List<Article>> Function() response = () async => [];
 
   @override
-  Future<List<Article>> getArticles() => response();
+  Future<Result<List<Article>>> getArticles() => Result.guard(
+    response,
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);

@@ -1,21 +1,17 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/core/theme/app_theme.dart';
 import 'package:sakina_app/features/media/domain/entities/article.dart';
-import 'package:sakina_app/features/media/domain/entities/reciter.dart';
 import 'package:sakina_app/features/media/domain/entities/video.dart';
 import 'package:sakina_app/features/media/domain/errors/media_exception.dart';
 import 'package:sakina_app/features/media/domain/repositories/media_repository.dart';
 import 'package:sakina_app/features/media/domain/usecases/get_articles.dart';
-import 'package:sakina_app/features/media/domain/usecases/get_reciters.dart';
-import 'package:sakina_app/features/media/domain/usecases/get_surah_audios.dart';
 import 'package:sakina_app/features/media/domain/usecases/get_islamic_videos.dart';
 import 'package:sakina_app/features/media/presentation/providers/articles_provider.dart';
-import 'package:sakina_app/features/media/presentation/providers/audio_provider.dart';
 import 'package:sakina_app/features/media/presentation/providers/video_provider.dart';
 import 'package:sakina_app/features/media/presentation/screens/articles_screen.dart';
-import 'package:sakina_app/features/media/presentation/screens/audio_screen.dart';
 import 'package:sakina_app/features/media/presentation/screens/video_screen.dart';
 import 'package:sakina_app/features/media/presentation/widgets/media_state_views.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -29,7 +25,12 @@ class _Repository implements MediaRepository {
   }
 
   @override
-  Future<List<Article>> getArticles() async {
+  Future<Result<List<Article>>> getArticles() => Result.guard(
+    () => _legacyGetArticles(),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<List<Article>> _legacyGetArticles() async {
     check();
     return [
       Article(
@@ -44,21 +45,12 @@ class _Repository implements MediaRepository {
   }
 
   @override
-  Future<List<Reciter>> getReciters() async {
-    check();
-    return [
-      const Reciter(
-        id: 999,
-        name: 'Audio result',
-        serverUrl: 'https://example.com/',
-        surahList: '1',
-        moshafName: 'Reading',
-      ),
-    ];
-  }
+  Future<Result<List<Video>>> getIslamicVideos(String query) => Result.guard(
+    () => _legacyGetIslamicVideos(query),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
 
-  @override
-  Future<List<Video>> getIslamicVideos(String query) async {
+  Future<List<Video>> _legacyGetIslamicVideos(String query) async {
     if (videoFailure != null) throw videoFailure!;
     check();
     return [
@@ -79,34 +71,27 @@ class _Repository implements MediaRepository {
 
 void main() {
   for (final dark in [false, true]) {
-    for (final kind in ['Article', 'Audio', 'Video']) {
+    for (final kind in ['Article', 'Video']) {
       testWidgets('$kind offline retry and failed refresh, dark=$dark', (
         tester,
       ) async {
         final repository = _Repository();
         final articles = ArticlesProvider(getArticles: GetArticles(repository));
-        final audio = AudioProvider(
-          getReciters: GetReciters(repository),
-          getSurahAudios: GetSurahAudios(repository),
-        );
         final video = VideoProvider(
           getIslamicVideos: GetIslamicVideos(repository),
         );
         addTearDown(articles.dispose);
-        addTearDown(audio.dispose);
         addTearDown(video.dispose);
         await tester.pumpWidget(
           MultiProvider(
             providers: [
               ChangeNotifierProvider.value(value: articles),
-              ChangeNotifierProvider.value(value: audio),
               ChangeNotifierProvider.value(value: video),
             ],
             child: MaterialApp(
               theme: dark ? AppTheme.darkTheme : AppTheme.lightTheme,
               home: switch (kind) {
                 'Article' => const ArticlesScreen(),
-                'Audio' => const AudioScreen(),
                 _ => const VideoScreen(),
               },
             ),

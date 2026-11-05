@@ -1807,4 +1807,137 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get recitationChannelName => 'تلاوة القرآن الكريم';
+
+  @override
+  String get recitationTitle => 'تلاوة القرآن';
+
+  @override
+  String get recitationPlay => 'تشغيل التلاوة';
+
+  @override
+  String get recitationPause => 'إيقاف مؤقت';
+
+  @override
+  String get recitationStop => 'إيقاف التلاوة وإغلاق المشغّل';
+
+  @override
+  String get recitationNextAyah => 'الآية التالية';
+
+  @override
+  String get recitationPreviousAyah => 'الآية السابقة';
+
+  @override
+  String recitationNowPlaying(String surah, String ayah) {
+    return '$surah • الآية $ayah';
+  }
+
+  @override
+  String get recitationLoading => 'جارٍ التحميل…';
+
+  @override
+  String get recitationOffline =>
+      'لا يوجد اتصال بالإنترنت. حمّل السورة لتستمع إليها بدون إنترنت.';
+
+  @override
+  String get recitationError => 'تعذر تشغيل التلاوة';
+
+  @override
+  String get recitationReciter => 'القارئ';
+
+  @override
+  String get recitationSpeed => 'سرعة التلاوة';
+
+  @override
+  String recitationSpeedValue(String value) {
+    return '$value×';
+  }
+
+  @override
+  String get recitationRepeat => 'التكرار';
+
+  @override
+  String get recitationRepeatOff => 'بدون تكرار';
+
+  @override
+  String recitationRepeatTimes(String count) {
+    return '$count مرات';
+  }
+
+  @override
+  String get recitationRepeatFrom => 'من الآية';
+
+  @override
+  String get recitationRepeatTo => 'إلى الآية';
+
+  @override
+  String get recitationRepeatStart => 'ابدأ التكرار';
+
+  @override
+  String recitationRepeating(String from, String to, String count) {
+    return 'تكرار الآيات $from إلى $to: $count مرات';
+  }
+
+  @override
+  String get recitationDownload => 'تحميل للاستماع بدون إنترنت';
+
+  @override
+  String recitationDownloadConfirm(String size) {
+    return 'حجم الملف $size. هل تريد تحميله؟';
+  }
+
+  @override
+  String get recitationDownloadAction => 'تحميل';
+
+  @override
+  String recitationDownloading(String percent) {
+    return 'جارٍ التحميل $percent٪';
+  }
+
+  @override
+  String get recitationDownloaded => 'محمّلة للاستماع بدون إنترنت';
+
+  @override
+  String get recitationDownloadFailed =>
+      'تعذر تحميل السورة. تحقق من الاتصال وحاول مرة أخرى.';
+
+  @override
+  String get recitationDownloadsTitle => 'التلاوات المحمّلة';
+
+  @override
+  String get recitationDownloadsEmpty =>
+      'لا توجد سور محمّلة بعد. يمكنك تحميل أي سورة من صفحة التلاوة.';
+
+  @override
+  String recitationDeleted(String surah) {
+    return 'تم حذف $surah';
+  }
+
+  @override
+  String get recitationDelete => 'حذف التحميل';
+
+  @override
+  String recitationSizeMb(String value) {
+    return '$value ميجابايت';
+  }
+
+  @override
+  String get recitationStyleMurattal => 'مرتّل';
+
+  @override
+  String get recitationStyleMujawwad => 'مجوّد';
+
+  @override
+  String get recitationStyleMuallim => 'معلّم';
+
+  @override
+  String get recitationListenFromHere => 'استمع من هذه الصفحة';
+
+  @override
+  String get recitationSource => 'التلاوات من Quran.com';
+
+  @override
+  String get recitationSettings => 'التلاوة';
+
+  @override
+  String get recitationManageDownloads => 'إدارة التلاوات المحمّلة';
 }

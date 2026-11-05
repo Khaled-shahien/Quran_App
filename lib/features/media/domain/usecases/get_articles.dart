@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import '../entities/article.dart';
 import '../repositories/media_repository.dart';
 
@@ -6,7 +7,7 @@ class GetArticles {
 
   final MediaRepository _repository;
 
-  Future<List<Article>> call() {
+  Future<Result<List<Article>>> call() {
     return _repository.getArticles();
   }
 }

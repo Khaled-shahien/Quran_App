@@ -1,14 +1,12 @@
+import 'package:sakina_app/core/result/result.dart';
+
 import '../entities/article.dart';
-import '../entities/reciter.dart';
-import '../entities/surah_audio.dart';
 import '../entities/video.dart';
 
+/// Articles and videos. A failure's [Failure.cause] is a MediaException
+/// whose message is already friendly Arabic copy.
 abstract class MediaRepository {
-  Future<List<Article>> getArticles();
+  Future<Result<List<Article>>> getArticles();
 
-  Future<List<Reciter>> getReciters();
-
-  Future<List<SurahAudio>> getSurahAudios(Reciter reciter);
-
-  Future<List<Video>> getIslamicVideos(String query);
+  Future<Result<List<Video>>> getIslamicVideos(String query);
 }
