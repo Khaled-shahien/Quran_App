@@ -3841,6 +3841,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الأكبر'**
   String get appTextSizeLargest;
+
+  /// No description provided for @addVerseToFavorites.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة الآية إلى المفضلة'**
+  String get addVerseToFavorites;
+
+  /// No description provided for @khatmaIncreaseDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'زيادة عدد الأيام'**
+  String get khatmaIncreaseDays;
+
+  /// No description provided for @khatmaDecreaseDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقليل عدد الأيام'**
+  String get khatmaDecreaseDays;
+
+  /// No description provided for @khatmaIncreaseDaily.
+  ///
+  /// In ar, this message translates to:
+  /// **'زيادة الورد اليومي'**
+  String get khatmaIncreaseDaily;
+
+  /// No description provided for @khatmaDecreaseDaily.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقليل الورد اليومي'**
+  String get khatmaDecreaseDaily;
 }
 
 class _AppLocalizationsDelegate

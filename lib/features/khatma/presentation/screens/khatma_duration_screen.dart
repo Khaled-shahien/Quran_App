@@ -102,242 +102,276 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Title text
-              Text(
-                l10nOf(context).khatmaDurationScreenMessage2,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: textColor,
-                  height: 1.5,
+        // Scrolls when large text needs more room than the screen; the
+        // continue button stays at the bottom when everything fits.
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24.0,
+                  vertical: 40.0,
                 ),
-              ),
-              const SizedBox(height: 30),
-
-              Directionality(
-                textDirection: TextDirection.rtl,
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: _buildPlanTypeCard(
-                        title: l10nOf(context).khatmaDurationScreenMessage3,
-                        subtitle: l10nOf(context).khatmaDurationScreenMessage4,
-                        active: _goalType == KhatmaGoalType.byDuration,
-                        onTap: () {
-                          setState(() {
-                            _goalType = KhatmaGoalType.byDuration;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _buildPlanTypeCard(
-                        title: l10nOf(context).khatmaDurationScreenMessage5,
-                        subtitle: l10nOf(context).khatmaDurationScreenMessage6,
-                        active: _goalType == KhatmaGoalType.byDailyAmount,
-                        onTap: () {
-                          setState(() {
-                            _goalType = KhatmaGoalType.byDailyAmount;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              Directionality(
-                textDirection: TextDirection.rtl,
-                child: Row(
-                  children: [
+                    // Title text
                     Text(
-                      l10nOf(context).khatmaDurationScreenMessage7,
+                      l10nOf(context).khatmaDurationScreenMessage2,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
                         color: textColor,
+                        height: 1.5,
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: cardColor,
+                    const SizedBox(height: 30),
+
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _buildPlanTypeCard(
+                              title: l10nOf(
+                                context,
+                              ).khatmaDurationScreenMessage3,
+                              subtitle: l10nOf(
+                                context,
+                              ).khatmaDurationScreenMessage4,
+                              active: _goalType == KhatmaGoalType.byDuration,
+                              onTap: () {
+                                setState(() {
+                                  _goalType = KhatmaGoalType.byDuration;
+                                });
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: _buildPlanTypeCard(
+                              title: l10nOf(
+                                context,
+                              ).khatmaDurationScreenMessage5,
+                              subtitle: l10nOf(
+                                context,
+                              ).khatmaDurationScreenMessage6,
+                              active: _goalType == KhatmaGoalType.byDailyAmount,
+                              onTap: () {
+                                setState(() {
+                                  _goalType = KhatmaGoalType.byDailyAmount;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: _LabeledRow(
+                        children: [
+                          Text(
+                            l10nOf(context).khatmaDurationScreenMessage7,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: cardColor,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<KhatmaTrackingUnit>(
+                                  value: _trackingUnit,
+                                  icon: Icon(
+                                    Icons.arrow_drop_down,
+                                    color: isDarkMode
+                                        ? Colors.white54
+                                        : Theme.of(
+                                            context,
+                                          ).colorScheme.onSurfaceVariant,
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: dropdownTextColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  isExpanded: true,
+                                  items: [
+                                    DropdownMenuItem(
+                                      value: KhatmaTrackingUnit.page,
+                                      child: Text(
+                                        l10nOf(
+                                          context,
+                                        ).khatmaDurationScreenMessage8,
+                                      ),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: KhatmaTrackingUnit.hizb,
+                                      child: Text(
+                                        l10nOf(
+                                          context,
+                                        ).khatmaDurationScreenMessage9,
+                                      ),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: KhatmaTrackingUnit.juz,
+                                      child: Text(
+                                        l10nOf(
+                                          context,
+                                        ).khatmaDurationScreenMessage10,
+                                      ),
+                                    ),
+                                  ],
+                                  onChanged: (val) {
+                                    if (val != null) {
+                                      setState(() {
+                                        _trackingUnit = val;
+                                        if (_goalType ==
+                                            KhatmaGoalType.byDailyAmount) {
+                                          _dailyTarget = _dailyTarget.clamp(
+                                            1,
+                                            _remainingUnits.toDouble(),
+                                          );
+                                        }
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    if (_goalType == KhatmaGoalType.byDuration)
+                      _buildDurationSection(cardColor, textColor)
+                    else
+                      _buildDailyTargetSection(cardColor, textColor),
+
+                    const SizedBox(height: 18),
+
+                    _buildReminderSection(cardColor, textColor),
+
+                    const SizedBox(height: 12),
+
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        _goalType == KhatmaGoalType.byDuration
+                            ? l10nOf(context).khatmaDurationScreenMessage11(
+                                (_formatDouble(
+                                  _computedDailyTargetForDuration,
+                                )).toString(),
+                                (_unitLabel).toString(),
+                              )
+                            : l10nOf(context).khatmaDurationScreenMessage12(
+                                ((_remainingUnits / _dailyTarget).ceil())
+                                    .toString(),
+                              ),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+
+                    const Spacer(),
+
+                    // Continue Button
+                    ElevatedButton(
+                      onPressed: () async {
+                        final provider = Provider.of<KhatmaProvider>(
+                          context,
+                          listen: false,
+                        );
+
+                        final double target =
+                            _goalType == KhatmaGoalType.byDuration
+                            ? _computedDailyTargetForDuration
+                            : _dailyTarget;
+
+                        final newKhatma = KhatmaModel(
+                          id: DateTime.now().millisecondsSinceEpoch.toString(),
+                          startMode: widget.startMode,
+                          startJuz: widget.startJuz ?? 1,
+                          startDate: DateTime.now(),
+                          trackingUnit: _trackingUnit,
+                          goalType: _goalType,
+                          plannedDurationDays: _durationDays,
+                          dailyTargetUnits: target,
+                          completedUnits: 0,
+                          reminderHour: _reminderHour,
+                          reminderMinute: _reminderMinute,
+                        );
+
+                        await provider.startNewKhatma(newKhatma);
+
+                        if (!context.mounted) return;
+                        // A plan's daily reminder needs the same one-time permission
+                        // explanation as a first prayer location.
+                        await promptForNotificationPermissionOnce(context);
+
+                        if (!context.mounted) return;
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              l10nOf(context).khatmaDurationScreenMessage13,
+                              style: const TextStyle(),
+                            ),
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                          ),
+                        );
+                        Navigator.of(
+                          context,
+                        ).popUntil((route) => route.isFirst);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<KhatmaTrackingUnit>(
-                            value: _trackingUnit,
-                            icon: Icon(
-                              Icons.arrow_drop_down,
-                              color: isDarkMode
-                                  ? Colors.white54
-                                  : Theme.of(
-                                      context,
-                                    ).colorScheme.onSurfaceVariant,
-                            ),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: dropdownTextColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            isExpanded: true,
-                            items: [
-                              DropdownMenuItem(
-                                value: KhatmaTrackingUnit.page,
-                                child: Text(
-                                  l10nOf(context).khatmaDurationScreenMessage8,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: KhatmaTrackingUnit.hizb,
-                                child: Text(
-                                  l10nOf(context).khatmaDurationScreenMessage9,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: KhatmaTrackingUnit.juz,
-                                child: Text(
-                                  l10nOf(context).khatmaDurationScreenMessage10,
-                                ),
-                              ),
-                            ],
-                            onChanged: (val) {
-                              if (val != null) {
-                                setState(() {
-                                  _trackingUnit = val;
-                                  if (_goalType ==
-                                      KhatmaGoalType.byDailyAmount) {
-                                    _dailyTarget = _dailyTarget.clamp(
-                                      1,
-                                      _remainingUnits.toDouble(),
-                                    );
-                                  }
-                                });
-                              }
-                            },
-                          ),
+                      ),
+                      child: Text(
+                        l10nOf(context).khatmaDurationScreenMessage14,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 20),
-
-              if (_goalType == KhatmaGoalType.byDuration)
-                _buildDurationSection(cardColor, textColor)
-              else
-                _buildDailyTargetSection(cardColor, textColor),
-
-              const SizedBox(height: 18),
-
-              _buildReminderSection(cardColor, textColor),
-
-              const SizedBox(height: 12),
-
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: cardColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  _goalType == KhatmaGoalType.byDuration
-                      ? l10nOf(context).khatmaDurationScreenMessage11(
-                          (_formatDouble(
-                            _computedDailyTargetForDuration,
-                          )).toString(),
-                          (_unitLabel).toString(),
-                        )
-                      : l10nOf(context).khatmaDurationScreenMessage12(
-                          ((_remainingUnits / _dailyTarget).ceil()).toString(),
-                        ),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-
-              const Spacer(),
-
-              // Continue Button
-              ElevatedButton(
-                onPressed: () async {
-                  final provider = Provider.of<KhatmaProvider>(
-                    context,
-                    listen: false,
-                  );
-
-                  final double target = _goalType == KhatmaGoalType.byDuration
-                      ? _computedDailyTargetForDuration
-                      : _dailyTarget;
-
-                  final newKhatma = KhatmaModel(
-                    id: DateTime.now().millisecondsSinceEpoch.toString(),
-                    startMode: widget.startMode,
-                    startJuz: widget.startJuz ?? 1,
-                    startDate: DateTime.now(),
-                    trackingUnit: _trackingUnit,
-                    goalType: _goalType,
-                    plannedDurationDays: _durationDays,
-                    dailyTargetUnits: target,
-                    completedUnits: 0,
-                    reminderHour: _reminderHour,
-                    reminderMinute: _reminderMinute,
-                  );
-
-                  await provider.startNewKhatma(newKhatma);
-
-                  if (!context.mounted) return;
-                  // A plan's daily reminder needs the same one-time permission
-                  // explanation as a first prayer location.
-                  await promptForNotificationPermissionOnce(context);
-
-                  if (!context.mounted) return;
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        l10nOf(context).khatmaDurationScreenMessage13,
-                        style: const TextStyle(),
-                      ),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                    ),
-                  );
-                  Navigator.of(context).popUntil((route) => route.isFirst);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  l10nOf(context).khatmaDurationScreenMessage14,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -394,7 +428,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
   Widget _buildDurationSection(Color cardColor, Color textColor) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Row(
+      child: _LabeledRow(
         children: [
           Text(
             appL10n.khatmaDurationScreenMessage15,
@@ -427,52 +461,43 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: cardColor,
-                border: Border.all(
+          Container(
+            decoration: BoxDecoration(
+              color: cardColor,
+              border: Border.all(color: Theme.of(context).colorScheme.primary),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  tooltip: appL10n.khatmaIncreaseDays,
+                  onPressed: () => setState(() => _durationDays++),
+                  icon: Icon(
+                    Icons.add,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 20,
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 30,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () => setState(() => _durationDays++),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.add,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 1,
-                    height: 30,
+                IconButton(
+                  tooltip: appL10n.khatmaDecreaseDays,
+                  onPressed: () {
+                    if (_durationDays > 1) {
+                      setState(() => _durationDays--);
+                    }
+                  },
+                  icon: Icon(
+                    Icons.remove,
                     color: Theme.of(context).colorScheme.primary,
+                    size: 20,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      if (_durationDays > 1) {
-                        setState(() => _durationDays--);
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.remove,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -483,7 +508,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
   Widget _buildDailyTargetSection(Color cardColor, Color textColor) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Row(
+      child: _LabeledRow(
         children: [
           Text(
             appL10n.khatmaDurationScreenMessage17,
@@ -514,62 +539,53 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: cardColor,
-                border: Border.all(
+          Container(
+            decoration: BoxDecoration(
+              color: cardColor,
+              border: Border.all(color: Theme.of(context).colorScheme.primary),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  tooltip: appL10n.khatmaIncreaseDaily,
+                  onPressed: () {
+                    setState(() {
+                      _dailyTarget = (_dailyTarget + 0.5).clamp(
+                        1,
+                        _remainingUnits.toDouble(),
+                      );
+                    });
+                  },
+                  icon: Icon(
+                    Icons.add,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 20,
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 30,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _dailyTarget = (_dailyTarget + 0.5).clamp(
-                          1,
-                          _remainingUnits.toDouble(),
-                        );
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.add,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 1,
-                    height: 30,
+                IconButton(
+                  tooltip: appL10n.khatmaDecreaseDaily,
+                  onPressed: () {
+                    setState(() {
+                      _dailyTarget = (_dailyTarget - 0.5).clamp(
+                        1,
+                        _remainingUnits.toDouble(),
+                      );
+                    });
+                  },
+                  icon: Icon(
+                    Icons.remove,
                     color: Theme.of(context).colorScheme.primary,
+                    size: 20,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _dailyTarget = (_dailyTarget - 0.5).clamp(
-                          1,
-                          _remainingUnits.toDouble(),
-                        );
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.remove,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -580,7 +596,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
   Widget _buildReminderSection(Color cardColor, Color textColor) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Row(
+      child: _LabeledRow(
         children: [
           Text(
             appL10n.khatmaDurationScreenMessage18,
@@ -631,6 +647,29 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// A label beside its controls; the label moves above them when large
+/// text would not fit on one line. Children: label, gap, controls...
+class _LabeledRow extends StatelessWidget {
+  const _LabeledRow({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    if (MediaQuery.textScalerOf(context).scale(1) <= 1.3) {
+      return Row(children: children);
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        children.first,
+        const SizedBox(height: 8),
+        Row(children: children.skip(2).toList()),
+      ],
     );
   }
 }

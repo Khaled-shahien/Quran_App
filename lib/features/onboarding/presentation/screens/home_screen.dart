@@ -154,13 +154,10 @@ class _HomeScreenState extends State<HomeScreen> {
         background: const _PrayerTimeHeader(),
       ),
       actions: [
-        Semantics(
-          button: true,
-          label: appL10n.homeScreenMessage1,
-          child: IconButton(
-            icon: const Icon(Icons.segment, size: 30),
-            onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
-          ),
+        IconButton(
+          tooltip: appL10n.homeScreenMessage1,
+          icon: const Icon(Icons.segment, size: 30),
+          onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
         ),
       ],
     );
@@ -191,6 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     button: true,
                     label: appL10n.homeScreenMessage2,
                     child: IconButton(
+                      tooltip: l10nOf(context).appStringsMessage13,
                       icon: const Icon(
                         Icons.arrow_back_ios,
                         color: Colors.white,
@@ -1077,21 +1075,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Semantics(
-                        button: true,
-                        label: l10nOf(context).homeScreenMessage60,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          icon: Icon(
-                            Icons.cancel,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 20,
-                          ),
-                          onPressed: () {
-                            favoritesProvider.removeFavorite(verse);
-                          },
+                      // Full 48dp target; the icon stays small.
+                      IconButton(
+                        tooltip: l10nOf(context).homeScreenMessage60,
+                        icon: Icon(
+                          Icons.cancel,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 20,
                         ),
+                        onPressed: () {
+                          favoritesProvider.removeFavorite(verse);
+                        },
                       ),
                       Expanded(
                         child: Text(

@@ -113,6 +113,9 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
+                      tooltip: isFav
+                          ? l10nOf(context).homeScreenMessage60
+                          : l10nOf(context).addVerseToFavorites,
                       icon: Icon(
                         isFav ? Icons.favorite : Icons.favorite_outline,
                         color: isFav

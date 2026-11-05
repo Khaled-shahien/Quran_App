@@ -321,6 +321,7 @@ class CurrentWirdWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
+                          tooltip: l10nOf(context).currentWirdWidgetMessage11,
                           icon: Icon(
                             Icons.cancel,
                             color: Theme.of(context).colorScheme.error,

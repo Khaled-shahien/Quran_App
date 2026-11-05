@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sakina_app/features/settings/presentation/providers/text_size_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:sakina_app/features/khatma/presentation/providers/khatma_provider.dart';
+import 'package:sakina_app/features/khatma/presentation/screens/khatma_duration_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:sakina_app/core/result/result.dart';
@@ -272,8 +275,23 @@ void main() {
       await expectAccessible(tester);
       semantics.dispose();
     });
+    testWidgets('khatma duration (dark=$dark)', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await pumpAudited(
+        tester,
+        const KhatmaDurationScreen(startMode: 'juz', startJuz: 1),
+        dark: dark,
+        providers: [
+          ChangeNotifierProvider<KhatmaProvider>.value(value: _KhatmaStub()),
+        ],
+      );
+      await expectAccessible(tester);
+      semantics.dispose();
+    });
   }
 }
+
+class _KhatmaStub extends Mock implements KhatmaProvider {}
 
 class _HadithRepo implements HadeathRepository {
   @override

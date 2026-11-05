@@ -2656,5 +2656,10 @@
   "appTextSizeNormal": "عادي",
   "appTextSizeLarge": "كبير",
   "appTextSizeLarger": "أكبر",
-  "appTextSizeLargest": "الأكبر"
+  "appTextSizeLargest": "الأكبر",
+  "addVerseToFavorites": "إضافة الآية إلى المفضلة",
+  "khatmaIncreaseDays": "زيادة عدد الأيام",
+  "khatmaDecreaseDays": "تقليل عدد الأيام",
+  "khatmaIncreaseDaily": "زيادة الورد اليومي",
+  "khatmaDecreaseDaily": "تقليل الورد اليومي"
 }

@@ -2103,4 +2103,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get appTextSizeLargest => 'الأكبر';
+
+  @override
+  String get addVerseToFavorites => 'إضافة الآية إلى المفضلة';
+
+  @override
+  String get khatmaIncreaseDays => 'زيادة عدد الأيام';
+
+  @override
+  String get khatmaDecreaseDays => 'تقليل عدد الأيام';
+
+  @override
+  String get khatmaIncreaseDaily => 'زيادة الورد اليومي';
+
+  @override
+  String get khatmaDecreaseDaily => 'تقليل الورد اليومي';
 }

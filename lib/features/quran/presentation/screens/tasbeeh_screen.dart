@@ -268,66 +268,70 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         ),
         child: const Icon(Icons.delete, color: Colors.white, size: 24),
       ),
-      child: GestureDetector(
-        onTap: () => _controller.select(index),
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 4),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(
-              AppConstants.kBorderRadiusMedium,
-            ),
-            color: isSelected
-                ? AppColors.accent.withValues(alpha: 0.2)
-                : Theme.of(context).scaffoldBackgroundColor,
-            border: Border.all(
-              color: isCompleted
-                  ? Theme.of(context).colorScheme.primary
-                  : (isSelected
-                        ? Theme.of(context).colorScheme.primary
-                        : Colors.transparent),
-              width: isSelected ? 1.5 : 1,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: isCompleted
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.primary,
-                    fontWeight: isSelected
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  ),
-                ),
+      child: Semantics(
+        button: true,
+        selected: isSelected,
+        child: GestureDetector(
+          onTap: () => _controller.select(index),
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                AppConstants.kBorderRadiusMedium,
               ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(
-                      AppConstants.kBorderRadiusSmall,
-                    ),
-                  ),
+              color: isSelected
+                  ? AppColors.accent.withValues(alpha: 0.2)
+                  : Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(
+                color: isCompleted
+                    ? Theme.of(context).colorScheme.primary
+                    : (isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.transparent),
+                width: isSelected ? 1.5 : 1,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 2,
                   child: Text(
-                    counter,
+                    title,
                     style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: isCompleted
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.primary,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      borderRadius: BorderRadius.circular(
+                        AppConstants.kBorderRadiusSmall,
+                      ),
+                    ),
+                    child: Text(
+                      counter,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

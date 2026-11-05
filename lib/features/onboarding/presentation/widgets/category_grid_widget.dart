@@ -81,23 +81,27 @@ class CategoryGridWidget extends StatelessWidget {
     String title,
     String imagePath, {
     VoidCallback? onTap,
-  }) => GestureDetector(
-    onTap: onTap,
-    child: Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
+  }) => Semantics(
+    button: true,
+    label: title,
+    excludeSemantics: true,
+    child: Material(
+      color: Theme.of(context).colorScheme.secondary,
+      borderRadius: BorderRadius.circular(15),
+      child: InkWell(
         borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(imagePath, width: 40, height: 40, fit: BoxFit.contain),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-          ),
-        ],
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(imagePath, width: 40, height: 40, fit: BoxFit.contain),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     ),
   );
