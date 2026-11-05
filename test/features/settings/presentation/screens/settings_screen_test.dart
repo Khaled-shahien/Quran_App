@@ -11,6 +11,7 @@ import 'package:sakina_app/core/theme/app_theme.dart';
 import 'package:sakina_app/core/theme/theme_provider.dart';
 import 'package:sakina_app/features/settings/presentation/screens/settings_screen.dart';
 import 'package:sakina_app/features/settings/presentation/widgets/reading_preferences.dart';
+import 'package:sakina_app/features/onboarding/presentation/widgets/alarms/alarm_menu_item.dart';
 import 'package:sakina_app/features/onboarding/presentation/widgets/alarms/alarm_time_picker_dialog.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
 import '../../providers/settings_provider_test.dart' as fakes;
@@ -140,4 +141,57 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  // Alarms live only in Settings now (no copy in the side menu).
+  testWidgets('settings opens the saved time for each alarm', (tester) async {
+    tester.view.physicalSize = const Size(400, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final prefs = await SharedPreferences.getInstance();
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => SettingsProvider(
+              prefs: prefs,
+              alarmScheduler: fakes.FakeAlarmScheduler(),
+              rescheduleTaskService: fakes.FakeRescheduleTaskService(),
+            ),
+          ),
+          ChangeNotifierProvider(create: (_) => ThemeProvider(prefs: prefs)),
+          ChangeNotifierProvider(create: (_) => TextSizeController(prefs)),
+          ChangeNotifierProvider(create: (_) => DigitStyleController(prefs)),
+          ChangeNotifierProvider(
+            create: (_) => FeedbackService(preferences: prefs),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => PrayerTimesProvider(
+              repository: prayer.FakePrayerTimesRepository(),
+            ),
+          ),
+        ],
+        child: const MaterialApp(home: SettingsScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    for (final type in ['morning', 'evening', 'mulk', 'baqarah']) {
+      final item = find.byWidgetPredicate(
+        (w) => w is AlarmMenuItem && w.alarmType == type,
+      );
+      await tester.scrollUntilVisible(
+        item,
+        200,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(item);
+      await tester.pumpAndSettle();
+      final dialog = find.byType(AlarmTimePickerDialog);
+      expect(tester.widget<AlarmTimePickerDialog>(dialog).alarmType, type);
+      Navigator.of(tester.element(dialog)).pop();
+      await tester.pumpAndSettle();
+    }
+    expect(tester.takeException(), isNull);
+  });
 }

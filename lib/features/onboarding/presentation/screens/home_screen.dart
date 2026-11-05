@@ -2,7 +2,6 @@ import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/core/widgets/geometric_pattern.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'dart:async';
-import '../widgets/alarms/alarm_time_picker_dialog.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +11,6 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/theme_provider.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/widgets/animated_entrance.dart';
-import '../../../../core/providers/settings_provider.dart';
 import '../../../khatma/domain/models/khatma_model.dart';
 import '../../../khatma/domain/services/khatma_quran_locator.dart';
 import '../../../khatma/presentation/providers/khatma_provider.dart';
@@ -156,13 +154,6 @@ class _HomeScreenState extends State<HomeScreen> {
         background: const _PrayerTimeHeader(),
       ),
       actions: [
-        // Settings (design, text size, sounds) one tap from home.
-        IconButton(
-          key: const Key('home-settings'),
-          tooltip: appL10n.appStringsMessage16,
-          icon: const Icon(Icons.settings_outlined, size: 26),
-          onPressed: () => context.push('/settings'),
-        ),
         IconButton(
           tooltip: appL10n.homeScreenMessage1,
           icon: const Icon(Icons.segment, size: 30),
@@ -348,104 +339,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMoreMenuSwitch({
-    required String title,
-    required String subtitle,
-    required Widget leadingIcon,
-    required bool value,
-    required ValueChanged<bool> onChanged,
-    String? alarmType,
-  }) {
-    return Semantics(
-      label: title,
-      toggled: value,
-      value: value ? appL10n.homeScreenMessage6 : appL10n.homeScreenMessage7,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        child: Row(
-          children: [
-            // Right Side: Icon
-            leadingIcon,
-            const SizedBox(width: 16),
-
-            // Middle: Text
-            Expanded(
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, // start in RTL is right
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.5),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Left Side: Switch & Subtitle
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end, // end in RTL is left
-              children: [
-                SizedBox(
-                  height: 30,
-                  child: Switch(value: value, onChanged: onChanged),
-                ),
-                if (alarmType != null)
-                  FutureBuilder<Map<String, int>>(
-                    future: context.read<SettingsProvider>().getAlarmTime(
-                      alarmType,
-                    ),
-                    builder: (context, snapshot) {
-                      final time = snapshot.data;
-                      final label = time == null
-                          ? '--:--'
-                          : TimeOfDay(
-                              hour: time['hour']!,
-                              minute: time['minute']!,
-                            ).format(context);
-                      return TextButton(
-                        key: ValueKey('alarm-time-$alarmType'),
-                        style: TextButton.styleFrom(
-                          foregroundColor: Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: 0.6),
-                          textStyle: const TextStyle(fontSize: 12),
-                        ),
-                        onPressed: () => showDialog<void>(
-                          context: context,
-                          builder: (_) => AlarmTimePickerDialog(
-                            alarmType: alarmType,
-                            title: title,
-                          ),
-                        ),
-                        child: Tooltip(
-                          message: appL10n.alarmMenuItemMessage1(title),
-                          child: Text(label),
-                        ),
-                      );
-                    },
-                  ),
-              ],
-            ),
-          ],
         ),
       ),
     );
@@ -782,7 +675,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSettingsList() {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final settingsProvider = Provider.of<SettingsProvider>(context);
     final isDark = themeProvider.isDarkMode;
 
     void showComingSoon() {
@@ -802,14 +694,6 @@ class _HomeScreenState extends State<HomeScreen> {
             context.push('/settings');
           },
         ),
-        _buildMoreMenuItem(
-          title: appL10n.homeScreenMessage25,
-          leadingIcon: Icon(Icons.privacy_tip_outlined, color: iconColor),
-          onTap: () {
-            Navigator.pop(context);
-            context.push('/settings/data-sources');
-          },
-        ),
         // 2. الختمة الحالية
         _buildSectionHeader(appL10n.appRouterMessage1),
         _buildMoreMenuItem(
@@ -826,6 +710,11 @@ class _HomeScreenState extends State<HomeScreen> {
           title: appL10n.homeScreenMessage26,
           leadingIcon: Icon(Icons.bookmark_border, color: iconColor),
           onTap: _openSavedBookmark,
+        ),
+        _buildMoreMenuItem(
+          title: appL10n.homeScreenMessage35,
+          leadingIcon: Icon(Icons.add, color: iconColor),
+          onTap: () => context.push('/khatma/location'),
         ),
         const Divider(height: 1),
 
@@ -899,24 +788,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const Divider(height: 1),
 
-        // 5. الإعدادات
-        _buildSectionHeader(appL10n.appStringsMessage16),
-        _buildMoreMenuSwitch(
-          title: appL10n.homeScreenMessage33,
-          subtitle: appL10n.homeScreenMessage34,
-          leadingIcon: Icon(Icons.dark_mode_outlined, color: iconColor),
-          value: isDark,
-          onChanged: (v) {
-            themeProvider.toggleTheme(v);
-          },
-        ),
-        _buildMoreMenuItem(
-          title: appL10n.homeScreenMessage35,
-          leadingIcon: Icon(Icons.add, color: iconColor),
-          onTap: () => context.push('/khatma/location'),
-        ),
-        const Divider(height: 1),
-
         // 6. مواقيت الصلاة
         _buildSectionHeader(appL10n.notificationServiceMessage5),
         _buildMoreMenuItem(
@@ -937,46 +808,6 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.pop(context);
             context.push('/qibla');
           },
-        ),
-        const Divider(height: 1),
-
-        // 7. منبهات الأذكار
-        _buildSectionHeader(appL10n.homeScreenMessage38),
-        _buildMoreMenuSwitch(
-          title: appL10n.homeScreenMessage39,
-          subtitle: appL10n.homeScreenMessage40,
-          alarmType: 'morning',
-          leadingIcon: Icon(Icons.wb_sunny, color: iconColor),
-          value: settingsProvider.isMorningAlarmEnabled,
-          onChanged: (val) => settingsProvider.toggleMorningAlarm(val),
-        ),
-        _buildMoreMenuSwitch(
-          title: appL10n.homeScreenMessage41,
-          subtitle: appL10n.homeScreenMessage42,
-          alarmType: 'evening',
-          leadingIcon: Icon(Icons.nightlight_round, color: iconColor),
-          value: settingsProvider.isEveningAlarmEnabled,
-          onChanged: (val) => settingsProvider.toggleEveningAlarm(val),
-        ),
-        const Divider(height: 1),
-
-        // 8. منبهات السنن
-        _buildSectionHeader(appL10n.homeScreenMessage43),
-        _buildMoreMenuSwitch(
-          title: appL10n.homeScreenMessage44,
-          subtitle: appL10n.homeScreenMessage45,
-          alarmType: 'mulk',
-          leadingIcon: Icon(Icons.notifications, color: iconColor),
-          value: settingsProvider.isMulkAlarmEnabled,
-          onChanged: (val) => settingsProvider.toggleMulkAlarm(val),
-        ),
-        _buildMoreMenuSwitch(
-          title: appL10n.homeScreenMessage46,
-          subtitle: appL10n.homeScreenMessage47,
-          alarmType: 'baqarah',
-          leadingIcon: Icon(Icons.notifications, color: iconColor),
-          value: settingsProvider.isBaqarahAlarmEnabled,
-          onChanged: (val) => settingsProvider.toggleBaqarahAlarm(val),
         ),
         const Divider(height: 1),
 

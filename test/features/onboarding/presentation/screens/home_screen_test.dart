@@ -1,5 +1,4 @@
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
-import 'package:sakina_app/features/onboarding/presentation/widgets/alarms/alarm_time_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -258,19 +257,6 @@ void main() {
     ],
   );
 
-  testWidgets('settings opens from the home header in one tap', (
-    tester,
-  ) async {
-    final router = settingsRouter();
-    addTearDown(router.dispose);
-    await tester.pumpWidget(await buildHome(router: router));
-    await tester.pumpAndSettle();
-    expect(find.byTooltip('الإعدادات'), findsOneWidget);
-    await tester.tap(find.byKey(const Key('home-settings')));
-    await tester.pumpAndSettle();
-    expect(find.text('Settings route'), findsOneWidget);
-  });
-
   testWidgets('settings is the first item in the side menu', (tester) async {
     final router = settingsRouter();
     addTearDown(router.dispose);
@@ -331,26 +317,29 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('drawer opens the saved time for each alarm', (tester) async {
+  testWidgets('side menu has no settings that the settings page owns', (
+    tester,
+  ) async {
     await tester.pumpWidget(await buildHome());
     await tester.pumpAndSettle();
     await tester.tap(find.byIcon(Icons.segment));
     await tester.pumpAndSettle();
-    final scrollable = find
-        .descendant(of: find.byType(Drawer), matching: find.byType(Scrollable))
-        .first;
-    for (final type in ['morning', 'evening', 'mulk', 'baqarah']) {
-      final button = find.byKey(ValueKey('alarm-time-$type'));
-      await tester.scrollUntilVisible(button, 200, scrollable: scrollable);
-      await tester.pumpAndSettle();
-      await tester.tap(button);
-      await tester.pumpAndSettle();
-      final dialog = find.byType(AlarmTimePickerDialog);
-      expect(tester.widget<AlarmTimePickerDialog>(dialog).alarmType, type);
-      expect(find.byType(FilledButton), findsOneWidget);
-      Navigator.of(tester.element(dialog)).pop();
-      await tester.pumpAndSettle();
+    expect(find.byTooltip('الإعدادات'), findsNothing);
+    final drawer = find.byType(Drawer);
+    for (final duplicate in [
+      'تفعيل الوضع الليلي',
+      'منبه أذكار الصباح',
+      'منبه أذكار المساء',
+      'منبه سورة الملك',
+      'منبه سورة البقرة',
+      'الخصوصية ومصادر المحتوى',
+    ]) {
+      expect(
+        find.descendant(of: drawer, matching: find.text(duplicate)),
+        findsNothing,
+        reason: duplicate,
+      );
     }
-    expect(tester.takeException(), isNull);
+    expect(find.byKey(const Key('home-settings')), findsNothing);
   });
 }
