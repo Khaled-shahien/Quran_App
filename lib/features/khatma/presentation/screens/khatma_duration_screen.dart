@@ -1,7 +1,7 @@
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import 'package:provider/provider.dart';
 import '../../../onboarding/presentation/widgets/notification_permission_dialog.dart';
 import '../providers/khatma_provider.dart';
@@ -80,7 +80,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final textColor = isDarkMode ? Colors.white70 : const Color(0xFF6B6A66);
-    final cardColor = isDarkMode ? AppColors.darkCardContent : Colors.white;
+    final cardColor = SakinaDecor.of(context).card;
     final dropdownTextColor = isDarkMode ? Colors.white : Colors.black87;
 
     return Scaffold(

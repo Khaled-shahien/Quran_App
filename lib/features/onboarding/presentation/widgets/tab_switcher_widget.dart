@@ -1,7 +1,6 @@
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_colors.dart';
 
 class TabSwitcherWidget extends StatelessWidget {
   final Function(int) onTabChanged;
@@ -41,7 +40,7 @@ class TabSwitcherWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color: active ? AppColors.lightPageAccent : Colors.transparent,
+            color: active ? SakinaDecor.of(context).accent : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
@@ -49,7 +48,7 @@ class TabSwitcherWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: active
-                  ? Colors.white
+                  ? SakinaDecor.of(context).onAccent
                   : Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.bold,
               fontSize: 12,

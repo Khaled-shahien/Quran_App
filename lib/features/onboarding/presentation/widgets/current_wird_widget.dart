@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'dart:async';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,7 @@ class CurrentWirdWidget extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     // Colors from the design
-    final Color cardBgColor = isDarkMode
-        ? AppColors.darkCardContent
-        : Colors.white;
+    final Color cardBgColor = SakinaDecor.of(context).card;
     final Color accentYellow = isDarkMode
         ? AppColors.darkSecondary
         : const Color(0xFFF9D030); // Yellow button

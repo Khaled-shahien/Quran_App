@@ -31,6 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: ListView(
           children: [
             _SectionTitle(l10nOf(context).settingsScreenMessage1),
+            const DesignPreference(),
             const ThemePreference(),
             const TextSizePreference(),
             const DigitStylePreference(),

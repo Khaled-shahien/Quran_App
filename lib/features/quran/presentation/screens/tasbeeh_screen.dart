@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/app_localizations.dart';
@@ -5,7 +6,6 @@ import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../domain/entities/tasbih_phrase.dart';
 import '../providers/tasbih_controller.dart';
@@ -268,7 +268,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
             ),
             action: SnackBarAction(
               label: appL10n.currentWirdWidgetMessage13,
-              textColor: AppColors.accent,
+              textColor: SakinaDecor.of(context).accent,
               onPressed: () => _controller.restore(removed),
             ),
             duration: const Duration(seconds: 4),
@@ -298,7 +298,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                 AppConstants.kBorderRadiusMedium,
               ),
               color: isSelected
-                  ? AppColors.accent.withValues(alpha: 0.2)
+                  ? SakinaDecor.of(context).accent.withValues(alpha: 0.2)
                   : Theme.of(context).scaffoldBackgroundColor,
               border: Border.all(
                 color: isCompleted

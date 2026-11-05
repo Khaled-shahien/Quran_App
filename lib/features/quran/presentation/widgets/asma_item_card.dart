@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-
 class AsmaItemCard extends StatelessWidget {
   final String number;
   final String arabicName;
@@ -75,9 +73,9 @@ class AsmaItemCard extends StatelessWidget {
                 meaning,
                 textDirection: TextDirection.ltr,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
-                  color: AppColors.secondaryText,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontStyle: FontStyle.italic,
                 ),
               ),

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/core/theme/app_theme.dart';
 import 'package:sakina_app/features/duas/data/models/azkar_model.dart';
 import 'package:sakina_app/features/duas/presentation/providers/azkar_provider.dart';
@@ -53,7 +54,7 @@ Future<void> pumpAudited(
   WidgetTester tester,
   Widget home, {
   required List<SingleChildWidget> providers,
-  bool dark = false,
+  required ThemeData theme,
 }) async {
   tester.view.physicalSize = const Size(360, 640);
   tester.view.devicePixelRatio = 1;
@@ -65,7 +66,7 @@ Future<void> pumpAudited(
     MultiProvider(
       providers: providers,
       child: MaterialApp(
-        theme: dark ? AppTheme.darkTheme : AppTheme.lightTheme,
+        theme: theme,
         locale: const Locale('ar'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
@@ -89,13 +90,20 @@ void main() {
     prefs = await SharedPreferences.getInstance();
   });
 
-  for (final dark in [false, true]) {
-    testWidgets('tasbih (dark=$dark)', (tester) async {
+  // Every screen in every design and brightness.
+  final looks = <(String, ThemeData)>[
+    for (final design in AppDesign.values) ...[
+      ('${design.name} light', AppTheme.light(design)),
+      if (!design.alwaysDark) ('${design.name} dark', AppTheme.dark(design)),
+    ],
+  ];
+  for (final look in looks) {
+    testWidgets('tasbih (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       await pumpAudited(
         tester,
         const TasbeehScreen(),
-        dark: dark,
+        theme: look.$2,
         providers: [
           ChangeNotifierProvider(
             create: (_) => TasbihController(
@@ -108,14 +116,14 @@ void main() {
       semantics.dispose();
     });
 
-    testWidgets('adhkar (dark=$dark)', (tester) async {
+    testWidgets('adhkar (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       final azkar = AzkarProvider(repository: _AdhkarRepo());
       await azkar.loadAzkar();
       await pumpAudited(
         tester,
         const AzkarDetailsScreen(categoryName: 'أذكار الصباح'),
-        dark: dark,
+        theme: look.$2,
         providers: [
           Provider<SharedPreferences>.value(value: prefs),
           ChangeNotifierProvider.value(value: azkar),
@@ -125,7 +133,7 @@ void main() {
       semantics.dispose();
     });
 
-    testWidgets('recitation (dark=$dark)', (tester) async {
+    testWidgets('recitation (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       final repository = FakeRepository();
       final controller = RecitationController(
@@ -138,7 +146,7 @@ void main() {
       await pumpAudited(
         tester,
         const RecitationScreen(),
-        dark: dark,
+        theme: look.$2,
         providers: [
           ChangeNotifierProvider.value(value: controller),
           ChangeNotifierProvider(
@@ -150,7 +158,7 @@ void main() {
       await expectAccessible(tester);
       semantics.dispose();
     });
-    testWidgets('settings (dark=$dark)', (tester) async {
+    testWidgets('settings (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       final prayer = PrayerTimesProvider(
         repository: prayer_fakes.FakePrayerTimesRepository(),
@@ -160,7 +168,7 @@ void main() {
       await pumpAudited(
         tester,
         const SettingsScreen(),
-        dark: dark,
+        theme: look.$2,
         providers: [
           Provider<SharedPreferences>.value(value: prefs),
           ChangeNotifierProvider(
@@ -195,7 +203,7 @@ void main() {
       semantics.dispose();
     });
 
-    testWidgets('prayer times (dark=$dark)', (tester) async {
+    testWidgets('prayer times (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       final prayer = PrayerTimesProvider(
         repository: prayer_fakes.FakePrayerTimesRepository(),
@@ -205,14 +213,14 @@ void main() {
       await pumpAudited(
         tester,
         const PrayerTimesScreen(),
-        dark: dark,
+        theme: look.$2,
         providers: [ChangeNotifierProvider.value(value: prayer)],
       );
       await expectAccessible(tester);
       semantics.dispose();
     });
 
-    testWidgets('adhan adhkar (dark=$dark)', (tester) async {
+    testWidgets('adhan adhkar (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       await pumpAudited(
         tester,
@@ -220,7 +228,7 @@ void main() {
           repository: AdhanAdhkarRepositoryImpl(),
           prayerName: 'المغرب',
         ),
-        dark: dark,
+        theme: look.$2,
         providers: [Provider<SharedPreferences>.value(value: prefs)],
       );
       await tester.runAsync(
@@ -231,7 +239,7 @@ void main() {
       semantics.dispose();
     });
 
-    testWidgets('downloads (dark=$dark)', (tester) async {
+    testWidgets('downloads (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       final repository = FakeRepository();
       final controller = RecitationController(
@@ -243,7 +251,7 @@ void main() {
       await pumpAudited(
         tester,
         const RecitationDownloadsScreen(),
-        dark: dark,
+        theme: look.$2,
         providers: [
           ChangeNotifierProvider.value(value: controller),
           ChangeNotifierProvider(
@@ -256,37 +264,37 @@ void main() {
       semantics.dispose();
     });
 
-    testWidgets('hadith list (dark=$dark)', (tester) async {
+    testWidgets('hadith list (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       final hadith = HadeathProvider(repository: _HadithRepo());
       await hadith.loadAhadeth();
       await pumpAudited(
         tester,
         const HadeathScreen(),
-        dark: dark,
+        theme: look.$2,
         providers: [ChangeNotifierProvider.value(value: hadith)],
       );
       await expectAccessible(tester);
       semantics.dispose();
     });
 
-    testWidgets('asma al-husna (dark=$dark)', (tester) async {
+    testWidgets('asma al-husna (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       await pumpAudited(
         tester,
         const AsmaAlHusnaScreen(),
-        dark: dark,
+        theme: look.$2,
         providers: [Provider<SharedPreferences>.value(value: prefs)],
       );
       await expectAccessible(tester);
       semantics.dispose();
     });
-    testWidgets('khatma duration (dark=$dark)', (tester) async {
+    testWidgets('khatma duration (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       await pumpAudited(
         tester,
         const KhatmaDurationScreen(startMode: 'juz', startJuz: 1),
-        dark: dark,
+        theme: look.$2,
         providers: [
           ChangeNotifierProvider<KhatmaProvider>.value(value: _KhatmaStub()),
         ],

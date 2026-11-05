@@ -1,3 +1,5 @@
+import 'package:sakina_app/core/theme/app_design.dart';
+import 'package:sakina_app/core/widgets/geometric_pattern.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'dart:async';
 import '../widgets/alarms/alarm_time_picker_dialog.dart';
@@ -6,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/theme_provider.dart';
 import '../../../../core/constants/app_strings.dart';
@@ -181,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 right: 20,
                 left: 20,
               ),
-              color: AppColors.darkCard,
+              color: SakinaDecor.of(context).featureCard,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -263,14 +264,18 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
-              color: active ? AppColors.accent : Colors.transparent,
+              color: active
+                  ? SakinaDecor.of(context).accent
+                  : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: active ? Colors.white : AppColors.primary,
+                color: active
+                    ? SakinaDecor.of(context).onAccent
+                    : Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -394,11 +399,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 SizedBox(
                   height: 30,
-                  child: Switch(
-                    value: value,
-                    onChanged: onChanged,
-                    activeThumbColor: AppColors.primary,
-                  ),
+                  child: Switch(value: value, onChanged: onChanged),
                 ),
                 if (alarmType != null)
                   FutureBuilder<Map<String, int>>(
@@ -447,10 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _showOverlayMessage(message);
   }
 
-  void _showOverlayMessage(
-    String message, {
-    Color backgroundColor = AppColors.primary,
-  }) {
+  void _showOverlayMessage(String message, {Color? backgroundColor}) {
     _messageEntry?.remove();
     _messageEntry?.dispose();
 
@@ -472,7 +470,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   vertical: 14,
                 ),
                 decoration: BoxDecoration(
-                  color: backgroundColor,
+                  color: backgroundColor ?? SakinaDecor.of(context).featureCard,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: const [
                     BoxShadow(
@@ -1199,69 +1197,80 @@ class _PrayerTimeHeader extends StatelessWidget {
               ],
             ),
           ),
-          child: Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              // The whole header opens the full prayer times.
-              onTap: () => context.push('/prayers'),
-              child: Semantics(
-                button: true,
-                label: next == null
-                    ? title
-                    : l10n.homeNextPrayerSemantics(
-                        next.name,
-                        context.digits(_duration(next.remaining)),
-                        context.digits(_clock(next.wallTime)),
+          child: Stack(
+            children: [
+              // Faint geometric ornament in the chosen design's style.
+              Positioned.fill(
+                child: GeometricPattern(
+                  pattern: SakinaDecor.of(context).pattern,
+                  color: onPrimary.withValues(alpha: 0.12),
+                ),
+              ),
+              Material(
+                type: MaterialType.transparency,
+                child: InkWell(
+                  // The whole header opens the full prayer times.
+                  onTap: () => context.push('/prayers'),
+                  child: Semantics(
+                    button: true,
+                    label: next == null
+                        ? title
+                        : l10n.homeNextPrayerSemantics(
+                            next.name,
+                            context.digits(_duration(next.remaining)),
+                            context.digits(_clock(next.wallTime)),
+                          ),
+                    excludeSemantics: true,
+                    child: SafeArea(
+                      bottom: false,
+                      child: Padding(
+                        // Bottom space keeps clear of the collapsing app title.
+                        padding: const EdgeInsets.fromLTRB(24, 56, 24, 52),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              l10n.homeNextPrayer,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                color: onPrimary.withValues(alpha: 0.85),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontSize: next == null ? 22 : 36,
+                                fontWeight: FontWeight.w900,
+                                color: onPrimary,
+                                height: 1.15,
+                              ),
+                            ),
+                            if (countdown != null)
+                              Text(
+                                countdown,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  color: onPrimary,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            if (at != null) ...[
+                              const SizedBox(height: AppSpacing.xs),
+                              Text(
+                                '$at • ${provider.locationLabel}',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: onPrimary.withValues(alpha: 0.85),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
-                excludeSemantics: true,
-                child: SafeArea(
-                  bottom: false,
-                  child: Padding(
-                    // Bottom space keeps clear of the collapsing app title.
-                    padding: const EdgeInsets.fromLTRB(24, 56, 24, 52),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          l10n.homeNextPrayer,
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: onPrimary.withValues(alpha: 0.85),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        Text(
-                          title,
-                          style: TextStyle(
-                            fontSize: next == null ? 22 : 36,
-                            fontWeight: FontWeight.w900,
-                            color: onPrimary,
-                            height: 1.15,
-                          ),
-                        ),
-                        if (countdown != null)
-                          Text(
-                            countdown,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: onPrimary,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        if (at != null) ...[
-                          const SizedBox(height: AppSpacing.xs),
-                          Text(
-                            '$at • ${provider.locationLabel}',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: onPrimary.withValues(alpha: 0.85),
-                            ),
-                          ),
-                        ],
-                      ],
                     ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
         );
       },

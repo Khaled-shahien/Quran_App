@@ -332,9 +332,9 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
             debugShowCheckedModeBanner: false,
             onGenerateTitle: (context) =>
                 AppLocalizations.of(context)!.applicationTitle,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: themeProvider.themeMode,
+            theme: AppTheme.light(themeProvider.design),
+            darkTheme: AppTheme.dark(themeProvider.design),
+            themeMode: themeProvider.effectiveThemeMode,
             locale: const Locale('ar'),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,

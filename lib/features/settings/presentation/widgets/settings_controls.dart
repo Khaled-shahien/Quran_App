@@ -1,4 +1,5 @@
 import 'package:sakina_app/core/feedback/feedback_service.dart';
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:flutter/material.dart';
 import '../providers/text_size_controller.dart';
 import '../providers/digit_style_controller.dart';
@@ -77,13 +78,17 @@ class ThemePreference extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeProvider>();
+    final locked = theme.design.alwaysDark;
     return Padding(
       padding: const EdgeInsets.all(16),
       child: DropdownButtonFormField<ThemeMode>(
+        key: ValueKey('theme-mode-${theme.design.name}'),
         isExpanded: true,
-        initialValue: theme.themeMode,
+        initialValue: locked ? ThemeMode.dark : theme.themeMode,
         decoration: InputDecoration(
           labelText: l10nOf(context).settingsScreenMessage2,
+          helperText: locked ? l10nOf(context).designNightAlwaysDark : null,
+          helperMaxLines: 2,
         ),
         items: [
           DropdownMenuItem(
@@ -99,9 +104,11 @@ class ThemePreference extends StatelessWidget {
             child: Text(l10nOf(context).settingsScreenMessage5),
           ),
         ],
-        onChanged: (value) {
-          if (value != null) theme.setThemeMode(value);
-        },
+        onChanged: locked
+            ? null
+            : (value) {
+                if (value != null) theme.setThemeMode(value);
+              },
       ),
     );
   }
@@ -309,6 +316,117 @@ class FeedbackPreferences extends StatelessWidget {
           onChanged: feedback.setSoundsEnabled,
         ),
       ],
+    );
+  }
+}
+
+/// Lets the user switch between the app's three visual directions.
+class DesignPreference extends StatelessWidget {
+  const DesignPreference({super.key});
+
+  static const _swatches = {
+    AppDesign.warm: [Color(0xFF795547), Color(0xFFFEFBF4), Color(0xFFCC9B76)],
+    AppDesign.sage: [Color(0xFF1F5C4A), Color(0xFFF6F4EE), Color(0xFFC9A66B)],
+    AppDesign.night: [Color(0xFF101826), Color(0xFF182235), Color(0xFFD4AF6A)],
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+    final provider = context.watch<ThemeProvider>();
+    final scheme = Theme.of(context).colorScheme;
+    final names = {
+      AppDesign.warm: (l10n.designWarm, l10n.designWarmHint),
+      AppDesign.sage: (l10n.designSage, l10n.designSageHint),
+      AppDesign.night: (l10n.designNight, l10n.designNightHint),
+    };
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(l10n.designTitle, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 8),
+          for (final design in AppDesign.values)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Semantics(
+                inMutuallyExclusiveGroup: true,
+                checked: provider.design == design,
+                child: Material(
+                  color: provider.design == design
+                      ? scheme.primary.withValues(alpha: 0.10)
+                      : Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: BorderSide(
+                      color: provider.design == design
+                          ? scheme.primary
+                          : scheme.outline.withValues(alpha: 0.5),
+                      width: provider.design == design ? 2 : 1,
+                    ),
+                  ),
+                  child: InkWell(
+                    key: Key('design-${design.name}'),
+                    borderRadius: BorderRadius.circular(16),
+                    onTap: () => provider.setDesign(design),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
+                        children: [
+                          ExcludeSemantics(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                for (final color in _swatches[design]!)
+                                  Container(
+                                    width: 22,
+                                    height: 22,
+                                    margin: const EdgeInsetsDirectional.only(
+                                      end: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: color,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: scheme.outline.withValues(
+                                          alpha: 0.4,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  names[design]!.$1,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Text(
+                                  names[design]!.$2,
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (provider.design == design)
+                            Icon(Icons.check_circle, color: scheme.primary),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

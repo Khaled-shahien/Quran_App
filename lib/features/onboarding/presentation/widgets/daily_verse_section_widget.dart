@@ -1,9 +1,9 @@
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
-import '../../../../core/theme/app_colors.dart';
 import '../providers/favorites_provider.dart';
 
 class DailyVerseSectionWidget extends StatefulWidget {
@@ -99,10 +99,13 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
           margin: const EdgeInsets.symmetric(horizontal: 16),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColors.darkCard,
+            color: SakinaDecor.of(context).featureCard,
             borderRadius: BorderRadius.circular(20),
-            border: const Border(
-              right: BorderSide(color: AppColors.accent, width: 6),
+            border: Border(
+              right: BorderSide(
+                color: SakinaDecor.of(context).accent,
+                width: 6,
+              ),
             ),
           ),
           child: Consumer<FavoritesProvider>(

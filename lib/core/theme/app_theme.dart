@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
+import 'app_design.dart';
 import 'app_typography.dart';
 
 class AppTheme {
@@ -53,7 +54,7 @@ class AppTheme {
       // Accessibility improvements
       scrollbarTheme: _buildScrollbarTheme(),
       // System UI overlay styling
-      extensions: [_buildThemeExtensions()],
+      extensions: [_buildThemeExtensions(), SakinaDecor.warmLight],
     );
   }
 
@@ -130,9 +131,93 @@ class AppTheme {
       dialogTheme: _buildDialogTheme(colorScheme),
       inputDecorationTheme: _buildInputDecorationTheme(colorScheme),
       scrollbarTheme: _buildScrollbarTheme(),
-      extensions: [_buildThemeExtensions()],
+      extensions: [_buildThemeExtensions(), SakinaDecor.warmDark],
     );
   }
+
+  /// Light theme for [design]. Night is dark-only, so it returns its dark
+  /// theme here too.
+  static ThemeData light(AppDesign design) => switch (design) {
+    AppDesign.warm => lightTheme,
+    AppDesign.sage => _fromPalette(AppPalette.sageLight),
+    AppDesign.night => _fromPalette(AppPalette.night),
+  };
+
+  static ThemeData dark(AppDesign design) => switch (design) {
+    AppDesign.warm => darkTheme,
+    AppDesign.sage => _fromPalette(AppPalette.sageDark),
+    AppDesign.night => _fromPalette(AppPalette.night),
+  };
+
+  static ThemeData _fromPalette(AppPalette p) {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: p.primary,
+      brightness: p.brightness,
+      primary: p.primary,
+      onPrimary: p.onPrimary,
+      secondary: p.secondary,
+      onSecondary: p.onSecondary,
+      tertiary: p.decor.accent,
+      onTertiary: p.decor.onAccent,
+      surface: p.background,
+      onSurface: p.text,
+      onSurfaceVariant: p.caption,
+      error: AppColors.error,
+      onError: AppColors.black,
+      outline: p.outline,
+    );
+    return ThemeData(
+      useMaterial3: true,
+      brightness: p.brightness,
+      fontFamily: AppTypography.uiFontFamily,
+      colorScheme: colorScheme,
+      textTheme: _paletteTextTheme(p),
+      appBarTheme: _buildAppBarTheme(
+        primaryColor: p.primary,
+        backgroundColor: p.background,
+        foregroundColor: p.text,
+      ),
+      elevatedButtonTheme: _buildElevatedButtonTheme(
+        backgroundColor: p.primary,
+        foregroundColor: p.onPrimary,
+        borderColor: p.primary,
+      ),
+      outlinedButtonTheme: _buildOutlinedButtonTheme(
+        backgroundColor: p.background,
+        foregroundColor: p.primary,
+        borderColor: p.primary,
+      ),
+      cardTheme: _buildCardThemeData(
+        backgroundColor: p.decor.card,
+        surfaceTintColor: p.decor.card,
+      ),
+      scaffoldBackgroundColor: p.background,
+      navigationBarTheme: _buildNavigationBarTheme(colorScheme),
+      bottomSheetTheme: _buildBottomSheetTheme(colorScheme),
+      dialogTheme: _buildDialogTheme(colorScheme),
+      inputDecorationTheme: _buildInputDecorationTheme(colorScheme),
+      scrollbarTheme: _buildScrollbarTheme(),
+      extensions: [_buildThemeExtensions(), p.decor],
+    );
+  }
+
+  static TextTheme _paletteTextTheme(AppPalette p) => TextTheme(
+    displayLarge: AppTypography.displayLarge.copyWith(color: p.text),
+    displayMedium: AppTypography.displayMedium.copyWith(color: p.text),
+    displaySmall: AppTypography.displaySmall.copyWith(color: p.text),
+    headlineLarge: AppTypography.headlineLarge.copyWith(color: p.text),
+    headlineMedium: AppTypography.headlineMedium.copyWith(color: p.text),
+    headlineSmall: AppTypography.headlineSmall.copyWith(color: p.text),
+    titleLarge: AppTypography.titleLarge.copyWith(color: p.text),
+    titleMedium: AppTypography.titleMedium.copyWith(color: p.text),
+    titleSmall: AppTypography.titleSmall.copyWith(color: p.text),
+    bodyLarge: AppTypography.bodyLarge.copyWith(color: p.body),
+    bodyMedium: AppTypography.bodyMedium.copyWith(color: p.body),
+    bodySmall: AppTypography.bodySmall.copyWith(color: p.caption),
+    labelLarge: AppTypography.labelLarge.copyWith(color: p.text),
+    labelMedium: AppTypography.labelMedium.copyWith(color: p.text),
+    labelSmall: AppTypography.labelSmall.copyWith(color: p.text),
+  );
 
   static TextTheme _buildLightTextTheme() {
     return TextTheme(

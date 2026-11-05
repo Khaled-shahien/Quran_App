@@ -2155,4 +2155,29 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get feedbackSoundsHint =>
       'نقرة خفيفة مع العدّ في المسبحة والأذكار. لا تؤثر على صوت الأذان أو التلاوة';
+
+  @override
+  String get designTitle => 'تصميم التطبيق';
+
+  @override
+  String get designWarm => 'دافئ ورقي';
+
+  @override
+  String get designWarmHint => 'البني والكريمي، الشكل الأصلي للتطبيق';
+
+  @override
+  String get designSage => 'أخضر هادئ';
+
+  @override
+  String get designSageHint => 'أخضر زيتوني مع لمسات رملية';
+
+  @override
+  String get designNight => 'ليلي ذهبي';
+
+  @override
+  String get designNightHint => 'كحلي وذهبي، داكن دائمًا ومريح ليلًا';
+
+  @override
+  String get designNightAlwaysDark =>
+      'التصميم الليلي الذهبي داكن دائمًا. اختر تصميمًا آخر لتغيير المظهر.';
 }

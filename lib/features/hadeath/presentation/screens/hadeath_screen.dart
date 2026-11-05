@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/pulse_loader.dart';
 import '../providers/hadeath_provider.dart';
 import '../widgets/hadeath_card.dart';
@@ -76,8 +75,8 @@ class _HadeathScreenState extends State<HadeathScreen> {
                 return Center(
                   child: Text(
                     l10nOf(context).hadeathScreenMessage2,
-                    style: const TextStyle(
-                      color: AppColors.secondaryText,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 18,
                     ),
                   ),

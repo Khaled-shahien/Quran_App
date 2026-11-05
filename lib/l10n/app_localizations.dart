@@ -3937,6 +3937,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'نقرة خفيفة مع العدّ في المسبحة والأذكار. لا تؤثر على صوت الأذان أو التلاوة'**
   String get feedbackSoundsHint;
+
+  /// No description provided for @designTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصميم التطبيق'**
+  String get designTitle;
+
+  /// No description provided for @designWarm.
+  ///
+  /// In ar, this message translates to:
+  /// **'دافئ ورقي'**
+  String get designWarm;
+
+  /// No description provided for @designWarmHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'البني والكريمي، الشكل الأصلي للتطبيق'**
+  String get designWarmHint;
+
+  /// No description provided for @designSage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أخضر هادئ'**
+  String get designSage;
+
+  /// No description provided for @designSageHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أخضر زيتوني مع لمسات رملية'**
+  String get designSageHint;
+
+  /// No description provided for @designNight.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليلي ذهبي'**
+  String get designNight;
+
+  /// No description provided for @designNightHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'كحلي وذهبي، داكن دائمًا ومريح ليلًا'**
+  String get designNightHint;
+
+  /// No description provided for @designNightAlwaysDark.
+  ///
+  /// In ar, this message translates to:
+  /// **'التصميم الليلي الذهبي داكن دائمًا. اختر تصميمًا آخر لتغيير المظهر.'**
+  String get designNightAlwaysDark;
 }
 
 class _AppLocalizationsDelegate

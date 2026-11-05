@@ -1,8 +1,7 @@
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/theme/app_colors.dart';
 
 class KhatmaLocationScreen extends StatefulWidget {
   const KhatmaLocationScreen({super.key});
@@ -26,7 +25,7 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
     final textColor = isDarkMode ? Colors.white70 : const Color(0xFF6B6A66);
-    final cardColor = isDarkMode ? AppColors.darkCardContent : Colors.white;
+    final cardColor = SakinaDecor.of(context).card;
     final dropdownTextColor = isDarkMode ? Colors.white : Colors.black87;
 
     return Scaffold(

@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -193,10 +192,6 @@ class _QuranScreenState extends State<_QuranScreenContent> {
                   label: appL10n.quranScreenMessage1,
                   child: ElevatedButton(
                     onPressed: _loadSurahs,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.lightPrimary,
-                      foregroundColor: Colors.white,
-                    ),
                     child: Text(appL10n.retry),
                   ),
                 ),
