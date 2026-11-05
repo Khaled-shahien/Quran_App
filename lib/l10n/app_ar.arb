@@ -2579,5 +2579,42 @@
     }
   },
   "recitationResume": "استكمال التلاوة",
-  "afterAdhanOpen": "دعاء ما بعد الأذان"
+  "afterAdhanOpen": "دعاء ما بعد الأذان",
+  "adhkarProgress": "{done} من {total}",
+  "@adhkarProgress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "adhkarTapToCount": "اضغط على الذكر بعد قراءته لتعدّه",
+  "adhkarDone": "تم",
+  "adhkarCompleted": "ما شاء الله، أتممت {category}. تقبّل الله منك.",
+  "@adhkarCompleted": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "adhkarReset": "البدء من جديد",
+  "adhkarResetDone": "تم تصفير العدّ",
+  "adhkarItemSemantics": "{title}، تم {done} من {total}. اضغط مرتين للعدّ",
+  "@adhkarItemSemantics": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  }
 }

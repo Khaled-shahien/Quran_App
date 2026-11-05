@@ -2030,4 +2030,31 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get afterAdhanOpen => 'دعاء ما بعد الأذان';
+
+  @override
+  String adhkarProgress(String done, String total) {
+    return '$done من $total';
+  }
+
+  @override
+  String get adhkarTapToCount => 'اضغط على الذكر بعد قراءته لتعدّه';
+
+  @override
+  String get adhkarDone => 'تم';
+
+  @override
+  String adhkarCompleted(String category) {
+    return 'ما شاء الله، أتممت $category. تقبّل الله منك.';
+  }
+
+  @override
+  String get adhkarReset => 'البدء من جديد';
+
+  @override
+  String get adhkarResetDone => 'تم تصفير العدّ';
+
+  @override
+  String adhkarItemSemantics(String title, String done, String total) {
+    return '$title، تم $done من $total. اضغط مرتين للعدّ';
+  }
 }

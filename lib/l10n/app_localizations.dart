@@ -3721,6 +3721,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'دعاء ما بعد الأذان'**
   String get afterAdhanOpen;
+
+  /// No description provided for @adhkarProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'{done} من {total}'**
+  String adhkarProgress(String done, String total);
+
+  /// No description provided for @adhkarTapToCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط على الذكر بعد قراءته لتعدّه'**
+  String get adhkarTapToCount;
+
+  /// No description provided for @adhkarDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get adhkarDone;
+
+  /// No description provided for @adhkarCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما شاء الله، أتممت {category}. تقبّل الله منك.'**
+  String adhkarCompleted(String category);
+
+  /// No description provided for @adhkarReset.
+  ///
+  /// In ar, this message translates to:
+  /// **'البدء من جديد'**
+  String get adhkarReset;
+
+  /// No description provided for @adhkarResetDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تصفير العدّ'**
+  String get adhkarResetDone;
+
+  /// No description provided for @adhkarItemSemantics.
+  ///
+  /// In ar, this message translates to:
+  /// **'{title}، تم {done} من {total}. اضغط مرتين للعدّ'**
+  String adhkarItemSemantics(String title, String done, String total);
 }
 
 class _AppLocalizationsDelegate
