@@ -1,3 +1,5 @@
+import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
@@ -9,7 +11,24 @@ class _CountingRepository implements PrayerTimesRepository {
   bool stale = false;
 
   @override
-  Future<PrayerTimesEntity> getPrayerTimes(
+  Future<Result<PrayerTimesEntity>> getPrayerTimes(
+    DateTime date,
+    double latitude,
+    double longitude, {
+    int calculationMethod = 3,
+    AsrMadhab madhab = AsrMadhab.standard,
+    String? timeZone,
+  }) => Result.guard(
+    () => _legacyGetPrayerTimes(
+      date,
+      latitude,
+      longitude,
+      calculationMethod: calculationMethod,
+    ),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<PrayerTimesEntity> _legacyGetPrayerTimes(
     DateTime date,
     double latitude,
     double longitude, {

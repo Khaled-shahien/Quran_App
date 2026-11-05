@@ -1795,4 +1795,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tasbihResetDone => 'تمت إعادة تعيين العدّاد';
+
+  @override
+  String get asrMadhabTitle => 'حساب وقت العصر';
+
+  @override
+  String get asrMadhabStandard => 'الجمهور (الشافعي والمالكي والحنبلي)';
+
+  @override
+  String get asrMadhabHanafi => 'الحنفي';
 }

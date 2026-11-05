@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import 'package:sakina_app/features/onboarding/presentation/widgets/alarms/alarm_time_picker_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,7 +25,7 @@ import 'package:sakina_app/features/onboarding/presentation/providers/favorites_
 import 'package:sakina_app/features/onboarding/presentation/screens/home_screen.dart';
 import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
-import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_performance_provider.dart';
+
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
 import 'package:sakina_app/features/quran/domain/entities/surah_entity.dart';
 import 'package:sakina_app/features/quran/domain/repositories/surah_repository.dart';
@@ -73,7 +74,24 @@ class FakeRescheduleTaskService implements AlarmRescheduleTaskService {
 
 class FakePrayerTimesRepository implements PrayerTimesRepository {
   @override
-  Future<PrayerTimesEntity> getPrayerTimes(
+  Future<Result<PrayerTimesEntity>> getPrayerTimes(
+    DateTime date,
+    double latitude,
+    double longitude, {
+    int calculationMethod = 3,
+    AsrMadhab madhab = AsrMadhab.standard,
+    String? timeZone,
+  }) => Result.guard(
+    () => _legacyGetPrayerTimes(
+      date,
+      latitude,
+      longitude,
+      calculationMethod: calculationMethod,
+    ),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<PrayerTimesEntity> _legacyGetPrayerTimes(
     DateTime date,
     double latitude,
     double longitude, {
@@ -165,10 +183,7 @@ void main() {
         ChangeNotifierProvider<PrayerTimesProvider>(
           create: (_) => PrayerTimesProvider(repository: prayerRepository),
         ),
-        ChangeNotifierProvider<PrayerTimesPerformanceProvider>(
-          create: (_) =>
-              PrayerTimesPerformanceProvider(repository: prayerRepository),
-        ),
+
         ChangeNotifierProvider<KhatmaProvider>(
           create: (_) =>
               KhatmaProvider(repository: KhatmaRepository(prefs: prefs)),

@@ -1,3 +1,5 @@
+import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +16,24 @@ class FakePrayerTimesRepository implements PrayerTimesRepository {
   int? lastCalculationMethod;
 
   @override
-  Future<PrayerTimesEntity> getPrayerTimes(
+  Future<Result<PrayerTimesEntity>> getPrayerTimes(
+    DateTime date,
+    double latitude,
+    double longitude, {
+    int calculationMethod = 3,
+    AsrMadhab madhab = AsrMadhab.standard,
+    String? timeZone,
+  }) => Result.guard(
+    () => _legacyGetPrayerTimes(
+      date,
+      latitude,
+      longitude,
+      calculationMethod: calculationMethod,
+    ),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<PrayerTimesEntity> _legacyGetPrayerTimes(
     DateTime date,
     double latitude,
     double longitude, {

@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 import 'notification_service.dart';
-import '../../features/prayers/data/data_sources/prayer_times_api_service.dart';
+
 import '../../features/prayers/data/repositories/prayer_times_repository_impl.dart';
 import '../../features/prayers/data/services/local_prayer_notification_scheduler.dart';
 import '../../features/prayers/data/services/prayer_replenishment_service.dart';
@@ -93,10 +93,7 @@ Future<void> _handleRescheduleAlarms({Map<String, dynamic>? inputData}) async {
 
     await PrayerReplenishmentService(
       preferences: prefs,
-      repository: PrayerTimesRepositoryImpl(
-        apiService: PrayerTimesApiService(),
-        sharedPreferences: prefs,
-      ),
+      repository: PrayerTimesRepositoryImpl(),
       scheduler: LocalPrayerNotificationScheduler(prefs: prefs),
     ).replenish();
     // A failed fetch/schedule must remain retryable by WorkManager.

@@ -33,6 +33,16 @@ Future<void> showPrayerLocationDialog(
   final form = GlobalKey<FormState>();
   var method = provider.selectedMethod;
   var useDevice = false;
+  // The timezone is only trusted while the coordinates are still exactly
+  // those it came with (a catalog city, or the saved place).
+  ({String lat, String lon, String zone})? zoneSource =
+      provider.selectedTimeZone == null
+      ? null
+      : (
+          lat: latitude.text,
+          lon: longitude.text,
+          zone: provider.selectedTimeZone!,
+        );
   final save = await showDialog<bool>(
     context: context,
     builder: (context) => StatefulBuilder(
@@ -77,6 +87,10 @@ Future<void> showPrayerLocationDialog(
                     );
                     latitude.text = city['latitude'].toString();
                     longitude.text = city['longitude'].toString();
+                    final zone = city['timezone'];
+                    zoneSource = zone is String
+                        ? (lat: latitude.text, lon: longitude.text, zone: zone)
+                        : null;
                   },
                 ),
                 const SizedBox(height: 12),
@@ -156,11 +170,18 @@ Future<void> showPrayerLocationDialog(
     ),
   );
   if (save == true) {
+    final source = zoneSource;
+    final bool coordinatesUnchanged =
+        source != null &&
+        source.lat == latitude.text &&
+        source.lon == longitude.text;
     await provider.selectLocation(
       double.parse(latitude.text.trim()),
       double.parse(longitude.text.trim()),
       name.text,
       method,
+      // Typed coordinates fall back to the device timezone.
+      timeZone: coordinatesUnchanged ? source.zone : null,
     );
   } else if (useDevice) {
     await provider.useDeviceLocation();

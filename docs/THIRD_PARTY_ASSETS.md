@@ -13,7 +13,9 @@
   using GeoNames data. Data is redistributed under
   [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
   The bundled subset retains Arabic names, English search names, countries and
-  coordinates; it is not an exhaustive city database. No user search requests
+  coordinates, plus each city's IANA timezone (retrieved 2026-11-05 from the
+  same API) so prayer times are calculated offline in the city's local time.
+  It is not an exhaustive city database. No user search requests
   are sent to this geocoding service at runtime.
 
 These licenses and attributions do not certify the religious content. Its separate

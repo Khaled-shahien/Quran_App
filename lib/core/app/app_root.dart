@@ -12,7 +12,7 @@ import 'package:sakina_app/core/navigation/notification_router.dart';
 import 'package:sakina_app/core/providers/notification_provider.dart';
 import 'package:sakina_app/core/providers/settings_provider.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
-import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_performance_provider.dart';
+
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
 import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:sakina_app/features/quran/domain/repositories/surah_repository.dart';
@@ -52,7 +52,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
   late final SurahRepository _surahRepository;
   late final HadeathRepository _hadeathRepository;
   late final PrayerTimesProvider _prayerTimesProvider;
-  late final PrayerTimesPerformanceProvider _prayerTimesPerformanceProvider;
+
   late final HadeathProvider _hadeathProvider;
   late final FavoritesProvider _favoritesProvider;
   late final ThemeProvider _themeProvider;
@@ -91,7 +91,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
     _prayerClockTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     _prayerTimesProvider.dispose();
-    _prayerTimesPerformanceProvider.dispose();
+
     _hadeathProvider.dispose();
     _favoritesProvider.dispose();
     _themeProvider.dispose();
@@ -121,11 +121,6 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
     // Initialize providers with repositories
     _prayerTimesProvider = PrayerTimesProvider(
       preferences: _prefs,
-      repository: _prayerTimesRepository,
-      notificationScheduler: _prayerNotificationScheduler,
-    );
-
-    _prayerTimesPerformanceProvider = PrayerTimesPerformanceProvider(
       repository: _prayerTimesRepository,
       notificationScheduler: _prayerNotificationScheduler,
     );
@@ -176,9 +171,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
         ChangeNotifierProvider<PrayerTimesProvider>.value(
           value: _prayerTimesProvider,
         ),
-        ChangeNotifierProvider<PrayerTimesPerformanceProvider>.value(
-          value: _prayerTimesPerformanceProvider,
-        ),
+
         ChangeNotifierProvider<HadeathProvider>.value(value: _hadeathProvider),
         ChangeNotifierProvider<FavoritesProvider>.value(
           value: _favoritesProvider,

@@ -2421,5 +2421,8 @@
   "hijriAdjustmentMinusOne": "يوم قبل",
   "hijriAdjustmentNone": "بدون تعديل",
   "hijriAdjustmentPlusOne": "يوم بعد",
-  "tasbihResetDone": "تمت إعادة تعيين العدّاد"
+  "tasbihResetDone": "تمت إعادة تعيين العدّاد",
+  "asrMadhabTitle": "حساب وقت العصر",
+  "asrMadhabStandard": "الجمهور (الشافعي والمالكي والحنبلي)",
+  "asrMadhabHanafi": "الحنفي"
 }

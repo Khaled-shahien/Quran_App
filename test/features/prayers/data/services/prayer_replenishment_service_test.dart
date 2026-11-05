@@ -1,3 +1,5 @@
+import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -17,7 +19,24 @@ class Repository implements PrayerTimesRepository {
   Future<void> Function()? beforeResponse;
 
   @override
-  Future<PrayerTimesEntity> getPrayerTimes(
+  Future<Result<PrayerTimesEntity>> getPrayerTimes(
+    DateTime date,
+    double latitude,
+    double longitude, {
+    int calculationMethod = 5,
+    AsrMadhab madhab = AsrMadhab.standard,
+    String? timeZone,
+  }) => Result.guard(
+    () => _legacyGetPrayerTimes(
+      date,
+      latitude,
+      longitude,
+      calculationMethod: calculationMethod,
+    ),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<PrayerTimesEntity> _legacyGetPrayerTimes(
     DateTime date,
     double latitude,
     double longitude, {
@@ -63,6 +82,7 @@ void main() {
       'prayer_latitude': 24.7,
       'prayer_longitude': 46.7,
       'prayer_method': 4,
+      'prayer_timezone': 'Asia/Riyadh',
     });
     prefs = await SharedPreferences.getInstance();
     repository = Repository();
@@ -78,14 +98,14 @@ void main() {
   test(
     'corrects location date and replenishes three actual calendar days',
     () async {
+      // 22:00 UTC on 31 Dec is already 1 Jan in Riyadh.
       await service.replenish();
       expect(repository.dates, [
-        DateTime(2026, 12, 31),
         DateTime(2027, 1, 1),
         DateTime(2027, 1, 2),
         DateTime(2027, 1, 3),
       ]);
-      expect(scheduler.dates, repository.dates.skip(1).toList());
+      expect(scheduler.dates, repository.dates);
       expect(repository.methods, everyElement(4));
       expect(scheduler.cancels, 0);
     },
@@ -123,14 +143,16 @@ void main() {
     },
   );
 
-  test(
-    'rejects missing timezone instead of scheduling in device time',
-    () async {
-      repository.zone = null;
-      await expectLater(service.replenish(), throwsStateError);
-      expect(scheduler.dates, isEmpty);
-    },
-  );
+  test('without a saved timezone the device calendar day is used', () async {
+    // Device location or typed coordinates: times use the device zone.
+    await prefs.remove('prayer_timezone');
+    await service.replenish();
+    expect(scheduler.dates, [
+      DateTime(2026, 12, 31),
+      DateTime(2027, 1, 1),
+      DateTime(2027, 1, 2),
+    ]);
+  });
 
   test('incomplete response cannot clear previously queued days', () async {
     repository.incomplete = true;

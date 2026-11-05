@@ -4,125 +4,143 @@
         "longitude":  31.24967,
         "name":  "القاهرة",
         "latitude":  30.06263,
-        "englishName":  "Cairo"
+        "englishName":  "Cairo",
+        "timezone":  "Africa/Cairo"
     },
     {
         "country":  "مصر",
         "longitude":  29.91582,
         "name":  "الإسكندرية",
         "latitude":  31.20176,
-        "englishName":  "Alexandria"
+        "englishName":  "Alexandria",
+        "timezone":  "Africa/Cairo"
     },
     {
         "country":  "المملكة العربية السعودية",
         "longitude":  46.72185,
         "name":  "الرياض",
         "latitude":  24.68773,
-        "englishName":  "Riyadh"
+        "englishName":  "Riyadh",
+        "timezone":  "Asia/Riyadh"
     },
     {
         "country":  "المملكة العربية السعودية",
         "longitude":  39.18624,
         "name":  "جدة",
         "latitude":  21.49012,
-        "englishName":  "Jeddah"
+        "englishName":  "Jeddah",
+        "timezone":  "Asia/Riyadh"
     },
     {
         "country":  "الإمارات العربية المتحدة",
         "longitude":  55.30927,
         "name":  "دبي",
         "latitude":  25.07725,
-        "englishName":  "Dubai"
+        "englishName":  "Dubai",
+        "timezone":  "Asia/Dubai"
     },
     {
         "country":  "الإمارات العربية المتحدة",
         "longitude":  54.39696,
         "name":  "أبوظبي",
         "latitude":  24.45118,
-        "englishName":  "Abu Dhabi"
+        "englishName":  "Abu Dhabi",
+        "timezone":  "Asia/Dubai"
     },
     {
         "country":  "قطر",
         "longitude":  51.53096,
         "name":  "الدوحة",
         "latitude":  25.28545,
-        "englishName":  "Doha"
+        "englishName":  "Doha",
+        "timezone":  "Asia/Qatar"
     },
     {
         "country":  "الكويت",
         "longitude":  47.97429,
         "name":  "مدينة الكويت",
         "latitude":  29.367,
-        "englishName":  "Kuwait"
+        "englishName":  "Kuwait",
+        "timezone":  "Asia/Kuwait"
     },
     {
         "country":  "الأردن",
         "longitude":  35.94503,
         "name":  "عمّان",
         "latitude":  31.95522,
-        "englishName":  "Amman"
+        "englishName":  "Amman",
+        "timezone":  "Asia/Amman"
     },
     {
         "country":  "لبنان",
         "longitude":  35.50157,
         "name":  "بيروت",
         "latitude":  33.89332,
-        "englishName":  "Beirut"
+        "englishName":  "Beirut",
+        "timezone":  "Asia/Beirut"
     },
     {
         "country":  "العراق",
         "longitude":  44.40088,
         "name":  "بغداد",
         "latitude":  33.34058,
-        "englishName":  "Baghdad"
+        "englishName":  "Baghdad",
+        "timezone":  "Asia/Baghdad"
     },
     {
         "country":  "عُمان",
         "longitude":  58.40778,
         "name":  "مسقط",
         "latitude":  23.58413,
-        "englishName":  "Muscat"
+        "englishName":  "Muscat",
+        "timezone":  "Asia/Muscat"
     },
     {
         "country":  "تونس",
         "longitude":  10.16579,
         "name":  "تونس",
         "latitude":  36.81897,
-        "englishName":  "Tunis"
+        "englishName":  "Tunis",
+        "timezone":  "Africa/Tunis"
     },
     {
         "country":  "الجزائر",
         "longitude":  3.08746,
         "name":  "الجزائر",
         "latitude":  36.73225,
-        "englishName":  "Algiers"
+        "englishName":  "Algiers",
+        "timezone":  "Africa/Algiers"
     },
     {
         "country":  "المغرب",
         "longitude":  -6.83255,
         "name":  "رباط",
         "latitude":  34.01325,
-        "englishName":  "Rabat"
+        "englishName":  "Rabat",
+        "timezone":  "Africa/Casablanca"
     },
     {
         "country":  "تركيا",
         "longitude":  28.94966,
         "name":  "اسطنبول",
         "latitude":  41.01384,
-        "englishName":  "Istanbul"
+        "englishName":  "Istanbul",
+        "timezone":  "Europe/Istanbul"
     },
     {
         "country":  "المملكة المتحدة",
         "longitude":  -0.12574,
         "name":  "لندن",
         "latitude":  51.50853,
-        "englishName":  "London"
+        "englishName":  "London",
+        "timezone":  "Europe/London"
     },
     {
         "country":  "فرنسا",
         "longitude":  2.3488,
         "name":  "باريس",
         "latitude":  48.85341,
-        "englishName":  "Paris"
+        "englishName":  "Paris",
+        "timezone":  "Europe/Paris"
     }
 ]

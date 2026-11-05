@@ -1,5 +1,6 @@
 import 'package:sakina_app/l10n/localization.dart';
 import '../../domain/prayer_time_zone.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sakina_app/core/services/device_position_resolver.dart';
@@ -97,10 +98,15 @@ class PrayerTimesProvider extends ChangeNotifier {
   Coordinates? _selectedCoordinates;
   String locationLabel = appL10n.prayerTimesProviderMessage4;
   int selectedMethod = PrayerCalculationPolicy.defaultMethod;
+  AsrMadhab asrMadhab = AsrMadhab.standard;
+
+  /// IANA zone of the chosen place; null means "use the device zone"
+  /// (device location or manually typed coordinates).
+  String? selectedTimeZone;
   DateTime? loadedDate;
   Coordinates? get selectedCoordinates => _selectedCoordinates;
   DateTime get locationNow =>
-      prayerWallTime(_clock.now(), _prayerTimes?.timezone);
+      prayerWallTime(_clock.now(), _prayerTimes?.timezone ?? selectedTimeZone);
   PrayerTimesEntity? _prayerTimes;
   int _requestId = 0;
   bool _disposed = false;
@@ -161,14 +167,31 @@ class PrayerTimesProvider extends ChangeNotifier {
     if (method is int && PrayerCalculationPolicy.methods.containsKey(method)) {
       selectedMethod = method;
     }
+    final zone = preferences?.get(timeZonePreferenceKey);
+    selectedTimeZone = zone is String && zone.isNotEmpty ? zone : null;
+    asrMadhab = AsrMadhab.fromStorage(
+      preferences?.get(AsrMadhab.preferenceKey),
+    );
+  }
+
+  static const String timeZonePreferenceKey = prayerTimeZonePreferenceKey;
+
+  /// Changes how Asr is calculated, then recalculates and reschedules.
+  Future<void> setAsrMadhab(AsrMadhab madhab) async {
+    if (_disposed || madhab == asrMadhab) return;
+    asrMadhab = madhab;
+    await _preferences?.setString(AsrMadhab.preferenceKey, madhab.name);
+    notifyListeners();
+    if (_selectedCoordinates != null) await refresh();
   }
 
   Future<void> selectLocation(
     double latitude,
     double longitude,
     String label,
-    int method,
-  ) async {
+    int method, {
+    String? timeZone,
+  }) async {
     if (!latitude.isFinite ||
         !longitude.isFinite ||
         latitude.abs() > 90 ||
@@ -195,6 +218,7 @@ class PrayerTimesProvider extends ChangeNotifier {
           'prayer_longitude',
           'prayer_location_label',
           'prayer_method',
+          timeZonePreferenceKey,
         ]) {
           previousValues[key] = preferences.get(key);
         }
@@ -203,6 +227,9 @@ class PrayerTimesProvider extends ChangeNotifier {
           () => preferences.setDouble('prayer_longitude', longitude),
           () => preferences.setString('prayer_location_label', nextLabel),
           () => preferences.setInt('prayer_method', method),
+          () => timeZone == null
+              ? preferences.remove(timeZonePreferenceKey)
+              : preferences.setString(timeZonePreferenceKey, timeZone),
         ];
         for (final write in writes) {
           final saved = await write();
@@ -239,6 +266,7 @@ class PrayerTimesProvider extends ChangeNotifier {
     _selectedCoordinates = (latitude: latitude, longitude: longitude);
     locationLabel = nextLabel;
     selectedMethod = method;
+    selectedTimeZone = timeZone;
     await fetchTodayForCurrentLocation(calculationMethod: method);
   }
 
@@ -315,27 +343,26 @@ class PrayerTimesProvider extends ChangeNotifier {
 
     PrayerTimesEntity? loadedPrayerTimes;
 
-    try {
-      final prayerTimes = await _repository.getPrayerTimes(
-        date,
-        latitude,
-        longitude,
-        calculationMethod: calculationMethod,
-      );
-
-      if (_disposed || requestId != _requestId) return;
-      prayerLocation(prayerTimes.timezone);
-      loadedDate = date;
-      _prayerTimes = prayerTimes;
-      loadedPrayerTimes = prayerTimes;
-      _isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      if (_disposed || requestId != _requestId) return;
-      _isLoading = false;
-      _errorMessage = appL10n.prayerTimesProviderMessage10;
-      notifyListeners();
+    final result = await _repository.getPrayerTimes(
+      date,
+      latitude,
+      longitude,
+      calculationMethod: calculationMethod,
+      madhab: asrMadhab,
+      timeZone: selectedTimeZone,
+    );
+    if (_disposed || requestId != _requestId) return;
+    switch (result) {
+      case Success(:final value):
+        loadedDate = date;
+        _prayerTimes = value;
+        loadedPrayerTimes = value;
+      case Err(:final failure):
+        debugPrint('Prayer time calculation failed: ${failure.cause}');
+        _errorMessage = appL10n.prayerTimesProviderMessage10;
     }
+    _isLoading = false;
+    notifyListeners();
 
     if (loadedPrayerTimes != null) {
       await _schedulePrayerNotifications(loadedPrayerTimes, date);

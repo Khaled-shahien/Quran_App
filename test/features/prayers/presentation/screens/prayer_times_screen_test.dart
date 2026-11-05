@@ -1,3 +1,5 @@
+import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,7 +20,24 @@ class FakePrayerTimesRepository implements PrayerTimesRepository {
   int calls = 0;
 
   @override
-  Future<PrayerTimesEntity> getPrayerTimes(
+  Future<Result<PrayerTimesEntity>> getPrayerTimes(
+    DateTime date,
+    double latitude,
+    double longitude, {
+    int calculationMethod = 3,
+    AsrMadhab madhab = AsrMadhab.standard,
+    String? timeZone,
+  }) => Result.guard(
+    () => _legacyGetPrayerTimes(
+      date,
+      latitude,
+      longitude,
+      calculationMethod: calculationMethod,
+    ),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<PrayerTimesEntity> _legacyGetPrayerTimes(
     DateTime date,
     double latitude,
     double longitude, {
@@ -49,7 +68,24 @@ class DelayedPrayerTimesRepository implements PrayerTimesRepository {
   final Completer<void> completer;
 
   @override
-  Future<PrayerTimesEntity> getPrayerTimes(
+  Future<Result<PrayerTimesEntity>> getPrayerTimes(
+    DateTime date,
+    double latitude,
+    double longitude, {
+    int calculationMethod = 3,
+    AsrMadhab madhab = AsrMadhab.standard,
+    String? timeZone,
+  }) => Result.guard(
+    () => _legacyGetPrayerTimes(
+      date,
+      latitude,
+      longitude,
+      calculationMethod: calculationMethod,
+    ),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<PrayerTimesEntity> _legacyGetPrayerTimes(
     DateTime date,
     double latitude,
     double longitude, {
@@ -74,7 +110,24 @@ class FlakyPrayerTimesRepository implements PrayerTimesRepository {
   int calls = 0;
 
   @override
-  Future<PrayerTimesEntity> getPrayerTimes(
+  Future<Result<PrayerTimesEntity>> getPrayerTimes(
+    DateTime date,
+    double latitude,
+    double longitude, {
+    int calculationMethod = 3,
+    AsrMadhab madhab = AsrMadhab.standard,
+    String? timeZone,
+  }) => Result.guard(
+    () => _legacyGetPrayerTimes(
+      date,
+      latitude,
+      longitude,
+      calculationMethod: calculationMethod,
+    ),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<PrayerTimesEntity> _legacyGetPrayerTimes(
     DateTime date,
     double latitude,
     double longitude, {

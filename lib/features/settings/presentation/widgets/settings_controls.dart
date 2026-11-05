@@ -5,6 +5,7 @@ import '../../../../core/providers/settings_provider.dart';
 import '../../../../core/theme/theme_provider.dart';
 import '../../../../core/services/notification_service.dart';
 import '../../../../core/services/monitoring_service.dart';
+import '../../../prayers/domain/prayer_calculation_policy.dart';
 import '../../../prayers/presentation/providers/prayer_times_provider.dart';
 import '../../../prayers/presentation/screens/prayer_location_dialog.dart';
 
@@ -141,6 +142,26 @@ class _PrayerPreferencesState extends State<PrayerPreferences> {
               await NotificationService.instance.cancelAllPrayerNotifications();
             }
           },
+        ),
+        RadioGroup<AsrMadhab>(
+          groupValue: prayer.asrMadhab,
+          onChanged: (value) {
+            if (value != null) prayer.setAsrMadhab(value);
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(title: Text(l10nOf(context).asrMadhabTitle)),
+              RadioListTile<AsrMadhab>(
+                value: AsrMadhab.standard,
+                title: Text(l10nOf(context).asrMadhabStandard),
+              ),
+              RadioListTile<AsrMadhab>(
+                value: AsrMadhab.hanafi,
+                title: Text(l10nOf(context).asrMadhabHanafi),
+              ),
+            ],
+          ),
         ),
       ],
     );

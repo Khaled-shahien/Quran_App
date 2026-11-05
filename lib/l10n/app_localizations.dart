@@ -3307,6 +3307,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تمت إعادة تعيين العدّاد'**
   String get tasbihResetDone;
+
+  /// No description provided for @asrMadhabTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حساب وقت العصر'**
+  String get asrMadhabTitle;
+
+  /// No description provided for @asrMadhabStandard.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجمهور (الشافعي والمالكي والحنبلي)'**
+  String get asrMadhabStandard;
+
+  /// No description provided for @asrMadhabHanafi.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحنفي'**
+  String get asrMadhabHanafi;
 }
 
 class _AppLocalizationsDelegate

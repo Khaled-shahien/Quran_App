@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sakina_app/core/constants/api_keys.dart';
 import 'package:sakina_app/core/services/cached_api_service.dart';
 import 'package:sakina_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
-import 'package:sakina_app/features/prayers/data/data_sources/prayer_times_api_service.dart';
+
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
 import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:sakina_app/features/prayers/data/repositories/prayer_times_repository_impl.dart';
@@ -77,10 +77,6 @@ Future<void> setupServiceLocator() async {
     // Data Sources
     // ==========================================
 
-    getIt.registerLazySingleton<PrayerTimesApiService>(
-      () => PrayerTimesApiService(),
-    );
-
     getIt.registerLazySingleton<LocalSurahDataSource>(
       () => LocalSurahDataSource(),
     );
@@ -116,10 +112,7 @@ Future<void> setupServiceLocator() async {
     // ==========================================
 
     getIt.registerLazySingleton<PrayerTimesRepository>(
-      () => PrayerTimesRepositoryImpl(
-        apiService: getIt<PrayerTimesApiService>(),
-        sharedPreferences: getIt<SharedPreferences>(),
-      ),
+      () => PrayerTimesRepositoryImpl(),
     );
 
     getIt.registerLazySingleton<SurahRepository>(
