@@ -31,6 +31,8 @@ AzkarItemModel _$AzkarItemModelFromJson(Map<String, dynamic> json) =>
       text: json['text'] as String,
       repeat: (json['repeat'] as num?)?.toInt() ?? 1,
       reference: json['reference'] as String? ?? '',
+      instructionBefore: json['instructionBefore'] as String? ?? '',
+      instructionAfter: json['instructionAfter'] as String? ?? '',
     );
 
 Map<String, dynamic> _$AzkarItemModelToJson(AzkarItemModel instance) =>
@@ -40,4 +42,6 @@ Map<String, dynamic> _$AzkarItemModelToJson(AzkarItemModel instance) =>
       'text': instance.text,
       'repeat': instance.repeat,
       'reference': instance.reference,
+      'instructionBefore': instance.instructionBefore,
+      'instructionAfter': instance.instructionAfter,
     };

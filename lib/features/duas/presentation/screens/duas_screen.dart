@@ -1,5 +1,6 @@
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
+import '../widgets/dhikr_text_block.dart';
 
 import 'package:provider/provider.dart';
 import '../../../../core/widgets/pulse_loader.dart';
@@ -132,17 +133,8 @@ class _DuasItemCard extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // Duas Text
-              Text(
-                item.text,
-                style: TextStyle(
-                  fontFamily: 'Amiri',
-                  fontSize: 22,
-                  height: 2.0,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              // Duas Text, with source guidance set apart
+              DhikrTextBlock(item: item),
 
               // Reference if available
               if (item.reference != null && item.reference.isNotEmpty) ...[
@@ -151,12 +143,12 @@ class _DuasItemCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   item.reference,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Cairo',
-                    fontSize: 12,
-                    color: Colors.grey,
+                    fontSize: 13,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
-                  textAlign: TextAlign.left,
+                  textAlign: TextAlign.start,
                 ),
               ],
             ],

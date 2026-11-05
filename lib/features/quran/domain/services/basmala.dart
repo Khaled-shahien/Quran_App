@@ -4,22 +4,93 @@
 /// instead, so it is split off here without changing a single character.
 library;
 
-/// The basmala exactly as in Al-Fatiha 1:1 of the bundled text. Written as
+/// The basmala exactly as in Al-Fatiha 1:1 of the bundled text, built from
 /// code points because editors and keyboards may reorder Arabic marks.
-const String uthmaniBasmala =
-    'بِسْمِ '
-    'ٱللَّهِ '
-    'ٱلرَّحْمَٰنِ '
-    'ٱلرَّحِيمِ';
+final String uthmaniBasmala = String.fromCharCodes(const <int>[
+  0x0628,
+  0x0650,
+  0x0633,
+  0x0652,
+  0x0645,
+  0x0650,
+  0x0020,
+  0x0671,
+  0x0644,
+  0x0644,
+  0x0651,
+  0x064E,
+  0x0647,
+  0x0650,
+  0x0020,
+  0x0671,
+  0x0644,
+  0x0631,
+  0x0651,
+  0x064E,
+  0x062D,
+  0x0652,
+  0x0645,
+  0x064E,
+  0x0670,
+  0x0646,
+  0x0650,
+  0x0020,
+  0x0671,
+  0x0644,
+  0x0631,
+  0x0651,
+  0x064E,
+  0x062D,
+  0x0650,
+  0x064A,
+  0x0645,
+  0x0650,
+]);
 
 /// Al-Tin (95) and Al-Qadr (97) carry a shadda on the first letter in the
 /// source, from joining with the previous surah. The header still uses
 /// [uthmaniBasmala]; this form only matters for splitting.
-const String _joinedBasmala =
-    'بِّسْمِ '
-    'ٱللَّهِ '
-    'ٱلرَّحْمَٰنِ '
-    'ٱلرَّحِيمِ';
+final String _joinedBasmala = String.fromCharCodes(const <int>[
+  0x0628,
+  0x0651,
+  0x0650,
+  0x0633,
+  0x0652,
+  0x0645,
+  0x0650,
+  0x0020,
+  0x0671,
+  0x0644,
+  0x0644,
+  0x0651,
+  0x064E,
+  0x0647,
+  0x0650,
+  0x0020,
+  0x0671,
+  0x0644,
+  0x0631,
+  0x0651,
+  0x064E,
+  0x062D,
+  0x0652,
+  0x0645,
+  0x064E,
+  0x0670,
+  0x0646,
+  0x0650,
+  0x0020,
+  0x0671,
+  0x0644,
+  0x0631,
+  0x0651,
+  0x064E,
+  0x062D,
+  0x0650,
+  0x064A,
+  0x0645,
+  0x0650,
+]);
 
 const int _fatiha = 1;
 const int _tawbah = 9;
@@ -46,7 +117,7 @@ BasmalaSplit splitLeadingBasmala({
   if (ayahNumber != 1 || surahNumber == _fatiha || surahNumber == _tawbah) {
     return BasmalaSplit(hasBasmala: false, ayahText: text);
   }
-  for (final prefix in const [uthmaniBasmala, _joinedBasmala]) {
+  for (final prefix in [uthmaniBasmala, _joinedBasmala]) {
     final withSpace = '$prefix ';
     if (text.startsWith(withSpace) && text.length > withSpace.length) {
       return BasmalaSplit(
