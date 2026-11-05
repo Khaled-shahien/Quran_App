@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
+import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/features/duas/data/models/azkar_model.dart';
 import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
 import 'package:sakina_app/features/duas/presentation/providers/azkar_provider.dart';
@@ -13,8 +14,8 @@ import 'package:sakina_app/features/duas/presentation/screens/azkar_screen.dart'
 
 class FakeAzkarRepository implements AzkarRepository {
   @override
-  Future<List<AzkarCategoryModel>> getAllAzkar() async {
-    return <AzkarCategoryModel>[
+  Future<Result<List<AzkarCategoryModel>>> getAllAzkar() async {
+    return Success(<AzkarCategoryModel>[
       AzkarCategoryModel(
         id: 1,
         category: 'أذكار الصباح',
@@ -28,7 +29,7 @@ class FakeAzkarRepository implements AzkarRepository {
           ),
         ],
       ),
-    ];
+    ]);
   }
 }
 

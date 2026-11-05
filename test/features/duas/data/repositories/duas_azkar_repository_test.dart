@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
 import 'package:sakina_app/features/duas/data/repositories/duas_repository.dart';
 
@@ -46,30 +47,26 @@ void main() {
             '"reference":"مرجع"}]}]',
       });
 
-      final repository = DuasRepositoryImpl();
-      final result = await repository.getAllDuas();
+      final result = await DuasRepositoryImpl().getAllDuas();
 
-      expect(result, hasLength(1));
-      expect(result.first.category, 'أدعية قرآنية');
-      expect(result.first.items, hasLength(1));
-      expect(result.first.items.first.title, 'دعاء');
+      final categories = result.valueOrNull!;
+      expect(categories, hasLength(1));
+      expect(categories.first.category, 'أدعية قرآنية');
+      expect(categories.first.items, hasLength(1));
+      expect(categories.first.items.first.title, 'دعاء');
     });
 
-    test('throws wrapped exception on malformed JSON', () async {
+    test('returns a ContentFailure on malformed JSON', () async {
       await evictAssetCache();
       await mockAssets({'assets/quran_duas.json': '{not-json'});
 
-      final repository = DuasRepositoryImpl();
+      final result = await DuasRepositoryImpl().getAllDuas();
 
+      expect(result.failureOrNull, isA<ContentFailure>());
       expect(
-        repository.getAllDuas,
-        throwsA(
-          isA<Exception>().having(
-            (e) => e.toString(),
-            'message',
-            contains('Failed to load duas data'),
-          ),
-        ),
+        result.failureOrNull!.cause,
+        isA<FormatException>(),
+        reason: 'the technical cause is kept for logging',
       );
     });
   });
@@ -84,30 +81,51 @@ void main() {
             '"repeat":3,"reference":"مرجع"}]}]',
       });
 
-      final repository = AzkarRepositoryImpl();
-      final result = await repository.getAllAzkar();
+      final result = await AzkarRepositoryImpl().getAllAzkar();
 
-      expect(result, hasLength(1));
-      expect(result.first.category, 'أذكار الصباح');
-      expect(result.first.items.first.repeat, 3);
+      final categories = result.valueOrNull!;
+      expect(categories, hasLength(1));
+      expect(categories.first.category, 'أذكار الصباح');
+      expect(categories.first.items.first.repeat, 3);
     });
 
-    test('throws wrapped exception when asset is missing', () async {
+    test('keeps dhikr text and reference byte-for-byte', () async {
+      const text = ' بِسْمِ اللَّهِ… ﴿١﴾ ';
+      const reference = ' رواه مسلم ';
+      await evictAssetCache();
+      await mockAssets({
+        'assets/prayers_data.json': jsonEncode([
+          {
+            'id': 1,
+            'category': 'أذكار الصباح',
+            'items': [
+              {
+                'id': 1,
+                'title': 'ذكر',
+                'text': text,
+                'repeat': 33,
+                'reference': reference,
+              },
+            ],
+          },
+        ]),
+      });
+
+      final result = await AzkarRepositoryImpl().getAllAzkar();
+
+      final item = result.valueOrNull!.single.items.single;
+      expect(item.text, text);
+      expect(item.reference, reference);
+      expect(item.repeat, 33);
+    });
+
+    test('returns a ContentFailure when the asset is missing', () async {
       await evictAssetCache();
       await mockAssets(const <String, String>{});
 
-      final repository = AzkarRepositoryImpl();
+      final result = await AzkarRepositoryImpl().getAllAzkar();
 
-      expect(
-        repository.getAllAzkar,
-        throwsA(
-          isA<Exception>().having(
-            (e) => e.toString(),
-            'message',
-            contains('Failed to load azkar data'),
-          ),
-        ),
-      );
+      expect(result.failureOrNull, isA<ContentFailure>());
     });
   });
 }

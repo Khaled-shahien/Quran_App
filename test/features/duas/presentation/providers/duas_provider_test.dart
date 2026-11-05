@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sakina_app/core/result/result.dart';
+import 'package:sakina_app/core/result/failure_messages.dart';
 import 'package:sakina_app/features/duas/data/models/azkar_model.dart';
 import 'package:sakina_app/features/duas/data/repositories/duas_repository.dart';
 import 'package:sakina_app/features/duas/presentation/providers/duas_provider.dart';
@@ -10,11 +12,11 @@ class FakeDuasRepository implements DuasRepository {
   FakeDuasRepository({required this.data, this.shouldThrow = false});
 
   @override
-  Future<List<AzkarCategoryModel>> getAllDuas() async {
+  Future<Result<List<AzkarCategoryModel>>> getAllDuas() async {
     if (shouldThrow) {
-      throw Exception('failed');
+      return const Err(ContentFailure(cause: 'failed'));
     }
-    return data;
+    return Success(data);
   }
 }
 
@@ -57,7 +59,10 @@ void main() {
     await provider.loadDuas();
 
     expect(provider.isLoading, isFalse);
-    expect(provider.errorMessage, isNotNull);
+    expect(provider.failure, isA<ContentFailure>());
+    // The user sees friendly Arabic copy, never the technical cause.
+    expect(provider.errorMessage, failureMessage(const ContentFailure()));
+    expect(provider.errorMessage, isNot(contains('failed')));
     expect(provider.categories, isEmpty);
   });
 }

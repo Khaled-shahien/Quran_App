@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sakina_app/core/providers/settings_provider.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/core/services/alarm_reschedule_task_service.dart';
 import 'package:sakina_app/core/services/alarm_scheduler.dart';
 import 'package:sakina_app/core/theme/theme_provider.dart';
@@ -119,13 +120,14 @@ class FakeSurahRepository implements SurahRepository {
 
 class FakeAzkarRepository implements AzkarRepository {
   @override
-  Future<List<AzkarCategoryModel>> getAllAzkar() async =>
-      <AzkarCategoryModel>[];
+  Future<Result<List<AzkarCategoryModel>>> getAllAzkar() async =>
+      const Success(<AzkarCategoryModel>[]);
 }
 
 class FakeDuasRepository implements DuasRepository {
   @override
-  Future<List<AzkarCategoryModel>> getAllDuas() async => <AzkarCategoryModel>[];
+  Future<Result<List<AzkarCategoryModel>>> getAllDuas() async =>
+      const Success(<AzkarCategoryModel>[]);
 }
 
 class FakeHadeathRepository implements HadeathRepository {

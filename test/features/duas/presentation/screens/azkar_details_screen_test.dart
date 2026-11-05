@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/core/widgets/pulse_loader.dart';
 import 'package:sakina_app/features/duas/data/models/azkar_model.dart';
 import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
@@ -9,8 +10,8 @@ import 'package:sakina_app/features/duas/presentation/screens/azkar_details_scre
 
 class _DummyAzkarRepository implements AzkarRepository {
   @override
-  Future<List<AzkarCategoryModel>> getAllAzkar() async =>
-      <AzkarCategoryModel>[];
+  Future<Result<List<AzkarCategoryModel>>> getAllAzkar() async =>
+      const Success(<AzkarCategoryModel>[]);
 }
 
 class TestAzkarProvider extends AzkarProvider {
