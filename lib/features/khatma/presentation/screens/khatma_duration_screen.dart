@@ -180,7 +180,11 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                             value: _trackingUnit,
                             icon: Icon(
                               Icons.arrow_drop_down,
-                              color: isDarkMode ? Colors.white54 : Colors.grey,
+                              color: isDarkMode
+                                  ? Colors.white54
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                             ),
                             style: TextStyle(
                               fontSize: 14,
@@ -311,7 +315,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                         l10nOf(context).khatmaDurationScreenMessage13,
                         style: const TextStyle(),
                       ),
-                      backgroundColor: Colors.green,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                   );
                   Navigator.of(context).popUntil((route) => route.isFirst);

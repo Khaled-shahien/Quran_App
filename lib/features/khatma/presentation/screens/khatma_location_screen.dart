@@ -95,7 +95,11 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                             value: _selectedStartMode,
                             icon: Icon(
                               Icons.arrow_drop_down,
-                              color: isDarkMode ? Colors.white54 : Colors.grey,
+                              color: isDarkMode
+                                  ? Colors.white54
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                             ),
                             style: TextStyle(
                               fontSize: 16,
@@ -155,7 +159,9 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                                 Icons.arrow_drop_down,
                                 color: isDarkMode
                                     ? Colors.white54
-                                    : Colors.grey,
+                                    : Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
                               ),
                               style: TextStyle(
                                 fontSize: 16,

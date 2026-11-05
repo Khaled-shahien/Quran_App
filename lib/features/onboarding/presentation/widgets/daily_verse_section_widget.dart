@@ -115,7 +115,9 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
                     child: IconButton(
                       icon: Icon(
                         isFav ? Icons.favorite : Icons.favorite_outline,
-                        color: isFav ? Colors.red : Colors.white70,
+                        color: isFav
+                            ? Theme.of(context).colorScheme.error
+                            : Colors.white70,
                       ),
                       onPressed: () {
                         favoritesProvider.toggleFavorite(_selectedVerse);

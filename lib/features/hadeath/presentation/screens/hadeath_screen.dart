@@ -62,7 +62,10 @@ class _HadeathScreenState extends State<HadeathScreen> {
                 return Center(
                   child: Text(
                     provider.errorMessage!,
-                    style: const TextStyle(color: Colors.red, fontSize: 16),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontSize: 16,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 );

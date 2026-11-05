@@ -880,9 +880,9 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
       return Center(
         child: Text(
           _error!,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
-            color: Colors.red,
+            color: Theme.of(context).colorScheme.error,
             fontFamily: 'Amiri',
           ),
         ),
@@ -893,9 +893,9 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
       return Center(
         child: Text(
           appL10n.readerContentMessage1,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
-            color: Colors.grey,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontFamily: 'Amiri',
           ),
         ),

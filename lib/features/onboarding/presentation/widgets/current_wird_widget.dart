@@ -222,7 +222,9 @@ class CurrentWirdWidget extends StatelessWidget {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      backgroundColor: Colors.green,
+                                      backgroundColor: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
                                       behavior: SnackBarBehavior.floating,
                                       duration: const Duration(seconds: 3),
                                     ),
@@ -319,7 +321,10 @@ class CurrentWirdWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: const Icon(Icons.cancel, color: Colors.red),
+                          icon: Icon(
+                            Icons.cancel,
+                            color: Theme.of(context).colorScheme.error,
+                          ),
                           onPressed: () {
                             showDialog(
                               context: context,
@@ -351,7 +356,11 @@ class CurrentWirdWidget extends StatelessWidget {
                                       l10nOf(
                                         context,
                                       ).currentWirdWidgetMessage14,
-                                      style: const TextStyle(color: Colors.red),
+                                      style: TextStyle(
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.error,
+                                      ),
                                     ),
                                   ),
                                 ],

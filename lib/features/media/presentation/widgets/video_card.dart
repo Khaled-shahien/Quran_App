@@ -95,7 +95,7 @@ class VideoChannelCard extends StatelessWidget {
       child: ListTile(
         onTap: () => _openUrl(context, channel.url),
         leading: CircleAvatar(
-          backgroundColor: Colors.red.shade700,
+          backgroundColor: Theme.of(context).colorScheme.error,
           child: const Icon(Icons.play_arrow_rounded, color: Colors.white),
         ),
         title: Text(

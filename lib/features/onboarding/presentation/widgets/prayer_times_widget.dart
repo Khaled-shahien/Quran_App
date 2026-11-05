@@ -89,14 +89,18 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                Icon(
+                  Icons.error_outline,
+                  size: 48,
+                  color: Theme.of(context).colorScheme.error,
+                ),
                 const SizedBox(height: 16),
                 Text(
                   l10nOf(context).prayerTimesWidgetMessage1,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.red,
+                    color: Theme.of(context).colorScheme.error,
                   ),
                 ),
                 TextButton(
@@ -107,7 +111,10 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 Text(
                   provider.errorMessage ??
                       l10nOf(context).prayerTimesWidgetMessage3,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ],

@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+
+import 'package:sakina_app/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -77,6 +80,8 @@ void main() {
   resetUndoTests();
 
   addPhraseTests();
+
+  contrastTests();
 }
 
 void resetUndoTests() {
@@ -126,4 +131,34 @@ void addPhraseTests() {
     expect(controller.phrases.last.customText, 'أستغفر الله');
     expect(tester.takeException(), isNull);
   });
+}
+
+double _lum(Color c) {
+  double ch(double v) =>
+      v <= 0.03928 ? v / 12.92 : math.pow((v + 0.055) / 1.055, 2.4).toDouble();
+  return 0.2126 * ch(c.r) + 0.7152 * ch(c.g) + 0.0722 * ch(c.b);
+}
+
+void contrastTests() {
+  for (final dark in [false, true]) {
+    testWidgets('count button text is readable (dark=$dark)', (tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      final controller = await _controller();
+      await tester.pumpWidget(
+        ChangeNotifierProvider<TasbihController>.value(
+          value: controller,
+          child: MaterialApp(
+            theme: dark ? AppTheme.darkTheme : AppTheme.lightTheme,
+            home: const TasbeehScreen(),
+          ),
+        ),
+      );
+      final fab = tester.widget<FloatingActionButton>(
+        find.byType(FloatingActionButton),
+      );
+      final a = _lum(fab.foregroundColor!), b = _lum(fab.backgroundColor!);
+      final ratio = (math.max(a, b) + 0.05) / (math.min(a, b) + 0.05);
+      expect(ratio, greaterThanOrEqualTo(4.5));
+    });
+  }
 }

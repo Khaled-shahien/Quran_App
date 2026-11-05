@@ -121,26 +121,35 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.error_outline,
                       size: 64,
-                      color: Colors.red,
+                      color: Theme.of(context).colorScheme.error,
                     ),
                     const SizedBox(height: 16),
                     Text(
                       l10n.prayerLoadError,
-                      style: const TextStyle(fontSize: 16, color: Colors.red),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       l10nOf(context).prayerTimesWidgetMessage1,
-                      style: const TextStyle(fontSize: 16, color: Colors.red),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       provider.errorMessage ??
                           l10nOf(context).prayerTimesWidgetMessage3,
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),

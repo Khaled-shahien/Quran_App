@@ -50,7 +50,10 @@ class DuasScreen extends StatelessWidget {
                 return Center(
                   child: Text(
                     l10nOf(context).duasScreenMessage1,
-                    style: const TextStyle(color: Colors.red, fontSize: 18),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontSize: 18,
+                    ),
                   ),
                 );
               }

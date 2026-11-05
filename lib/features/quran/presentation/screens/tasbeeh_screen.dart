@@ -226,7 +226,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                 FloatingActionButton.extended(
                   onPressed: _incrementCounter,
                   backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   label: Text(l10nOf(context).tasbeehScreenMessage6),
                   icon: const Icon(Icons.add),
                 ),
@@ -239,16 +239,16 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                     // Add new tasbeeh button
                     ElevatedButton.icon(
                       onPressed: _showAddTasbeehDialog,
-                      icon: const Icon(Icons.add, color: Colors.white),
+                      icon: const Icon(Icons.add),
                       label: Text(
                         l10nOf(context).tasbeehScreenMessage7,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
+                        style: const TextStyle(fontSize: 14),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onPrimary,
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppConstants.kPaddingMedium,
                           vertical: AppConstants.kPaddingSmall,
@@ -258,17 +258,23 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                     // Reset button
                     OutlinedButton.icon(
                       onPressed: _resetCounters,
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.refresh,
-                        color: Colors.red,
+                        color: Theme.of(context).colorScheme.error,
                         size: 18,
                       ),
                       label: Text(
                         l10nOf(context).tasbeehScreenMessage8,
-                        style: const TextStyle(color: Colors.red, fontSize: 14),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontSize: 14,
+                        ),
                       ),
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.red, width: 1.5),
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.error,
+                          width: 1.5,
+                        ),
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppConstants.kPaddingMedium,
                           vertical: AppConstants.kPaddingSmall,
@@ -348,7 +354,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         padding: const EdgeInsets.only(right: 20),
         margin: const EdgeInsets.symmetric(vertical: 4),
         decoration: BoxDecoration(
-          color: Colors.red,
+          color: Theme.of(context).colorScheme.error,
           borderRadius: BorderRadius.circular(AppConstants.kBorderRadiusMedium),
         ),
         child: const Icon(Icons.delete, color: Colors.white, size: 24),
@@ -367,7 +373,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                 : Theme.of(context).scaffoldBackgroundColor,
             border: Border.all(
               color: isCompleted
-                  ? Colors.green
+                  ? Theme.of(context).colorScheme.primary
                   : (isSelected
                         ? Theme.of(context).colorScheme.primary
                         : Colors.transparent),
@@ -384,7 +390,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     color: isCompleted
-                        ? Colors.green
+                        ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.primary,
                     fontWeight: isSelected
                         ? FontWeight.bold
@@ -484,7 +490,7 @@ class _AddPhraseDialogState extends State<_AddPhraseDialog> {
           },
           child: Text(
             l10nOf(context).appStringsMessage9,
-            style: const TextStyle(color: Colors.red),
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ),
         ElevatedButton(
@@ -495,11 +501,9 @@ class _AddPhraseDialogState extends State<_AddPhraseDialog> {
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
           ),
-          child: Text(
-            l10nOf(context).tasbeehScreenMessage11,
-            style: const TextStyle(color: Colors.white),
-          ),
+          child: Text(l10nOf(context).tasbeehScreenMessage11),
         ),
       ],
     );
