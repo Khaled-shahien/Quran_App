@@ -66,11 +66,68 @@ void main() {
         .expand((c) => c.items)
         .where((i) => i.reference.contains('حصن المسلم'))
         .toList();
-    expect(sourced, hasLength(19));
+    // 19 corrected entries + 20 added to the morning + 20 to the evening.
+    expect(sourced, hasLength(59));
     for (final i in sourced) {
       expect(i.reference, matches(RegExp(r'حصن المسلم \(\d+\)')));
       expect(i.text.trim(), i.text, reason: '${i.title}: no stray spaces');
     }
+  });
+
+  test('morning and evening hold every Hisn al-Muslim dhikr, in order', () {
+    List<int> hisnIds(String category) => categories
+        .firstWhere((c) => c.category == category)
+        .items
+        .map((i) => RegExp(r'حصن المسلم \((\d+)\)').firstMatch(i.reference))
+        .whereType<RegExpMatch>()
+        .map((m) => int.parse(m.group(1)!))
+        .toList();
+
+    // 97 is said in the evening only.
+    expect(hisnIds('أذكار الصباح'), [
+      for (var id = 75; id <= 98; id++)
+        if (id != 97) id,
+    ]);
+    // 93-95 are morning-only; 77 is present in its full evening form.
+    expect(hisnIds('أذكار المساء'), [
+      for (var id = 75; id <= 98; id++)
+        if (id != 77 && (id < 93 || id > 95)) id,
+    ]);
+  });
+
+  test('repeat counts follow Hisn al-Muslim', () {
+    int repeat(String category, int hisnId) => categories
+        .firstWhere((c) => c.category == category)
+        .items
+        .firstWhere((i) => i.reference.contains('حصن المسلم ($hisnId)'))
+        .repeat;
+    expect(repeat('أذكار الصباح', 80), 4);
+    expect(repeat('أذكار الصباح', 83), 7, reason: 'the text says seven');
+    expect(repeat('أذكار الصباح', 91), 100);
+    expect(repeat('أذكار الصباح', 93), 100);
+    expect(repeat('أذكار المساء', 97), 3);
+    expect(repeat('أذكار المساء', 98), 10);
+  });
+
+  test('titles are unique within each category', () {
+    for (final c in categories) {
+      final titles = c.items.map((i) => i.title).toList();
+      expect(titles.toSet(), hasLength(titles.length), reason: c.category);
+    }
+  });
+
+  test('Quranic dua of Ibrahim 41 is exactly the Mushaf text', () {
+    final quran =
+        jsonDecode(File('assets/quran_master.json').readAsStringSync())
+            as List<dynamic>;
+    final ayah = (quran[13]['ayahs'] as List<dynamic>)[40]['text'] as String;
+    final duas =
+        (jsonDecode(File('assets/quran_duas.json').readAsStringSync())
+                as List<dynamic>)
+            .map((c) => AzkarCategoryModel.fromJson(c as Map<String, dynamic>))
+            .expand((c) => c.items);
+    final dua = duas.firstWhere((i) => i.reference.contains('إبراهيم'));
+    expect(dua.text, ayah);
   });
 
   test('every entry has text, a reference and a positive repeat', () {

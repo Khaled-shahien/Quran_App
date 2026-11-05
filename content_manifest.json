@@ -14,7 +14,7 @@
     },
     {
       "path": "assets/quran_duas.json",
-      "sha256": "5e4c6e7667457cfc69a12175b8b4e2fcccd37eca82fc65c6303c0cd71c9eab14",
+      "sha256": "cf3c02cda7956b14373468018ffc04c1b65bc065e785f73342833941d9763fea",
       "source": "pending_owner_review",
       "edition": null,
       "license": null,
@@ -24,7 +24,7 @@
     },
     {
       "path": "assets/prayers_data.json",
-      "sha256": "8ea8916273868af4781780887038b33fac344ac6e6dd631dd8801f2d8a8848e7",
+      "sha256": "b527213626372d061840ef33275a7ac828606a7bad05af59d63780c8ba2c7e6a",
       "source": "pending_owner_review",
       "edition": null,
       "license": null,
