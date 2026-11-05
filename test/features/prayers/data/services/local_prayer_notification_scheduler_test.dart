@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sakina_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
 import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
@@ -7,6 +8,7 @@ class FakePrayerNotificationGateway implements PrayerNotificationGateway {
   int scheduleCalls = 0;
   int cancelCalls = 0;
   Map<String, DateTime>? scheduledPrayerTimes;
+  AdhanSettings? scheduledSettings;
 
   @override
   Future<void> cancelAllPrayerNotifications() async {
@@ -16,8 +18,10 @@ class FakePrayerNotificationGateway implements PrayerNotificationGateway {
   @override
   Future<void> scheduleAllPrayersForDate({
     required Map<String, DateTime> prayerTimes,
+    required AdhanSettings settings,
   }) async {
     scheduleCalls++;
+    scheduledSettings = settings;
     scheduledPrayerTimes = Map<String, DateTime>.from(prayerTimes);
   }
 }

@@ -2528,5 +2528,56 @@
   "recitationListenFromHere": "استمع من هذه الصفحة",
   "recitationSource": "التلاوات من Quran.com",
   "recitationSettings": "التلاوة",
-  "recitationManageDownloads": "إدارة التلاوات المحمّلة"
+  "recitationManageDownloads": "إدارة التلاوات المحمّلة",
+  "prayerAlertsTitle": "تنبيه كل صلاة",
+  "prayerAlertModeAdhan": "الأذان",
+  "prayerAlertModeSound": "صوت تنبيه",
+  "prayerAlertModeNotification": "إشعار بدون صوت",
+  "prayerAlertModeSilent": "بدون تنبيه",
+  "adhanRecordingsPending": "تسجيلات الأذان لم تُضف بعد، وسيُستخدم صوت التنبيه حتى تتوفر.",
+  "prayerReminderTitle": "تذكير قبل الصلاة",
+  "prayerReminderOff": "بدون تذكير",
+  "prayerReminderMinutes": "قبل {minutes} دقيقة",
+  "@prayerReminderMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerReminderBody": "بقي {minutes} دقيقة على صلاة {prayer}",
+  "@prayerReminderBody": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      },
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerReminderChannel": "تذكير قبل الصلاة",
+  "prayerSilentChannel": "مواقيت الصلاة بدون صوت",
+  "prayerNotificationBody": "اضغط لقراءة دعاء ما بعد الأذان",
+  "testAdhanButton": "جرّب تنبيه الصلاة الآن",
+  "testAdhanScheduled": "سيظهر تنبيه تجريبي بعد 10 ثوانٍ",
+  "exactAlarmTitle": "التنبيه في الوقت بالضبط",
+  "exactAlarmExplain": "حتى يصلك تنبيه الصلاة في وقتها تماماً، يحتاج التطبيق إذن «المنبهات والتذكيرات». سنفتح لك صفحة الإعدادات لتفعيله.",
+  "exactAlarmAllowed": "مفعّل",
+  "exactAlarmNotAllowed": "غير مفعّل، وقد يتأخر التنبيه قليلاً",
+  "exactAlarmAllow": "تفعيل",
+  "batteryTitle": "توفير البطارية",
+  "batteryExplain": "بعض الأجهزة توقف تنبيهات التطبيقات لتوفير البطارية. إن تأخرت التنبيهات، افتح إعدادات التطبيق واختر «بدون قيود» في إعدادات البطارية.",
+  "batteryOpenSettings": "فتح إعدادات التطبيق",
+  "afterAdhanTitle": "أذكار الأذان",
+  "prayerTimeArrived": "حان وقت صلاة {prayer}",
+  "@prayerTimeArrived": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationResume": "استكمال التلاوة",
+  "afterAdhanOpen": "دعاء ما بعد الأذان"
 }

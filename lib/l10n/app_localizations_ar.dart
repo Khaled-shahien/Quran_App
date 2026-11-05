@@ -1940,4 +1940,94 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get recitationManageDownloads => 'إدارة التلاوات المحمّلة';
+
+  @override
+  String get prayerAlertsTitle => 'تنبيه كل صلاة';
+
+  @override
+  String get prayerAlertModeAdhan => 'الأذان';
+
+  @override
+  String get prayerAlertModeSound => 'صوت تنبيه';
+
+  @override
+  String get prayerAlertModeNotification => 'إشعار بدون صوت';
+
+  @override
+  String get prayerAlertModeSilent => 'بدون تنبيه';
+
+  @override
+  String get adhanRecordingsPending =>
+      'تسجيلات الأذان لم تُضف بعد، وسيُستخدم صوت التنبيه حتى تتوفر.';
+
+  @override
+  String get prayerReminderTitle => 'تذكير قبل الصلاة';
+
+  @override
+  String get prayerReminderOff => 'بدون تذكير';
+
+  @override
+  String prayerReminderMinutes(String minutes) {
+    return 'قبل $minutes دقيقة';
+  }
+
+  @override
+  String prayerReminderBody(String minutes, String prayer) {
+    return 'بقي $minutes دقيقة على صلاة $prayer';
+  }
+
+  @override
+  String get prayerReminderChannel => 'تذكير قبل الصلاة';
+
+  @override
+  String get prayerSilentChannel => 'مواقيت الصلاة بدون صوت';
+
+  @override
+  String get prayerNotificationBody => 'اضغط لقراءة دعاء ما بعد الأذان';
+
+  @override
+  String get testAdhanButton => 'جرّب تنبيه الصلاة الآن';
+
+  @override
+  String get testAdhanScheduled => 'سيظهر تنبيه تجريبي بعد 10 ثوانٍ';
+
+  @override
+  String get exactAlarmTitle => 'التنبيه في الوقت بالضبط';
+
+  @override
+  String get exactAlarmExplain =>
+      'حتى يصلك تنبيه الصلاة في وقتها تماماً، يحتاج التطبيق إذن «المنبهات والتذكيرات». سنفتح لك صفحة الإعدادات لتفعيله.';
+
+  @override
+  String get exactAlarmAllowed => 'مفعّل';
+
+  @override
+  String get exactAlarmNotAllowed => 'غير مفعّل، وقد يتأخر التنبيه قليلاً';
+
+  @override
+  String get exactAlarmAllow => 'تفعيل';
+
+  @override
+  String get batteryTitle => 'توفير البطارية';
+
+  @override
+  String get batteryExplain =>
+      'بعض الأجهزة توقف تنبيهات التطبيقات لتوفير البطارية. إن تأخرت التنبيهات، افتح إعدادات التطبيق واختر «بدون قيود» في إعدادات البطارية.';
+
+  @override
+  String get batteryOpenSettings => 'فتح إعدادات التطبيق';
+
+  @override
+  String get afterAdhanTitle => 'أذكار الأذان';
+
+  @override
+  String prayerTimeArrived(String prayer) {
+    return 'حان وقت صلاة $prayer';
+  }
+
+  @override
+  String get recitationResume => 'استكمال التلاوة';
+
+  @override
+  String get afterAdhanOpen => 'دعاء ما بعد الأذان';
 }

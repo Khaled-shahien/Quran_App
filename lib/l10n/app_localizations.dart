@@ -3559,6 +3559,168 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إدارة التلاوات المحمّلة'**
   String get recitationManageDownloads;
+
+  /// No description provided for @prayerAlertsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه كل صلاة'**
+  String get prayerAlertsTitle;
+
+  /// No description provided for @prayerAlertModeAdhan.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأذان'**
+  String get prayerAlertModeAdhan;
+
+  /// No description provided for @prayerAlertModeSound.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوت تنبيه'**
+  String get prayerAlertModeSound;
+
+  /// No description provided for @prayerAlertModeNotification.
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعار بدون صوت'**
+  String get prayerAlertModeNotification;
+
+  /// No description provided for @prayerAlertModeSilent.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون تنبيه'**
+  String get prayerAlertModeSilent;
+
+  /// No description provided for @adhanRecordingsPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيلات الأذان لم تُضف بعد، وسيُستخدم صوت التنبيه حتى تتوفر.'**
+  String get adhanRecordingsPending;
+
+  /// No description provided for @prayerReminderTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكير قبل الصلاة'**
+  String get prayerReminderTitle;
+
+  /// No description provided for @prayerReminderOff.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون تذكير'**
+  String get prayerReminderOff;
+
+  /// No description provided for @prayerReminderMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبل {minutes} دقيقة'**
+  String prayerReminderMinutes(String minutes);
+
+  /// No description provided for @prayerReminderBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'بقي {minutes} دقيقة على صلاة {prayer}'**
+  String prayerReminderBody(String minutes, String prayer);
+
+  /// No description provided for @prayerReminderChannel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكير قبل الصلاة'**
+  String get prayerReminderChannel;
+
+  /// No description provided for @prayerSilentChannel.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواقيت الصلاة بدون صوت'**
+  String get prayerSilentChannel;
+
+  /// No description provided for @prayerNotificationBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط لقراءة دعاء ما بعد الأذان'**
+  String get prayerNotificationBody;
+
+  /// No description provided for @testAdhanButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرّب تنبيه الصلاة الآن'**
+  String get testAdhanButton;
+
+  /// No description provided for @testAdhanScheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيظهر تنبيه تجريبي بعد 10 ثوانٍ'**
+  String get testAdhanScheduled;
+
+  /// No description provided for @exactAlarmTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التنبيه في الوقت بالضبط'**
+  String get exactAlarmTitle;
+
+  /// No description provided for @exactAlarmExplain.
+  ///
+  /// In ar, this message translates to:
+  /// **'حتى يصلك تنبيه الصلاة في وقتها تماماً، يحتاج التطبيق إذن «المنبهات والتذكيرات». سنفتح لك صفحة الإعدادات لتفعيله.'**
+  String get exactAlarmExplain;
+
+  /// No description provided for @exactAlarmAllowed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفعّل'**
+  String get exactAlarmAllowed;
+
+  /// No description provided for @exactAlarmNotAllowed.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مفعّل، وقد يتأخر التنبيه قليلاً'**
+  String get exactAlarmNotAllowed;
+
+  /// No description provided for @exactAlarmAllow.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل'**
+  String get exactAlarmAllow;
+
+  /// No description provided for @batteryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'توفير البطارية'**
+  String get batteryTitle;
+
+  /// No description provided for @batteryExplain.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعض الأجهزة توقف تنبيهات التطبيقات لتوفير البطارية. إن تأخرت التنبيهات، افتح إعدادات التطبيق واختر «بدون قيود» في إعدادات البطارية.'**
+  String get batteryExplain;
+
+  /// No description provided for @batteryOpenSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح إعدادات التطبيق'**
+  String get batteryOpenSettings;
+
+  /// No description provided for @afterAdhanTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أذكار الأذان'**
+  String get afterAdhanTitle;
+
+  /// No description provided for @prayerTimeArrived.
+  ///
+  /// In ar, this message translates to:
+  /// **'حان وقت صلاة {prayer}'**
+  String prayerTimeArrived(String prayer);
+
+  /// No description provided for @recitationResume.
+  ///
+  /// In ar, this message translates to:
+  /// **'استكمال التلاوة'**
+  String get recitationResume;
+
+  /// No description provided for @afterAdhanOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'دعاء ما بعد الأذان'**
+  String get afterAdhanOpen;
 }
 
 class _AppLocalizationsDelegate

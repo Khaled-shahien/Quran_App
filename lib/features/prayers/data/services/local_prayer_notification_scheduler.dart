@@ -7,9 +7,13 @@ import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.
 import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../domain/entities/adhan_settings.dart';
+import '../repositories/adhan_settings_store.dart';
+
 abstract class PrayerNotificationGateway {
   Future<void> scheduleAllPrayersForDate({
     required Map<String, DateTime> prayerTimes,
+    required AdhanSettings settings,
   });
 
   Future<void> cancelAllPrayerNotifications();
@@ -32,9 +36,11 @@ class NotificationServicePrayerNotificationGateway
   @override
   Future<void> scheduleAllPrayersForDate({
     required Map<String, DateTime> prayerTimes,
+    required AdhanSettings settings,
   }) {
     return _notificationService.scheduleAllPrayersForDate(
       prayerTimes: prayerTimes,
+      settings: settings,
     );
   }
 }
@@ -93,7 +99,11 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
       return;
     }
 
-    await _notificationGateway.scheduleAllPrayersForDate(prayerTimes: schedule);
+    // Read on every schedule so background reschedules use current choices.
+    await _notificationGateway.scheduleAllPrayersForDate(
+      prayerTimes: schedule,
+      settings: AdhanSettingsStore(_prefs).read(),
+    );
     await _onScheduled?.call();
   }
 

@@ -11,7 +11,9 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../navigation/notification_router.dart';
 import 'local_timezone_fallback.dart';
+import '../../features/prayers/domain/entities/adhan_settings.dart';
 import '../../features/prayers/domain/prayer_notification_ids.dart';
+import '../../features/prayers/domain/services/prayer_alert_planner.dart';
 
 /// Notification Service for managing alarms and notifications.
 ///
@@ -69,6 +71,10 @@ class NotificationService {
   static final String _prayerChannelDescription =
       appL10n.notificationServiceMessage6;
 
+  // Android fixes a channel's sound at creation, so each sound has its own
+  // versioned channel ID; adhan channels will be named per muezzin.
+  static const String _prayerSilentChannelId = 'prayer_times_silent_v1';
+  static const String _prayerReminderChannelId = 'prayer_reminders_v1';
   static const String _testChannelId = 'test_channel';
   static final String _testChannelName = appL10n.notificationServiceMessage7;
   static final String _testChannelDescription =
@@ -222,6 +228,24 @@ class NotificationService {
         // Platform default sound until a licensed adhan is bundled.
         playSound: true,
         enableVibration: true,
+      ),
+    );
+
+    await androidImplementation.createNotificationChannel(
+      AndroidNotificationChannel(
+        _prayerSilentChannelId,
+        appL10n.prayerSilentChannel,
+        importance: Importance.high,
+        playSound: false,
+        enableVibration: true,
+      ),
+    );
+
+    await androidImplementation.createNotificationChannel(
+      AndroidNotificationChannel(
+        _prayerReminderChannelId,
+        appL10n.prayerReminderChannel,
+        importance: Importance.high,
       ),
     );
 
@@ -658,10 +682,16 @@ class NotificationService {
   }
 
   /// Schedule a one-time notification for a prayer time.
+  ///
+  /// [mode] picks the channel: the alert sound (also used for "adhan" until
+  /// licensed recordings are bundled) or a silent notification.
   Future<void> schedulePrayerNotification({
     required int id,
     required String prayerName,
     required DateTime prayerTime,
+    PrayerAlertMode mode = PrayerAlertMode.sound,
+    bool isReminder = false,
+    int reminderMinutes = 0,
   }) async {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
@@ -680,26 +710,47 @@ class NotificationService {
       return;
     }
 
-    final AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-          _prayerChannelId,
-          _prayerChannelName,
-          channelDescription: _prayerChannelDescription,
-          importance: Importance.max,
-          priority: Priority.high,
-          icon: '@drawable/ic_notification',
-          // Platform default sound until a licensed adhan is bundled.
-          playSound: true,
-          enableVibration: true,
-          category: AndroidNotificationCategory.alarm,
-        );
+    final bool withSound = mode != PrayerAlertMode.notificationOnly;
+    final AndroidNotificationDetails androidNotificationDetails = isReminder
+        ? AndroidNotificationDetails(
+            _prayerReminderChannelId,
+            appL10n.prayerReminderChannel,
+            importance: Importance.high,
+            priority: Priority.high,
+            icon: '@drawable/ic_notification',
+          )
+        : withSound
+        ? AndroidNotificationDetails(
+            _prayerChannelId,
+            _prayerChannelName,
+            channelDescription: _prayerChannelDescription,
+            importance: Importance.max,
+            priority: Priority.high,
+            icon: '@drawable/ic_notification',
+            // Platform default sound until a licensed adhan is bundled.
+            playSound: true,
+            enableVibration: true,
+            category: AndroidNotificationCategory.alarm,
+          )
+        : AndroidNotificationDetails(
+            _prayerSilentChannelId,
+            appL10n.prayerSilentChannel,
+            importance: Importance.high,
+            priority: Priority.high,
+            icon: '@drawable/ic_notification',
+            playSound: false,
+            enableVibration: true,
+            category: AndroidNotificationCategory.reminder,
+          );
 
-    const DarwinNotificationDetails iosNotificationDetails =
+    final DarwinNotificationDetails iosNotificationDetails =
         DarwinNotificationDetails(
           presentAlert: true,
           presentBadge: true,
-          presentSound: true,
-          interruptionLevel: InterruptionLevel.timeSensitive,
+          presentSound: withSound,
+          interruptionLevel: isReminder
+              ? InterruptionLevel.active
+              : InterruptionLevel.timeSensitive,
         );
 
     final NotificationDetails notificationDetails = NotificationDetails(
@@ -717,8 +768,10 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
-      appL10n.notificationServiceMessage17((prayerName).toString()),
-      appL10n.notificationServiceMessage18,
+      isReminder
+          ? appL10n.prayerReminderBody('$reminderMinutes', prayerName)
+          : appL10n.notificationServiceMessage17((prayerName).toString()),
+      isReminder ? null : appL10n.prayerNotificationBody,
       scheduledDate,
       notificationDetails,
       androidScheduleMode: await _androidScheduleMode(),
@@ -736,14 +789,18 @@ class NotificationService {
   /// Replace only the supplied calendar day's slot, preserving other days.
   Future<void> scheduleAllPrayersForDate({
     required Map<String, DateTime> prayerTimes,
+    AdhanSettings settings = const AdhanSettings(),
   }) async {
     if (prayerTimes.isEmpty) return;
     final date = prayerTimes.values.first;
     for (final legacyId in _prayerNotificationIdsByName.values) {
       await cancelNotification(legacyId);
       await cancelNotification(prayerNotificationId(legacyId, date));
+      await cancelNotification(prayerReminderNotificationId(legacyId, date));
     }
 
+    final times = <DailyPrayer, DateTime>{};
+    final names = <DailyPrayer, String>{};
     for (final MapEntry<String, DateTime> entry in prayerTimes.entries) {
       final int? id = _prayerNotificationIdsByName[entry.key];
       if (id == null) {
@@ -754,14 +811,41 @@ class NotificationService {
         );
         continue;
       }
+      final prayer = DailyPrayer.values[id - 2001];
+      times[prayer] = entry.value;
+      names[prayer] = entry.key;
+    }
 
+    for (final alert in planPrayerAlerts(
+      times: times,
+      names: names,
+      settings: settings,
+      now: DateTime.now(),
+    )) {
       await schedulePrayerNotification(
-        id: prayerNotificationId(id, date),
-        prayerName: entry.key,
-        prayerTime: entry.value,
+        id: alert.id,
+        prayerName: alert.prayerName,
+        prayerTime: alert.at,
+        mode: alert.mode,
+        isReminder: alert.kind == PlannedAlertKind.reminder,
+        reminderMinutes: settings.reminderMinutes,
       );
     }
   }
+
+  /// Shows a prayer alert in 10 seconds so the user can check it works on
+  /// this device, using the alert type chosen for Fajr.
+  Future<void> scheduleTestPrayerAlert(AdhanSettings settings) async {
+    final mode = settings.modeFor(DailyPrayer.fajr);
+    await schedulePrayerNotification(
+      id: _testPrayerAlertId,
+      prayerName: _prayerNotificationIdsByName.keys.first,
+      prayerTime: DateTime.now().add(const Duration(seconds: 10)),
+      mode: mode == PrayerAlertMode.silent ? PrayerAlertMode.sound : mode,
+    );
+  }
+
+  static const int _testPrayerAlertId = 2999;
 
   String _formatTimeHHmm(int hour, int minute) {
     final String h = hour.toString().padLeft(2, '0');
