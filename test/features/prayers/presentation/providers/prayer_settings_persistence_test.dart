@@ -90,4 +90,54 @@ void main() {
     expect(repository.madhabs.last, AsrMadhab.hanafi);
     expect(provider().asrMadhab, AsrMadhab.hanafi);
   });
+
+  nextPrayerTests();
+}
+
+class _Clock implements PrayerTimesClock {
+  _Clock(this.value);
+  DateTime value;
+  @override
+  DateTime now() => value;
+}
+
+void nextPrayerTests() {
+  group('nextPrayer', () {
+    late _Clock clock;
+    late PrayerTimesProvider provider;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      clock = _Clock(DateTime.utc(2026, 11, 5, 10)); // 12:00 in Cairo
+      provider = PrayerTimesProvider(
+        repository: _CapturingRepository(),
+        preferences: await SharedPreferences.getInstance(),
+        clock: clock,
+      );
+      await provider.selectLocation(
+        30.0444,
+        31.2357,
+        'القاهرة',
+        5,
+        timeZone: 'Africa/Cairo',
+      );
+    });
+
+    test('is the next prayer later today', () {
+      final next = provider.nextPrayer!;
+      expect(next.isTomorrow, isFalse);
+      expect(next.wallTime.hour, 15); // Asr at 15:00 in the fake times
+      expect(next.remaining, const Duration(hours: 3));
+    });
+
+    test('after Isha it is tomorrow\'s Fajr with a real countdown', () {
+      clock.value = DateTime.utc(2026, 11, 5, 20); // 22:00 in Cairo
+      final next = provider.nextPrayer!;
+      expect(next.isTomorrow, isTrue);
+      expect(next.wallTime.day, 6);
+      expect(next.wallTime.hour, 5);
+      expect(next.remaining, const Duration(hours: 7));
+      expect(provider.getCurrentAndNextPrayer()['nextTime'], isNot('--:--'));
+    });
+  });
 }

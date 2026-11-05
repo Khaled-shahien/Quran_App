@@ -1,7 +1,6 @@
 import 'package:sakina_app/l10n/localization.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../l10n/app_localizations_ar.dart';
-import '../../domain/prayer_time_zone.dart';
 import 'prayer_location_dialog.dart';
 import '../../../onboarding/presentation/widgets/notification_permission_dialog.dart';
 import '../../domain/prayer_calculation_policy.dart';
@@ -480,34 +479,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
 
   /// Get next prayer information
   Map<String, dynamic> _getNextPrayer(Map<String, String> prayerTimes) {
-    const englishOrder = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-    final arabicNames = {
-      'Fajr': appL10n.prayerTimesWidgetMessage8,
-      'Dhuhr': appL10n.prayerTimesWidgetMessage9,
-      'Asr': appL10n.prayerTimesWidgetMessage10,
-      'Maghrib': appL10n.prayerTimesWidgetMessage11,
-      'Isha': appL10n.prayerTimesWidgetMessage12,
-    };
-
-    final now = context.read<PrayerTimesProvider>().locationNow;
-    DateTime? nextPrayerTime;
-    String? nextPrayerName;
-
-    for (int i = 0; i < englishOrder.length; i++) {
-      final prayerName = englishOrder[i];
-      final timeStr = prayerTimes[prayerName];
-
-      if (timeStr != null && timeStr != 'N/A') {
-        final prayerDateTime = _parseTime(timeStr);
-        if (prayerDateTime != null && prayerDateTime.isAfter(now)) {
-          nextPrayerTime = prayerDateTime;
-          nextPrayerName = arabicNames[prayerName];
-          break;
-        }
-      }
-    }
-
-    if (nextPrayerTime == null) {
+    final next = context.read<PrayerTimesProvider>().nextPrayer;
+    if (next == null) {
       return {
         'name': appL10n.prayerTimesWidgetMessage13,
         'time': '--:--',
@@ -515,59 +488,21 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
       };
     }
 
-    final timeRemaining = nextPrayerTime.difference(now);
+    final timeRemaining = next.remaining.isNegative
+        ? Duration.zero
+        : next.remaining;
     final hoursStr = timeRemaining.inHours.toString();
     final minutesStr = (timeRemaining.inMinutes % 60).toString();
 
-    String remainingText = '';
-    if (timeRemaining.inHours > 0) {
-      remainingText = appL10n.prayerTimesWidgetMessage15(
-        (hoursStr).toString(),
-        (minutesStr).toString(),
-      );
-    } else {
-      remainingText = appL10n.prayerTimesWidgetMessage16(
-        (minutesStr).toString(),
-      );
-    }
+    final String remainingText = timeRemaining.inHours > 0
+        ? appL10n.prayerTimesWidgetMessage15(hoursStr, minutesStr)
+        : appL10n.prayerTimesWidgetMessage16(minutesStr);
 
     return {
-      'name': nextPrayerName ?? appL10n.prayerTimesWidgetMessage8,
-      'time': _formatTimeForDisplay(nextPrayerTime),
+      'name': next.name,
+      'time': _formatTimeForDisplay(next.wallTime),
       'remaining': remainingText,
     };
-  }
-
-  /// Parse time string to DateTime
-  DateTime? _parseTime(String timeStr) {
-    try {
-      // Remove AM/PM markers from the formatted time
-      final cleanTime = timeStr.replaceAll('ص', '').replaceAll('م', '').trim();
-      final parts = cleanTime.split(':');
-
-      if (parts.length < 2) return null;
-
-      int hour = int.parse(parts[0]);
-      final minute = int.parse(parts[1]);
-
-      // Check if it's PM (after 12:00 already converted form)
-      // Since the display format already handles AM/PM, we need to preserve the logic
-      if (timeStr.contains('م')) {
-        if (hour != 12) hour += 12;
-      } else {
-        if (hour == 12) hour = 0;
-      }
-
-      final now = context.read<PrayerTimesProvider>().locationNow;
-      return prayerInstant(
-        now,
-        hour,
-        minute,
-        context.read<PrayerTimesProvider>().prayerTimes?.timezone,
-      );
-    } catch (e) {
-      return null;
-    }
   }
 
   /// Format time for display

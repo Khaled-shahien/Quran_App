@@ -108,6 +108,9 @@ class PrayerTimesProvider extends ChangeNotifier {
   DateTime get locationNow =>
       prayerWallTime(_clock.now(), _prayerTimes?.timezone ?? selectedTimeZone);
   PrayerTimesEntity? _prayerTimes;
+
+  /// Tomorrow's times, so the next prayer after Isha (Fajr) is known.
+  PrayerTimesEntity? _tomorrowPrayerTimes;
   int _requestId = 0;
   bool _disposed = false;
   bool _isLoading = false;
@@ -352,6 +355,16 @@ class PrayerTimesProvider extends ChangeNotifier {
       timeZone: selectedTimeZone,
     );
     if (_disposed || requestId != _requestId) return;
+    final tomorrowResult = await _repository.getPrayerTimes(
+      DateTime(date.year, date.month, date.day + 1),
+      latitude,
+      longitude,
+      calculationMethod: calculationMethod,
+      madhab: asrMadhab,
+      timeZone: selectedTimeZone,
+    );
+    if (_disposed || requestId != _requestId) return;
+    _tomorrowPrayerTimes = tomorrowResult.valueOrNull;
     switch (result) {
       case Success(:final value):
         loadedDate = date;
@@ -530,6 +543,83 @@ class PrayerTimesProvider extends ChangeNotifier {
       result['currentTime'] = formatted[entry.key]!;
       result['nextName'] = appL10n.prayerTimesWidgetMessage13;
     }
+    final tomorrowFajr = _tomorrowPrayerTimes
+        ?.getFormattedPrayerTimes()['Fajr'];
+    if (tomorrowFajr != null && tomorrowFajr != 'N/A') {
+      result['nextTime'] = tomorrowFajr;
+    }
     return result;
   }
+
+  /// The next of the five prayers from now, including tomorrow's Fajr after
+  /// Isha. [wallTime] is in the prayer location's timezone, for display.
+  NextPrayer? get nextPrayer {
+    final today = _prayerTimes;
+    final date = loadedDate;
+    if (today == null || date == null) return null;
+    final instantNow = _clock.now();
+    final names = <String, String>{
+      'Fajr': appL10n.prayerTimesWidgetMessage8,
+      'Dhuhr': appL10n.prayerTimesWidgetMessage9,
+      'Asr': appL10n.prayerTimesWidgetMessage10,
+      'Maghrib': appL10n.prayerTimesWidgetMessage11,
+      'Isha': appL10n.prayerTimesWidgetMessage12,
+    };
+    final raw = today.getMainPrayerTimes();
+    for (final entry in names.entries) {
+      final at = _instantFor(date, raw[entry.key], today.timezone);
+      if (at != null && at.isAfter(instantNow)) {
+        return NextPrayer(
+          name: entry.value,
+          at: at,
+          wallTime: prayerWallTime(at, today.timezone),
+          isTomorrow: false,
+          remaining: at.difference(instantNow),
+        );
+      }
+    }
+    final tomorrow = _tomorrowPrayerTimes;
+    final next = DateTime(date.year, date.month, date.day + 1);
+    final at = _instantFor(next, tomorrow?.fajr, tomorrow?.timezone);
+    if (tomorrow == null || at == null) return null;
+    return NextPrayer(
+      name: appL10n.prayerTimesWidgetMessage13,
+      at: at,
+      wallTime: prayerWallTime(at, tomorrow.timezone),
+      isTomorrow: true,
+      remaining: at.difference(instantNow),
+    );
+  }
+
+  static DateTime? _instantFor(DateTime date, String? hhmm, String? zone) {
+    final match = RegExp(r'^(\d{1,2}):(\d{2})').firstMatch(hhmm ?? '');
+    if (match == null) return null;
+    return prayerInstant(
+      date,
+      int.parse(match[1]!),
+      int.parse(match[2]!),
+      zone,
+    );
+  }
+}
+
+/// The upcoming prayer, computed in one place for every screen.
+class NextPrayer {
+  const NextPrayer({
+    required this.name,
+    required this.at,
+    required this.wallTime,
+    required this.isTomorrow,
+    required this.remaining,
+  });
+
+  final String name;
+
+  /// The instant the prayer begins.
+  final DateTime at;
+
+  /// The same moment as wall-clock time at the prayer location.
+  final DateTime wallTime;
+  final bool isTomorrow;
+  final Duration remaining;
 }
