@@ -3889,6 +3889,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الإشعارات: نطلبها فقط عندما تفعّل تذكيرًا أو الأذان، ويمكنك إيقافها من الإعدادات في أي وقت.'**
   String get onboardingNotificationsNote;
+
+  /// No description provided for @digitStyle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شكل الأرقام'**
+  String get digitStyle;
+
+  /// No description provided for @digitStyleWestern.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرقام غربية (123)'**
+  String get digitStyleWestern;
+
+  /// No description provided for @digitStyleArabic.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرقام عربية (١٢٣)'**
+  String get digitStyleArabic;
 }
 
 class _AppLocalizationsDelegate

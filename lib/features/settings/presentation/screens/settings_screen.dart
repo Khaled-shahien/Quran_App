@@ -33,6 +33,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _SectionTitle(l10nOf(context).settingsScreenMessage1),
             const ThemePreference(),
             const TextSizePreference(),
+            const DigitStylePreference(),
             const HijriAdjustmentPreference(),
             ReadingPreferencesPanel(preferences: settings.prefs),
             _SectionTitle(l10nOf(context).mainNavigationShellMessage1),

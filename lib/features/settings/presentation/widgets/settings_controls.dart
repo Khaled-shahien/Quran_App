@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../providers/text_size_controller.dart';
+import '../providers/digit_style_controller.dart';
+import '../../../../core/accessibility/digit_style.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import '../../../../core/providers/settings_provider.dart';
@@ -243,6 +245,37 @@ class TextSizePreference extends StatelessWidget {
         ],
         onChanged: (value) {
           if (value != null) controller.setSize(value);
+        },
+      ),
+    );
+  }
+}
+
+class DigitStylePreference extends StatelessWidget {
+  const DigitStylePreference({super.key});
+  @override
+  Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+    final controller = context.watch<DigitStyleController>();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: DropdownButtonFormField<DigitStyle>(
+        key: const Key('digit-style'),
+        isExpanded: true,
+        initialValue: controller.style,
+        decoration: InputDecoration(labelText: l10n.digitStyle),
+        items: [
+          DropdownMenuItem(
+            value: DigitStyle.western,
+            child: Text(l10n.digitStyleWestern),
+          ),
+          DropdownMenuItem(
+            value: DigitStyle.arabic,
+            child: Text(l10n.digitStyleArabic),
+          ),
+        ],
+        onChanged: (value) {
+          if (value != null) controller.setStyle(value);
         },
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/app_localizations.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,10 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                     button: true,
                     label: phraseText,
                     value: target > 0
-                        ? l10n.adhkarProgress('$count', '$target')
+                        ? l10n.adhkarProgress(
+                            context.digits(count),
+                            context.digits(target),
+                          )
                         : '$count',
                     excludeSemantics: true,
                     child: Material(
@@ -109,7 +113,9 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  count.toString().padLeft(2, '0'),
+                                  context.digits(
+                                    count.toString().padLeft(2, '0'),
+                                  ),
                                   style: TextStyle(
                                     fontSize: 64,
                                     fontWeight: FontWeight.w800,
@@ -144,7 +150,10 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    l10n.adhkarProgress('$count', '$target'),
+                                    l10n.adhkarProgress(
+                                      context.digits(count),
+                                      context.digits(target),
+                                    ),
                                     style: theme.textTheme.bodyMedium,
                                   ),
                                 ],
@@ -184,7 +193,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                           itemKey: phrase.id,
                           index: index,
                           title: tasbihPhraseText(phrase, l10n),
-                          counter: phrase.count.toString(),
+                          counter: context.digits(phrase.count),
                           isCompleted: phrase.isComplete,
                           isSelected: index == controller.selectedIndex,
                         );

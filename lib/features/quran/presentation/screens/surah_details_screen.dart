@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/utils/arabic_text.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'dart:convert';
@@ -835,8 +836,8 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
                     },
                     child: Text(
                       appL10n.onboardingScreenMessage3(
-                        (currentPage).toString(),
-                        (totalPages).toString(),
+                        context.digits(currentPage),
+                        context.digits(totalPages),
                       ),
                       key: ValueKey<int>(currentPage),
                       textAlign: TextAlign.center,
@@ -1053,7 +1054,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
                 ).colorScheme.primary.withValues(alpha: 0.08),
               ),
               child: Text(
-                verse.verseNumber.toString(),
+                context.digits(verse.verseNumber),
                 style: TextStyle(
                   fontSize: _fontSize * 0.45,
                   fontWeight: FontWeight.bold,

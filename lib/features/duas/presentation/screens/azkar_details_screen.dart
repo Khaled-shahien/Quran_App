@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -234,7 +235,7 @@ class _AzkarItemCard extends StatelessWidget {
               Align(
                 alignment: AlignmentDirectional.centerStart,
                 child: Text(
-                  l10n.azkarDetailsScreenMessage6((item.repeat).toString()),
+                  l10n.azkarDetailsScreenMessage6(context.digits(item.repeat)),
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
@@ -272,7 +273,10 @@ class _AzkarItemCard extends StatelessWidget {
                   Text(
                     complete
                         ? l10n.adhkarDone
-                        : l10n.adhkarProgress('$done', '$total'),
+                        : l10n.adhkarProgress(
+                            context.digits(done),
+                            context.digits(total),
+                          ),
                     style: theme.textTheme.titleSmall,
                   ),
                 ],
@@ -307,7 +311,11 @@ class _AzkarItemCard extends StatelessWidget {
     // The whole card is the tap target: easy for children and seniors.
     return Semantics(
       button: true,
-      label: l10n.adhkarItemSemantics(item.title, '$done', '$total'),
+      label: l10n.adhkarItemSemantics(
+        item.title,
+        context.digits(done),
+        context.digits(total),
+      ),
       excludeSemantics: false,
       child: InkWell(
         borderRadius: BorderRadius.circular(15),

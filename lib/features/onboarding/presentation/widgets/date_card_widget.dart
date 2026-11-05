@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -82,9 +83,11 @@ class _DateCardWidgetState extends State<DateCardWidget>
 
     return Semantics(
       container: true,
-      label: l10nOf(
-        context,
-      ).dateCardSemantics(_date.weekday, hijri ?? '', _date.gregorian),
+      label: l10nOf(context).dateCardSemantics(
+        _date.weekday,
+        context.digits(hijri ?? ''),
+        context.digits(_date.gregorian),
+      ),
       excludeSemantics: true,
       child: Container(
         margin: const EdgeInsets.fromLTRB(
@@ -130,12 +133,12 @@ class _DateCardWidgetState extends State<DateCardWidget>
                   if (hijri != null)
                     _DateLine(
                       label: l10nOf(context).dateCardHijriLabel,
-                      value: hijri,
+                      value: context.digits(hijri),
                       emphasized: true,
                     ),
                   _DateLine(
                     label: l10nOf(context).dateCardGregorianLabel,
-                    value: _date.gregorian,
+                    value: context.digits(_date.gregorian),
                   ),
                 ],
               ),

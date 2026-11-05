@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'dart:async';
 import '../widgets/alarms/alarm_time_picker_dialog.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -1174,8 +1175,10 @@ class _PrayerTimeHeader extends StatelessWidget {
         final String? at;
         if (next != null) {
           title = next.name;
-          countdown = l10n.homeTimeLeft(_duration(next.remaining));
-          at = l10n.homeAtTime(_clock(next.wallTime));
+          countdown = l10n.homeTimeLeft(
+            context.digits(_duration(next.remaining)),
+          );
+          at = l10n.homeAtTime(context.digits(_clock(next.wallTime)));
         } else {
           title = provider.needsLocation
               ? l10n.choosePrayerLocation
@@ -1207,8 +1210,8 @@ class _PrayerTimeHeader extends StatelessWidget {
                     ? title
                     : l10n.homeNextPrayerSemantics(
                         next.name,
-                        _duration(next.remaining),
-                        _clock(next.wallTime),
+                        context.digits(_duration(next.remaining)),
+                        context.digits(_clock(next.wallTime)),
                       ),
                 excludeSemantics: true,
                 child: SafeArea(

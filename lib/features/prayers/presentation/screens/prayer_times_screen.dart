@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../l10n/app_localizations_ar.dart';
@@ -270,8 +271,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
   Widget _buildNextPrayerCard(Map<String, String> prayerTimes) {
     final nextPrayerInfo = _getNextPrayer(prayerTimes);
     final nextPrayerName = nextPrayerInfo['name'] as String;
-    final nextPrayerTime = nextPrayerInfo['time'] as String;
-    final timeRemaining = nextPrayerInfo['remaining'] as String;
+    final nextPrayerTime = context.digits(nextPrayerInfo['time'] as String);
+    final timeRemaining = context.digits(nextPrayerInfo['remaining'] as String);
 
     return Container(
       margin: const EdgeInsets.all(16),
@@ -396,7 +397,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
 
         return _prayerTimeTile(
           prayerName: arabicName,
-          prayerTime: entry.value,
+          prayerTime: context.digits(entry.value),
           isNext: isCurrentPrayer,
         );
       },

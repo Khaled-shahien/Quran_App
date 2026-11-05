@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -175,8 +176,8 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
   Widget _buildNextPrayerCard(Map<String, String> prayerTimes) {
     final nextPrayerInfo = _getNextPrayer(prayerTimes);
     final nextPrayerName = nextPrayerInfo['name'] as String;
-    final nextPrayerTime = nextPrayerInfo['time'] as String;
-    final timeRemaining = nextPrayerInfo['remaining'] as String;
+    final nextPrayerTime = context.digits(nextPrayerInfo['time'] as String);
+    final timeRemaining = context.digits(nextPrayerInfo['remaining'] as String);
 
     return Container(
       decoration: BoxDecoration(
@@ -289,7 +290,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
 
         return _prayerTimeTile(
           prayerName: arabicName,
-          prayerTime: entry.value,
+          prayerTime: context.digits(entry.value),
           isNext: isCurrentPrayer,
         );
       }).toList(),

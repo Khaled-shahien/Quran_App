@@ -2129,4 +2129,13 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get onboardingNotificationsNote =>
       'الإشعارات: نطلبها فقط عندما تفعّل تذكيرًا أو الأذان، ويمكنك إيقافها من الإعدادات في أي وقت.';
+
+  @override
+  String get digitStyle => 'شكل الأرقام';
+
+  @override
+  String get digitStyleWestern => 'أرقام غربية (123)';
+
+  @override
+  String get digitStyleArabic => 'أرقام عربية (١٢٣)';
 }
