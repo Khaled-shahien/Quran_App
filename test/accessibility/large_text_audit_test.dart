@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sakina_app/features/settings/presentation/providers/text_size_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -165,6 +166,7 @@ void main() {
             ),
           ),
           ChangeNotifierProvider(create: (_) => ThemeProvider(prefs: prefs)),
+          ChangeNotifierProvider(create: (_) => TextSizeController(prefs)),
           ChangeNotifierProvider.value(value: prayer),
           ChangeNotifierProvider(create: (_) => ReadingModeController(prefs)),
           ChangeNotifierProvider(

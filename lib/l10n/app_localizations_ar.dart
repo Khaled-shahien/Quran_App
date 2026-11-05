@@ -2084,4 +2084,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tasbihTapHint => 'اضغط في أي مكان هنا للعدّ';
+
+  @override
+  String get appTextSize => 'حجم خط التطبيق';
+
+  @override
+  String get appTextSizeHint =>
+      'يُضاف إلى حجم الخط في إعدادات الهاتف، ولا يغيّر حجم خط المصحف';
+
+  @override
+  String get appTextSizeNormal => 'عادي';
+
+  @override
+  String get appTextSizeLarge => 'كبير';
+
+  @override
+  String get appTextSizeLarger => 'أكبر';
+
+  @override
+  String get appTextSizeLargest => 'الأكبر';
 }

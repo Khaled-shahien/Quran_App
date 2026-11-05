@@ -3805,6 +3805,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اضغط في أي مكان هنا للعدّ'**
   String get tasbihTapHint;
+
+  /// No description provided for @appTextSize.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجم خط التطبيق'**
+  String get appTextSize;
+
+  /// No description provided for @appTextSizeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُضاف إلى حجم الخط في إعدادات الهاتف، ولا يغيّر حجم خط المصحف'**
+  String get appTextSizeHint;
+
+  /// No description provided for @appTextSizeNormal.
+  ///
+  /// In ar, this message translates to:
+  /// **'عادي'**
+  String get appTextSizeNormal;
+
+  /// No description provided for @appTextSizeLarge.
+  ///
+  /// In ar, this message translates to:
+  /// **'كبير'**
+  String get appTextSizeLarge;
+
+  /// No description provided for @appTextSizeLarger.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكبر'**
+  String get appTextSizeLarger;
+
+  /// No description provided for @appTextSizeLargest.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأكبر'**
+  String get appTextSizeLargest;
 }
 
 class _AppLocalizationsDelegate

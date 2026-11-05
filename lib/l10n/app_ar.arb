@@ -2650,5 +2650,11 @@
       }
     }
   },
-  "tasbihTapHint": "اضغط في أي مكان هنا للعدّ"
+  "tasbihTapHint": "اضغط في أي مكان هنا للعدّ",
+  "appTextSize": "حجم خط التطبيق",
+  "appTextSizeHint": "يُضاف إلى حجم الخط في إعدادات الهاتف، ولا يغيّر حجم خط المصحف",
+  "appTextSizeNormal": "عادي",
+  "appTextSizeLarge": "كبير",
+  "appTextSizeLarger": "أكبر",
+  "appTextSizeLargest": "الأكبر"
 }

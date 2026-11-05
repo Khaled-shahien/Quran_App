@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/surah_entity.dart';
 import '../../domain/services/basmala.dart';
+import '../../../../core/accessibility/app_text_scale.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../settings/presentation/providers/reading_mode_controller.dart';
 import '../../../recitation/presentation/providers/recitation_controller.dart';
@@ -945,22 +946,25 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
                       key: PageStorageKey<String>('surah-page-$pageIndex'),
                       child: SizedBox(
                         width: constraints.maxWidth,
-                        child: Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: SelectableText.rich(
-                            TextSpan(
-                              style: TextStyle(
-                                fontFamily: quranFontFamily,
-                                fontSize: _fontSize,
-                                color: textColor,
-                                height: _lineHeight,
+                        // The Quran has its own size control in the reader.
+                        child: SystemTextScale(
+                          child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: SelectableText.rich(
+                              TextSpan(
+                                style: TextStyle(
+                                  fontFamily: quranFontFamily,
+                                  fontSize: _fontSize,
+                                  color: textColor,
+                                  height: _lineHeight,
+                                ),
+                                children: _buildVersesWithNumbers(
+                                  pageData,
+                                  constraints.maxWidth,
+                                ),
                               ),
-                              children: _buildVersesWithNumbers(
-                                pageData,
-                                constraints.maxWidth,
-                              ),
+                              textAlign: TextAlign.justify,
                             ),
-                            textAlign: TextAlign.justify,
                           ),
                         ),
                       ),

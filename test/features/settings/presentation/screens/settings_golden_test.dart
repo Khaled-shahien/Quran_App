@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:sakina_app/features/settings/presentation/providers/text_size_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -50,6 +51,7 @@ void main() {
               ),
             ),
             ChangeNotifierProvider(create: (_) => ThemeProvider(prefs: prefs)),
+            ChangeNotifierProvider(create: (_) => TextSizeController(prefs)),
             ChangeNotifierProvider(
               create: (_) => PrayerTimesProvider(
                 repository: prayer_fakes.FakePrayerTimesRepository(),

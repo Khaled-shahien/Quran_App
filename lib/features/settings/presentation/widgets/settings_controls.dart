@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../providers/text_size_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import '../../../../core/providers/settings_provider.dart';
@@ -211,4 +212,39 @@ class AboutAppTile extends StatelessWidget {
       children: [Text(l10nOf(context).settingsScreenMessage17)],
     ),
   );
+}
+
+class TextSizePreference extends StatelessWidget {
+  const TextSizePreference({super.key});
+  @override
+  Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+    final controller = context.watch<TextSizeController>();
+    final labels = {
+      AppTextSize.normal: l10n.appTextSizeNormal,
+      AppTextSize.large: l10n.appTextSizeLarge,
+      AppTextSize.larger: l10n.appTextSizeLarger,
+      AppTextSize.largest: l10n.appTextSizeLargest,
+    };
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: DropdownButtonFormField<AppTextSize>(
+        key: const Key('app-text-size'),
+        isExpanded: true,
+        initialValue: controller.size,
+        decoration: InputDecoration(
+          labelText: l10n.appTextSize,
+          helperText: l10n.appTextSizeHint,
+          helperMaxLines: 3,
+        ),
+        items: [
+          for (final size in AppTextSize.values)
+            DropdownMenuItem(value: size, child: Text(labels[size]!)),
+        ],
+        onChanged: (value) {
+          if (value != null) controller.setSize(value);
+        },
+      ),
+    );
+  }
 }

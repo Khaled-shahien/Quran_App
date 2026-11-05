@@ -25,6 +25,8 @@ import 'package:sakina_app/core/services/notification_service.dart';
 import 'package:sakina_app/features/prayers/data/repositories/adhan_settings_store.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/adhan_settings_controller.dart';
 import 'package:sakina_app/features/settings/presentation/providers/reading_mode_controller.dart';
+import 'package:sakina_app/features/settings/presentation/providers/text_size_controller.dart';
+import 'package:sakina_app/core/accessibility/app_text_scale.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_arrival_watcher.dart';
 import 'package:sakina_app/features/prayers/presentation/widgets/adhan_preferences.dart';
 import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
@@ -292,6 +294,9 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
         ChangeNotifierProvider<ReadingModeController>(
           create: (_) => ReadingModeController(_prefs),
         ),
+        ChangeNotifierProvider<TextSizeController>(
+          create: (_) => TextSizeController(_prefs),
+        ),
         ChangeNotifierProvider<AdhanSettingsController>(
           create: (_) => AdhanSettingsController(
             store: AdhanSettingsStore(_prefs),
@@ -326,15 +331,19 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
             supportedLocales: AppLocalizations.supportedLocales,
             routerConfig: appRouter,
             builder: (context, child) {
-              return NoiseBackground(
-                child: Column(
-                  children: [
-                    Expanded(child: child!),
-                    // Stays visible on every screen while a surah is loaded.
-                    RecitationMiniPlayer(
-                      sheetContext: () => appNavigatorKey.currentContext,
-                    ),
-                  ],
+              final textSize = context.watch<TextSizeController>().factor;
+              return AppTextScale(
+                factor: textSize,
+                child: NoiseBackground(
+                  child: Column(
+                    children: [
+                      Expanded(child: child!),
+                      // Stays visible on every screen while a surah is loaded.
+                      RecitationMiniPlayer(
+                        sheetContext: () => appNavigatorKey.currentContext,
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
