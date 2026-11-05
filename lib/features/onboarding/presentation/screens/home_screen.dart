@@ -156,6 +156,13 @@ class _HomeScreenState extends State<HomeScreen> {
         background: const _PrayerTimeHeader(),
       ),
       actions: [
+        // Settings (design, text size, sounds) one tap from home.
+        IconButton(
+          key: const Key('home-settings'),
+          tooltip: appL10n.appStringsMessage16,
+          icon: const Icon(Icons.settings_outlined, size: 26),
+          onPressed: () => context.push('/settings'),
+        ),
         IconButton(
           tooltip: appL10n.homeScreenMessage1,
           icon: const Icon(Icons.segment, size: 30),
@@ -787,6 +794,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return ListView(
       padding: const EdgeInsets.only(bottom: 20),
       children: [
+        _buildMoreMenuItem(
+          title: appL10n.appStringsMessage16,
+          leadingIcon: Icon(Icons.settings_outlined, color: iconColor),
+          onTap: () {
+            Navigator.pop(context);
+            context.push('/settings');
+          },
+        ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage25,
           leadingIcon: Icon(Icons.privacy_tip_outlined, color: iconColor),

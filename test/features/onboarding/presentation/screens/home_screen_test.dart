@@ -247,6 +247,47 @@ void main() {
     );
   });
 
+  GoRouter settingsRouter() => GoRouter(
+    initialLocation: '/home',
+    routes: [
+      GoRoute(path: '/home', builder: (_, _) => const HomeScreen()),
+      GoRoute(
+        path: '/settings',
+        builder: (_, _) => const Scaffold(body: Text('Settings route')),
+      ),
+    ],
+  );
+
+  testWidgets('settings opens from the home header in one tap', (
+    tester,
+  ) async {
+    final router = settingsRouter();
+    addTearDown(router.dispose);
+    await tester.pumpWidget(await buildHome(router: router));
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('الإعدادات'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('home-settings')));
+    await tester.pumpAndSettle();
+    expect(find.text('Settings route'), findsOneWidget);
+  });
+
+  testWidgets('settings is the first item in the side menu', (tester) async {
+    final router = settingsRouter();
+    addTearDown(router.dispose);
+    await tester.pumpWidget(await buildHome(router: router));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.segment));
+    await tester.pumpAndSettle();
+    final item = find.descendant(
+      of: find.byType(Drawer),
+      matching: find.text('الإعدادات'),
+    );
+    expect(item, findsOneWidget);
+    await tester.tap(item);
+    await tester.pumpAndSettle();
+    expect(find.text('Settings route'), findsOneWidget);
+  });
+
   testWidgets('HomeScreen opens drawer and shows settings sections', (
     tester,
   ) async {
