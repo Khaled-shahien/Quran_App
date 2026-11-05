@@ -57,3 +57,6 @@ android/key.properties
 # Local-only env overrides.
 *.local
 key.properties
+
+# Golden test failure output (generated on a failing run)
+**/failures/
