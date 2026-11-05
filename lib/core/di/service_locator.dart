@@ -4,6 +4,14 @@ import 'package:sakina_app/features/quran/data/data_sources/local_quran_data_sou
 import 'package:sakina_app/features/quran/data/repositories/ayah_repository.dart';
 import 'package:sakina_app/features/quran/domain/repositories/ayah_repository.dart';
 import 'dart:developer' as developer;
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:sakina_app/core/audio/just_audio_recitation_engine.dart';
+import 'package:sakina_app/core/audio/recitation_audio_engine.dart';
+import 'package:sakina_app/features/recitation/data/datasources/quran_cdn_recitation_source.dart';
+import 'package:sakina_app/features/recitation/data/repositories/recitation_repository_impl.dart';
+import 'package:sakina_app/features/recitation/domain/repositories/recitation_repository.dart';
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -205,6 +213,24 @@ Future<void> setupServiceLocator() async {
     );
 
     getIt.registerLazySingleton<WorkManagerService>(() => WorkManagerService());
+
+    // ==========================================
+    // Quran recitation
+    // ==========================================
+
+    getIt.registerLazySingleton<RecitationRepository>(
+      () => RecitationRepositoryImpl(
+        remote: QuranCdnRecitationSource(client: getIt<http.Client>()),
+        downloadsDirectory: () async => Directory(
+          '${(await getApplicationSupportDirectory()).path}/recitation',
+        ),
+      ),
+    );
+    getIt.registerLazySingleton<RecitationAudioEngine>(
+      () => JustAudioRecitationEngine(
+        notificationChannelName: appL10n.recitationChannelName,
+      ),
+    );
   } catch (e) {
     developer.log(
       'Service Locator setup failed',

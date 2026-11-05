@@ -81,6 +81,7 @@
 	<!-- Background fetch for local reminder maintenance -->
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>fetch</string>
 	</array>
 	

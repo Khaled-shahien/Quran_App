@@ -1804,4 +1804,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get asrMadhabHanafi => 'الحنفي';
+
+  @override
+  String get recitationChannelName => 'تلاوة القرآن الكريم';
 }

@@ -19,6 +19,11 @@ import 'package:sakina_app/features/quran/domain/repositories/surah_repository.d
 import 'package:sakina_app/features/quran/presentation/providers/bookmark_provider.dart';
 import 'package:sakina_app/features/quran/data/repositories/tasbih_repository_impl.dart';
 import 'package:sakina_app/features/quran/presentation/providers/tasbih_controller.dart';
+import 'package:sakina_app/core/audio/recitation_audio_engine.dart';
+import 'package:sakina_app/core/utils/surah_names.dart';
+import 'package:sakina_app/features/recitation/domain/repositories/recitation_repository.dart';
+import 'package:sakina_app/features/recitation/presentation/providers/recitation_controller.dart';
+import 'package:sakina_app/l10n/localization.dart';
 import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_repository.dart';
 import 'package:sakina_app/features/hadeath/presentation/providers/hadeath_provider.dart';
 import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
@@ -191,6 +196,16 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
         ),
         ChangeNotifierProvider<TasbihController>.value(
           value: _tasbihController,
+        ),
+        // Created on first use; one player for the whole app.
+        ChangeNotifierProvider<RecitationController>(
+          create: (_) => RecitationController(
+            repository: getIt<RecitationRepository>(),
+            engine: getIt<RecitationAudioEngine>(),
+            preferences: _prefs,
+            surahName: (surah) =>
+                appL10n.surahAudioModelMessage1(surahNameAr(surah) ?? '$surah'),
+          )..initialize(),
         ),
       ],
       child: Consumer<ThemeProvider>(

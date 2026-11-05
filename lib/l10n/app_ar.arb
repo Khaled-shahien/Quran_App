@@ -2424,5 +2424,6 @@
   "tasbihResetDone": "تمت إعادة تعيين العدّاد",
   "asrMadhabTitle": "حساب وقت العصر",
   "asrMadhabStandard": "الجمهور (الشافعي والمالكي والحنبلي)",
-  "asrMadhabHanafi": "الحنفي"
+  "asrMadhabHanafi": "الحنفي",
+  "recitationChannelName": "تلاوة القرآن الكريم"
 }

@@ -3325,6 +3325,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الحنفي'**
   String get asrMadhabHanafi;
+
+  /// No description provided for @recitationChannelName.
+  ///
+  /// In ar, this message translates to:
+  /// **'تلاوة القرآن الكريم'**
+  String get recitationChannelName;
 }
 
 class _AppLocalizationsDelegate

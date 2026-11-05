@@ -1,10 +1,12 @@
 package com.example.sakina_app
 
-import io.flutter.embedding.android.FlutterActivity
+import com.ryanheise.audioservice.AudioServiceActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
 
-class MainActivity : FlutterActivity() {
+// AudioServiceActivity (a FlutterActivity) shares the engine with the
+// background recitation service.
+class MainActivity : AudioServiceActivity() {
     private var qiblaCompass: QiblaCompass? = null
     private var qiblaChannel: EventChannel? = null
 
