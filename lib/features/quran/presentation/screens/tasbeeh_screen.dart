@@ -295,7 +295,21 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
 
   void _incrementCounter() => _controller.increment();
 
-  void _resetCounters() => _controller.reset();
+  void _resetCounters() {
+    final before = _controller.reset();
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.clearSnackBars();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(l10nOf(context).tasbihResetDone),
+        action: SnackBarAction(
+          label: l10nOf(context).currentWirdWidgetMessage13,
+          onPressed: () => _controller.undoReset(before),
+        ),
+        duration: const Duration(seconds: 6),
+      ),
+    );
+  }
 
   void _showAddTasbeehDialog() {
     TextEditingController controller = TextEditingController();

@@ -73,4 +73,31 @@ void main() {
     await tester.pumpWidget(_app(await _controller()));
     expect(find.text('02'), findsOneWidget);
   });
+
+  resetUndoTests();
+}
+
+void resetUndoTests() {
+  testWidgets('reset can be undone from the snackbar', (tester) async {
+    SharedPreferences.setMockInitialValues(<String, Object>{});
+    tester.view.physicalSize = const Size(1080, 1920);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final controller = await _controller();
+    await tester.pumpWidget(_app(controller));
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pump();
+    expect(controller.count, 1);
+
+    await tester.tap(find.byIcon(Icons.refresh));
+    await tester.pumpAndSettle();
+    expect(controller.count, 0);
+    expect(find.text('تمت إعادة تعيين العدّاد'), findsOneWidget);
+
+    await tester.tap(find.text('تراجع'));
+    await tester.pump();
+    expect(controller.count, 1);
+  });
 }
