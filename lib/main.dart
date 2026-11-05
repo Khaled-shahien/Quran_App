@@ -7,7 +7,7 @@ void main() async {
   // Ensure Flutter binding is initialized before any async operations
   WidgetsFlutterBinding.ensureInitialized();
   LicenseRegistry.addLicense(() async* {
-    for (final family in ['Cairo', 'Amiri']) {
+    for (final family in ['Cairo', 'Amiri', 'AmiriQuran']) {
       yield LicenseEntryWithLineBreaks([
         family,
       ], await rootBundle.loadString('fonts/$family-OFL.txt'));

@@ -4,6 +4,10 @@
   SIL Open Font License in `fonts/Cairo-OFL.txt`.
 - Amiri regular and bold: [Google Fonts source](https://github.com/google/fonts/tree/main/ofl/amiri),
   SIL Open Font License in `fonts/Amiri-OFL.txt`.
+- Amiri Quran regular (Quran text in the reader): [Google Fonts source](https://github.com/google/fonts/tree/main/ofl/amiriquran),
+  unmodified, SIL Open Font License in `fonts/AmiriQuran-OFL.txt`.
+  SHA-256 `e2a47644762d16bdfb6d33e0d8db8c6ff30beae84150ef5a705316bbd829455c`.
+  Interim choice until written permission to bundle KFGQPC Uthmanic Hafs is obtained.
 - `assets/prayer_cities.json`: selected city centers retrieved 2026-09-28 from
   the [Open-Meteo Geocoding API](https://open-meteo.com/en/docs/geocoding-api),
   using GeoNames data. Data is redistributed under

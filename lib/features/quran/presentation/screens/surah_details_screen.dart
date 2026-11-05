@@ -7,8 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/surah_entity.dart';
+import '../../domain/services/basmala.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../../settings/presentation/widgets/reading_preferences.dart';
 import '../../../khatma/presentation/providers/khatma_provider.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_shadows.dart';
@@ -105,7 +109,20 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    _restoreReadingPreferences();
     _loadVerses().then((_) => _focusInitialTarget());
+  }
+
+  /// Optional so the reader still works where preferences are not provided.
+  SharedPreferences? get _prefs =>
+      Provider.of<SharedPreferences?>(context, listen: false);
+
+  void _restoreReadingPreferences() {
+    final SharedPreferences? prefs = _prefs;
+    if (prefs == null) return;
+    _fontSize = ReadingPreferences.fontSize(prefs);
+    _lineHeight = ReadingPreferences.lineHeight(prefs);
+    _showVerseMarkers = prefs.getBool(ReadingPreferences.markersKey) ?? true;
   }
 
   @override
@@ -330,11 +347,17 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
 
       for (int i = 0; i < selectedAyahs.length; i++) {
         final Map<String, dynamic> ayah = selectedAyahs[i];
-        final String verseText = (ayah['text'] as String? ?? '').trim();
         final int verseNumber = (ayah['numberInSurah'] as num?)?.toInt() ?? 1;
         final int pageNumber = (ayah['page'] as num?)?.toInt() ?? 1;
         final int surahNumber =
             (ayah['_surahNumber'] as num?)?.toInt() ?? widget.surahNumber;
+        // The basmala is shown as an unnumbered header, not inside ayah 1.
+        final BasmalaSplit basmala = splitLeadingBasmala(
+          surahNumber: surahNumber,
+          ayahNumber: verseNumber,
+          text: (ayah['text'] as String? ?? '').trim(),
+        );
+        final String verseText = basmala.ayahText;
         if (verseText.isEmpty) {
           continue;
         }
@@ -369,10 +392,11 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
             revelationType: ayah['_surahRevelationType']?.toString() ?? '',
             totalAyah: (ayah['_surahTotalAyah'] as num?)?.toInt() ?? 0,
             showSurahHeader: showSurahHeader,
-            showBasmala: false,
+            showBasmala: basmala.hasBasmala,
           ),
         );
         currentLength += verseText.length;
+        if (basmala.hasBasmala) currentLength += uthmaniBasmala.length;
 
         if (currentLength >= maxCharsPerPage) {
           paginatedVerses.add(
@@ -785,31 +809,28 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
-                    child: SizedBox(
-                      width: constraints.maxWidth,
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.topCenter,
-                        child: SizedBox(
-                          width: constraints.maxWidth,
-                          child: Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: SelectableText.rich(
-                              TextSpan(
-                                style: TextStyle(
-                                  fontFamily: 'Amiri',
-                                  fontSize: _fontSize,
-                                  color: textColor,
-                                  height: _lineHeight,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                children: _buildVersesWithNumbers(
-                                  pageData,
-                                  constraints.maxWidth,
-                                ),
+                    // Never scale the text down to fit: large Quran text and
+                    // large system font sizes scroll within the page instead.
+                    child: SingleChildScrollView(
+                      key: PageStorageKey<String>('surah-page-$pageIndex'),
+                      child: SizedBox(
+                        width: constraints.maxWidth,
+                        child: Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: SelectableText.rich(
+                            TextSpan(
+                              style: TextStyle(
+                                fontFamily: quranFontFamily,
+                                fontSize: _fontSize,
+                                color: textColor,
+                                height: _lineHeight,
                               ),
-                              textAlign: TextAlign.justify,
+                              children: _buildVersesWithNumbers(
+                                pageData,
+                                constraints.maxWidth,
+                              ),
                             ),
+                            textAlign: TextAlign.justify,
                           ),
                         ),
                       ),
@@ -842,6 +863,22 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
             alignment: PlaceholderAlignment.baseline,
             baseline: TextBaseline.alphabetic,
             child: _buildSurahHeader(verse, pageWidth),
+          ),
+        );
+        spans.add(const TextSpan(text: '\n'));
+      } else if (verse.showBasmala) {
+        // In range mode the surah header already includes the basmala.
+        if (spans.isNotEmpty) {
+          spans.add(const TextSpan(text: '\n'));
+        }
+        spans.add(
+          WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: SizedBox(
+              width: pageWidth.clamp(180.0, 720.0),
+              child: _buildBasmala(verse),
+            ),
           ),
         );
         spans.add(const TextSpan(text: '\n'));
@@ -970,36 +1007,38 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                 ),
               ),
             ),
-            if (verse.showBasmala)
-              SizedBox(
-                width: double.infinity,
-                child: Container(
-                  key: Key('surah-basmala-${verse.surahNumber}'),
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: theme.scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: primary.withValues(alpha: 0.14)),
-                  ),
-                  child: Text(
-                    appL10n.readerContentMessage3,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Amiri',
-                      fontSize: (_fontSize * 0.78).clamp(19.0, 26.0),
-                      fontWeight: FontWeight.bold,
-                      color: primary,
-                      height: 1.25,
-                    ),
-                  ),
-                ),
-              ),
+            if (verse.showBasmala) _buildBasmala(verse),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// Unnumbered basmala header above ayah 1 (never for Al-Fatiha or
+  /// At-Tawbah; see [splitLeadingBasmala]). It scales with the Quran text
+  /// size so large-text readers get a large basmala too.
+  Widget _buildBasmala(_SurahVerseData verse) {
+    final ThemeData theme = Theme.of(context);
+    final Color primary = theme.colorScheme.primary;
+    return Container(
+      key: Key('surah-basmala-${verse.surahNumber}'),
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: theme.scaffoldBackgroundColor,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: primary.withValues(alpha: 0.14)),
+      ),
+      child: Text(
+        uthmaniBasmala,
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.rtl,
+        style: TextStyle(
+          fontFamily: quranFontFamily,
+          fontSize: _fontSize * 0.9,
+          color: primary,
+          height: 1.6,
         ),
       ),
     );
@@ -1096,6 +1135,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                         setState(() {
                           _fontSize = value;
                         });
+                        _prefs?.setDouble(ReadingPreferences.fontKey, value);
                         setLocalState(() {});
                       },
                     ),
@@ -1116,6 +1156,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                         setState(() {
                           _lineHeight = value;
                         });
+                        _prefs?.setDouble(ReadingPreferences.heightKey, value);
                         setLocalState(() {});
                       },
                     ),
@@ -1125,6 +1166,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                         setState(() {
                           _showVerseMarkers = value;
                         });
+                        _prefs?.setBool(ReadingPreferences.markersKey, value);
                         setLocalState(() {});
                       },
                       title: Text(

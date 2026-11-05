@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/// Font used for Quranic text only (bundled unmodified, OFL). Interim until
+/// permission to bundle KFGQPC Uthmanic Hafs is granted.
+const String quranFontFamily = 'AmiriQuran';
+
 abstract class AppTypography {
   // Display styles
   static TextStyle displayLarge = const TextStyle(
