@@ -319,12 +319,7 @@ class _AsmaAlHusnaScreenState extends State<AsmaAlHusnaScreen> {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-                childAspectRatio: 0.8,
-              ),
+              gridDelegate: _gridFor(MediaQuery.textScalerOf(context).scale(1)),
               itemCount: _names.length,
               itemBuilder: (context, index) {
                 return AsmaItemCard(
@@ -337,6 +332,23 @@ class _AsmaAlHusnaScreenState extends State<AsmaAlHusnaScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  /// Two columns normally; one taller column when large text needs room.
+  static SliverGridDelegate _gridFor(double textScale) {
+    if (textScale <= 1.15) {
+      return const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16.0,
+        mainAxisSpacing: 16.0,
+        childAspectRatio: 0.8,
+      );
+    }
+    return SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 1,
+      mainAxisSpacing: 16.0,
+      mainAxisExtent: 140 + 90 * textScale,
     );
   }
 }

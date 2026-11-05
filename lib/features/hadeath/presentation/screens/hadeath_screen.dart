@@ -42,6 +42,7 @@ class _HadeathScreenState extends State<HadeathScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
+          tooltip: l10nOf(context).appStringsMessage13,
           icon: Icon(
             Icons.arrow_back_ios,
             color: Theme.of(context).colorScheme.primary,

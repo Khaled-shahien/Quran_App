@@ -17,6 +17,27 @@ import 'package:sakina_app/features/recitation/presentation/screens/recitation_s
 import 'package:sakina_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:sakina_app/core/providers/settings_provider.dart';
+import 'package:sakina_app/core/theme/theme_provider.dart';
+import 'package:sakina_app/features/duas/data/repositories/adhan_adhkar_repository.dart';
+import 'package:sakina_app/features/duas/presentation/screens/after_adhan_screen.dart';
+import 'package:sakina_app/features/hadeath/domain/entities/hadeath_entity.dart';
+import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_repository.dart';
+import 'package:sakina_app/features/hadeath/presentation/providers/hadeath_provider.dart';
+import 'package:sakina_app/features/hadeath/presentation/screens/hadeath_screen.dart';
+import 'package:sakina_app/features/prayers/data/repositories/adhan_settings_store.dart';
+import 'package:sakina_app/features/prayers/presentation/providers/adhan_settings_controller.dart';
+import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
+import 'package:sakina_app/features/prayers/presentation/screens/prayer_times_screen.dart';
+import 'package:sakina_app/features/quran/presentation/screens/asma_al_husna_screen.dart';
+import 'package:sakina_app/features/recitation/presentation/screens/recitation_downloads_screen.dart';
+import 'package:sakina_app/features/settings/presentation/providers/reading_mode_controller.dart';
+import 'package:sakina_app/features/settings/presentation/screens/settings_screen.dart';
+
+import '../features/settings/providers/settings_provider_test.dart'
+    as settings_fakes;
+import '../features/prayers/presentation/providers/prayer_times_provider_test.dart'
+    as prayer_fakes;
 import '../features/duas/presentation/adhkar_progress_test.dart' as adhkar;
 import '../features/recitation/fakes.dart';
 
@@ -123,7 +144,140 @@ void main() {
       await expectAccessible(tester);
       semantics.dispose();
     });
+    testWidgets('settings (dark=$dark)', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final prayer = PrayerTimesProvider(
+        repository: prayer_fakes.FakePrayerTimesRepository(),
+        preferences: prefs,
+      );
+      await prayer.selectLocation(30.04, 31.23, 'القاهرة', 5);
+      await pumpAudited(
+        tester,
+        const SettingsScreen(),
+        dark: dark,
+        providers: [
+          Provider<SharedPreferences>.value(value: prefs),
+          ChangeNotifierProvider(
+            create: (_) => SettingsProvider(
+              prefs: prefs,
+              alarmScheduler: settings_fakes.FakeAlarmScheduler(),
+              rescheduleTaskService: settings_fakes.FakeRescheduleTaskService(),
+            ),
+          ),
+          ChangeNotifierProvider(create: (_) => ThemeProvider(prefs: prefs)),
+          ChangeNotifierProvider.value(value: prayer),
+          ChangeNotifierProvider(create: (_) => ReadingModeController(prefs)),
+          ChangeNotifierProvider(
+            create: (_) => AdhanSettingsController(
+              store: AdhanSettingsStore(prefs),
+              platform: AdhanPlatform(
+                reschedule: () async {},
+                canScheduleExact: () async => false,
+                requestExact: () async => true,
+                scheduleTest: (_) async {},
+              ),
+            ),
+          ),
+        ],
+      );
+      await expectAccessible(tester);
+      semantics.dispose();
+    });
+
+    testWidgets('prayer times (dark=$dark)', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final prayer = PrayerTimesProvider(
+        repository: prayer_fakes.FakePrayerTimesRepository(),
+        preferences: prefs,
+      );
+      await prayer.selectLocation(30.04, 31.23, 'القاهرة', 5);
+      await pumpAudited(
+        tester,
+        const PrayerTimesScreen(),
+        dark: dark,
+        providers: [ChangeNotifierProvider.value(value: prayer)],
+      );
+      await expectAccessible(tester);
+      semantics.dispose();
+    });
+
+    testWidgets('adhan adhkar (dark=$dark)', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await pumpAudited(
+        tester,
+        AfterAdhanScreen(
+          repository: AdhanAdhkarRepositoryImpl(),
+          prayerName: 'المغرب',
+        ),
+        dark: dark,
+        providers: [Provider<SharedPreferences>.value(value: prefs)],
+      );
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 300)),
+      );
+      await tester.pump();
+      await expectAccessible(tester);
+      semantics.dispose();
+    });
+
+    testWidgets('downloads (dark=$dark)', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final repository = FakeRepository();
+      final controller = RecitationController(
+        repository: repository,
+        engine: FakeEngine(),
+        preferences: prefs,
+        surahName: (s) => 'سورة ',
+      );
+      await pumpAudited(
+        tester,
+        const RecitationDownloadsScreen(),
+        dark: dark,
+        providers: [
+          ChangeNotifierProvider.value(value: controller),
+          ChangeNotifierProvider(
+            create: (_) =>
+                RecitationDownloadsController(repository: repository),
+          ),
+        ],
+      );
+      await expectAccessible(tester);
+      semantics.dispose();
+    });
+
+    testWidgets('hadith list (dark=$dark)', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final hadith = HadeathProvider(repository: _HadithRepo());
+      await hadith.loadAhadeth();
+      await pumpAudited(
+        tester,
+        const HadeathScreen(),
+        dark: dark,
+        providers: [ChangeNotifierProvider.value(value: hadith)],
+      );
+      await expectAccessible(tester);
+      semantics.dispose();
+    });
+
+    testWidgets('asma al-husna (dark=$dark)', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await pumpAudited(
+        tester,
+        const AsmaAlHusnaScreen(),
+        dark: dark,
+        providers: [Provider<SharedPreferences>.value(value: prefs)],
+      );
+      await expectAccessible(tester);
+      semantics.dispose();
+    });
   }
+}
+
+class _HadithRepo implements HadeathRepository {
+  @override
+  Future<Result<List<HadeathEntity>>> getAllAhadeth() async => const Success([
+    HadeathEntity(title: 'الحديث الأول', content: ['نص الحديث']),
+  ]);
 }
 
 class _AdhkarRepo implements AzkarRepository {

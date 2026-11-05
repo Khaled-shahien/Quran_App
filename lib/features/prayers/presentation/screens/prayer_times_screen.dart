@@ -423,8 +423,12 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
           width: isNext ? 2 : 1,
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // Wraps the time under the name instead of overflowing at large text.
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 8,
+        runSpacing: 8,
         children: [
           Text(
             prayerName,
