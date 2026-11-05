@@ -35,6 +35,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ReadingPreferencesPanel(preferences: settings.prefs),
             _SectionTitle(l10nOf(context).mainNavigationShellMessage1),
             const PrayerPreferences(),
+            _SectionTitle(l10nOf(context).recitationSettings),
+            ListTile(
+              leading: const Icon(Icons.headphones_rounded),
+              title: Text(l10nOf(context).recitationTitle),
+              subtitle: Text(l10nOf(context).recitationReciter),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push('/recitation'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.download_done_rounded),
+              title: Text(l10nOf(context).recitationManageDownloads),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => context.push('/recitation/downloads'),
+            ),
             _SectionTitle(l10nOf(context).settingsScreenMessage9),
             for (final alarm in [
               (
