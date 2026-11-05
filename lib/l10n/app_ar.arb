@@ -2661,5 +2661,8 @@
   "khatmaIncreaseDays": "زيادة عدد الأيام",
   "khatmaDecreaseDays": "تقليل عدد الأيام",
   "khatmaIncreaseDaily": "زيادة الورد اليومي",
-  "khatmaDecreaseDaily": "تقليل الورد اليومي"
+  "khatmaDecreaseDaily": "تقليل الورد اليومي",
+  "onboardingNoPermissionsNow": "لن نطلب منك أي إذن الآن.",
+  "onboardingLocationNote": "الموقع: نطلبه فقط إذا اخترت تحديد موقعك لحساب مواقيت الصلاة أو اتجاه القبلة، ويمكنك بدلًا منه اختيار مدينتك يدويًا.",
+  "onboardingNotificationsNote": "الإشعارات: نطلبها فقط عندما تفعّل تذكيرًا أو الأذان، ويمكنك إيقافها من الإعدادات في أي وقت."
 }

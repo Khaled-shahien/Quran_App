@@ -3871,6 +3871,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تقليل الورد اليومي'**
   String get khatmaDecreaseDaily;
+
+  /// No description provided for @onboardingNoPermissionsNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'لن نطلب منك أي إذن الآن.'**
+  String get onboardingNoPermissionsNow;
+
+  /// No description provided for @onboardingLocationNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموقع: نطلبه فقط إذا اخترت تحديد موقعك لحساب مواقيت الصلاة أو اتجاه القبلة، ويمكنك بدلًا منه اختيار مدينتك يدويًا.'**
+  String get onboardingLocationNote;
+
+  /// No description provided for @onboardingNotificationsNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات: نطلبها فقط عندما تفعّل تذكيرًا أو الأذان، ويمكنك إيقافها من الإعدادات في أي وقت.'**
+  String get onboardingNotificationsNote;
 }
 
 class _AppLocalizationsDelegate

@@ -12,6 +12,7 @@ class OnboardingPageContent {
     required this.features,
     this.imagePath,
     this.showBasmalah = false,
+    this.permissionNotes = const [],
   });
 
   final String title;
@@ -21,6 +22,9 @@ class OnboardingPageContent {
   final List<String> features;
   final String? imagePath;
   final bool showBasmalah;
+
+  /// Plain explanation of what the app may ask for, and when.
+  final List<({IconData icon, String text})> permissionNotes;
 }
 
 final onboardingPages = [
@@ -68,6 +72,17 @@ final onboardingPages = [
       appL10n.notificationServiceMessage5,
       appL10n.onboardingPageMessage22,
       appL10n.onboardingPageMessage23,
+    ],
+    permissionNotes: [
+      (
+        icon: Icons.verified_user_outlined,
+        text: appL10n.onboardingNoPermissionsNow,
+      ),
+      (icon: Icons.location_on_outlined, text: appL10n.onboardingLocationNote),
+      (
+        icon: Icons.notifications_none_rounded,
+        text: appL10n.onboardingNotificationsNote,
+      ),
     ],
   ),
 ];
@@ -181,6 +196,49 @@ class _PageCopy extends StatelessWidget {
               )
               .toList(),
         ),
+        if (content.permissionNotes.isNotEmpty) ...[
+          const SizedBox(height: 20),
+          Container(
+            key: const Key('onboarding-permission-notes'),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: colors.primary.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: colors.primary.withValues(alpha: 0.16)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (final note in content.permissionNotes)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ExcludeSemantics(
+                          child: Icon(
+                            note.icon,
+                            size: 22,
+                            color: colors.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            note.text,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: colors.onSurface,
+                              height: 1.6,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
       ],
     );
   }

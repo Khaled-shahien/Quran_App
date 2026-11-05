@@ -95,6 +95,12 @@ void main() {
     expect(find.text('تخطي').hitTestable(), findsNothing);
     expect(find.bySemanticsLabel('الصفحة 4 من 4'), findsOneWidget);
     expect(find.text(onboardingPages.last.title).hitTestable(), findsOneWidget);
+    // The last page explains, gently, that nothing is asked for up front.
+    expect(
+      find.byKey(const Key('onboarding-permission-notes')),
+      findsOneWidget,
+    );
+    expect(find.text('لن نطلب منك أي إذن الآن.'), findsOneWidget);
     await tester.tap(find.text('ابدأ الآن'));
     await tester.pumpAndSettle();
     expect(find.text('Home destination'), findsOneWidget);

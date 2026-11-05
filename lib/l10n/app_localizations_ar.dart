@@ -2118,4 +2118,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get khatmaDecreaseDaily => 'تقليل الورد اليومي';
+
+  @override
+  String get onboardingNoPermissionsNow => 'لن نطلب منك أي إذن الآن.';
+
+  @override
+  String get onboardingLocationNote =>
+      'الموقع: نطلبه فقط إذا اخترت تحديد موقعك لحساب مواقيت الصلاة أو اتجاه القبلة، ويمكنك بدلًا منه اختيار مدينتك يدويًا.';
+
+  @override
+  String get onboardingNotificationsNote =>
+      'الإشعارات: نطلبها فقط عندما تفعّل تذكيرًا أو الأذان، ويمكنك إيقافها من الإعدادات في أي وقت.';
 }
