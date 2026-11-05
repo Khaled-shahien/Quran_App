@@ -68,6 +68,7 @@ dependencies:
   geolocator: 14.0.2
   firebase_crashlytics: 4.3.10
   firebase_analytics: 11.6.0
+  hijri: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -125,6 +126,7 @@ flutter:
     - assets/prayers_data.json
     - assets/quran_duas.json
     - assets/prayer_cities.json
+    - assets/islamic_guide.json
     - content_manifest.json
     - fonts/Cairo-OFL.txt
     - fonts/Amiri-OFL.txt

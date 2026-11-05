@@ -53,6 +53,24 @@ class CategoryGridWidget extends StatelessWidget {
             'assets/images/الاحاديث.png',
             onTap: () => context.push('/hadeath'),
           ),
+          _iconCard(
+            context,
+            l10nOf(context).guideTileProphets,
+            Icons.auto_stories_rounded,
+            onTap: () => context.push('/guide?section=prophets'),
+          ),
+          _iconCard(
+            context,
+            l10nOf(context).guideTilePrayer,
+            Icons.mosque_rounded,
+            onTap: () => context.push('/guide?section=prayer'),
+          ),
+          _iconCard(
+            context,
+            l10nOf(context).guideTilePillars,
+            Icons.account_balance_rounded,
+            onTap: () => context.push('/guide?section=pillars'),
+          ),
         ]),
       ),
     );
@@ -84,6 +102,41 @@ class CategoryGridWidget extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    ),
+  );
+
+  Widget _iconCard(
+    BuildContext context,
+    String title,
+    IconData icon, {
+    required VoidCallback onTap,
+  }) => Semantics(
+    button: true,
+    label: title,
+    excludeSemantics: true,
+    child: Material(
+      color: Theme.of(context).colorScheme.secondary,
+      borderRadius: BorderRadius.circular(15),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 40, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontFamily: 'Cairo',
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     ),
   );

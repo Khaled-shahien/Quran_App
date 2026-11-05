@@ -41,6 +41,16 @@
       "reviewer": null,
       "approvalDate": null,
       "evidenceUrl": null
+    },
+    {
+      "path": "assets/islamic_guide.json",
+      "sha256": "27bb7a5bdaec74956fe1d3ce9bc148edf79c26a2d56de71e62cffda322e23a01",
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null
     }
   ]
 }

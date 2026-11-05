@@ -219,7 +219,7 @@ void main() {
       // Assert
       expect(result.length, 114);
       expect(result[0].englishName, 'Al-Faatiha');
-      expect(result[0].name, contains('فَاتِح'));
+      expect(result[0].name, 'سورة الفاتحة');
 
       // Verify cache was set
       final cacheKeyExists = prefs.containsKey('cached_surahs');
@@ -251,7 +251,7 @@ void main() {
       // Assert
       expect(result.length, 1);
       expect(result[0].englishName, 'Al-Faatiha');
-      expect(result[0].name, contains('فَاتِح'));
+      expect(result[0].name, 'سورة الفاتحة');
     });
 
     test('should handle data loading errors with cache fallback', () async {
@@ -287,7 +287,7 @@ void main() {
 
       // Assert
       expect(result.length, 1);
-      expect(result[0].name, contains('فَاتِح'));
+      expect(result[0].name, 'سورة الفاتحة');
     });
 
     test('should get specific Surah by index', () async {
@@ -296,7 +296,7 @@ void main() {
 
       // Assert
       expect(result.englishName, 'Al-Faatiha');
-      expect(result.name, contains('فَاتِح'));
+      expect(result.name, 'سورة الفاتحة');
       expect(result.totalAyah, 7);
     });
 

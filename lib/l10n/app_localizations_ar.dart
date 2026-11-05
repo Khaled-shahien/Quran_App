@@ -1723,4 +1723,47 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get applicationTitle => 'Sakina';
+
+  @override
+  String get guideTitle => 'دليل المسلم';
+
+  @override
+  String get guideTileProphets => 'الأنبياء';
+
+  @override
+  String get guideTilePrayer => 'صفة الصلاة';
+
+  @override
+  String get guideTilePillars => 'أركان الدين';
+
+  @override
+  String get guideLoadError => 'تعذر تحميل المحتوى.';
+
+  @override
+  String get guideQuranLoadError => 'تعذر عرض الآيات.';
+
+  @override
+  String get guideReviewNotice =>
+      'هذا المحتوى تعليمي مبسط، ويُعرض بانتظار مراجعة المختصين. راجع أهل العلم في المسائل التفصيلية.';
+
+  @override
+  String guideSource(String source) {
+    return 'المصدر: $source';
+  }
+
+  @override
+  String guideItemCount(String count) {
+    return '$count موضوعات';
+  }
+
+  @override
+  String get dateCardHijriLabel => 'التاريخ الهجري';
+
+  @override
+  String get dateCardGregorianLabel => 'التاريخ الميلادي';
+
+  @override
+  String dateCardSemantics(String weekday, String hijri, String gregorian) {
+    return 'اليوم $weekday، $hijri، الموافق $gregorian';
+  }
 }

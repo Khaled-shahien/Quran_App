@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/utils/arabic_text.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
@@ -229,7 +230,9 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
         ayah as Map,
       );
       mapped['_surahNumber'] = surahNumber;
-      mapped['_surahName'] = surahData['name']?.toString() ?? '';
+      mapped['_surahName'] = displaySurahName(
+        surahData['name']?.toString() ?? '',
+      );
       mapped['_surahRevelationType'] =
           surahData['revelationType']?.toString() ?? '';
       mapped['_surahTotalAyah'] =
@@ -262,7 +265,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
         }
 
         ayah['_surahNumber'] = surahNumber;
-        ayah['_surahName'] = surah['name']?.toString() ?? '';
+        ayah['_surahName'] = displaySurahName(surah['name']?.toString() ?? '');
         ayah['_surahRevelationType'] =
             surah['revelationType']?.toString() ?? '';
         ayah['_surahTotalAyah'] =

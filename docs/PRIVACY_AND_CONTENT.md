@@ -19,6 +19,8 @@ No claim is made that uninstall deletes third-party records or OS backups. A uni
 
 `content_manifest.json` records SHA-256 baselines of existing assets. These hashes detect changes; they do not certify correctness, licensing, authenticity, edition or provenance. Source metadata is explicitly `pending_owner_review` until supplied and approved. Sacred text was not modified during these fixes.
 
+`assets/islamic_guide.json` (prophets, prayer description, special prayers, pillars of Islam and Iman) was authored for this app and is listed as `pending_owner_review`. It never contains Quranic text: verses are stored as `{surah, from, to}` references and rendered from `quran_master.json`, and `test/features/islamic_guide/islamic_guide_asset_test.dart` fails if Uthmani-only marks appear in it. Its hadith texts and numbered citations (Bukhari, Muslim, Abu Dawud, Tirmidhi, Ibn Majah) still need a qualified reviewer before approval.
+
 For each collection, the content owner must record source, edition/version, license, reviewer, approval date and evidence. Hadith additionally needs attribution/grading where applicable; duas need count/source checks. Do not invent missing metadata. Changes to asset bytes require review before updating the manifest. Run `python scripts/verify_content.py` in CI.
 
 The release workflow additionally runs `python scripts/verify_content.py --require-approved`; it intentionally fails while approval is pending. The in-app sources page exposes the pending provenance status. See `PRIVACY_POLICY_DRAFT_AR.md` for the public-policy draft and `THIRD_PARTY_ASSETS.md` for font and city-catalog attribution.

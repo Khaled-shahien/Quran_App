@@ -8,6 +8,7 @@ from pathlib import Path
 REQUIRED_COLLECTIONS = {
     'assets/quran_master.json', 'assets/quran_duas.json',
     'assets/prayers_data.json', 'assets/hadeath/ahadeth.txt',
+    'assets/islamic_guide.json',
 }
 
 root = Path(__file__).resolve().parents[1]
@@ -26,7 +27,7 @@ try:
     if (not all(isinstance(path, str) for path in paths)
             or len(paths) != len(REQUIRED_COLLECTIONS)
             or set(paths) != REQUIRED_COLLECTIONS):
-        raise ValueError('Exactly the four required content collections must be listed')
+        raise ValueError('Exactly the required content collections must be listed')
 except (OSError, ValueError, TypeError) as error:
     raise SystemExit(f'Content manifest invalid: {error}') from None
 failed = []

@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/utils/arabic_text.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/errors/api_exception.dart';
@@ -33,7 +34,7 @@ class SurahRepositoryImpl implements SurahRepository {
   SurahEntity _modelToEntity(SurahModel model) {
     return SurahEntity(
       number: model.number,
-      name: model.name,
+      name: displaySurahName(model.name),
       englishName: model.englishName,
       englishNameTranslation: model.englishNameTranslation,
       revelationType: model.revelationType,

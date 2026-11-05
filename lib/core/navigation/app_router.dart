@@ -20,6 +20,9 @@ import '../../features/hadeath/domain/repositories/hadeath_repository.dart';
 import '../../features/hadeath/presentation/screens/'
     'hadeath_details_screen.dart';
 import '../../features/hadeath/presentation/screens/hadeath_screen.dart';
+import '../../features/islamic_guide/domain/repositories/islamic_guide_repository.dart';
+import '../../features/islamic_guide/presentation/providers/islamic_guide_provider.dart';
+import '../../features/islamic_guide/presentation/screens/islamic_guide_screen.dart';
 import '../../features/khatma/presentation/screens/khatma_duration_screen.dart';
 import '../../features/khatma/presentation/screens/khatma_location_screen.dart';
 import '../../features/media/presentation/providers/articles_provider.dart';
@@ -244,6 +247,20 @@ final GoRouter appRouter = GoRouter(
 
         return _fadePage(state, HadeathDetailsScreen(hadeath: hadeath));
       },
+    ),
+    GoRoute(
+      path: '/guide',
+      pageBuilder: (context, state) => _fadePage(
+        state,
+        ChangeNotifierProvider<IslamicGuideProvider>(
+          create: (_) =>
+              IslamicGuideProvider(repository: getIt<IslamicGuideRepository>())
+                ..load(),
+          child: IslamicGuideScreen(
+            initialSectionId: state.uri.queryParameters['section'],
+          ),
+        ),
+      ),
     ),
     GoRoute(
       path: '/tasbeeh',

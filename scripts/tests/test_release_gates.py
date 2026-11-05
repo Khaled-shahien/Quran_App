@@ -12,7 +12,8 @@ import unittest
 
 SCRIPTS = Path(__file__).resolve().parents[1]
 COLLECTIONS = ('assets/quran_master.json', 'assets/quran_duas.json',
-               'assets/prayers_data.json', 'assets/hadeath/ahadeth.txt')
+               'assets/prayers_data.json', 'assets/hadeath/ahadeth.txt',
+               'assets/islamic_guide.json')
 
 
 class ReleaseGatesTest(unittest.TestCase):

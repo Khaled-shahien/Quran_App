@@ -1,3 +1,5 @@
+import '../../features/islamic_guide/data/islamic_guide_repository_impl.dart';
+import '../../features/islamic_guide/domain/repositories/islamic_guide_repository.dart';
 import 'package:sakina_app/features/quran/data/data_sources/local_quran_data_source.dart';
 import 'package:sakina_app/features/quran/data/repositories/ayah_repository.dart';
 import 'package:sakina_app/features/quran/domain/repositories/ayah_repository.dart';
@@ -130,6 +132,13 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<HadeathRepository>(
       () => HadeathRepositoryImpl(
         localDataSource: getIt<LocalHadeathDataSource>(),
+      ),
+    );
+
+    getIt.registerLazySingleton<IslamicGuideRepository>(
+      () => IslamicGuideRepositoryImpl(
+        ayahRepository: getIt<AyahRepository>(),
+        surahRepository: getIt<SurahRepository>(),
       ),
     );
 

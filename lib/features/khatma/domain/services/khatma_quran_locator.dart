@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/utils/arabic_text.dart';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
@@ -93,7 +94,7 @@ class KhatmaQuranLocator {
       surahNumber: surahNumber,
       ayahNumber: ayahNumber,
       pageNumber: pageNumber,
-      surahName: selectedSurah!['name']?.toString() ?? '',
+      surahName: displaySurahName(selectedSurah!['name']?.toString() ?? ''),
       ayahText: selectedAyah!['text']?.toString() ?? '',
     );
   }
@@ -156,7 +157,7 @@ class KhatmaQuranLocator {
           surahNumber: storedSurah,
           ayahNumber: storedAyah,
           pageNumber: storedPage,
-          surahName: surah['name']?.toString() ?? '',
+          surahName: displaySurahName(surah['name']?.toString() ?? ''),
           ayahText: ayah['text']?.toString() ?? '',
         );
       }
@@ -181,7 +182,7 @@ class KhatmaQuranLocator {
       surahNumber: (lastSurah['number'] as num?)?.toInt() ?? 114,
       ayahNumber: (lastAyah['numberInSurah'] as num?)?.toInt() ?? 6,
       pageNumber: (lastAyah['page'] as num?)?.toInt() ?? 604,
-      surahName: lastSurah['name']?.toString() ?? '',
+      surahName: displaySurahName(lastSurah['name']?.toString() ?? ''),
       ayahText: lastAyah['text']?.toString() ?? '',
     );
   }
@@ -238,7 +239,7 @@ class KhatmaQuranLocator {
       surahNumber: (surah['number'] as num?)?.toInt() ?? 1,
       ayahNumber: (ayah['numberInSurah'] as num?)?.toInt() ?? 1,
       pageNumber: (ayah['page'] as num?)?.toInt() ?? 1,
-      surahName: surah['name']?.toString() ?? '',
+      surahName: displaySurahName(surah['name']?.toString() ?? ''),
       ayahText: ayah['text']?.toString() ?? '',
     );
   }

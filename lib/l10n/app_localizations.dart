@@ -3181,6 +3181,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'Sakina'**
   String get applicationTitle;
+
+  /// Title of the Islamic guide screen.
+  ///
+  /// In ar, this message translates to:
+  /// **'دليل المسلم'**
+  String get guideTitle;
+
+  /// Home grid tile opening the prophets tab.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأنبياء'**
+  String get guideTileProphets;
+
+  /// Home grid tile opening the prayer description tab.
+  ///
+  /// In ar, this message translates to:
+  /// **'صفة الصلاة'**
+  String get guideTilePrayer;
+
+  /// Home grid tile opening the pillars of Islam and Iman tab.
+  ///
+  /// In ar, this message translates to:
+  /// **'أركان الدين'**
+  String get guideTilePillars;
+
+  /// Shown when the guide asset fails to load.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر تحميل المحتوى.'**
+  String get guideLoadError;
+
+  /// Shown when Quran verses of a guide block fail to load.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر عرض الآيات.'**
+  String get guideQuranLoadError;
+
+  /// Disclaimer shown at the top of each guide tab.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا المحتوى تعليمي مبسط، ويُعرض بانتظار مراجعة المختصين. راجع أهل العلم في المسائل التفصيلية.'**
+  String get guideReviewNotice;
+
+  /// Citation line under a guide block.
+  ///
+  /// In ar, this message translates to:
+  /// **'المصدر: {source}'**
+  String guideSource(String source);
+
+  /// Number of entries in a guide section.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} موضوعات'**
+  String guideItemCount(String count);
+
+  /// Label of the Hijri date on the home date card.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ الهجري'**
+  String get dateCardHijriLabel;
+
+  /// Label of the Gregorian date on the home date card.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ الميلادي'**
+  String get dateCardGregorianLabel;
+
+  /// Screen reader summary of the home date card.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم {weekday}، {hijri}، الموافق {gregorian}'**
+  String dateCardSemantics(String weekday, String hijri, String gregorian);
 }
 
 class _AppLocalizationsDelegate

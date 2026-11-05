@@ -19,6 +19,7 @@ import '../../../quran/domain/repositories/surah_repository.dart';
 import '../../../quran/presentation/providers/bookmark_provider.dart';
 import '../providers/favorites_provider.dart';
 import '../widgets/current_wird_widget.dart';
+import '../widgets/date_card_widget.dart';
 import '../widgets/daily_verse_section_widget.dart';
 import '../widgets/tab_switcher_widget.dart';
 import '../widgets/category_grid_widget.dart';
@@ -74,6 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
           physics: const BouncingScrollPhysics(),
           slivers: [
             _buildSliverAppBar(),
+            const SliverToBoxAdapter(
+              child: AnimatedEntrance(
+                delay: Duration(milliseconds: 60),
+                child: DateCardWidget(),
+              ),
+            ),
             const SliverToBoxAdapter(
               child: AnimatedEntrance(
                 delay: Duration(milliseconds: 100),

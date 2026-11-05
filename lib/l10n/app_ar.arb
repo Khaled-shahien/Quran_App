@@ -2343,5 +2343,74 @@
   "applicationTitle": "Sakina",
   "@applicationTitle": {
     "description": "Application title."
+  },
+  "guideTitle": "دليل المسلم",
+  "@guideTitle": {
+    "description": "Title of the Islamic guide screen."
+  },
+  "guideTileProphets": "الأنبياء",
+  "@guideTileProphets": {
+    "description": "Home grid tile opening the prophets tab."
+  },
+  "guideTilePrayer": "صفة الصلاة",
+  "@guideTilePrayer": {
+    "description": "Home grid tile opening the prayer description tab."
+  },
+  "guideTilePillars": "أركان الدين",
+  "@guideTilePillars": {
+    "description": "Home grid tile opening the pillars of Islam and Iman tab."
+  },
+  "guideLoadError": "تعذر تحميل المحتوى.",
+  "@guideLoadError": {
+    "description": "Shown when the guide asset fails to load."
+  },
+  "guideQuranLoadError": "تعذر عرض الآيات.",
+  "@guideQuranLoadError": {
+    "description": "Shown when Quran verses of a guide block fail to load."
+  },
+  "guideReviewNotice": "هذا المحتوى تعليمي مبسط، ويُعرض بانتظار مراجعة المختصين. راجع أهل العلم في المسائل التفصيلية.",
+  "@guideReviewNotice": {
+    "description": "Disclaimer shown at the top of each guide tab."
+  },
+  "guideSource": "المصدر: {source}",
+  "@guideSource": {
+    "description": "Citation line under a guide block.",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "guideItemCount": "{count} موضوعات",
+  "@guideItemCount": {
+    "description": "Number of entries in a guide section.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "dateCardHijriLabel": "التاريخ الهجري",
+  "@dateCardHijriLabel": {
+    "description": "Label of the Hijri date on the home date card."
+  },
+  "dateCardGregorianLabel": "التاريخ الميلادي",
+  "@dateCardGregorianLabel": {
+    "description": "Label of the Gregorian date on the home date card."
+  },
+  "dateCardSemantics": "اليوم {weekday}، {hijri}، الموافق {gregorian}",
+  "@dateCardSemantics": {
+    "description": "Screen reader summary of the home date card.",
+    "placeholders": {
+      "weekday": {
+        "type": "String"
+      },
+      "hijri": {
+        "type": "String"
+      },
+      "gregorian": {
+        "type": "String"
+      }
+    }
   }
 }
