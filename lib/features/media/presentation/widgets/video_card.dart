@@ -49,7 +49,6 @@ class VideoCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontFamily: 'Cairo',
                       fontWeight: FontWeight.w800,
                       color: theme.colorScheme.primary,
                     ),
@@ -62,7 +61,6 @@ class VideoCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 12,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -104,7 +102,6 @@ class VideoChannelCard extends StatelessWidget {
           channel.name,
           textDirection: TextDirection.rtl,
           style: TextStyle(
-            fontFamily: 'Cairo',
             fontWeight: FontWeight.w800,
             color: theme.colorScheme.primary,
           ),
@@ -112,7 +109,7 @@ class VideoChannelCard extends StatelessWidget {
         subtitle: Text(
           channel.description,
           textDirection: TextDirection.rtl,
-          style: const TextStyle(fontFamily: 'Cairo'),
+          style: const TextStyle(),
         ),
         trailing: const Icon(Icons.open_in_new_rounded),
       ),
@@ -144,7 +141,7 @@ Future<void> _openUrl(BuildContext context, String url) async {
         content: Text(
           l10nOf(context).articleCardMessage1,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontFamily: 'Cairo'),
+          style: const TextStyle(),
         ),
       ),
     );

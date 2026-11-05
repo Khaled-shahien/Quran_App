@@ -48,7 +48,6 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                   title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
@@ -65,7 +64,6 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                         ).homeScreenMessage12((remaining).toString()),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     color: Theme.of(
                       context,
                     ).colorScheme.primary.withValues(alpha: 0.7),
@@ -81,7 +79,6 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                           : l10nOf(context).homeScreenMessage14,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 14,
                         color: Theme.of(
                           context,
@@ -112,7 +109,6 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                                 (activeKhatma.amountType).toString(),
                               ),
                               style: TextStyle(
-                                fontFamily: 'Cairo',
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -123,7 +119,6 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                                 context,
                               ).homeScreenMessage16((dateLabel).toString()),
                               style: TextStyle(
-                                fontFamily: 'Cairo',
                                 color: Theme.of(
                                   context,
                                 ).colorScheme.primary.withValues(alpha: 0.65),
@@ -152,7 +147,6 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                               context,
                             ).homeScreenMessage17((wirdDay).toString()),
                             style: TextStyle(
-                              fontFamily: 'Cairo',
                               fontWeight: FontWeight.w600,
                               color: Theme.of(context).colorScheme.primary,
                             ),
@@ -161,7 +155,6 @@ mixin _HomeKhatmaActions on State<HomeDrawer> {
                           subtitle: Text(
                             l10nOf(context).homeScreenMessage18,
                             style: TextStyle(
-                              fontFamily: 'Cairo',
                               color: Theme.of(
                                 context,
                               ).colorScheme.primary.withValues(alpha: 0.65),

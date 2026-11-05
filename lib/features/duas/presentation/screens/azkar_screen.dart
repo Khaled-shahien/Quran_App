@@ -13,7 +13,6 @@ class AzkarScreen extends StatelessWidget {
         title: Text(
           l10nOf(context).mainNavigationShellMessage2,
           style: TextStyle(
-            fontFamily: 'Cairo',
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -187,7 +186,6 @@ Widget _buildHeaderCard(
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.right,
                 style: const TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -247,7 +245,6 @@ Widget _buildGridCard(
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.right,
                 style: const TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,

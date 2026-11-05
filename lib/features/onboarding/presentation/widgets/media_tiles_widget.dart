@@ -60,7 +60,6 @@ class MediaTilesWidget extends StatelessWidget {
                   child: Text(
                     title,
                     style: const TextStyle(
-                      fontFamily: 'Cairo',
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,

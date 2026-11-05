@@ -13,7 +13,6 @@ class MediaScreen extends StatelessWidget {
         title: Text(
           l10nOf(context).homeScreenMessage28,
           style: TextStyle(
-            fontFamily: 'Cairo',
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
           ),

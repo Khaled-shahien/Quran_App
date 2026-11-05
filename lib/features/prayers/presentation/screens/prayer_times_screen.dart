@@ -79,7 +79,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
         title: Text(
           l10n.prayerTitle,
           style: TextStyle(
-            fontFamily: 'Cairo',
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
@@ -130,30 +129,18 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                     const SizedBox(height: 16),
                     Text(
                       l10n.prayerLoadError,
-                      style: const TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 16,
-                        color: Colors.red,
-                      ),
+                      style: const TextStyle(fontSize: 16, color: Colors.red),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       l10nOf(context).prayerTimesWidgetMessage1,
-                      style: const TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 16,
-                        color: Colors.red,
-                      ),
+                      style: const TextStyle(fontSize: 16, color: Colors.red),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       provider.errorMessage ??
                           l10nOf(context).prayerTimesWidgetMessage3,
-                      style: const TextStyle(
-                        fontFamily: 'Cairo',
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -164,10 +151,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                         onPressed: () {
                           provider.fetchTodayForCurrentLocation();
                         },
-                        child: Text(
-                          l10n.retry,
-                          style: const TextStyle(fontFamily: 'Cairo'),
-                        ),
+                        child: Text(l10n.retry, style: const TextStyle()),
                       ),
                     ),
                   ],
@@ -241,7 +225,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                 Text(
                   l10n.todayPrayerTimes,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: Theme.of(context).colorScheme.primary,
@@ -251,7 +234,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                 Text(
                   formattedDate,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
@@ -260,7 +242,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                 Text(
                   appL10n.notificationServiceMessage5,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
@@ -313,7 +294,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                 child: Text(
                   appL10n.prayerTimesWidgetMessage6,
                   style: const TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: Colors.white70,
@@ -329,7 +309,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                       (nextPrayerName).toString(),
                     ),
                     style: const TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 56,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -344,7 +323,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                       Text(
                         nextPrayerTime,
                         style: const TextStyle(
-                          fontFamily: 'Cairo',
                           fontSize: 48,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -358,7 +336,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                           Text(
                             appL10n.prayerTimesWidgetMessage7,
                             style: const TextStyle(
-                              fontFamily: 'Cairo',
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Colors.white70,
@@ -367,7 +344,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                           Text(
                             timeRemaining,
                             style: const TextStyle(
-                              fontFamily: 'Cairo',
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: Colors.white,
@@ -444,7 +420,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
           Text(
             prayerName,
             style: TextStyle(
-              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: isNext ? FontWeight.bold : FontWeight.w500,
               color: Theme.of(context).colorScheme.primary,
@@ -463,7 +438,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
             child: Text(
               prayerTime,
               style: TextStyle(
-                fontFamily: 'Cairo',
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: isNext

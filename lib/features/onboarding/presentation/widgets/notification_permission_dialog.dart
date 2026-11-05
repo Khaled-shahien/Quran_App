@@ -59,7 +59,6 @@ class NotificationPermissionDialog extends StatelessWidget {
               Text(
                 l10nOf(context).notificationPermissionDialogMessage1,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.primary,
@@ -70,7 +69,6 @@ class NotificationPermissionDialog extends StatelessWidget {
               Text(
                 l10nOf(context).notificationPermissionDialogMessage2,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 15,
                   height: 1.5,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -97,7 +95,6 @@ class NotificationPermissionDialog extends StatelessWidget {
                   child: Text(
                     l10nOf(context).notificationPermissionDialogMessage3,
                     style: const TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 16,
                       height: 1.4,
                       fontWeight: FontWeight.bold,
@@ -124,7 +121,6 @@ class NotificationPermissionDialog extends StatelessWidget {
                   child: Text(
                     l10nOf(context).notificationPermissionDialogMessage4,
                     style: const TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),

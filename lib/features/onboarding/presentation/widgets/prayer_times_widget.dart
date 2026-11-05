@@ -70,7 +70,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                   l10nOf(context).choosePrayerLocation,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 16,
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -95,7 +94,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 Text(
                   l10nOf(context).prayerTimesWidgetMessage1,
                   style: const TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: Colors.red,
@@ -109,11 +107,7 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 Text(
                   provider.errorMessage ??
                       l10nOf(context).prayerTimesWidgetMessage3,
-                  style: TextStyle(
-                    fontFamily: 'Cairo',
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -130,7 +124,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           child: Text(
             l10nOf(context).prayerTimesWidgetMessage4,
             style: TextStyle(
-              fontFamily: 'Cairo',
               fontSize: 16,
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -159,7 +152,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           Text(
             appL10n.prayerTimesWidgetMessage5,
             style: TextStyle(
-              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.primary,
@@ -206,7 +198,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
               child: Text(
                 appL10n.prayerTimesWidgetMessage6,
                 style: const TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: Colors.white70,
@@ -221,7 +212,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
               child: Text(
                 nextPrayerName,
                 style: const TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 44,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -241,7 +231,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                     Text(
                       appL10n.prayerTimesWidgetMessage7,
                       style: const TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         color: Colors.white70,
@@ -251,7 +240,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                     Text(
                       timeRemaining,
                       style: const TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
@@ -262,7 +250,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
                 Text(
                   nextPrayerTime,
                   style: const TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -328,7 +315,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
           Text(
             prayerName,
             style: TextStyle(
-              fontFamily: 'Cairo',
               fontSize: 15,
               fontWeight: isNext ? FontWeight.bold : FontWeight.w500,
               color: Theme.of(context).colorScheme.primary,
@@ -347,7 +333,6 @@ class _PrayerTimesWidgetState extends State<PrayerTimesWidget> {
             child: Text(
               prayerTime,
               style: TextStyle(
-                fontFamily: 'Cairo',
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
                 color: isNext

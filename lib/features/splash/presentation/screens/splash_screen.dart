@@ -95,7 +95,6 @@ class _SplashScreenState extends State<SplashScreen>
                           l10nOf(context).splashScreenMessage1,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            fontFamily: 'Cairo',
                             color: logoGold,
                             fontSize: 20,
                             fontWeight: FontWeight.w500,

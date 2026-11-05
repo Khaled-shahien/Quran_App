@@ -46,7 +46,6 @@ class ArticleCard extends StatelessWidget {
                     child: Text(
                       article.sourceName,
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 11,
                         color: theme.colorScheme.onPrimaryContainer,
                         fontWeight: FontWeight.w700,
@@ -63,7 +62,6 @@ class ArticleCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: theme.colorScheme.primary,
@@ -78,7 +76,6 @@ class ArticleCard extends StatelessWidget {
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 13,
                     color: theme.colorScheme.onSurfaceVariant,
                     height: 1.5,
@@ -97,7 +94,6 @@ class ArticleCard extends StatelessWidget {
                   Text(
                     _formatDate(article.pubDate),
                     style: TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 11,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -124,7 +120,7 @@ class ArticleCard extends StatelessWidget {
         content: Text(
           l10nOf(context).articleCardMessage1,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontFamily: 'Cairo'),
+          style: const TextStyle(),
         ),
       ),
     );

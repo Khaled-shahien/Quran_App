@@ -297,7 +297,6 @@ class _AsmaAlHusnaScreenState extends State<AsmaAlHusnaScreen> {
         title: Text(
           l10nOf(context).asmaAlHusnaScreenMessage1,
           style: TextStyle(
-            fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
           ),

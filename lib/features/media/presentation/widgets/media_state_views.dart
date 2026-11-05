@@ -44,7 +44,6 @@ class MediaErrorView extends StatelessWidget {
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
               style: TextStyle(
-                fontFamily: 'Cairo',
                 fontSize: 15,
                 color: theme.colorScheme.onSurface,
               ),
@@ -53,10 +52,7 @@ class MediaErrorView extends StatelessWidget {
             FilledButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded),
-              label: Text(
-                l10nOf(context).retry,
-                style: const TextStyle(fontFamily: 'Cairo'),
-              ),
+              label: Text(l10nOf(context).retry, style: const TextStyle()),
             ),
           ],
         ),
@@ -92,7 +88,6 @@ class MediaEmptyView extends StatelessWidget {
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
               style: TextStyle(
-                fontFamily: 'Cairo',
                 fontSize: 15,
                 color: theme.colorScheme.onSurfaceVariant,
               ),

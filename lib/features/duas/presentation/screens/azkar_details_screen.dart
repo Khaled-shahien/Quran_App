@@ -22,7 +22,6 @@ class AzkarDetailsScreen extends StatelessWidget {
         title: Text(
           categoryName,
           style: TextStyle(
-            fontFamily: 'Cairo',
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -57,7 +56,6 @@ class AzkarDetailsScreen extends StatelessWidget {
                   child: Text(
                     l10nOf(context).azkarDetailsScreenMessage3,
                     style: TextStyle(
-                      fontFamily: 'Cairo',
                       color: Theme.of(context).colorScheme.error,
                       fontSize: 18,
                     ),
@@ -72,7 +70,6 @@ class AzkarDetailsScreen extends StatelessWidget {
                   child: Text(
                     l10nOf(context).azkarDetailsScreenMessage4,
                     style: TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 18,
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -222,7 +219,6 @@ class _AzkarItemCard extends StatelessWidget {
               Text(
                 item.title,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.primary,
@@ -235,7 +231,6 @@ class _AzkarItemCard extends StatelessWidget {
                 child: Text(
                   l10n.azkarDetailsScreenMessage6((item.repeat).toString()),
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.primary,
@@ -286,7 +281,6 @@ class _AzkarItemCard extends StatelessWidget {
               Text(
                 item.reference,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 13,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

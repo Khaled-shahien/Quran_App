@@ -182,7 +182,6 @@ class _QuranScreenState extends State<_QuranScreenContent> {
                 Text(
                   _error!,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 16,
                     color: theme.colorScheme.error,
                   ),
@@ -348,7 +347,6 @@ class SurahCard extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontFamily: 'Cairo',
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: textColor,

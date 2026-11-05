@@ -35,7 +35,6 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
         title: Text(
           l10nOf(context).khatmaDurationScreenMessage1,
           style: TextStyle(
-            fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -60,7 +59,6 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                 l10nOf(context).khatmaLocationScreenMessage2,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: textColor, // Dark brownish-grey or light
@@ -79,7 +77,6 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                     Text(
                       l10nOf(context).khatmaLocationScreenMessage3,
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: textColor,
@@ -101,7 +98,6 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                               color: isDarkMode ? Colors.white54 : Colors.grey,
                             ),
                             style: TextStyle(
-                              fontFamily: 'Cairo',
                               fontSize: 16,
                               color: dropdownTextColor,
                               fontWeight: FontWeight.w600,
@@ -139,7 +135,6 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                       Text(
                         l10nOf(context).khatmaLocationScreenMessage4,
                         style: TextStyle(
-                          fontFamily: 'Cairo',
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: textColor,
@@ -163,7 +158,6 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                                     : Colors.grey,
                               ),
                               style: TextStyle(
-                                fontFamily: 'Cairo',
                                 fontSize: 16,
                                 color: dropdownTextColor,
                                 fontWeight: FontWeight.w600,
@@ -221,7 +215,6 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                 child: Text(
                   l10nOf(context).khatmaDurationScreenMessage14,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.onPrimary,

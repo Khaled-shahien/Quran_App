@@ -81,7 +81,6 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
               Text(
                 l10nOf(context).dailyVerseSectionWidgetMessage1,
                 style: const TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -89,7 +88,6 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
               Text(
                 _selectedVerse['surah']!,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   color: Theme.of(context).colorScheme.primary,
                   fontSize: 14,
                 ),

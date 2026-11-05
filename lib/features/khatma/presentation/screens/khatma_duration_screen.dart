@@ -89,7 +89,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
         title: Text(
           l10nOf(context).khatmaDurationScreenMessage1,
           style: TextStyle(
-            fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.onPrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -113,7 +112,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 l10nOf(context).khatmaDurationScreenMessage2,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: textColor,
@@ -164,7 +162,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                     Text(
                       l10nOf(context).khatmaDurationScreenMessage7,
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: textColor,
@@ -186,7 +183,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                               color: isDarkMode ? Colors.white54 : Colors.grey,
                             ),
                             style: TextStyle(
-                              fontFamily: 'Cairo',
                               fontSize: 14,
                               color: dropdownTextColor,
                               fontWeight: FontWeight.bold,
@@ -265,7 +261,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                           ((_remainingUnits / _dailyTarget).ceil()).toString(),
                         ),
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -314,7 +309,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                     SnackBar(
                       content: Text(
                         l10nOf(context).khatmaDurationScreenMessage13,
-                        style: const TextStyle(fontFamily: 'Cairo'),
+                        style: const TextStyle(),
                       ),
                       backgroundColor: Colors.green,
                     ),
@@ -331,7 +326,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 child: Text(
                   l10nOf(context).khatmaDurationScreenMessage14,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.onPrimary,
@@ -373,7 +367,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
             Text(
               title,
               style: TextStyle(
-                fontFamily: 'Cairo',
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.primary,
               ),
@@ -383,7 +376,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
             Text(
               subtitle,
               style: TextStyle(
-                fontFamily: 'Cairo',
                 fontSize: 12,
                 color: Theme.of(context).colorScheme.primary,
               ),
@@ -403,7 +395,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
           Text(
             appL10n.khatmaDurationScreenMessage15,
             style: TextStyle(
-              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: textColor,
@@ -424,7 +415,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                   (_durationDays).toString(),
                 ),
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.primary,
@@ -494,7 +484,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
           Text(
             appL10n.khatmaDurationScreenMessage17,
             style: TextStyle(
-              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: textColor,
@@ -513,7 +502,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
               child: Text(
                 '${_formatDouble(_dailyTarget)} $_unitLabel',
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.primary,
@@ -593,7 +581,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
           Text(
             appL10n.khatmaDurationScreenMessage18,
             style: TextStyle(
-              fontFamily: 'Cairo',
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: textColor,
@@ -630,7 +617,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                   '${_reminderHour.toString().padLeft(2, '0')}:'
                   '${_reminderMinute.toString().padLeft(2, '0')}',
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,

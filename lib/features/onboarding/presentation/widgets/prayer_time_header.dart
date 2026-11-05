@@ -65,7 +65,6 @@ class PrayerTimeHeader extends StatelessWidget {
                         currentTime,
                         textAlign: TextAlign.right,
                         style: TextStyle(
-                          fontFamily: 'Cairo',
                           fontSize: 38,
                           fontWeight: FontWeight.w900,
                           color: theme.colorScheme.onPrimary,

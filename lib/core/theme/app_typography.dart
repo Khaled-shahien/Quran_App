@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 const String quranFontFamily = 'AmiriQuran';
 
 abstract class AppTypography {
+  /// The app's UI font; set once on the theme.
+  static const String uiFontFamily = 'Cairo';
+
   // Display styles
   static TextStyle displayLarge = const TextStyle(
     fontFamily: 'Cairo',

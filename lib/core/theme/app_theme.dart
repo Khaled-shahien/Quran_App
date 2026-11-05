@@ -21,6 +21,8 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
+      // One UI font for the whole app; Quran text sets its own font.
+      fontFamily: AppTypography.uiFontFamily,
       colorScheme: colorScheme,
       textTheme: _buildLightTextTheme(),
       appBarTheme: _buildAppBarTheme(
@@ -73,6 +75,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      fontFamily: AppTypography.uiFontFamily,
       colorScheme: colorScheme,
       textTheme: _buildDarkTextTheme(),
       appBarTheme: _buildAppBarTheme(

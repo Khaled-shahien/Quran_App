@@ -46,12 +46,9 @@ class IslamicGuideScreen extends StatelessWidget {
             isScrollable: true,
             tabAlignment: TabAlignment.start,
             labelStyle: theme.textTheme.labelLarge?.copyWith(
-              fontFamily: 'Cairo',
               fontWeight: FontWeight.w800,
             ),
-            unselectedLabelStyle: theme.textTheme.labelLarge?.copyWith(
-              fontFamily: 'Cairo',
-            ),
+            unselectedLabelStyle: theme.textTheme.labelLarge?.copyWith(),
             tabs: <Widget>[
               for (final GuideSection section in sections)
                 Tab(text: section.title),
@@ -122,7 +119,6 @@ class _SectionIntro extends StatelessWidget {
             Text(
               section.intro!,
               style: theme.textTheme.bodyMedium?.copyWith(
-                fontFamily: 'Cairo',
                 height: 1.7,
                 color: scheme.onSurface,
               ),
@@ -141,7 +137,6 @@ class _SectionIntro extends StatelessWidget {
                 child: Text(
                   l10nOf(context).guideReviewNotice,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    fontFamily: 'Cairo',
                     color: scheme.onSurfaceVariant,
                   ),
                 ),
@@ -173,7 +168,7 @@ class _ErrorView extends StatelessWidget {
             Text(
               l10nOf(context).guideLoadError,
               textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: 'Cairo', color: scheme.error),
+              style: TextStyle(color: scheme.error),
             ),
             const SizedBox(height: AppSpacing.md),
             FilledButton(

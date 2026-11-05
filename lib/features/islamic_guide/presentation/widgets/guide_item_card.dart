@@ -56,7 +56,6 @@ class GuideItemCard extends StatelessWidget {
           title: Text(
             item.title,
             style: theme.textTheme.titleMedium?.copyWith(
-              fontFamily: 'Cairo',
               fontWeight: FontWeight.w800,
               color: scheme.onSurface,
             ),
@@ -84,7 +83,6 @@ class GuideItemCard extends StatelessWidget {
             Text(
               item.subtitle!,
               style: theme.textTheme.bodySmall?.copyWith(
-                fontFamily: 'Cairo',
                 color: scheme.onSurfaceVariant,
               ),
             ),
@@ -101,7 +99,6 @@ class GuideItemCard extends StatelessWidget {
               child: Text(
                 badge,
                 style: theme.textTheme.labelSmall?.copyWith(
-                  fontFamily: 'Cairo',
                   fontWeight: FontWeight.w700,
                   color: scheme.primary,
                 ),
@@ -123,7 +120,6 @@ class _BlockView extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
     final TextStyle? body = theme.textTheme.bodyMedium?.copyWith(
-      fontFamily: 'Cairo',
       height: 1.7,
       color: scheme.onSurface,
     );
@@ -138,7 +134,6 @@ class _BlockView extends StatelessWidget {
             child: Text(
               block.label,
               style: theme.textTheme.labelLarge?.copyWith(
-                fontFamily: 'Cairo',
                 fontWeight: FontWeight.w800,
                 color: scheme.primary,
               ),
@@ -160,7 +155,6 @@ class _BlockView extends StatelessWidget {
             Text(
               l10nOf(context).guideSource(block.source!),
               style: theme.textTheme.bodySmall?.copyWith(
-                fontFamily: 'Cairo',
                 color: scheme.onSurfaceVariant,
               ),
             ),
@@ -217,7 +211,6 @@ class _StepsView extends StatelessWidget {
                     child: Text(
                       steps[i],
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        fontFamily: 'Cairo',
                         height: 1.7,
                         color: scheme.onSurface,
                       ),
@@ -319,7 +312,7 @@ class _QuranRefViewState extends State<_QuranRefView> {
                 Expanded(
                   child: Text(
                     l10nOf(context).guideQuranLoadError,
-                    style: TextStyle(fontFamily: 'Cairo', color: scheme.error),
+                    style: TextStyle(color: scheme.error),
                   ),
                 ),
                 TextButton(
@@ -359,7 +352,6 @@ class _QuranRefViewState extends State<_QuranRefView> {
                 '[${first.surahName}: $range]',
                 textAlign: TextAlign.end,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  fontFamily: 'Cairo',
                   fontWeight: FontWeight.w700,
                   color: scheme.primary,
                 ),

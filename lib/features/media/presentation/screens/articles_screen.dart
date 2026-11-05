@@ -34,10 +34,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
         appBar: AppBar(
           title: Text(
             l10nOf(context).articlesScreenMessage1,
-            style: const TextStyle(
-              fontFamily: 'Cairo',
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -118,7 +115,6 @@ class _SourceChips extends StatelessWidget {
             label: Text(
               isAll ? l10nOf(context).articlesScreenMessage3 : source!,
               style: TextStyle(
-                fontFamily: 'Cairo',
                 color: selected ? theme.colorScheme.onPrimary : null,
                 fontWeight: FontWeight.w700,
               ),

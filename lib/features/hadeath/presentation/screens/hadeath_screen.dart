@@ -34,7 +34,6 @@ class _HadeathScreenState extends State<HadeathScreen> {
         title: Text(
           l10nOf(context).hadeathScreenMessage1,
           style: TextStyle(
-            fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
           ),
@@ -63,11 +62,7 @@ class _HadeathScreenState extends State<HadeathScreen> {
                 return Center(
                   child: Text(
                     provider.errorMessage!,
-                    style: const TextStyle(
-                      fontFamily: 'Cairo',
-                      color: Colors.red,
-                      fontSize: 16,
-                    ),
+                    style: const TextStyle(color: Colors.red, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                 );
@@ -78,7 +73,6 @@ class _HadeathScreenState extends State<HadeathScreen> {
                   child: Text(
                     l10nOf(context).hadeathScreenMessage2,
                     style: const TextStyle(
-                      fontFamily: 'Cairo',
                       color: AppColors.secondaryText,
                       fontSize: 18,
                     ),

@@ -639,7 +639,6 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 11,
                   color: primary.withValues(alpha: 0.72),
                   fontWeight: FontWeight.w600,
@@ -795,7 +794,6 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                       key: ValueKey<int>(currentPage),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 13,
                         color: theme.colorScheme.primary.withValues(
                           alpha: 0.78,
@@ -1091,7 +1089,6 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontFamily: 'Cairo',
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: primary.withValues(alpha: 0.7),
@@ -1212,7 +1209,6 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                       l10nOf(context).readerControlsMessage5,
                       textAlign: TextAlign.right,
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.primary,
@@ -1222,10 +1218,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                     Text(
                       l10nOf(context).readerControlsMessage6,
                       textAlign: TextAlign.right,
-                      style: const TextStyle(
-                        fontFamily: 'Cairo',
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     Slider(
                       value: _fontSize,
@@ -1243,10 +1236,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                     Text(
                       l10nOf(context).readerControlsMessage7,
                       textAlign: TextAlign.right,
-                      style: const TextStyle(
-                        fontFamily: 'Cairo',
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     Slider(
                       value: _lineHeight,
@@ -1273,10 +1263,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                       title: Text(
                         l10nOf(context).readerControlsMessage8,
                         textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          fontFamily: 'Cairo',
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),
                     SwitchListTile(
@@ -1290,10 +1277,7 @@ class _SurahDetailsScreenState extends State<SurahDetailsScreen> {
                       title: Text(
                         l10nOf(context).readerControlsMessage9,
                         textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          fontFamily: 'Cairo',
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),
                   ],

@@ -17,7 +17,6 @@ class DuasScreen extends StatelessWidget {
         title: Text(
           l10nOf(context).appStringsMessage30,
           style: TextStyle(
-            fontFamily: 'Cairo',
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -51,11 +50,7 @@ class DuasScreen extends StatelessWidget {
                 return Center(
                   child: Text(
                     l10nOf(context).duasScreenMessage1,
-                    style: const TextStyle(
-                      fontFamily: 'Cairo',
-                      color: Colors.red,
-                      fontSize: 18,
-                    ),
+                    style: const TextStyle(color: Colors.red, fontSize: 18),
                   ),
                 );
               }
@@ -69,7 +64,6 @@ class DuasScreen extends StatelessWidget {
                   child: Text(
                     l10nOf(context).duasScreenMessage2,
                     style: TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 18,
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -125,7 +119,6 @@ class _DuasItemCard extends StatelessWidget {
               Text(
                 item.title,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.primary,
@@ -144,7 +137,6 @@ class _DuasItemCard extends StatelessWidget {
                 Text(
                   item.reference,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 13,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),

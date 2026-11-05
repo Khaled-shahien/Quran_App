@@ -64,7 +64,6 @@ class CurrentWirdWidget extends StatelessWidget {
               Text(
                 l10nOf(context).currentWirdWidgetMessage3,
                 style: TextStyle(
-                  fontFamily: 'Cairo',
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: primaryColor,
@@ -92,7 +91,6 @@ class CurrentWirdWidget extends StatelessWidget {
                             Text(
                               l10nOf(context).currentWirdWidgetMessage4,
                               style: TextStyle(
-                                fontFamily: 'Cairo',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: textDark,
@@ -103,7 +101,6 @@ class CurrentWirdWidget extends StatelessWidget {
                                 (activeKhatma.currentJuz).toString(),
                               ),
                               style: TextStyle(
-                                fontFamily: 'Cairo',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: primaryColor,
@@ -136,7 +133,6 @@ class CurrentWirdWidget extends StatelessWidget {
                                 (activeKhatma.startMode).toString(),
                               ),
                               style: TextStyle(
-                                fontFamily: 'Cairo',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: primaryColor,
@@ -147,7 +143,6 @@ class CurrentWirdWidget extends StatelessWidget {
                                 (activeKhatma.amountValue).toString(),
                               ),
                               style: TextStyle(
-                                fontFamily: 'Cairo',
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: primaryColor,
@@ -163,7 +158,6 @@ class CurrentWirdWidget extends StatelessWidget {
                             (activeKhatma.amountType).toString(),
                           ),
                           style: TextStyle(
-                            fontFamily: 'Cairo',
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: textDark.withValues(alpha: 0.8),
@@ -179,7 +173,6 @@ class CurrentWirdWidget extends StatelessWidget {
                                 child: Text(
                                   l10nOf(context).currentWirdWidgetMessage8,
                                   style: TextStyle(
-                                    fontFamily: 'Cairo',
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700,
                                     color: primaryColor,
@@ -226,7 +219,6 @@ class CurrentWirdWidget extends StatelessWidget {
                                       content: Text(
                                         message,
                                         style: const TextStyle(
-                                          fontFamily: 'Cairo',
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -258,7 +250,6 @@ class CurrentWirdWidget extends StatelessWidget {
                                     Text(
                                       l10nOf(context).currentWirdWidgetMessage9,
                                       style: TextStyle(
-                                        fontFamily: 'Cairo',
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: finishedBtnText,
@@ -293,7 +284,6 @@ class CurrentWirdWidget extends StatelessWidget {
                                 child: Text(
                                   l10nOf(context).currentWirdWidgetMessage10,
                                   style: const TextStyle(
-                                    fontFamily: 'Cairo',
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -319,7 +309,6 @@ class CurrentWirdWidget extends StatelessWidget {
                     Text(
                       l10nOf(context).appRouterMessage1,
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: textDark,
@@ -337,11 +326,11 @@ class CurrentWirdWidget extends StatelessWidget {
                               builder: (context) => AlertDialog(
                                 title: Text(
                                   l10nOf(context).currentWirdWidgetMessage11,
-                                  style: const TextStyle(fontFamily: 'Cairo'),
+                                  style: const TextStyle(),
                                 ),
                                 content: Text(
                                   l10nOf(context).currentWirdWidgetMessage12,
-                                  style: const TextStyle(fontFamily: 'Cairo'),
+                                  style: const TextStyle(),
                                 ),
                                 actions: [
                                   TextButton(
@@ -350,9 +339,7 @@ class CurrentWirdWidget extends StatelessWidget {
                                       l10nOf(
                                         context,
                                       ).currentWirdWidgetMessage13,
-                                      style: const TextStyle(
-                                        fontFamily: 'Cairo',
-                                      ),
+                                      style: const TextStyle(),
                                     ),
                                   ),
                                   TextButton(
@@ -364,10 +351,7 @@ class CurrentWirdWidget extends StatelessWidget {
                                       l10nOf(
                                         context,
                                       ).currentWirdWidgetMessage14,
-                                      style: const TextStyle(
-                                        fontFamily: 'Cairo',
-                                        color: Colors.red,
-                                      ),
+                                      style: const TextStyle(color: Colors.red),
                                     ),
                                   ),
                                 ],
@@ -399,7 +383,6 @@ class CurrentWirdWidget extends StatelessWidget {
                         (activeKhatma.amountType).toString(),
                       ),
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: textDark,
@@ -412,7 +395,6 @@ class CurrentWirdWidget extends StatelessWidget {
                         )).toString(),
                       ),
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: textDark,
@@ -440,7 +422,6 @@ class CurrentWirdWidget extends StatelessWidget {
                       Text(
                         l10nOf(context).homeScreenMessage8,
                         style: TextStyle(
-                          fontFamily: 'Cairo',
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: textDark,
@@ -450,7 +431,6 @@ class CurrentWirdWidget extends StatelessWidget {
                       Text(
                         l10nOf(context).currentWirdWidgetMessage17,
                         style: TextStyle(
-                          fontFamily: 'Cairo',
                           fontSize: 14,
                           color: textDark.withValues(alpha: 0.7),
                         ),
@@ -474,7 +454,6 @@ class CurrentWirdWidget extends StatelessWidget {
                         child: Text(
                           l10nOf(context).currentWirdWidgetMessage18,
                           style: const TextStyle(
-                            fontFamily: 'Cairo',
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -713,7 +692,6 @@ class _AnimatedWirdAyahPreviewState extends State<_AnimatedWirdAyahPreview> {
                 Text(
                   display.reference,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: widget.textColor.withValues(alpha: 0.75),

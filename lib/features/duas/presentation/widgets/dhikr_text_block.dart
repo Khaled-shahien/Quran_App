@@ -13,7 +13,6 @@ class DhikrTextBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final guidance = TextStyle(
-      fontFamily: 'Cairo',
       fontSize: 15,
       height: 1.7,
       color: scheme.onSurfaceVariant,

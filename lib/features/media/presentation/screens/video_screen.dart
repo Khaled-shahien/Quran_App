@@ -36,10 +36,7 @@ class _VideoScreenState extends State<VideoScreen> {
         appBar: AppBar(
           title: Text(
             l10nOf(context).videoScreenMessage1,
-            style: const TextStyle(
-              fontFamily: 'Cairo',
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -71,7 +68,6 @@ class _VideoScreenState extends State<VideoScreen> {
                         provider.fallbackMessage!,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontFamily: 'Cairo',
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w700,
                         ),
@@ -122,7 +118,6 @@ class _CategoryChips extends StatelessWidget {
             label: Text(
               entry.key,
               style: TextStyle(
-                fontFamily: 'Cairo',
                 color: selected ? theme.colorScheme.onPrimary : null,
                 fontWeight: FontWeight.w700,
               ),

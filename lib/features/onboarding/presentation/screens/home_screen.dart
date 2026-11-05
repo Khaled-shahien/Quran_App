@@ -207,7 +207,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontFamily: 'Cairo',
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -273,7 +272,6 @@ class _HomeScreenState extends State<HomeScreen> {
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'Cairo',
                 color: active ? Colors.white : AppColors.primary,
                 fontWeight: FontWeight.bold,
               ),
@@ -292,7 +290,6 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Text(
         title,
         style: TextStyle(
-          fontFamily: 'Cairo',
           fontWeight: FontWeight.bold,
           color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
           fontSize: 14,
@@ -329,7 +326,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   title,
                   textAlign: TextAlign.right,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: textColor ?? Theme.of(context).colorScheme.primary,
@@ -376,7 +372,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     title,
                     style: TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: Theme.of(context).colorScheme.primary,
@@ -385,7 +380,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 12,
                       color: Theme.of(
                         context,
@@ -427,10 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           foregroundColor: Theme.of(
                             context,
                           ).colorScheme.primary.withValues(alpha: 0.6),
-                          textStyle: const TextStyle(
-                            fontFamily: 'Cairo',
-                            fontSize: 12,
-                          ),
+                          textStyle: const TextStyle(fontSize: 12),
                         ),
                         onPressed: () => showDialog<void>(
                           context: context,
@@ -495,10 +486,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Text(
                   message,
-                  style: const TextStyle(
-                    fontFamily: 'Cairo',
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -562,7 +550,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
@@ -579,7 +566,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ).homeScreenMessage12((remaining).toString()),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     color: Theme.of(
                       context,
                     ).colorScheme.primary.withValues(alpha: 0.7),
@@ -595,7 +581,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           : l10nOf(context).homeScreenMessage14,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 14,
                         color: Theme.of(
                           context,
@@ -626,7 +611,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 (activeKhatma.amountType).toString(),
                               ),
                               style: TextStyle(
-                                fontFamily: 'Cairo',
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -637,7 +621,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 context,
                               ).homeScreenMessage16((dateLabel).toString()),
                               style: TextStyle(
-                                fontFamily: 'Cairo',
                                 color: Theme.of(
                                   context,
                                 ).colorScheme.primary.withValues(alpha: 0.65),
@@ -666,7 +649,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                             ).homeScreenMessage17((wirdDay).toString()),
                             style: TextStyle(
-                              fontFamily: 'Cairo',
                               fontWeight: FontWeight.w600,
                               color: Theme.of(context).colorScheme.primary,
                             ),
@@ -675,7 +657,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           subtitle: Text(
                             l10nOf(context).homeScreenMessage18,
                             style: TextStyle(
-                              fontFamily: 'Cairo',
                               color: Theme.of(
                                 context,
                               ).colorScheme.primary.withValues(alpha: 0.65),
@@ -1005,15 +986,12 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (dialogContext) => AlertDialog(
               title: Text(
                 appL10n.homeScreenMessage50,
-                style: const TextStyle(
-                  fontFamily: 'Cairo',
-                  fontWeight: FontWeight.bold,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.bold),
                 textAlign: TextAlign.right,
               ),
               content: Text(
                 appL10n.homeScreenMessage51,
-                style: const TextStyle(fontFamily: 'Cairo'),
+                style: const TextStyle(),
                 textAlign: TextAlign.right,
               ),
               actions: [
@@ -1021,7 +999,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () => Navigator.pop(dialogContext),
                   child: Text(
                     appL10n.appStringsMessage8,
-                    style: const TextStyle(fontFamily: 'Cairo'),
+                    style: const TextStyle(),
                   ),
                 ),
               ],
@@ -1073,7 +1051,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text(
               l10nOf(context).homeScreenMessage59,
               style: TextStyle(
-                fontFamily: 'Cairo',
                 fontSize: 16,
                 color: Theme.of(
                   context,
@@ -1135,7 +1112,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     verse['surah'] ?? '',
                     style: TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 12,
                       color: Theme.of(
                         context,
@@ -1231,7 +1207,6 @@ class _PrayerTimeHeader extends StatelessWidget {
                         currentTime,
                         textAlign: TextAlign.right,
                         style: TextStyle(
-                          fontFamily: 'Cairo',
                           fontSize: 38,
                           fontWeight: FontWeight.w900,
                           color: theme.colorScheme.onPrimary,

@@ -50,7 +50,6 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         title: Text(
           l10nOf(context).tasbeehScreenMessage5,
           style: TextStyle(
-            fontFamily: 'Cairo',
             color: Theme.of(context).colorScheme.primary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -104,7 +103,6 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                             child: Text(
                               l10nOf(context).appStringsMessage30,
                               style: TextStyle(
-                                fontFamily: 'Cairo',
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.primary,
@@ -214,7 +212,6 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                     child: Text(
                       controller.count.toString().padLeft(2, '0'),
                       style: TextStyle(
-                        fontFamily: 'Cairo',
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.primary,
@@ -246,7 +243,6 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                       label: Text(
                         l10nOf(context).tasbeehScreenMessage7,
                         style: const TextStyle(
-                          fontFamily: 'Cairo',
                           color: Colors.white,
                           fontSize: 14,
                         ),
@@ -269,11 +265,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                       ),
                       label: Text(
                         l10nOf(context).tasbeehScreenMessage8,
-                        style: const TextStyle(
-                          fontFamily: 'Cairo',
-                          color: Colors.red,
-                          fontSize: 14,
-                        ),
+                        style: const TextStyle(color: Colors.red, fontSize: 14),
                       ),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: Colors.red, width: 1.5),
@@ -340,7 +332,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
           SnackBar(
             content: Text(
               appL10n.tasbeehScreenMessage12((title).toString()),
-              style: const TextStyle(fontFamily: 'Cairo'),
+              style: const TextStyle(),
             ),
             action: SnackBarAction(
               label: appL10n.currentWirdWidgetMessage13,
@@ -390,7 +382,6 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    fontFamily: 'Cairo',
                     fontSize: 16,
                     color: isCompleted
                         ? Colors.green
@@ -413,7 +404,6 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                   child: Text(
                     counter,
                     style: TextStyle(
-                      fontFamily: 'Cairo',
                       fontSize: 14,
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,
@@ -453,7 +443,6 @@ class _AddPhraseDialogState extends State<_AddPhraseDialog> {
       title: Text(
         l10nOf(context).tasbeehScreenMessage9,
         style: TextStyle(
-          fontFamily: 'Cairo',
           fontWeight: FontWeight.bold,
           color: Theme.of(context).colorScheme.primary,
           fontSize: 18,
@@ -463,7 +452,7 @@ class _AddPhraseDialogState extends State<_AddPhraseDialog> {
         controller: controller,
         decoration: InputDecoration(
           hintText: l10nOf(context).tasbeehScreenMessage10,
-          hintStyle: const TextStyle(fontFamily: 'Cairo'),
+          hintStyle: const TextStyle(),
           filled: true,
           fillColor: Theme.of(context).scaffoldBackgroundColor,
           border: OutlineInputBorder(
@@ -486,10 +475,7 @@ class _AddPhraseDialogState extends State<_AddPhraseDialog> {
           ),
         ),
         textAlign: TextAlign.right,
-        style: TextStyle(
-          fontFamily: 'Cairo',
-          color: Theme.of(context).colorScheme.primary,
-        ),
+        style: TextStyle(color: Theme.of(context).colorScheme.primary),
       ),
       actions: [
         TextButton(
@@ -498,7 +484,7 @@ class _AddPhraseDialogState extends State<_AddPhraseDialog> {
           },
           child: Text(
             l10nOf(context).appStringsMessage9,
-            style: const TextStyle(fontFamily: 'Cairo', color: Colors.red),
+            style: const TextStyle(color: Colors.red),
           ),
         ),
         ElevatedButton(
@@ -512,7 +498,7 @@ class _AddPhraseDialogState extends State<_AddPhraseDialog> {
           ),
           child: Text(
             l10nOf(context).tasbeehScreenMessage11,
-            style: const TextStyle(fontFamily: 'Cairo', color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
         ),
       ],

@@ -48,7 +48,6 @@ class TabSwitcherWidget extends StatelessWidget {
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontFamily: 'Cairo',
               color: active
                   ? Colors.white
                   : Theme.of(context).colorScheme.primary,

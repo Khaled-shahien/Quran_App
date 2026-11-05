@@ -123,7 +123,6 @@ class _DateCardWidgetState extends State<DateCardWidget>
                   Text(
                     _date.weekday,
                     style: theme.textTheme.labelLarge?.copyWith(
-                      fontFamily: 'Cairo',
                       fontWeight: FontWeight.w800,
                       color: scheme.primary,
                     ),
