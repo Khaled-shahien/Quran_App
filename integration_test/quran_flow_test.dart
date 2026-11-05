@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -18,28 +19,21 @@ class FakeSurahRepository implements SurahRepository {
   final List<SurahEntity> _surahs;
 
   @override
-  Future<void> clearCache() async {}
+  Future<Result<List<SurahEntity>>> getAllSurahs() => Result.guard(
+    () => _legacyGetAllSurahs(),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<List<SurahEntity>> _legacyGetAllSurahs() async => _surahs;
 
   @override
-  Future<List<SurahEntity>> getAllSurahs() async => _surahs;
+  Future<Result<SurahEntity>> getSurahByIndex(int index) => Result.guard(
+    () => _legacyGetSurahByIndex(index),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
 
-  @override
-  Future<SurahEntity> getSurahByIndex(int index) async =>
+  Future<SurahEntity> _legacyGetSurahByIndex(int index) async =>
       _surahs.firstWhere((surah) => surah.number == index);
-
-  @override
-  Future<Map<String, dynamic>> getSurahStatistics() async =>
-      <String, dynamic>{};
-
-  @override
-  Future<List<SurahEntity>> getSurahsByRevelationPlace(String place) async {
-    return _surahs.where((surah) => surah.revelationType == place).toList();
-  }
-
-  @override
-  Future<List<SurahEntity>> searchSurahs(String query) async {
-    return _surahs.where((surah) => surah.name.contains(query)).toList();
-  }
 }
 
 void main() {

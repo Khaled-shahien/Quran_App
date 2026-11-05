@@ -373,34 +373,51 @@ class _SurahDetailsRouteLoader extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<SurahEntity>(
-      future: context.read<SurahRepository>().getSurahByIndex(surahNumber),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return const Scaffold(body: Center(child: PulseLoader(lines: 5)));
-        }
+  Widget build(BuildContext context) => _OnceFutureBuilder<Result<SurahEntity>>(
+    load: () => context.read<SurahRepository>().getSurahByIndex(surahNumber),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState != ConnectionState.done) {
+        return const Scaffold(body: Center(child: PulseLoader(lines: 5)));
+      }
 
-        final SurahEntity? surah = snapshot.data;
-        if (snapshot.hasError || surah == null) {
-          return _RouteDataErrorScreen(
-            message: l10nOf(context).appRouterMessage6,
-          );
-        }
-
-        return SurahDetailsScreen(
-          surah: surah,
-          surahNumber: surahNumber,
-          initialSurahNumber: initialSurahNumber,
-          initialAyahNumber: initialAyahNumber,
-          initialPageNumber: initialPageNumber,
-          rangeTrackingUnit: rangeTrackingUnit,
-          rangeFromUnit: rangeFromUnit,
-          rangeToUnit: rangeToUnit,
+      final SurahEntity? surah = snapshot.data?.valueOrNull;
+      if (snapshot.hasError || surah == null) {
+        return _RouteDataErrorScreen(
+          message: l10nOf(context).appRouterMessage6,
         );
-      },
-    );
-  }
+      }
+
+      return SurahDetailsScreen(
+        surah: surah,
+        surahNumber: surahNumber,
+        initialSurahNumber: initialSurahNumber,
+        initialAyahNumber: initialAyahNumber,
+        initialPageNumber: initialPageNumber,
+        rangeTrackingUnit: rangeTrackingUnit,
+        rangeFromUnit: rangeFromUnit,
+        rangeToUnit: rangeToUnit,
+      );
+    },
+  );
+}
+
+/// Starts [load] once per route instead of on every rebuild.
+class _OnceFutureBuilder<T> extends StatefulWidget {
+  const _OnceFutureBuilder({required this.load, required this.builder});
+
+  final Future<T> Function() load;
+  final AsyncWidgetBuilder<T> builder;
+
+  @override
+  State<_OnceFutureBuilder<T>> createState() => _OnceFutureBuilderState<T>();
+}
+
+class _OnceFutureBuilderState<T> extends State<_OnceFutureBuilder<T>> {
+  late final Future<T> _future = widget.load();
+
+  @override
+  Widget build(BuildContext context) =>
+      FutureBuilder<T>(future: _future, builder: widget.builder);
 }
 
 class _HadeathDetailsRouteLoader extends StatefulWidget {

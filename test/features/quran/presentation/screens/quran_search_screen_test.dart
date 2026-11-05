@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,7 +9,12 @@ import 'package:sakina_app/features/quran/presentation/screens/quran_search_scre
 
 class SearchRepository implements AyahRepository {
   @override
-  Future<Map<int, List<AyahEntity>>> getAllAyahs() async => {
+  Future<Result<Map<int, List<AyahEntity>>>> getAllAyahs() => Result.guard(
+    () => _legacyGetAllAyahs(),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<Map<int, List<AyahEntity>>> _legacyGetAllAyahs() async => {
     for (var surah = 1; surah <= 114; surah++)
       surah: [
         AyahEntity(
@@ -25,13 +31,13 @@ class SearchRepository implements AyahRepository {
       ],
   };
   @override
-  Future<List<AyahEntity>> getAyahsForSurah(int number) async =>
-      (await getAllAyahs())[number]!;
-  @override
-  Future<AyahEntity> getAyah(int surah, int ayah) async =>
-      (await getAyahsForSurah(surah)).first;
-  @override
-  Future<List<AyahEntity>> searchAyahs(String query) async => [];
+  Future<Result<List<AyahEntity>>> getAyahsForSurah(int number) => Result.guard(
+    () => _legacyGetAyahsForSurah(number),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<List<AyahEntity>> _legacyGetAyahsForSurah(int number) async =>
+      (await _legacyGetAllAyahs())[number]!;
 }
 
 Future<void> pumpSearch(WidgetTester tester, Widget app) async {

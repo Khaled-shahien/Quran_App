@@ -113,27 +113,17 @@ class FakePrayerTimesRepository implements PrayerTimesRepository {
 
 class FakeSurahRepository implements SurahRepository {
   @override
-  Future<void> clearCache() async {}
+  Future<Result<List<SurahEntity>>> getAllSurahs() => Result.guard(
+    () => _legacyGetAllSurahs(),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
 
-  @override
-  Future<List<SurahEntity>> getAllSurahs() async => const <SurahEntity>[];
-
-  @override
-  Future<SurahEntity> getSurahByIndex(int index) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Map<String, dynamic>> getSurahStatistics() async =>
-      <String, dynamic>{};
-
-  @override
-  Future<List<SurahEntity>> getSurahsByRevelationPlace(String place) async =>
+  Future<List<SurahEntity>> _legacyGetAllSurahs() async =>
       const <SurahEntity>[];
 
   @override
-  Future<List<SurahEntity>> searchSurahs(String query) async =>
-      const <SurahEntity>[];
+  Future<Result<SurahEntity>> getSurahByIndex(int index) async =>
+      Err(ContentFailure(cause: UnimplementedError()));
 }
 
 class FakeAzkarRepository implements AzkarRepository {

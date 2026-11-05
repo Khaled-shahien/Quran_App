@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
+import '../../../core/result/result.dart';
+import '../../quran/domain/entities/ayah_entity.dart';
 import '../../quran/domain/repositories/ayah_repository.dart';
 import '../../quran/domain/repositories/surah_repository.dart';
 import '../domain/entities/guide_entities.dart';
@@ -26,19 +28,30 @@ class IslamicGuideRepositoryImpl implements IslamicGuideRepository {
   List<GuideSection>? _cache;
 
   @override
-  Future<List<GuideSection>> getSections() async {
+  Future<Result<List<GuideSection>>> getSections() async {
     final List<GuideSection>? cached = _cache;
-    if (cached != null) return cached;
-    final String raw = await _loadAsset(assetPath);
-    return _cache = parseGuide(raw);
+    if (cached != null) return Success(cached);
+    return Result.guard(
+      () async => _cache = parseGuide(await _loadAsset(assetPath)),
+      onError: (error, _) => ContentFailure(cause: error),
+    );
   }
 
   @override
-  Future<List<GuideVerse>> resolveQuran(QuranRef ref) async {
-    final ayahs = await _ayahRepository.getAyahsForSurah(ref.surah);
-    final String surahName = (await _surahRepository.getSurahByIndex(
-      ref.surah,
-    )).name;
+  Future<Result<List<GuideVerse>>> resolveQuran(QuranRef ref) async {
+    final ayahResult = await _ayahRepository.getAyahsForSurah(ref.surah);
+    final surahResult = await _surahRepository.getSurahByIndex(ref.surah);
+    final List<AyahEntity> ayahs;
+    final String surahName;
+    switch ((ayahResult, surahResult)) {
+      case (Success(value: final a), Success(value: final s)):
+        ayahs = a;
+        surahName = s.name;
+      case (Err(:final failure), _):
+        return Err(failure);
+      case (_, Err(:final failure)):
+        return Err(failure);
+    }
     final List<GuideVerse> verses = <GuideVerse>[
       for (final ayah in ayahs)
         if (ayah.numberInSurah >= ref.from && ayah.numberInSurah <= ref.to)
@@ -50,11 +63,15 @@ class IslamicGuideRepositoryImpl implements IslamicGuideRepository {
           ),
     ];
     if (verses.length != ref.to - ref.from + 1) {
-      throw StateError(
-        'Quran reference ${ref.surah}:${ref.from}-${ref.to} is incomplete',
+      return Err(
+        ContentFailure(
+          cause: StateError(
+            'Quran reference ${ref.surah}:${ref.from}-${ref.to} is incomplete',
+          ),
+        ),
       );
     }
-    return verses;
+    return Success(verses);
   }
 }
 

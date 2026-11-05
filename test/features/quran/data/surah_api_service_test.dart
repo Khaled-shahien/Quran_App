@@ -1,10 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import 'package:sakina_app/features/quran/data/data_sources/local_surah_data_source.dart';
 import 'package:sakina_app/features/quran/data/repositories/surah_repository.dart';
 import 'package:sakina_app/features/quran/data/models/surah_model.dart';
-import 'package:sakina_app/core/errors/api_exception.dart';
+import 'package:sakina_app/core/result/result.dart';
 
 // Mock Local Data Source that throws errors
 class MockLocalDataSource extends LocalSurahDataSource {
@@ -197,133 +196,60 @@ void main() {
   });
 
   group('Surah Repository Tests', () {
-    late LocalSurahDataSource localDataSource;
-    late SurahRepositoryImpl repository;
     late SharedPreferences prefs;
+    late SurahRepositoryImpl repository;
 
     setUp(() async {
-      localDataSource = LocalSurahDataSource();
-      SharedPreferences.setMockInitialValues({});
+      SharedPreferences.setMockInitialValues({
+        // Left over from earlier versions that copied the list into prefs.
+        'cached_surahs': '[]',
+        'cached_surahs_timestamp': 1,
+      });
       prefs = await SharedPreferences.getInstance();
-
       repository = SurahRepositoryImpl(
-        localDataSource: localDataSource,
+        localDataSource: LocalSurahDataSource(),
         sharedPreferences: prefs,
       );
     });
 
-    test('should fetch Surahs from local data source and cache them', () async {
-      // Act
-      final result = await repository.getAllSurahs();
+    test('loads all 114 surahs from the bundled asset', () async {
+      final surahs = (await repository.getAllSurahs()).valueOrNull!;
 
-      // Assert
-      expect(result.length, 114);
-      expect(result[0].englishName, 'Al-Faatiha');
-      expect(result[0].name, 'سورة الفاتحة');
-
-      // Verify cache was set
-      final cacheKeyExists = prefs.containsKey('cached_surahs');
-      expect(cacheKeyExists, true);
+      expect(surahs, hasLength(114));
+      expect(surahs[0].englishName, 'Al-Faatiha');
+      expect(surahs[0].name, 'سورة الفاتحة');
     });
 
-    test('should return cached data when available', () async {
-      // Arrange - Set up cache with real surah data
-      final surahModel = {
-        "number": 1,
-        "name": "سُورَةُ ٱلْفَاتِحَةِ",
-        "englishName": "Al-Faatiha",
-        "englishNameTranslation": "The Opening",
-        "revelationType": "Meccan",
-        "numberOfAyahs": 7,
-        "ayahs": [],
-      };
-
-      final jsonString = jsonEncode([surahModel]);
-      await prefs.setString('cached_surahs', jsonString);
-      await prefs.setInt(
-        'cached_surahs_timestamp',
-        DateTime.now().millisecondsSinceEpoch,
-      );
-
-      // Act - This should return cached data
-      final result = await repository.getAllSurahs();
-
-      // Assert
-      expect(result.length, 1);
-      expect(result[0].englishName, 'Al-Faatiha');
-      expect(result[0].name, 'سورة الفاتحة');
+    test('removes the obsolete preference copies', () async {
+      await Future<void>.delayed(Duration.zero);
+      expect(prefs.containsKey('cached_surahs'), isFalse);
+      expect(prefs.containsKey('cached_surahs_timestamp'), isFalse);
     });
 
-    test('should handle data loading errors with cache fallback', () async {
-      // Arrange - Set up cache with valid data
-      final surahModel = {
-        "number": 1,
-        "name": "سُورَةُ ٱلْفَاتِحَةِ",
-        "englishName": "Al-Faatiha",
-        "englishNameTranslation": "The Opening",
-        "revelationType": "Meccan",
-        "numberOfAyahs": 7,
-        "ayahs": [],
-      };
+    test(
+      'a failing data source is a ContentFailure, not an exception',
+      () async {
+        repository = SurahRepositoryImpl(
+          localDataSource: MockLocalDataSource(),
+        );
 
-      final jsonString = jsonEncode([surahModel]);
-      await prefs.setString('cached_surahs', jsonString);
-      await prefs.setInt(
-        'cached_surahs_timestamp',
-        DateTime.now().millisecondsSinceEpoch,
-      );
+        final result = await repository.getAllSurahs();
 
-      // Create a mock data source that throws an error
-      final mockDataSource = MockLocalDataSource();
+        expect(result.failureOrNull, isA<ContentFailure>());
+      },
+    );
 
-      // Use this mock in repository
-      repository = SurahRepositoryImpl(
-        localDataSource: mockDataSource,
-        sharedPreferences: prefs,
-      );
+    test('gets a specific surah by index', () async {
+      final surah = (await repository.getSurahByIndex(1)).valueOrNull!;
 
-      // Act
-      final result = await repository.getAllSurahs();
-
-      // Assert
-      expect(result.length, 1);
-      expect(result[0].name, 'سورة الفاتحة');
+      expect(surah.englishName, 'Al-Faatiha');
+      expect(surah.name, 'سورة الفاتحة');
+      expect(surah.totalAyah, 7);
     });
 
-    test('should get specific Surah by index', () async {
-      // Act
-      final result = await repository.getSurahByIndex(1);
-
-      // Assert
-      expect(result.englishName, 'Al-Faatiha');
-      expect(result.name, 'سورة الفاتحة');
-      expect(result.totalAyah, 7);
-    });
-
-    test('should throw error for invalid Surah index', () async {
-      // Act & Assert
-      expect(
-        () => repository.getSurahByIndex(0),
-        throwsA(const TypeMatcher<ApiException>()),
-      );
-
-      expect(
-        () => repository.getSurahByIndex(115),
-        throwsA(const TypeMatcher<ApiException>()),
-      );
-    });
-
-    test('should clear cache successfully', () async {
-      // Arrange - Set up cache
-      await prefs.setString('cached_surahs', 'test_data');
-      await prefs.setInt('cached_surahs_timestamp', 1234567890);
-
-      // Act
-      await repository.clearCache();
-
-      // Assert
-      expect(prefs.containsKey('cached_surahs'), false);
-      expect(prefs.containsKey('cached_surahs_timestamp'), false);
+    test('an out-of-range index is a failure', () async {
+      expect((await repository.getSurahByIndex(0)).isSuccess, isFalse);
+      expect((await repository.getSurahByIndex(115)).isSuccess, isFalse);
     });
   });
 }

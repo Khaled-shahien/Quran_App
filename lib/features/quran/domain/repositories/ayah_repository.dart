@@ -1,18 +1,11 @@
+import 'package:sakina_app/core/result/result.dart';
+
 import '../entities/ayah_entity.dart';
 
-/// Ayah Repository Interface
-///
-/// Abstract interface for Ayah repository operations
 abstract class AyahRepository {
-  /// Get all Ayahs for a specific Surah
-  Future<List<AyahEntity>> getAyahsForSurah(int surahNumber);
+  /// The ayahs of [surahNumber] (1-114), text exactly as bundled.
+  Future<Result<List<AyahEntity>>> getAyahsForSurah(int surahNumber);
 
-  /// Get a specific Ayah by Surah number and Ayah number
-  Future<AyahEntity> getAyah(int surahNumber, int ayahNumber);
-
-  /// Get all Ayahs for all Surahs
-  Future<Map<int, List<AyahEntity>>> getAllAyahs();
-
-  /// Search Ayahs containing the query text
-  Future<List<AyahEntity>> searchAyahs(String query);
+  /// Every surah's ayahs keyed by surah number (used by search).
+  Future<Result<Map<int, List<AyahEntity>>>> getAllAyahs();
 }

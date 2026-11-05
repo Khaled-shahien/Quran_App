@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../l10n/app_localizations_ar.dart';
@@ -76,19 +77,17 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
 
   Future<void> _load() async {
     setState(() => _failed = false);
-    try {
-      final data = await (widget.repository ?? getIt<AyahRepository>())
-          .getAllAyahs();
-      if (data.length != 114 || data.values.any((ayahs) => ayahs.isEmpty)) {
-        throw StateError('Incomplete Quran search index');
-      }
-      if (!mounted) return;
-      setState(() {
-        _source = data;
-        _results = searchQuran(data, _query);
-      });
-    } catch (_) {
-      if (mounted) setState(() => _failed = true);
+    final result = await (widget.repository ?? getIt<AyahRepository>())
+        .getAllAyahs();
+    if (!mounted) return;
+    switch (result) {
+      case Success(:final value):
+        setState(() {
+          _source = value;
+          _results = searchQuran(value, _query);
+        });
+      case Err():
+        setState(() => _failed = true);
     }
   }
 

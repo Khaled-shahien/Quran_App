@@ -1,3 +1,5 @@
+import 'package:sakina_app/core/result/failure_messages.dart';
+import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -57,18 +59,18 @@ class _QuranScreenState extends State<_QuranScreenContent> {
       _error = null;
     });
 
-    try {
-      final surahs = await _repository.getAllSurahs();
-      setState(() {
-        _surahs = surahs;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _error = e.toString();
-        _isLoading = false;
-      });
-    }
+    final result = await _repository.getAllSurahs();
+    if (!mounted) return;
+    setState(() {
+      switch (result) {
+        case Success(:final value):
+          _surahs = value;
+        case Err(:final failure):
+          // Friendly copy; the technical cause is never shown.
+          _error = failureMessage(failure);
+      }
+      _isLoading = false;
+    });
   }
 
   @override

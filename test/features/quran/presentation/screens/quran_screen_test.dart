@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -41,10 +42,12 @@ class FakeSurahRepository implements SurahRepository {
   int getAllCalls = 0;
 
   @override
-  Future<void> clearCache() async {}
+  Future<Result<List<SurahEntity>>> getAllSurahs() => Result.guard(
+    () => _legacyGetAllSurahs(),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
 
-  @override
-  Future<List<SurahEntity>> getAllSurahs() async {
+  Future<List<SurahEntity>> _legacyGetAllSurahs() async {
     getAllCalls++;
     if (shouldThrow) {
       throw Exception('failed to load surahs');
@@ -53,18 +56,13 @@ class FakeSurahRepository implements SurahRepository {
   }
 
   @override
-  Future<SurahEntity> getSurahByIndex(int index) async => _surahs[index - 1];
+  Future<Result<SurahEntity>> getSurahByIndex(int index) => Result.guard(
+    () => _legacyGetSurahByIndex(index),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
 
-  @override
-  Future<Map<String, dynamic>> getSurahStatistics() async =>
-      <String, dynamic>{};
-
-  @override
-  Future<List<SurahEntity>> getSurahsByRevelationPlace(String place) async =>
-      _surahs.where((s) => s.revelationType == place).toList();
-
-  @override
-  Future<List<SurahEntity>> searchSurahs(String query) async => _surahs;
+  Future<SurahEntity> _legacyGetSurahByIndex(int index) async =>
+      _surahs[index - 1];
 }
 
 void main() {

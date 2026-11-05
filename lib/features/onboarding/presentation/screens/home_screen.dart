@@ -710,7 +710,9 @@ class _HomeScreenState extends State<HomeScreen> {
       unitIndex: unitIndex,
     );
 
-    final List<SurahEntity> surahs = await surahRepository.getAllSurahs();
+    final List<SurahEntity> surahs =
+        (await surahRepository.getAllSurahs()).valueOrNull ??
+        const <SurahEntity>[];
     if (surahs.isEmpty) {
       if (!mounted) return;
       _showFeatureMessage(appL10n.homeScreenMessage19);
@@ -762,7 +764,9 @@ class _HomeScreenState extends State<HomeScreen> {
         context,
         listen: false,
       );
-      final List<SurahEntity> surahs = await surahRepository.getAllSurahs();
+      final List<SurahEntity> surahs =
+          (await surahRepository.getAllSurahs()).valueOrNull ??
+          const <SurahEntity>[];
 
       final SurahEntity? targetSurah = surahs
           .where((surah) => surah.number == surahNumber)

@@ -1,24 +1,11 @@
+import 'package:sakina_app/core/result/result.dart';
+
 import '../entities/surah_entity.dart';
 
-/// Surah Repository Interface
-///
-/// Abstract interface for Surah repository operations
 abstract class SurahRepository {
-  /// Get all Surahs
-  Future<List<SurahEntity>> getAllSurahs();
+  /// All 114 surahs in order, or a [ContentFailure].
+  Future<Result<List<SurahEntity>>> getAllSurahs();
 
-  /// Get a specific Surah by index
-  Future<SurahEntity> getSurahByIndex(int index);
-
-  /// Search Surahs by name
-  Future<List<SurahEntity>> searchSurahs(String query);
-
-  /// Get Surahs by revelation place
-  Future<List<SurahEntity>> getSurahsByRevelationPlace(String place);
-
-  /// Get Surah statistics
-  Future<Map<String, dynamic>> getSurahStatistics();
-
-  /// Clear cached Surah data
-  Future<void> clearCache();
+  /// Surah [index] (1-114), or a failure when it is out of range.
+  Future<Result<SurahEntity>> getSurahByIndex(int index);
 }

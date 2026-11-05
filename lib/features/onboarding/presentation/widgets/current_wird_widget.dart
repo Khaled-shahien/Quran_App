@@ -518,7 +518,9 @@ class CurrentWirdWidget extends StatelessWidget {
       targetAyahNumber = position.ayahNumber;
     }
 
-    final List<SurahEntity> surahs = await surahRepository.getAllSurahs();
+    final List<SurahEntity> surahs =
+        (await surahRepository.getAllSurahs()).valueOrNull ??
+        const <SurahEntity>[];
     if (surahs.isEmpty) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,12 @@ class _FakeRepository implements IslamicGuideRepository {
   int quranCalls = 0;
 
   @override
-  Future<List<GuideSection>> getSections() async {
+  Future<Result<List<GuideSection>>> getSections() => Result.guard(
+    () => _legacyGetSections(),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<List<GuideSection>> _legacyGetSections() async {
     if (fail) throw StateError('boom');
     return const <GuideSection>[
       GuideSection(
@@ -60,7 +66,12 @@ class _FakeRepository implements IslamicGuideRepository {
   }
 
   @override
-  Future<List<GuideVerse>> resolveQuran(QuranRef ref) async {
+  Future<Result<List<GuideVerse>>> resolveQuran(QuranRef ref) => Result.guard(
+    () => _legacyResolveQuran(ref),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<List<GuideVerse>> _legacyResolveQuran(QuranRef ref) async {
     quranCalls++;
     return const <GuideVerse>[
       GuideVerse(surah: 21, surahName: 'سورة الأنبياء', ayah: 87, text: 'نص'),
