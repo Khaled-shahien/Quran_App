@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/theme_provider.dart';
 import '../../../../core/constants/app_strings.dart';
@@ -1150,17 +1149,46 @@ class _HomeScreenState extends State<HomeScreen> {
 class _PrayerTimeHeader extends StatelessWidget {
   const _PrayerTimeHeader();
 
+  static String _clock(DateTime t) {
+    final period = t.hour >= 12
+        ? appL10n.alarmMenuItemMessage2
+        : appL10n.alarmMenuItemMessage3;
+    final h = t.hour % 12 == 0 ? 12 : t.hour % 12;
+    return '$h:${t.minute.toString().padLeft(2, '0')} $period';
+  }
+
+  static String _duration(Duration d) {
+    final minutes = d.inMinutes.clamp(0, 24 * 60);
+    final h = minutes ~/ 60;
+    final m = minutes % 60;
+    return h > 0
+        ? appL10n.prayerTimesWidgetMessage15('$h', '$m')
+        : appL10n.prayerTimesWidgetMessage16('$m');
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = l10nOf(context);
+    final onPrimary = theme.colorScheme.onPrimary;
 
     return Consumer<PrayerTimesProvider>(
       builder: (context, provider, child) {
-        final prayerData = provider.getCurrentAndNextPrayer();
-        final currentName = prayerData['currentName'] ?? '---';
-        final currentTime = prayerData['currentTime'] ?? '--:--';
-        final nextName = prayerData['nextName'] ?? '---';
-        final nextTime = prayerData['nextTime'] ?? '--:--';
+        final next = provider.nextPrayer;
+        final String title;
+        final String? countdown;
+        final String? at;
+        if (next != null) {
+          title = next.name;
+          countdown = l10n.homeTimeLeft(_duration(next.remaining));
+          at = l10n.homeAtTime(_clock(next.wallTime));
+        } else {
+          title = provider.needsLocation
+              ? l10n.choosePrayerLocation
+              : l10n.prayerTimesWidgetMessage4;
+          countdown = null;
+          at = null;
+        }
 
         return Container(
           decoration: BoxDecoration(
@@ -1174,103 +1202,69 @@ class _PrayerTimeHeader extends StatelessWidget {
               ],
             ),
           ),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              PositionedDirectional(
-                top: -50,
-                end: -20,
-                child: Icon(
-                  Icons.auto_stories_rounded,
-                  size: 170,
-                  color: theme.colorScheme.onPrimary.withValues(alpha: 0.08),
-                ),
-              ),
-              SafeArea(
-                bottom: false,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 56, 24, 52),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        currentName,
-                        textAlign: TextAlign.right,
-                        style: theme.textTheme.labelLarge?.copyWith(
-                          color: theme.colorScheme.onPrimary.withValues(
-                            alpha: 0.78,
-                          ),
-                          fontWeight: FontWeight.w700,
-                        ),
+          child: Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              // The whole header opens the full prayer times.
+              onTap: () => context.push('/prayers'),
+              child: Semantics(
+                button: true,
+                label: next == null
+                    ? title
+                    : l10n.homeNextPrayerSemantics(
+                        next.name,
+                        _duration(next.remaining),
+                        _clock(next.wallTime),
                       ),
-                      Text(
-                        currentTime,
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 38,
-                          fontWeight: FontWeight.w900,
-                          color: theme.colorScheme.onPrimary,
-                          height: 1.05,
-                        ),
-                      ),
-                      const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.md,
-                          vertical: AppSpacing.sm,
-                        ),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.onPrimary.withValues(
-                            alpha: 0.13,
+                excludeSemantics: true,
+                child: SafeArea(
+                  bottom: false,
+                  child: Padding(
+                    // Bottom space keeps clear of the collapsing app title.
+                    padding: const EdgeInsets.fromLTRB(24, 56, 24, 52),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          l10n.homeNextPrayer,
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: onPrimary.withValues(alpha: 0.85),
+                            fontWeight: FontWeight.w700,
                           ),
-                          borderRadius: BorderRadius.circular(18),
-                          border: Border.all(
-                            color: theme.colorScheme.onPrimary.withValues(
-                              alpha: 0.18,
+                        ),
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontSize: next == null ? 22 : 36,
+                            fontWeight: FontWeight.w900,
+                            color: onPrimary,
+                            height: 1.15,
+                          ),
+                        ),
+                        if (countdown != null)
+                          Text(
+                            countdown,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: onPrimary,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                          boxShadow: AppShadows.subtle,
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.schedule_rounded,
-                              size: 18,
-                              color: theme.colorScheme.onPrimary.withValues(
-                                alpha: 0.84,
-                              ),
+                        if (at != null) ...[
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(
+                            '$at • ${provider.locationLabel}',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: onPrimary.withValues(alpha: 0.85),
                             ),
-                            const SizedBox(width: AppSpacing.sm),
-                            Expanded(
-                              child: Text(
-                                l10nOf(
-                                  context,
-                                ).homeScreenMessage61((nextName).toString()),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onPrimary.withValues(
-                                    alpha: 0.82,
-                                  ),
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              nextTime,
-                              style: theme.textTheme.labelLarge?.copyWith(
-                                color: theme.colorScheme.onPrimary,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ],
+            ),
           ),
         );
       },

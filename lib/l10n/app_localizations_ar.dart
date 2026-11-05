@@ -2063,4 +2063,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get readingNightModeHint => 'صفحة دافئة بإضاءة أهدأ للقراءة ليلاً';
+
+  @override
+  String get homeNextPrayer => 'الصلاة القادمة';
+
+  @override
+  String homeTimeLeft(String duration) {
+    return 'بعد $duration';
+  }
+
+  @override
+  String homeAtTime(String time) {
+    return 'الساعة $time';
+  }
+
+  @override
+  String homeNextPrayerSemantics(String prayer, String duration, String time) {
+    return 'الصلاة القادمة $prayer بعد $duration، الساعة $time';
+  }
 }

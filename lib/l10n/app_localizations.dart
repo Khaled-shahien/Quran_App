@@ -3775,6 +3775,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'صفحة دافئة بإضاءة أهدأ للقراءة ليلاً'**
   String get readingNightModeHint;
+
+  /// No description provided for @homeNextPrayer.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصلاة القادمة'**
+  String get homeNextPrayer;
+
+  /// No description provided for @homeTimeLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد {duration}'**
+  String homeTimeLeft(String duration);
+
+  /// No description provided for @homeAtTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'الساعة {time}'**
+  String homeAtTime(String time);
+
+  /// No description provided for @homeNextPrayerSemantics.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصلاة القادمة {prayer} بعد {duration}، الساعة {time}'**
+  String homeNextPrayerSemantics(String prayer, String duration, String time);
 }
 
 class _AppLocalizationsDelegate

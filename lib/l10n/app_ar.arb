@@ -2618,5 +2618,36 @@
     }
   },
   "readingNightMode": "وضع القراءة الليلية",
-  "readingNightModeHint": "صفحة دافئة بإضاءة أهدأ للقراءة ليلاً"
+  "readingNightModeHint": "صفحة دافئة بإضاءة أهدأ للقراءة ليلاً",
+  "homeNextPrayer": "الصلاة القادمة",
+  "homeTimeLeft": "بعد {duration}",
+  "@homeTimeLeft": {
+    "placeholders": {
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "homeAtTime": "الساعة {time}",
+  "@homeAtTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "homeNextPrayerSemantics": "الصلاة القادمة {prayer} بعد {duration}، الساعة {time}",
+  "@homeNextPrayerSemantics": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }
