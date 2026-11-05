@@ -70,6 +70,10 @@ dependencies:
   firebase_analytics: 11.6.0
   hijri: ^3.0.1
   adhan_dart: 2.0.1
+  just_audio: ^0.10.6
+  audio_service: ^0.18.19
+  audio_session: ^0.2.4
+  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:
@@ -131,6 +135,7 @@ flutter:
     - assets/quran_duas.json
     - assets/prayer_cities.json
     - assets/islamic_guide.json
+    - assets/recitation_reciters.json
     - content_manifest.json
     - fonts/Cairo-OFL.txt
     - fonts/Amiri-OFL.txt
