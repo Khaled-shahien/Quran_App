@@ -20,10 +20,10 @@ Set each reminder a few minutes ahead; observe foreground, background and termin
 delivery. Tap each notification and verify the exact destination. Repeat with
 permission denied, exact-alarm access disabled, battery saver, reboot and upgrade.
 For prayer times compare the explicitly selected city's method and timezone with
-the provider response, including travel, DST and midnight rollover. Check the
+an independent reference (ministry timetable or AlAdhan), including travel, DST and midnight rollover. Check the
 following day without opening the app. The background worker now queues today
 and the next two calendar days from saved coordinates and the selected method,
-using the API timezone. Periodic execution remains OS-controlled: test delayed
+calculated on device in the place's IANA timezone. Periodic execution remains OS-controlled: test delayed
 jobs, offline gaps longer than the queued window, and location/setting changes
 while a job runs. Physical delivery and iOS background execution remain unverified.
 
@@ -62,3 +62,5 @@ if crashes, notification errors or content issues exceed approved thresholds.
 Prepare a corrective build with a higher version code; the first release has no
 previous published artifact to restore. No store submission is performed by the
 local test workflow.
+
+A step-by-step Arabic checklist for manual runs is in `MANUAL_QA_CHECKLIST_AR.md`.
