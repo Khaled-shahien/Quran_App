@@ -181,7 +181,7 @@ void main() {
 
         ChangeNotifierProvider<KhatmaProvider>(
           create: (_) =>
-              KhatmaProvider(repository: KhatmaRepository(prefs: prefs)),
+              KhatmaProvider(repository: KhatmaRepositoryImpl(prefs: prefs)),
         ),
         ChangeNotifierProvider<AzkarProvider>(
           create: (_) => AzkarProvider(repository: FakeAzkarRepository()),

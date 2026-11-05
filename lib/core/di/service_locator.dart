@@ -140,7 +140,7 @@ Future<void> setupServiceLocator() async {
     getIt.registerLazySingleton<DuasRepository>(() => DuasRepositoryImpl());
 
     getIt.registerLazySingleton<KhatmaRepository>(
-      () => KhatmaRepository(prefs: getIt<SharedPreferences>()),
+      () => KhatmaRepositoryImpl(prefs: getIt<SharedPreferences>()),
     );
 
     getIt.registerLazySingleton<MediaRepository>(

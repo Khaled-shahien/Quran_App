@@ -2,6 +2,7 @@ import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
 import 'dart:math' as math;
+import 'package:sakina_app/core/result/result.dart';
 import '../../domain/models/khatma_model.dart';
 import '../../domain/models/wird_reading_position.dart';
 import '../../data/repositories/khatma_repository.dart';
@@ -42,9 +43,28 @@ class KhatmaProvider extends ChangeNotifier {
 
   KhatmaReportSummary? get monthlySummary => _activeKhatma?.summaryForDays(30);
 
+  /// Persistence failures keep the in-memory plan usable and are logged; the
+  /// next successful save writes the full current state again.
+  T? _logFailure<T>(Result<T> result) {
+    switch (result) {
+      case Success(:final value):
+        return value;
+      case Err(:final failure):
+        developer.log(
+          'Khatma persistence failed',
+          name: 'sakina_app.khatma',
+          level: 1000,
+          error: failure.cause,
+        );
+        return null;
+    }
+  }
+
   void _loadActiveKhatma() {
-    _activeKhatma = repository.getActiveKhatma();
-    _savedWirdPosition = repository.getSavedWirdPosition();
+    _activeKhatma = _logFailure<KhatmaModel?>(repository.getActiveKhatma());
+    _savedWirdPosition = _logFailure<WirdReadingPosition?>(
+      repository.getSavedWirdPosition(),
+    );
     notifyListeners();
   }
 
@@ -69,9 +89,9 @@ class KhatmaProvider extends ChangeNotifier {
       nextPageNumber: startPosition.pageNumber,
     );
 
-    await repository.clearWirdPosition();
+    _logFailure(await repository.clearWirdPosition());
     _savedWirdPosition = null;
-    await repository.saveKhatma(enriched);
+    _logFailure(await repository.saveKhatma(enriched));
     _activeKhatma = enriched;
     await _scheduleKhatmaReminder(enriched);
     notifyListeners();
@@ -105,7 +125,7 @@ class KhatmaProvider extends ChangeNotifier {
       return false;
     }
 
-    await repository.saveWirdPosition(position);
+    _logFailure(await repository.saveWirdPosition(position));
     _savedWirdPosition = position;
     notifyListeners();
     return true;
@@ -181,8 +201,8 @@ class KhatmaProvider extends ChangeNotifier {
       completedWirds: nextCompletedWirds,
     );
 
-    await repository.saveKhatma(updatedKhatma);
-    await repository.clearWirdPosition();
+    _logFailure(await repository.saveKhatma(updatedKhatma));
+    _logFailure(await repository.clearWirdPosition());
     _activeKhatma = updatedKhatma;
     _savedWirdPosition = null;
 
@@ -200,8 +220,8 @@ class KhatmaProvider extends ChangeNotifier {
       isCompleted: true,
       completedUnits: current.plannedUnits.toDouble(),
     );
-    await repository.saveKhatma(updatedKhatma);
-    await repository.clearWirdPosition();
+    _logFailure(await repository.saveKhatma(updatedKhatma));
+    _logFailure(await repository.clearWirdPosition());
     await _reminderService.cancelReminder(_khatmaReminderNotificationId);
     _activeKhatma = updatedKhatma;
     _savedWirdPosition = null;
@@ -216,7 +236,7 @@ class KhatmaProvider extends ChangeNotifier {
       dailyTargetUnits: targetUnits.clamp(1, 2000),
       goalType: KhatmaGoalType.byDailyAmount,
     );
-    await repository.saveKhatma(updatedKhatma);
+    _logFailure(await repository.saveKhatma(updatedKhatma));
     _activeKhatma = updatedKhatma;
     await _scheduleKhatmaReminder(updatedKhatma);
     notifyListeners();
@@ -266,7 +286,7 @@ class KhatmaProvider extends ChangeNotifier {
           : current.startDate,
     );
 
-    await repository.saveKhatma(updated);
+    _logFailure(await repository.saveKhatma(updated));
     _activeKhatma = updated;
     await _scheduleKhatmaReminder(updated);
     notifyListeners();
@@ -280,7 +300,7 @@ class KhatmaProvider extends ChangeNotifier {
       reminderHour: reminder.hour,
       reminderMinute: reminder.minute,
     );
-    await repository.saveKhatma(updatedKhatma);
+    _logFailure(await repository.saveKhatma(updatedKhatma));
     _activeKhatma = updatedKhatma;
     await _scheduleKhatmaReminder(updatedKhatma);
     notifyListeners();
@@ -316,7 +336,7 @@ class KhatmaProvider extends ChangeNotifier {
     final KhatmaModel updatedKhatma = current.copyWith(
       dailyTargetUnits: recalculatedTarget,
     );
-    await repository.saveKhatma(updatedKhatma);
+    _logFailure(await repository.saveKhatma(updatedKhatma));
     _activeKhatma = updatedKhatma;
     await _scheduleKhatmaReminder(updatedKhatma);
     notifyListeners();
@@ -324,8 +344,8 @@ class KhatmaProvider extends ChangeNotifier {
 
   Future<void> cancelKhatma() async {
     await _reminderService.cancelReminder(_khatmaReminderNotificationId);
-    await repository.deleteActiveKhatma();
-    await repository.clearWirdPosition();
+    _logFailure(await repository.deleteActiveKhatma());
+    _logFailure(await repository.clearWirdPosition());
     _activeKhatma = null;
     _savedWirdPosition = null;
     notifyListeners();

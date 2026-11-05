@@ -1,70 +1,59 @@
 import 'dart:convert';
-import 'dart:developer' as developer;
+
+import 'package:sakina_app/core/result/result.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../domain/models/khatma_model.dart';
 import '../../domain/models/wird_reading_position.dart';
+import '../../domain/repositories/khatma_repository.dart';
 
-class KhatmaRepository {
+export '../../domain/repositories/khatma_repository.dart';
+
+class KhatmaRepositoryImpl implements KhatmaRepository {
+  KhatmaRepositoryImpl({required this.prefs});
+
   static const String _activeKhatmaKey = 'active_khatma_plan';
   static const String _savedWirdPositionKey = 'saved_wird_position';
   final SharedPreferences prefs;
 
-  KhatmaRepository({required this.prefs});
-
-  Future<void> saveKhatma(KhatmaModel khatma) async {
-    final String jsonData = jsonEncode(khatma.toJson());
-    await prefs.setString(_activeKhatmaKey, jsonData);
-  }
-
-  KhatmaModel? getActiveKhatma() {
-    final String? jsonData = prefs.getString(_activeKhatmaKey);
-    if (jsonData != null) {
-      try {
-        final Map<String, dynamic> decoded = jsonDecode(jsonData);
-        return KhatmaModel.fromJson(decoded);
-      } catch (e, stackTrace) {
-        developer.log(
-          'Failed to parse stored khatma plan',
-          name: 'sakina_app.khatma',
-          level: 1000,
-          error: e,
-          stackTrace: stackTrace,
-        );
-        return null;
-      }
-    }
-    return null;
-  }
-
-  Future<void> deleteActiveKhatma() async {
-    await prefs.remove(_activeKhatmaKey);
-  }
-
-  Future<void> saveWirdPosition(WirdReadingPosition position) async {
-    final String jsonData = jsonEncode(position.toJson());
-    await prefs.setString(_savedWirdPositionKey, jsonData);
-  }
-
-  WirdReadingPosition? getSavedWirdPosition() {
-    final String? jsonData = prefs.getString(_savedWirdPositionKey);
-    if (jsonData == null) return null;
-
+  Result<T?> _read<T>(String key, T Function(Map<String, dynamic>) parse) {
+    final String? jsonData = prefs.getString(key);
+    if (jsonData == null) return const Success(null);
     try {
-      final Map<String, dynamic> decoded = jsonDecode(jsonData);
-      return WirdReadingPosition.fromJson(decoded);
-    } catch (e, stackTrace) {
-      developer.log(
-        'Failed to parse stored wird reading position',
-        name: 'sakina_app.khatma',
-        level: 1000,
-        error: e,
-        stackTrace: stackTrace,
-      );
-      return null;
+      return Success(parse(jsonDecode(jsonData) as Map<String, dynamic>));
+    } catch (error) {
+      return Err(StorageFailure(cause: error));
     }
   }
 
-  Future<void> clearWirdPosition() async {
-    await prefs.remove(_savedWirdPositionKey);
-  }
+  Future<Result<void>> _write(Future<bool> Function() write) =>
+      Result.guard(() async {
+        if (!await write()) throw StateError('Preference write failed');
+      }, onError: (error, _) => StorageFailure(cause: error));
+
+  @override
+  Result<KhatmaModel?> getActiveKhatma() =>
+      _read(_activeKhatmaKey, KhatmaModel.fromJson);
+
+  @override
+  Future<Result<void>> saveKhatma(KhatmaModel khatma) => _write(
+    () => prefs.setString(_activeKhatmaKey, jsonEncode(khatma.toJson())),
+  );
+
+  @override
+  Future<Result<void>> deleteActiveKhatma() =>
+      _write(() => prefs.remove(_activeKhatmaKey));
+
+  @override
+  Result<WirdReadingPosition?> getSavedWirdPosition() =>
+      _read(_savedWirdPositionKey, WirdReadingPosition.fromJson);
+
+  @override
+  Future<Result<void>> saveWirdPosition(WirdReadingPosition position) => _write(
+    () => prefs.setString(_savedWirdPositionKey, jsonEncode(position.toJson())),
+  );
+
+  @override
+  Future<Result<void>> clearWirdPosition() =>
+      _write(() => prefs.remove(_savedWirdPositionKey));
 }

@@ -48,7 +48,7 @@ void main() {
 
   Future<KhatmaRepository> repository() async {
     SharedPreferences.setMockInitialValues({});
-    return KhatmaRepository(prefs: await SharedPreferences.getInstance());
+    return KhatmaRepositoryImpl(prefs: await SharedPreferences.getInstance());
   }
 
   test('finishing a wird moves the reminder text to the next range', () async {
@@ -76,6 +76,6 @@ void main() {
     await provider.startNewKhatma(_khatma());
 
     expect(provider.hasActiveKhatma, isTrue);
-    expect(repo.getActiveKhatma(), isNotNull);
+    expect(repo.getActiveKhatma().valueOrNull, isNotNull);
   });
 }

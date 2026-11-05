@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,7 +57,7 @@ void main() {
   test('startNewKhatma schedules daily reminder', () async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    final repository = KhatmaRepository(prefs: prefs);
+    final repository = KhatmaRepositoryImpl(prefs: prefs);
     final reminders = FakeKhatmaReminderService();
 
     final provider = KhatmaProvider(
@@ -74,7 +75,7 @@ void main() {
   test('markCurrentWirdAsFinished updates progress and logs', () async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    final repository = KhatmaRepository(prefs: prefs);
+    final repository = KhatmaRepositoryImpl(prefs: prefs);
     final reminders = FakeKhatmaReminderService();
 
     final provider = KhatmaProvider(
@@ -98,7 +99,7 @@ void main() {
     () async {
       SharedPreferences.setMockInitialValues({});
       final prefs = await SharedPreferences.getInstance();
-      final repository = KhatmaRepository(prefs: prefs);
+      final repository = KhatmaRepositoryImpl(prefs: prefs);
       final reminders = FakeKhatmaReminderService();
 
       final provider = KhatmaProvider(
@@ -119,19 +120,19 @@ void main() {
 
       expect(saved, isTrue);
       expect(provider.savedWirdPosition, isNotNull);
-      expect(repository.getSavedWirdPosition(), isNotNull);
+      expect(repository.getSavedWirdPosition().valueOrNull, isNotNull);
 
       await provider.markCurrentWirdAsFinished();
 
       expect(provider.savedWirdPosition, isNull);
-      expect(repository.getSavedWirdPosition(), isNull);
+      expect(repository.getSavedWirdPosition().valueOrNull, isNull);
     },
   );
 
   test('saved wird position ignores a different current range', () async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    final repository = KhatmaRepository(prefs: prefs);
+    final repository = KhatmaRepositoryImpl(prefs: prefs);
     final reminders = FakeKhatmaReminderService();
 
     final provider = KhatmaProvider(
@@ -152,13 +153,13 @@ void main() {
 
     expect(saved, isFalse);
     expect(provider.savedWirdPosition, isNull);
-    expect(repository.getSavedWirdPosition(), isNull);
+    expect(repository.getSavedWirdPosition().valueOrNull, isNull);
   });
 
   test('markCurrentWirdAsFinished cancels reminder on completion', () async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
-    final repository = KhatmaRepository(prefs: prefs);
+    final repository = KhatmaRepositoryImpl(prefs: prefs);
     final reminders = FakeKhatmaReminderService();
 
     final provider = KhatmaProvider(
@@ -174,5 +175,18 @@ void main() {
     expect(active!.isCompleted, isTrue);
     expect(reminders.cancelCount, 1);
     expect(reminders.lastCancelId, 1205);
+  });
+
+  khatmaRepositoryResultTests();
+}
+
+void khatmaRepositoryResultTests() {
+  test('corrupt stored plan is a StorageFailure, not a crash', () async {
+    SharedPreferences.setMockInitialValues({'active_khatma_plan': '{oops'});
+    final repo = KhatmaRepositoryImpl(
+      prefs: await SharedPreferences.getInstance(),
+    );
+    expect(repo.getActiveKhatma().failureOrNull, isA<StorageFailure>());
+    expect(repo.getSavedWirdPosition().valueOrNull, isNull);
   });
 }
