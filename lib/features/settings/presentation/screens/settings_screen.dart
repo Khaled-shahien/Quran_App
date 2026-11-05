@@ -107,6 +107,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onChanged: alarm.toggle,
               ),
             ],
+            _SectionTitle(l10nOf(context).feedbackSection),
+            const FeedbackPreferences(),
             _SectionTitle(l10nOf(context).settingsScreenMessage12),
             const MonitoringPreference(),
             ListTile(

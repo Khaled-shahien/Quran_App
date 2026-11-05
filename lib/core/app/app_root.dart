@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'dart:async';
 import '../../l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -298,6 +299,9 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
         ),
         ChangeNotifierProvider<TextSizeController>(
           create: (_) => TextSizeController(_prefs),
+        ),
+        ChangeNotifierProvider<FeedbackService>.value(
+          value: getIt<FeedbackService>(),
         ),
         ChangeNotifierProvider<DigitStyleController>(
           create: (_) => DigitStyleController(_prefs),

@@ -2138,4 +2138,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get digitStyleArabic => 'أرقام عربية (١٢٣)';
+
+  @override
+  String get feedbackSection => 'الصوت والتفاعل';
+
+  @override
+  String get feedbackHaptics => 'الاهتزاز عند اللمس';
+
+  @override
+  String get feedbackHapticsHint =>
+      'اهتزاز خفيف مع كل تسبيحة، وأقوى عند إتمام العدد، وعند الاتجاه للقبلة';
+
+  @override
+  String get feedbackSounds => 'أصوات الواجهة';
+
+  @override
+  String get feedbackSoundsHint =>
+      'نقرة خفيفة مع العدّ في المسبحة والأذكار. لا تؤثر على صوت الأذان أو التلاوة';
 }

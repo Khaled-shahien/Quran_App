@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/app_localizations.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -209,10 +210,17 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
     );
   }
 
-  void _incrementCounter() => _controller.increment();
+  void _incrementCounter() {
+    final setComplete = _controller.increment();
+    playFeedback(
+      context,
+      setComplete ? FeedbackEvent.tasbihSetComplete : FeedbackEvent.tasbihCount,
+    );
+  }
 
   void _resetCounters() {
     final before = _controller.reset();
+    playFeedback(context, FeedbackEvent.reset);
     final messenger = ScaffoldMessenger.of(context);
     messenger.clearSnackBars();
     messenger.showSnackBar(

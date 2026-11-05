@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
@@ -323,6 +324,12 @@ class _AzkarItemCard extends StatelessWidget {
             ? null
             : () {
                 final finishedItem = p.increment(item);
+                playFeedback(
+                  context,
+                  finishedItem
+                      ? FeedbackEvent.adhkarComplete
+                      : FeedbackEvent.adhkarCount,
+                );
                 if (finishedItem && p.allComplete) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(l10n.adhkarCompleted(p.category))),

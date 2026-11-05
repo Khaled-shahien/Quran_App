@@ -2667,5 +2667,10 @@
   "onboardingNotificationsNote": "الإشعارات: نطلبها فقط عندما تفعّل تذكيرًا أو الأذان، ويمكنك إيقافها من الإعدادات في أي وقت.",
   "digitStyle": "شكل الأرقام",
   "digitStyleWestern": "أرقام غربية (123)",
-  "digitStyleArabic": "أرقام عربية (١٢٣)"
+  "digitStyleArabic": "أرقام عربية (١٢٣)",
+  "feedbackSection": "الصوت والتفاعل",
+  "feedbackHaptics": "الاهتزاز عند اللمس",
+  "feedbackHapticsHint": "اهتزاز خفيف مع كل تسبيحة، وأقوى عند إتمام العدد، وعند الاتجاه للقبلة",
+  "feedbackSounds": "أصوات الواجهة",
+  "feedbackSoundsHint": "نقرة خفيفة مع العدّ في المسبحة والأذكار. لا تؤثر على صوت الأذان أو التلاوة"
 }

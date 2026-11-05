@@ -3907,6 +3907,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أرقام عربية (١٢٣)'**
   String get digitStyleArabic;
+
+  /// No description provided for @feedbackSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصوت والتفاعل'**
+  String get feedbackSection;
+
+  /// No description provided for @feedbackHaptics.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاهتزاز عند اللمس'**
+  String get feedbackHaptics;
+
+  /// No description provided for @feedbackHapticsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اهتزاز خفيف مع كل تسبيحة، وأقوى عند إتمام العدد، وعند الاتجاه للقبلة'**
+  String get feedbackHapticsHint;
+
+  /// No description provided for @feedbackSounds.
+  ///
+  /// In ar, this message translates to:
+  /// **'أصوات الواجهة'**
+  String get feedbackSounds;
+
+  /// No description provided for @feedbackSoundsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقرة خفيفة مع العدّ في المسبحة والأذكار. لا تؤثر على صوت الأذان أو التلاوة'**
+  String get feedbackSoundsHint;
 }
 
 class _AppLocalizationsDelegate

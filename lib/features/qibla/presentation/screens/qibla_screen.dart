@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'dart:async';
 import 'dart:math' as math;
@@ -22,6 +23,7 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     controller = widget.controller ?? QiblaController();
+    controller.addListener(_onQiblaChanged);
     WidgetsBinding.instance.addObserver(this);
     unawaited(controller.start());
   }
@@ -34,8 +36,21 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
     }
   }
 
+  bool _wasAligned = false;
+
+  /// One gentle pulse when the phone turns to face the qibla, not on every
+  /// sensor update while it stays aligned.
+  void _onQiblaChanged() {
+    final aligned = controller.aligned;
+    if (aligned && !_wasAligned && mounted) {
+      playFeedback(context, FeedbackEvent.qiblaAligned);
+    }
+    _wasAligned = aligned;
+  }
+
   @override
   void dispose() {
+    controller.removeListener(_onQiblaChanged);
     WidgetsBinding.instance.removeObserver(this);
     if (widget.controller == null) {
       controller.dispose();

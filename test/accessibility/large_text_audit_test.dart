@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/features/settings/presentation/providers/digit_style_controller.dart';
 import 'package:sakina_app/features/settings/presentation/providers/text_size_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -172,6 +173,9 @@ void main() {
           ChangeNotifierProvider(create: (_) => ThemeProvider(prefs: prefs)),
           ChangeNotifierProvider(create: (_) => TextSizeController(prefs)),
           ChangeNotifierProvider(create: (_) => DigitStyleController(prefs)),
+          ChangeNotifierProvider(
+            create: (_) => FeedbackService(preferences: prefs),
+          ),
           ChangeNotifierProvider.value(value: prayer),
           ChangeNotifierProvider(create: (_) => ReadingModeController(prefs)),
           ChangeNotifierProvider(

@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/feedback/feedback_service.dart';
 import '../../features/islamic_guide/data/islamic_guide_repository_impl.dart';
 import '../../features/islamic_guide/domain/repositories/islamic_guide_repository.dart';
 import 'package:sakina_app/features/quran/data/data_sources/local_quran_data_source.dart';
@@ -70,6 +71,9 @@ Future<void> setupServiceLocator() async {
     // ==========================================
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     getIt.registerSingleton<SharedPreferences>(prefs);
+    getIt.registerSingleton<FeedbackService>(
+      FeedbackService(preferences: prefs),
+    );
     getIt.registerLazySingleton<AyahRepository>(
       () => AyahRepositoryImpl(
         localDataSource: LocalQuranDataSource(),

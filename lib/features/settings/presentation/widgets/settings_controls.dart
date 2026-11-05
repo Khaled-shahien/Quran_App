@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:flutter/material.dart';
 import '../providers/text_size_controller.dart';
 import '../providers/digit_style_controller.dart';
@@ -278,6 +279,36 @@ class DigitStylePreference extends StatelessWidget {
           if (value != null) controller.setStyle(value);
         },
       ),
+    );
+  }
+}
+
+/// Touch and sound feedback. Vibration is on by default; sounds are off.
+class FeedbackPreferences extends StatelessWidget {
+  const FeedbackPreferences({super.key});
+  @override
+  Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+    final feedback = context.watch<FeedbackService>();
+    return Column(
+      children: [
+        SwitchListTile(
+          key: const Key('feedback-haptics'),
+          secondary: const Icon(Icons.vibration_rounded),
+          title: Text(l10n.feedbackHaptics),
+          subtitle: Text(l10n.feedbackHapticsHint),
+          value: feedback.hapticsEnabled,
+          onChanged: feedback.setHapticsEnabled,
+        ),
+        SwitchListTile(
+          key: const Key('feedback-sounds'),
+          secondary: const Icon(Icons.volume_up_outlined),
+          title: Text(l10n.feedbackSounds),
+          subtitle: Text(l10n.feedbackSoundsHint),
+          value: feedback.soundsEnabled,
+          onChanged: feedback.setSoundsEnabled,
+        ),
+      ],
     );
   }
 }
