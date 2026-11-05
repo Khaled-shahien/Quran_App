@@ -5,7 +5,7 @@ import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/features/media/domain/entities/video.dart';
 import 'package:sakina_app/features/media/domain/entities/video_channel.dart';
-import 'package:sakina_app/core/utils/external_links.dart';
+import 'package:sakina_app/core/widgets/external_link_confirmation.dart';
 
 class VideoCard extends StatelessWidget {
   const VideoCard({super.key, required this.video});
@@ -137,8 +137,8 @@ class _VideoFallbackImage extends StatelessWidget {
 }
 
 Future<void> _openUrl(BuildContext context, String url) async {
-  final opened = await openWebUrl(url);
-  if (!opened && context.mounted) {
+  final outcome = await openExternalLinkWithConsent(context, url);
+  if (outcome == ExternalLinkOutcome.failed && context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(

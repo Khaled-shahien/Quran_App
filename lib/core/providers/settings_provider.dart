@@ -38,6 +38,23 @@ class SettingsProvider extends ChangeNotifier {
     _loadSettings();
   }
 
+  static const String hijriOffsetKey = 'hijri_offset_days';
+
+  /// Manual Hijri correction for local moon sighting: -1, 0 or +1 day.
+  /// The Hijri date still changes at midnight.
+  int get hijriOffsetDays {
+    final value = prefs.get(hijriOffsetKey);
+    return value is int && value >= -1 && value <= 1 ? value : 0;
+  }
+
+  Future<void> setHijriOffsetDays(int days) async {
+    if (days < -1 || days > 1) {
+      throw ArgumentError.value(days, 'days', 'must be -1, 0 or 1');
+    }
+    await prefs.setInt(hijriOffsetKey, days);
+    notifyListeners();
+  }
+
   bool get isMorningAlarmEnabled => _isMorningAlarmEnabled;
   bool get isEveningAlarmEnabled => _isEveningAlarmEnabled;
   bool get isMulkAlarmEnabled => _isMulkAlarmEnabled;

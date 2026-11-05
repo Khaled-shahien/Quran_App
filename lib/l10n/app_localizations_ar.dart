@@ -1766,4 +1766,33 @@ class AppLocalizationsAr extends AppLocalizations {
   String dateCardSemantics(String weekday, String hijri, String gregorian) {
     return 'اليوم $weekday، $hijri، الموافق $gregorian';
   }
+
+  @override
+  String get externalLinkTitle => 'رابط خارجي';
+
+  @override
+  String get externalLinkMessage =>
+      'سيتم فتح رابط خارج التطبيق، هل تريد المتابعة؟';
+
+  @override
+  String get externalLinkContinue => 'متابعة';
+
+  @override
+  String get hijriAdjustmentTitle => 'تعديل التاريخ الهجري';
+
+  @override
+  String get hijriAdjustmentSubtitle =>
+      'إذا اختلف التاريخ عن رؤية الهلال في بلدك';
+
+  @override
+  String get hijriAdjustmentMinusOne => 'يوم قبل';
+
+  @override
+  String get hijriAdjustmentNone => 'بدون تعديل';
+
+  @override
+  String get hijriAdjustmentPlusOne => 'يوم بعد';
+
+  @override
+  String get tasbihResetDone => 'تمت إعادة تعيين العدّاد';
 }

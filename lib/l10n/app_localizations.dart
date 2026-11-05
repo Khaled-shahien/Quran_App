@@ -3253,6 +3253,60 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اليوم {weekday}، {hijri}، الموافق {gregorian}'**
   String dateCardSemantics(String weekday, String hijri, String gregorian);
+
+  /// No description provided for @externalLinkTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رابط خارجي'**
+  String get externalLinkTitle;
+
+  /// No description provided for @externalLinkMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم فتح رابط خارج التطبيق، هل تريد المتابعة؟'**
+  String get externalLinkMessage;
+
+  /// No description provided for @externalLinkContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة'**
+  String get externalLinkContinue;
+
+  /// No description provided for @hijriAdjustmentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل التاريخ الهجري'**
+  String get hijriAdjustmentTitle;
+
+  /// No description provided for @hijriAdjustmentSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا اختلف التاريخ عن رؤية الهلال في بلدك'**
+  String get hijriAdjustmentSubtitle;
+
+  /// No description provided for @hijriAdjustmentMinusOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم قبل'**
+  String get hijriAdjustmentMinusOne;
+
+  /// No description provided for @hijriAdjustmentNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون تعديل'**
+  String get hijriAdjustmentNone;
+
+  /// No description provided for @hijriAdjustmentPlusOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم بعد'**
+  String get hijriAdjustmentPlusOne;
+
+  /// No description provided for @tasbihResetDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إعادة تعيين العدّاد'**
+  String get tasbihResetDone;
 }
 
 class _AppLocalizationsDelegate

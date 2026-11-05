@@ -24,6 +24,49 @@ Future<void> requestNotificationPermissionWithFeedback(
   );
 }
 
+/// -1 / 0 / +1 day correction of the Hijri date.
+class HijriAdjustmentPreference extends StatelessWidget {
+  const HijriAdjustmentPreference({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
+    final l10n = l10nOf(context);
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l10n.hijriAdjustmentTitle,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            l10n.hijriAdjustmentSubtitle,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 8),
+          SegmentedButton<int>(
+            showSelectedIcon: false,
+            segments: [
+              ButtonSegment(
+                value: -1,
+                label: Text(l10n.hijriAdjustmentMinusOne),
+              ),
+              ButtonSegment(value: 0, label: Text(l10n.hijriAdjustmentNone)),
+              ButtonSegment(value: 1, label: Text(l10n.hijriAdjustmentPlusOne)),
+            ],
+            selected: {settings.hijriOffsetDays},
+            onSelectionChanged: (selection) =>
+                settings.setHijriOffsetDays(selection.single),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ThemePreference extends StatelessWidget {
   const ThemePreference({super.key});
   @override

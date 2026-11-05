@@ -31,6 +31,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             _SectionTitle(l10nOf(context).settingsScreenMessage1),
             const ThemePreference(),
+            const HijriAdjustmentPreference(),
             ReadingPreferencesPanel(preferences: settings.prefs),
             _SectionTitle(l10nOf(context).mainNavigationShellMessage1),
             const PrayerPreferences(),

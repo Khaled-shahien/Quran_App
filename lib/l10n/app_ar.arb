@@ -2412,5 +2412,14 @@
         "type": "String"
       }
     }
-  }
+  },
+  "externalLinkTitle": "رابط خارجي",
+  "externalLinkMessage": "سيتم فتح رابط خارج التطبيق، هل تريد المتابعة؟",
+  "externalLinkContinue": "متابعة",
+  "hijriAdjustmentTitle": "تعديل التاريخ الهجري",
+  "hijriAdjustmentSubtitle": "إذا اختلف التاريخ عن رؤية الهلال في بلدك",
+  "hijriAdjustmentMinusOne": "يوم قبل",
+  "hijriAdjustmentNone": "بدون تعديل",
+  "hijriAdjustmentPlusOne": "يوم بعد",
+  "tasbihResetDone": "تمت إعادة تعيين العدّاد"
 }

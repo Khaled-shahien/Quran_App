@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sakina_app/l10n/localization.dart';
 
+import '../../../../core/providers/settings_provider.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -33,9 +35,23 @@ class _DateCardWidgetState extends State<DateCardWidget>
     _refresh();
   }
 
+  int _hijriOffsetDays = 0;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Optional so the card still works where settings are not provided.
+    final int offset =
+        Provider.of<SettingsProvider?>(context)?.hijriOffsetDays ?? 0;
+    if (offset != _hijriOffsetDays) {
+      _hijriOffsetDays = offset;
+      _refresh();
+    }
+  }
+
   void _refresh() {
     final DateTime now = widget.clock();
-    _date = DualDate.of(now);
+    _date = DualDate.of(now, hijriOffsetDays: _hijriOffsetDays);
     _midnightTimer?.cancel();
     final DateTime nextMidnight = DateTime(now.year, now.month, now.day + 1);
     _midnightTimer = Timer(
