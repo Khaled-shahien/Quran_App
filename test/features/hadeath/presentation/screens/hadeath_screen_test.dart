@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -20,7 +21,12 @@ class FakeHadeathRepository implements HadeathRepository {
   final Future<List<HadeathEntity>> Function()? onGetAll;
 
   @override
-  Future<List<HadeathEntity>> getAllAhadeth() async {
+  Future<Result<List<HadeathEntity>>> getAllAhadeth() => Result.guard(
+    () => _legacyGetAllAhadeth(),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<List<HadeathEntity>> _legacyGetAllAhadeth() async {
     if (onGetAll != null) {
       return onGetAll!();
     }

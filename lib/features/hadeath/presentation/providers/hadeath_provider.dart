@@ -1,5 +1,7 @@
-import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sakina_app/l10n/localization.dart';
+import 'package:sakina_app/core/result/failure_messages.dart';
+import 'package:sakina_app/core/result/result.dart';
 import '../../domain/entities/hadeath_entity.dart';
 import '../../domain/repositories/hadeath_repository.dart';
 
@@ -25,16 +27,16 @@ class HadeathProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    try {
-      final List<HadeathEntity> loadedAhadeth = await repository
-          .getAllAhadeth();
-
-      _ahadethList = loadedAhadeth;
-    } catch (e) {
-      _errorMessage = appL10n.hadeathProviderMessage1((e).toString());
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+    switch (await repository.getAllAhadeth()) {
+      case Success(:final value):
+        _ahadethList = value;
+      case Err(:final failure):
+        // Friendly copy only; the technical cause is never shown.
+        _errorMessage = appL10n.hadeathProviderMessage1(
+          failureMessage(failure),
+        );
     }
+    _isLoading = false;
+    notifyListeners();
   }
 }

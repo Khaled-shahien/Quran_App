@@ -150,7 +150,12 @@ class FakeDuasRepository implements DuasRepository {
 
 class FakeHadeathRepository implements HadeathRepository {
   @override
-  Future<List<HadeathEntity>> getAllAhadeth() async => <HadeathEntity>[];
+  Future<Result<List<HadeathEntity>>> getAllAhadeth() => Result.guard(
+    () => _legacyGetAllAhadeth(),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<List<HadeathEntity>> _legacyGetAllAhadeth() async => <HadeathEntity>[];
 }
 
 void main() {

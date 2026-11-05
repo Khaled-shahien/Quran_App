@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:sakina_app/features/hadeath/domain/entities/hadeath_entity.dart';
@@ -11,7 +12,12 @@ class FakeHadeathRepository implements HadeathRepository {
   FakeHadeathRepository({required this.data, this.shouldThrow = false});
 
   @override
-  Future<List<HadeathEntity>> getAllAhadeth() async {
+  Future<Result<List<HadeathEntity>>> getAllAhadeth() => Result.guard(
+    () => _legacyGetAllAhadeth(),
+    onError: (error, _) => UnexpectedFailure(cause: error),
+  );
+
+  Future<List<HadeathEntity>> _legacyGetAllAhadeth() async {
     if (shouldThrow) {
       throw Exception('network error');
     }
@@ -49,5 +55,6 @@ void main() {
     expect(provider.isLoading, isFalse);
     expect(provider.ahadethList, isEmpty);
     expect(provider.errorMessage, contains('حدث خطأ أثناء تحميل الأحاديث'));
+    expect(provider.errorMessage, isNot(contains('network error')));
   });
 }

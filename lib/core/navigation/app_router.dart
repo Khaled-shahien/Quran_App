@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../di/service_locator.dart';
+import '../result/result.dart';
 import '../router/fade_slide_route.dart';
 import '../widgets/pulse_loader.dart';
 import '../../features/duas/presentation/screens/azkar_details_screen.dart';
@@ -402,22 +403,35 @@ class _SurahDetailsRouteLoader extends StatelessWidget {
   }
 }
 
-class _HadeathDetailsRouteLoader extends StatelessWidget {
+class _HadeathDetailsRouteLoader extends StatefulWidget {
   final int index;
 
   const _HadeathDetailsRouteLoader({required this.index});
 
   @override
+  State<_HadeathDetailsRouteLoader> createState() =>
+      _HadeathDetailsRouteLoaderState();
+}
+
+class _HadeathDetailsRouteLoaderState
+    extends State<_HadeathDetailsRouteLoader> {
+  // Created once; a future built inside build() would reload on every rebuild.
+  late final Future<Result<List<HadeathEntity>>> _ahadeth = context
+      .read<HadeathRepository>()
+      .getAllAhadeth();
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<HadeathEntity>>(
-      future: context.read<HadeathRepository>().getAllAhadeth(),
+    final int index = widget.index;
+    return FutureBuilder<Result<List<HadeathEntity>>>(
+      future: _ahadeth,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const Scaffold(body: Center(child: PulseLoader(lines: 5)));
         }
 
         final List<HadeathEntity> all =
-            snapshot.data ?? const <HadeathEntity>[];
+            snapshot.data?.valueOrNull ?? const <HadeathEntity>[];
         if (snapshot.hasError || index < 0 || index >= all.length) {
           return _RouteDataErrorScreen(
             message: l10nOf(context).appRouterMessage7,
