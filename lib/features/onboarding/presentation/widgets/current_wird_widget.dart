@@ -595,7 +595,7 @@ class _KhatmaProgressBar extends StatelessWidget {
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: 0, end: safeProgress),
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 400),
       curve: Curves.easeOutCubic,
       builder: (context, value, child) => buildBar(value),
     );

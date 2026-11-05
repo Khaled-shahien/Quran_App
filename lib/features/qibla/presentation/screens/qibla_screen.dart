@@ -281,7 +281,7 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
   }
 }
 
-class QiblaDial extends StatelessWidget {
+class QiblaDial extends StatefulWidget {
   const QiblaDial({
     super.key,
     required this.bearing,
@@ -293,19 +293,44 @@ class QiblaDial extends StatelessWidget {
   final bool aligned;
 
   @override
+  State<QiblaDial> createState() => _QiblaDialState();
+}
+
+/// Eases the dial towards each new sensor reading so it glides instead of
+/// jittering, always turning the short way across north.
+class _QiblaDialState extends State<QiblaDial> {
+  late double _continuous = widget.heading;
+
+  @override
+  void didUpdateWidget(QiblaDial oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final delta = (widget.heading - oldWidget.heading + 540) % 360 - 180;
+    _continuous += delta;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final accent = aligned ? const Color(0xFF28734F) : colors.primary;
+    final accent = widget.aligned ? const Color(0xFF28734F) : colors.primary;
+    final duration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : const Duration(milliseconds: 250);
     return Semantics(
       label: l10nOf(context).qiblaScreenMessage30,
       child: AspectRatio(
         aspectRatio: 1,
-        child: CustomPaint(
-          painter: _CompassPainter(
-            heading: heading,
-            bearing: bearing,
-            color: accent,
-            textColor: colors.onSurface,
+        child: TweenAnimationBuilder<double>(
+          tween: Tween<double>(end: _continuous),
+          duration: duration,
+          curve: Curves.easeOutCubic,
+          builder: (context, heading, child) => CustomPaint(
+            painter: _CompassPainter(
+              heading: heading,
+              bearing: widget.bearing,
+              color: accent,
+              textColor: colors.onSurface,
+            ),
+            child: child,
           ),
           child: Center(
             child: Container(
