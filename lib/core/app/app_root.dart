@@ -17,6 +17,8 @@ import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_rep
 import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:sakina_app/features/quran/domain/repositories/surah_repository.dart';
 import 'package:sakina_app/features/quran/presentation/providers/bookmark_provider.dart';
+import 'package:sakina_app/features/quran/data/repositories/tasbih_repository_impl.dart';
+import 'package:sakina_app/features/quran/presentation/providers/tasbih_controller.dart';
 import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_repository.dart';
 import 'package:sakina_app/features/hadeath/presentation/providers/hadeath_provider.dart';
 import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart';
@@ -63,6 +65,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
   late final KhatmaRepository _khatmaRepository;
   late final KhatmaProvider _khatmaProvider;
   late final NotificationProvider _notificationProvider;
+  late final TasbihController _tasbihController;
 
   @override
   void initState() {
@@ -98,6 +101,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
     _settingsProvider.dispose();
     _khatmaProvider.dispose();
     _notificationProvider.dispose();
+    _tasbihController.dispose();
     super.dispose();
   }
 
@@ -140,6 +144,11 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
     _settingsProvider = SettingsProvider(prefs: _prefs);
 
     _khatmaProvider = KhatmaProvider(repository: _khatmaRepository);
+
+    // TODO: resolve TasbihRepository from GetIt.
+    _tasbihController = TasbihController(
+      repository: SharedPreferencesTasbihRepository(_prefs),
+    );
 
     // Initialize notification provider globally at app startup
     _notificationProvider = NotificationProvider(prefs: _prefs);
@@ -186,6 +195,9 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
         ChangeNotifierProvider<KhatmaProvider>.value(value: _khatmaProvider),
         ChangeNotifierProvider<NotificationProvider>.value(
           value: _notificationProvider,
+        ),
+        ChangeNotifierProvider<TasbihController>.value(
+          value: _tasbihController,
         ),
       ],
       child: Consumer<ThemeProvider>(

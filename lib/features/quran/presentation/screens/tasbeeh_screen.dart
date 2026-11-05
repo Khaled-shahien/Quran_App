@@ -1,8 +1,24 @@
+import 'package:sakina_app/l10n/app_localizations.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../domain/entities/tasbih_phrase.dart';
+import '../providers/tasbih_controller.dart';
+
+/// Display text for a phrase: built-ins come from l10n, custom ones as typed.
+String tasbihPhraseText(TasbihPhrase phrase, AppLocalizations l10n) {
+  if (phrase.customText case final text?) return text;
+  return switch (phrase.id) {
+    'builtin_subhan_allah' => l10n.tasbeehScreenMessage1,
+    'builtin_alhamdulillah' => l10n.tasbeehScreenMessage2,
+    'builtin_la_ilaha_illallah' => l10n.tasbeehScreenMessage3,
+    'builtin_allahu_akbar' => l10n.tasbeehScreenMessage4,
+    _ => '',
+  };
+}
 
 class TasbeehScreen extends StatefulWidget {
   const TasbeehScreen({super.key});
@@ -12,18 +28,14 @@ class TasbeehScreen extends StatefulWidget {
 }
 
 class _TasbeehScreenState extends State<TasbeehScreen> {
-  int count = 0; // Start from 0 instead of 5
-  int totalCounter = 0; // Track total counts across all phrases
-  int selectedIndex = 0; // Index of currently selected phrase
-  List<Map<String, dynamic>> tasbeehPhrases = [
-    {'text': appL10n.tasbeehScreenMessage1, 'count': 0, 'target': 33},
-    {'text': appL10n.tasbeehScreenMessage2, 'count': 0, 'target': 33},
-    {'text': appL10n.tasbeehScreenMessage3, 'count': 0, 'target': 33},
-    {'text': appL10n.tasbeehScreenMessage4, 'count': 0, 'target': 33},
-  ];
+  TasbihController get _controller => context.read<TasbihController>();
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.watch<TasbihController>();
+    final l10n = l10nOf(context);
+    final phrases = controller.phrases;
+    final selected = controller.selected;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -103,19 +115,17 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                           const SizedBox(height: AppConstants.kPaddingSmall),
                           Expanded(
                             child: ListView.builder(
-                              itemCount: tasbeehPhrases.length,
+                              itemCount: phrases.length,
                               itemBuilder: (context, index) {
-                                final phrase = tasbeehPhrases[index];
-                                bool isCompleted =
-                                    phrase['count'] >= phrase['target'];
+                                final phrase = phrases[index];
 
                                 return _tasbeehRow(
-                                  itemKey: phrase,
+                                  itemKey: phrase.id,
                                   index: index,
-                                  title: phrase['text'],
-                                  counter: phrase['count'].toString(),
-                                  isCompleted: isCompleted,
-                                  isSelected: index == selectedIndex,
+                                  title: tasbihPhraseText(phrase, l10n),
+                                  counter: phrase.count.toString(),
+                                  isCompleted: phrase.isComplete,
+                                  isSelected: index == controller.selectedIndex,
                                 );
                               },
                             ),
@@ -162,10 +172,9 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                     ),
                     child: Center(
                       child: Text(
-                        tasbeehPhrases.isNotEmpty &&
-                                selectedIndex < tasbeehPhrases.length
-                            ? tasbeehPhrases[selectedIndex]['text']
-                            : '',
+                        selected == null
+                            ? ''
+                            : tasbihPhraseText(selected, l10n),
                         style: TextStyle(
                           fontFamily: 'Amiri',
                           fontSize: 28,
@@ -203,7 +212,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
                   ),
                   child: Center(
                     child: Text(
-                      count.toString().padLeft(2, '0'),
+                      controller.count.toString().padLeft(2, '0'),
                       style: TextStyle(
                         fontFamily: 'Cairo',
                         fontSize: 36,
@@ -284,27 +293,9 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
     );
   }
 
-  void _incrementCounter() {
-    setState(() {
-      count++;
-      totalCounter++;
+  void _incrementCounter() => _controller.increment();
 
-      // Update the selected phrase count
-      if (tasbeehPhrases.isNotEmpty && selectedIndex < tasbeehPhrases.length) {
-        tasbeehPhrases[selectedIndex]['count'] = count;
-      }
-    });
-  }
-
-  void _resetCounters() {
-    setState(() {
-      count = 0;
-      totalCounter = 0;
-      for (var phrase in tasbeehPhrases) {
-        phrase['count'] = 0;
-      }
-    });
-  }
+  void _resetCounters() => _controller.reset();
 
   void _showAddTasbeehDialog() {
     TextEditingController controller = TextEditingController();
@@ -366,13 +357,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
             ElevatedButton(
               onPressed: () {
                 if (controller.text.trim().isNotEmpty) {
-                  setState(() {
-                    tasbeehPhrases.add({
-                      'text': controller.text.trim(),
-                      'count': 0,
-                      'target': 33, // Default target
-                    });
-                  });
+                  _controller.add(controller.text);
                   Navigator.of(context).pop();
                 }
               },
@@ -405,32 +390,10 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
       key: ObjectKey(itemKey),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        // Step 1: Capture the item and its index before removing it
-        final deletedItem = tasbeehPhrases[index];
-        final deletedIndex = index;
-        final wasSelected = selectedIndex == index;
+        final removed = _controller.removeAt(index);
+        if (removed == null) return;
 
-        setState(() {
-          tasbeehPhrases.removeAt(index);
-
-          // Adjust selectedIndex if needed
-          if (selectedIndex == index) {
-            // If we deleted the selected item,
-            // select the first item or set to 0.
-            selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : 0;
-            if (tasbeehPhrases.isNotEmpty &&
-                selectedIndex < tasbeehPhrases.length) {
-              count = tasbeehPhrases[selectedIndex]['count'];
-            } else {
-              count = 0;
-            }
-          } else if (selectedIndex > index) {
-            // If we deleted an item before the selected one, adjust the index
-            selectedIndex--;
-          }
-        });
-
-        // Step 2: Show SnackBar with Undo action
+        // Offer undo so a swipe never loses the phrase or its count.
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -441,21 +404,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
             action: SnackBarAction(
               label: appL10n.currentWirdWidgetMessage13,
               textColor: AppColors.accent,
-              onPressed: () {
-                setState(() {
-                  // Step 3: Restore the item
-                  tasbeehPhrases.insert(deletedIndex, deletedItem);
-
-                  // Restore selection if it was selected
-                  // or if we need to adjust index.
-                  if (wasSelected) {
-                    selectedIndex = deletedIndex;
-                    count = deletedItem['count'];
-                  } else if (selectedIndex >= deletedIndex) {
-                    selectedIndex++;
-                  }
-                });
-              },
+              onPressed: () => _controller.restore(removed),
             ),
             duration: const Duration(seconds: 4),
           ),
@@ -472,12 +421,7 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         child: const Icon(Icons.delete, color: Colors.white, size: 24),
       ),
       child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedIndex = index;
-            count = tasbeehPhrases[index]['count'];
-          });
-        },
+        onTap: () => _controller.select(index),
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 4),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),

@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:sakina_app/features/quran/data/repositories/tasbih_repository_impl.dart';
+import 'package:sakina_app/features/quran/presentation/providers/tasbih_controller.dart';
 import 'package:sakina_app/features/quran/presentation/screens/tasbeeh_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future<TasbihController> _controller() async {
+  final prefs = await SharedPreferences.getInstance();
+  return TasbihController(repository: SharedPreferencesTasbihRepository(prefs));
+}
+
+Widget _app(TasbihController controller) =>
+    ChangeNotifierProvider<TasbihController>.value(
+      value: controller,
+      child: const MaterialApp(home: TasbeehScreen()),
+    );
 
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues(<String, Object>{}));
+
   testWidgets('Tasbeeh screen supports swipe interactions', (
     WidgetTester tester,
   ) async {
@@ -12,8 +29,7 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
-    // Build the TasbeehScreen
-    await tester.pumpWidget(const MaterialApp(home: TasbeehScreen()));
+    await tester.pumpWidget(_app(await _controller()));
 
     // Verify initial state and pick the first visible dismissible row.
     expect(find.byType(Dismissible), findsWidgets);
@@ -34,5 +50,27 @@ void main() {
       tester.widgetList(find.byType(Dismissible)).length,
       greaterThanOrEqualTo(initialCount - 1),
     );
+  });
+
+  testWidgets('counts survive the screen being rebuilt from storage', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(1080, 1920);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final first = await _controller();
+    await tester.pumpWidget(_app(first));
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pump();
+    expect(find.text('02'), findsOneWidget);
+    await first.saved;
+
+    // A fresh controller reads what the first one wrote, as after app kill.
+    await tester.pumpWidget(const SizedBox());
+    await tester.pumpWidget(_app(await _controller()));
+    expect(find.text('02'), findsOneWidget);
   });
 }
