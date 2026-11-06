@@ -10,6 +10,9 @@ import '../../../onboarding/domain/first_run_state.dart';
 /// Animated splash screen that displays the Sakina logo
 /// before navigating to onboarding or home screen.
 class SplashScreen extends StatefulWidget {
+  /// Long enough for the logo not to flash, no fixed wait beyond that.
+  static const Duration minimumDisplay = Duration(milliseconds: 500);
+
   const SplashScreen({super.key});
 
   @override
@@ -28,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 600),
     );
 
     _fadeAnimation = CurvedAnimation(
@@ -45,16 +48,16 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Navigate after the animation + a short pause
-    _navigateAfterDelay();
+    _navigateWhenReady();
   }
 
-  Future<void> _navigateAfterDelay() async {
-    await Future.delayed(const Duration(seconds: 2));
+  Future<void> _navigateWhenReady() async {
+    final ready = await Future.wait<Object?>([
+      SharedPreferences.getInstance(),
+      Future<void>.delayed(SplashScreen.minimumDisplay),
+    ]);
     if (!mounted) return;
-
-    final prefs = await SharedPreferences.getInstance();
-    if (!mounted) return;
+    final prefs = ready.first! as SharedPreferences;
 
     final completed = hasCompletedOnboarding(prefs);
     context.go(completed ? '/home' : '/onboarding');

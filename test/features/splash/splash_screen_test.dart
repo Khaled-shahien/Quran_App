@@ -25,6 +25,22 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  testWidgets('leaves the splash in well under a second', (tester) async {
+    SharedPreferences.setMockInitialValues({'onboarding_complete': true});
+    final router = GoRouter(
+      initialLocation: '/splash',
+      routes: [
+        GoRoute(path: '/splash', builder: (_, _) => const SplashScreen()),
+        GoRoute(path: '/home', builder: (_, _) => const Text('home')),
+      ],
+    );
+    addTearDown(router.dispose);
+    await tester.pumpWidget(MaterialApp.router(routerConfig: router));
+    await tester.pump(SplashScreen.minimumDisplay);
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('home'), findsOneWidget);
+  });
+
   testWidgets('a new install goes to onboarding', (tester) async {
     SharedPreferences.setMockInitialValues({});
     await pumpSplash(tester);
