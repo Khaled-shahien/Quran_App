@@ -4,8 +4,6 @@ A modern Islamic Flutter application for Quran reading, prayer times, adhkar/dua
 
 ## 📱 Screenshots
 
-Use clean and aligned screenshots.
-
 | Home | Quran | Adhkar | Hadith |
 |------|-------|--------|--------|
 | ![Home](assets/images/بسم%20الله%20الرحمن%20الرحيم.png) | ![Quran](assets/images/القران.png) | ![Adhkar](assets/images/الاذكار.png) | ![Hadith](assets/images/الاحاديث.png) |
@@ -193,9 +191,6 @@ Each feature is isolated and modular:
 - [docs/APP_SCOPE_AND_AUTH.md](docs/APP_SCOPE_AND_AUTH.md) - defines the app’s explicit local-only product scope and authentication policy.
 - [docs/RELEASE_VALIDATION_MATRIX.md](docs/RELEASE_VALIDATION_MATRIX.md) - documents the required validation gates for public releases.
 - [docs/PRODUCTION_DIAGNOSTICS_POLICY.md](docs/PRODUCTION_DIAGNOSTICS_POLICY.md) - outlines the safe operational monitoring policy.
-
-Some older documents mention `AUDIT_REPORT.md` and `updated_development_plan.md`.
-Those files were removed from the repository and survive only in git history.
 
 ## 📱 Responsive Design
 
