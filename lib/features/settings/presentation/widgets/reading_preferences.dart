@@ -15,6 +15,21 @@ class ReadingPreferences {
       (prefs.getDouble(fontKey) ?? 28).clamp(22, 38);
   static double lineHeight(SharedPreferences prefs) =>
       (prefs.getDouble(heightKey) ?? 1.95).clamp(1.5, 2.5);
+
+  /// The first ayah of the last page read in [surah], saved automatically.
+  /// Stored as an ayah (not a page index) so it survives layout changes.
+  static String lastAyahKey(int surah) => 'reading_last_ayah_$surah';
+
+  static int? lastAyah(SharedPreferences prefs, int surah) {
+    final value = prefs.get(lastAyahKey(surah));
+    return value is int && value > 0 ? value : null;
+  }
+
+  static Future<void> saveLastAyah(
+    SharedPreferences prefs,
+    int surah,
+    int ayah,
+  ) => prefs.setInt(lastAyahKey(surah), ayah);
 }
 
 class ReadingPreferencesPanel extends StatefulWidget {

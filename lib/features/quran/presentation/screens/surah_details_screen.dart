@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/utils/arabic_text.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -258,7 +259,50 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
     if (_focusInitialPageIfProvided()) {
       return;
     }
+    if (_focusLastReadPage()) {
+      return;
+    }
     _focusBookmarkedPage();
+  }
+
+  /// Whole-surah reading resumes where it stopped; khatma ranges keep
+  /// their own start.
+  bool get _remembersPosition => widget.rangeFromUnit == null;
+
+  bool _focusLastReadPage() {
+    final prefs = _prefs;
+    if (prefs == null || !_remembersPosition || _surahPages.isEmpty) {
+      return false;
+    }
+    final ayah = ReadingPreferences.lastAyah(prefs, widget.surahNumber);
+    if (ayah == null) return false;
+    final index = _surahPages.indexWhere(
+      (page) => page.verses.any(
+        (verse) =>
+            verse.surahNumber == widget.surahNumber &&
+            verse.verseNumber == ayah,
+      ),
+    );
+    if (index < 0) return false;
+    _setCurrentPage(index);
+    return true;
+  }
+
+  void _rememberPage(int index) {
+    final prefs = _prefs;
+    if (prefs == null || !_remembersPosition) return;
+    if (index < 0 || index >= _surahPages.length) return;
+    final lead = _surahPages[index].verses
+        .where((verse) => verse.surahNumber == widget.surahNumber)
+        .firstOrNull;
+    if (lead == null) return;
+    unawaited(
+      ReadingPreferences.saveLastAyah(
+        prefs,
+        widget.surahNumber,
+        lead.verseNumber,
+      ),
+    );
   }
 
   void _setCurrentPage(int pageIndex) {
@@ -915,6 +959,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
             setState(() {
               _currentSurahPage = index;
             });
+            _rememberPage(index);
           },
           itemBuilder: (context, pageIndex) {
             final pageData = _surahPages[pageIndex];
