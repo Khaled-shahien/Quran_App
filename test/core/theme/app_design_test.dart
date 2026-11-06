@@ -34,6 +34,10 @@ void main() {
         greaterThanOrEqualTo(4.5),
       );
       expect(contrast(p.outline, p.background), greaterThanOrEqualTo(3));
+      // White text sits on the next-prayer card gradient.
+      for (final color in p.decor.heroColors) {
+        expect(contrast(Colors.white, color), greaterThanOrEqualTo(4.5));
+      }
       // Light text sits on the feature card in every design.
       expect(
         contrast(Colors.white, p.decor.featureCard),

@@ -49,10 +49,10 @@ class AsmaItemCard extends StatelessWidget {
                 child: Center(
                   child: Text(
                     number,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ),

@@ -41,7 +41,7 @@ class CurrentWirdWidget extends StatelessWidget {
         ? AppColors.darkSecondary
         : const Color(0xFFF9D030); // Yellow button
     final Color finishedBtnText = isDarkMode ? Colors.white : Colors.black87;
-    final Color textDark = isDarkMode ? Colors.white : const Color(0xFF4A4A4A);
+    final Color textDark = Theme.of(context).colorScheme.onSurface;
     final Color dividerColor = isDarkMode
         ? AppColors.darkGray
         : const Color(0xFFE5E5E5);
@@ -284,10 +284,12 @@ class CurrentWirdWidget extends StatelessWidget {
                                 ),
                                 child: Text(
                                   l10nOf(context).currentWirdWidgetMessage10,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimary,
                                   ),
                                 ),
                               ),
@@ -462,10 +464,10 @@ class CurrentWirdWidget extends StatelessWidget {
                         ),
                         child: Text(
                           l10nOf(context).currentWirdWidgetMessage18,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
                       ),

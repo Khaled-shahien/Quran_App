@@ -79,9 +79,9 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    final textColor = isDarkMode ? Colors.white70 : const Color(0xFF6B6A66);
+    final textColor = Theme.of(context).colorScheme.onSurfaceVariant;
     final cardColor = SakinaDecor.of(context).card;
-    final dropdownTextColor = isDarkMode ? Colors.white : Colors.black87;
+    final dropdownTextColor = Theme.of(context).colorScheme.onSurface;
 
     return Scaffold(
       backgroundColor: backgroundColor,

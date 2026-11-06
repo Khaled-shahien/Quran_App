@@ -25,8 +25,7 @@ class AlarmMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final iconColor = isDark ? Colors.white : Colors.black87;
+    final iconColor = Theme.of(context).colorScheme.onSurface;
 
     return FutureBuilder<Map<String, int>>(
       future: Provider.of<SettingsProvider>(

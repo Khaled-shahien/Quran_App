@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -287,10 +288,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Colors.amber.shade600.withValues(alpha: 0.8),
-              Colors.brown.shade900.withValues(alpha: 0.95),
-            ],
+            colors: SakinaDecor.of(context).heroColors,
           ),
         ),
         child: Padding(
@@ -455,7 +453,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: isNext
-                    ? Colors.white
+                    ? Theme.of(context).colorScheme.onPrimary
                     : Theme.of(context).colorScheme.primary,
               ),
             ),

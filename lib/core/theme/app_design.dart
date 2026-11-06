@@ -29,7 +29,10 @@ class SakinaDecor extends ThemeExtension<SakinaDecor> {
     required this.card,
     required this.featureCard,
     required this.pattern,
+    this.heroColors = _warmHero,
   });
+
+  static const List<Color> _warmHero = [Color(0xCCFFB300), Color(0xF23E2723)];
 
   /// Highlights: selected tabs, progress, undo actions.
   final Color accent;
@@ -44,6 +47,9 @@ class SakinaDecor extends ThemeExtension<SakinaDecor> {
   final Color featureCard;
 
   final DecorPattern pattern;
+
+  /// Background of the next-prayer cards; white text sits on it.
+  final List<Color> heroColors;
 
   static const SakinaDecor warmLight = SakinaDecor(
     accent: AppColors.lightPageAccent,
@@ -75,12 +81,14 @@ class SakinaDecor extends ThemeExtension<SakinaDecor> {
     Color? card,
     Color? featureCard,
     DecorPattern? pattern,
+    List<Color>? heroColors,
   }) => SakinaDecor(
     accent: accent ?? this.accent,
     onAccent: onAccent ?? this.onAccent,
     card: card ?? this.card,
     featureCard: featureCard ?? this.featureCard,
     pattern: pattern ?? this.pattern,
+    heroColors: heroColors ?? this.heroColors,
   );
 
   @override
@@ -92,6 +100,7 @@ class SakinaDecor extends ThemeExtension<SakinaDecor> {
       card: Color.lerp(card, other.card, t)!,
       featureCard: Color.lerp(featureCard, other.featureCard, t)!,
       pattern: t < 0.5 ? pattern : other.pattern,
+      heroColors: t < 0.5 ? heroColors : other.heroColors,
     );
   }
 }
@@ -152,6 +161,7 @@ class AppPalette {
       card: Color(0xFFFFFFFF),
       featureCard: Color(0xFF16463A),
       pattern: DecorPattern.rings,
+      heroColors: [Color(0xFF2A7560), Color(0xFF16463A)],
     ),
   );
 
@@ -172,6 +182,7 @@ class AppPalette {
       card: Color(0xFF16211C),
       featureCard: Color(0xFF16463A),
       pattern: DecorPattern.rings,
+      heroColors: [Color(0xFF1F5C4A), Color(0xFF0F2E25)],
     ),
   );
 
@@ -192,6 +203,7 @@ class AppPalette {
       card: Color(0xFF182235),
       featureCard: Color(0xFF0B1220),
       pattern: DecorPattern.star,
+      heroColors: [Color(0xFF2A3A5C), Color(0xFF0B1220)],
     ),
   );
 }

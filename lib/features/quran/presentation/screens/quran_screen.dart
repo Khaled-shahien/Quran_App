@@ -325,8 +325,8 @@ class SurahCard extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       '$index',
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
