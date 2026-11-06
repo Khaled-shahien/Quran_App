@@ -1436,10 +1436,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tasbeehScreenMessage1 => 'سبحان الله';
 
   @override
-  String get tasbeehScreenMessage2 => 'الحمدلله';
+  String get tasbeehScreenMessage2 => 'الحمد لله';
 
   @override
-  String get tasbeehScreenMessage3 => 'لا اله الا الله';
+  String get tasbeehScreenMessage3 => 'لا إله إلا الله';
 
   @override
   String get tasbeehScreenMessage4 => 'الله أكبر';

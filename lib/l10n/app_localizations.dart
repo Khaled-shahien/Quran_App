@@ -2657,13 +2657,13 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'الحمدلله'**
+  /// **'الحمد لله'**
   String get tasbeehScreenMessage2;
 
   /// Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'لا اله الا الله'**
+  /// **'لا إله إلا الله'**
   String get tasbeehScreenMessage3;
 
   /// Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart.

@@ -1962,11 +1962,11 @@
   "@tasbeehScreenMessage1": {
     "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
   },
-  "tasbeehScreenMessage2": "الحمدلله",
+  "tasbeehScreenMessage2": "الحمد لله",
   "@tasbeehScreenMessage2": {
     "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
   },
-  "tasbeehScreenMessage3": "لا اله الا الله",
+  "tasbeehScreenMessage3": "لا إله إلا الله",
   "@tasbeehScreenMessage3": {
     "description": "Display text used in lib/features/quran/presentation/screens/tasbeeh_screen.dart."
   },
