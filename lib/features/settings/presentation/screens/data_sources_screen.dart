@@ -80,6 +80,7 @@ class _ContentProvenanceViewState extends State<ContentProvenanceView> {
           (jsonDecode(snapshot.data!) as Map<String, dynamic>)['collections']
               as List;
       return ExpansionTile(
+        key: const PageStorageKey<String>('data-sources-manifest'),
         title: Text(l10nOf(context).dataSourcesScreenMessage10),
         children: [
           for (final collection in collections)

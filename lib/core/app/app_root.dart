@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/app/app_frame.dart';
 import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'dart:async';
 import '../../l10n/app_localizations.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/core/di/service_locator.dart';
 import 'package:sakina_app/core/theme/app_theme.dart';
-import 'package:sakina_app/core/theme/noise_background.dart';
 import 'package:sakina_app/core/theme/theme_provider.dart';
 import 'package:sakina_app/core/navigation/app_router.dart';
 import 'package:sakina_app/core/navigation/notification_handler.dart';
@@ -36,7 +36,6 @@ import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart'
 import 'package:sakina_app/features/recitation/domain/repositories/recitation_repository.dart';
 import 'package:sakina_app/features/recitation/presentation/providers/recitation_controller.dart';
 import 'package:sakina_app/features/recitation/presentation/providers/recitation_downloads_controller.dart';
-import 'package:sakina_app/features/recitation/presentation/widgets/recitation_mini_player.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:sakina_app/features/hadeath/domain/repositories/hadeath_repository.dart';
 import 'package:sakina_app/features/hadeath/presentation/providers/hadeath_provider.dart';
@@ -346,16 +345,9 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
                 style: digits,
                 child: AppTextScale(
                   factor: textSize,
-                  child: NoiseBackground(
-                    child: Column(
-                      children: [
-                        Expanded(child: child!),
-                        // Stays visible on every screen while a surah is loaded.
-                        RecitationMiniPlayer(
-                          sheetContext: () => appNavigatorKey.currentContext,
-                        ),
-                      ],
-                    ),
+                  child: AppFrame(
+                    sheetContext: () => appNavigatorKey.currentContext,
+                    child: child!,
                   ),
                 ),
               );

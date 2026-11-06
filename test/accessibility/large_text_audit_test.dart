@@ -55,10 +55,11 @@ Future<void> pumpAudited(
   Widget home, {
   required List<SingleChildWidget> providers,
   required ThemeData theme,
+  double textScale = 2.0,
 }) async {
   tester.view.physicalSize = const Size(360, 640);
   tester.view.devicePixelRatio = 1;
-  tester.platformDispatcher.textScaleFactorTestValue = 2.0;
+  tester.platformDispatcher.textScaleFactorTestValue = textScale;
   addTearDown(tester.view.resetPhysicalSize);
   addTearDown(tester.view.resetDevicePixelRatio);
   addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
@@ -79,8 +80,46 @@ Future<void> pumpAudited(
 
 Future<void> expectAccessible(WidgetTester tester) async {
   expect(tester.takeException(), isNull, reason: 'no overflow at 200% text');
+  await scrollThrough(tester);
   await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
   await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+}
+
+/// Scrolls every visible vertical list to the end and back, checking that
+/// nothing throws or overflows along the way (headers collapsing, items
+/// building as they appear, players and banners staying in place).
+Future<void> scrollThrough(WidgetTester tester) async {
+  final scrollables = find.byType(Scrollable).hitTestable();
+  final count = scrollables.evaluate().length;
+  for (var i = 0; i < count; i++) {
+    final finder = scrollables.at(i);
+    if (finder.evaluate().isEmpty) continue;
+    final state = tester.state<ScrollableState>(finder);
+    if (state.position.axis != Axis.vertical) continue;
+    // All the way to the end, then all the way back to the top.
+    for (final down in [true, false]) {
+      for (var step = 0; step < 80; step++) {
+        if (finder.evaluate().isEmpty) break;
+        final position = tester.state<ScrollableState>(finder).position;
+        final atEdge = down
+            ? position.pixels >= position.maxScrollExtent
+            : position.pixels <= position.minScrollExtent;
+        if (atEdge) break;
+        await tester.drag(
+          finder,
+          Offset(0, down ? -500 : 500),
+          warnIfMissed: false,
+        );
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(
+          tester.takeException(),
+          isNull,
+          reason: 'no error while scrolling ${down ? 'down' : 'up'}',
+        );
+      }
+    }
+  }
 }
 
 void main() {
@@ -91,10 +130,13 @@ void main() {
   });
 
   // Every screen in every design and brightness.
-  final looks = <(String, ThemeData)>[
+  // Every design and brightness at 200% text, plus normal text once.
+  final looks = <(String, ThemeData, double)>[
+    ('warm light 100%', AppTheme.lightTheme, 1.0),
     for (final design in AppDesign.values) ...[
-      ('${design.name} light', AppTheme.light(design)),
-      if (!design.alwaysDark) ('${design.name} dark', AppTheme.dark(design)),
+      ('${design.name} light', AppTheme.light(design), 2.0),
+      if (!design.alwaysDark)
+        ('${design.name} dark', AppTheme.dark(design), 2.0),
     ],
   ];
   for (final look in looks) {
@@ -104,6 +146,7 @@ void main() {
         tester,
         const TasbeehScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [
           ChangeNotifierProvider(
             create: (_) => TasbihController(
@@ -124,6 +167,7 @@ void main() {
         tester,
         const AzkarDetailsScreen(categoryName: 'أذكار الصباح'),
         theme: look.$2,
+        textScale: look.$3,
         providers: [
           Provider<SharedPreferences>.value(value: prefs),
           ChangeNotifierProvider.value(value: azkar),
@@ -147,6 +191,7 @@ void main() {
         tester,
         const RecitationScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [
           ChangeNotifierProvider.value(value: controller),
           ChangeNotifierProvider(
@@ -169,6 +214,7 @@ void main() {
         tester,
         const SettingsScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [
           Provider<SharedPreferences>.value(value: prefs),
           ChangeNotifierProvider(
@@ -214,6 +260,7 @@ void main() {
         tester,
         const PrayerTimesScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [ChangeNotifierProvider.value(value: prayer)],
       );
       await expectAccessible(tester);
@@ -229,6 +276,7 @@ void main() {
           prayerName: 'المغرب',
         ),
         theme: look.$2,
+        textScale: look.$3,
         providers: [Provider<SharedPreferences>.value(value: prefs)],
       );
       await tester.runAsync(
@@ -252,6 +300,7 @@ void main() {
         tester,
         const RecitationDownloadsScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [
           ChangeNotifierProvider.value(value: controller),
           ChangeNotifierProvider(
@@ -272,6 +321,7 @@ void main() {
         tester,
         const HadeathScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [ChangeNotifierProvider.value(value: hadith)],
       );
       await expectAccessible(tester);
@@ -284,6 +334,7 @@ void main() {
         tester,
         const AsmaAlHusnaScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [Provider<SharedPreferences>.value(value: prefs)],
       );
       await expectAccessible(tester);
@@ -295,6 +346,7 @@ void main() {
         tester,
         const KhatmaDurationScreen(startMode: 'juz', startJuz: 1),
         theme: look.$2,
+        textScale: look.$3,
         providers: [
           ChangeNotifierProvider<KhatmaProvider>.value(value: _KhatmaStub()),
         ],

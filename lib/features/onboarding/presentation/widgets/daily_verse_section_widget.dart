@@ -75,8 +75,12 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // Wraps the surah name under the heading at large text sizes.
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 8,
+            runSpacing: 4,
             children: [
               Text(
                 l10nOf(context).dailyVerseSectionWidgetMessage1,

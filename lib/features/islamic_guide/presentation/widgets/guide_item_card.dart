@@ -35,6 +35,10 @@ class GuideItemCard extends StatelessWidget {
         // Removes the default divider lines ExpansionTile draws.
         data: theme.copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
+          // Its own PageStorage slot: without a key it shares the list's
+          // slot, reads the saved scroll offset as its open state and
+          // crashes after scrolling back.
+          key: PageStorageKey<String>('guide-item-${item.title}'),
           initiallyExpanded: initiallyExpanded,
           shape: const RoundedRectangleBorder(borderRadius: AppRadius.card),
           collapsedShape: const RoundedRectangleBorder(

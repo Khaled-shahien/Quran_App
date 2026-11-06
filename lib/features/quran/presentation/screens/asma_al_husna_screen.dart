@@ -318,37 +318,54 @@ class _AsmaAlHusnaScreenState extends State<AsmaAlHusnaScreen> {
           textDirection: TextDirection.rtl,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: GridView.builder(
-              gridDelegate: _gridFor(MediaQuery.textScalerOf(context).scale(1)),
-              itemCount: _names.length,
-              itemBuilder: (context, index) {
-                return AsmaItemCard(
-                  number: _names[index]['number']!,
-                  arabicName: _names[index]['name']!,
-                  meaning: _names[index]['meaning']!,
+            // Rows size to their tallest card, so long meanings never
+            // overflow (a fixed-height grid cannot fit every name).
+            child: Builder(
+              builder: (context) {
+                final perRow = MediaQuery.textScalerOf(context).scale(1) <= 1.15
+                    ? 2
+                    : 1;
+                final rows = (_names.length / perRow).ceil();
+                return ListView.separated(
+                  itemCount: rows,
+                  separatorBuilder: (_, _) => const SizedBox(height: 16),
+                  itemBuilder: (context, row) {
+                    final cards = <Widget>[
+                      for (
+                        var i = row * perRow;
+                        i < (row + 1) * perRow && i < _names.length;
+                        i++
+                      )
+                        Expanded(
+                          child: AsmaItemCard(
+                            number: _names[i]['number']!,
+                            arabicName: _names[i]['name']!,
+                            meaning: _names[i]['meaning']!,
+                          ),
+                        ),
+                    ];
+                    // Keeps a lone last card at half width.
+                    if (cards.length < perRow) {
+                      cards.add(const Expanded(child: SizedBox.shrink()));
+                    }
+                    return IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (var i = 0; i < cards.length; i++) ...[
+                            if (i > 0) const SizedBox(width: 16),
+                            cards[i],
+                          ],
+                        ],
+                      ),
+                    );
+                  },
                 );
               },
             ),
           ),
         ),
       ),
-    );
-  }
-
-  /// Two columns normally; one taller column when large text needs room.
-  static SliverGridDelegate _gridFor(double textScale) {
-    if (textScale <= 1.15) {
-      return const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16.0,
-        mainAxisSpacing: 16.0,
-        childAspectRatio: 0.8,
-      );
-    }
-    return SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 1,
-      mainAxisSpacing: 16.0,
-      mainAxisExtent: 140 + 90 * textScale,
     );
   }
 }

@@ -48,10 +48,13 @@ void main() {
     prefs = await SharedPreferences.getInstance();
   });
 
-  final looks = <(String, ThemeData)>[
+  // Every design and brightness at 200% text, plus normal text once.
+  final looks = <(String, ThemeData, double)>[
+    ('warm light 100%', AppTheme.lightTheme, 1.0),
     for (final design in AppDesign.values) ...[
-      ('${design.name} light', AppTheme.light(design)),
-      if (!design.alwaysDark) ('${design.name} dark', AppTheme.dark(design)),
+      ('${design.name} light', AppTheme.light(design), 2.0),
+      if (!design.alwaysDark)
+        ('${design.name} dark', AppTheme.dark(design), 2.0),
     ],
   ];
 
@@ -62,6 +65,7 @@ void main() {
         tester,
         const HomeScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [
           ChangeNotifierProvider(create: (_) => ThemeProvider(prefs: prefs)),
           ChangeNotifierProvider(
@@ -108,6 +112,7 @@ void main() {
         tester,
         const QuranScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [
           Provider<SurahRepository>(create: (_) => home.FakeSurahRepository()),
           ChangeNotifierProvider(create: (_) => BookmarkProvider(prefs: prefs)),
@@ -134,6 +139,7 @@ void main() {
             surahNumber: 1,
           ),
           theme: look.$2,
+          textScale: look.$3,
           providers: [
             Provider<SharedPreferences>.value(value: prefs),
             ChangeNotifierProvider(
@@ -159,6 +165,7 @@ void main() {
           ),
         ),
         theme: look.$2,
+        textScale: look.$3,
         providers: [
           Provider<SurahRepository>(create: (_) => home.FakeSurahRepository()),
         ],
@@ -173,6 +180,7 @@ void main() {
         tester,
         const KhatmaLocationScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [
           ChangeNotifierProvider<KhatmaProvider>.value(value: _KhatmaStub()),
         ],
@@ -193,6 +201,7 @@ void main() {
         tester,
         QiblaScreen(controller: controller),
         theme: look.$2,
+        textScale: look.$3,
         providers: [Provider<SharedPreferences>.value(value: prefs)],
       );
       await expectAccessible(tester);
@@ -218,6 +227,7 @@ void main() {
         tester,
         const IslamicGuideScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [ChangeNotifierProvider.value(value: provider)],
       );
       await expectAccessible(tester);
@@ -230,6 +240,7 @@ void main() {
         tester,
         const MediaScreen(),
         theme: look.$2,
+        textScale: look.$3,
         providers: [Provider<SharedPreferences>.value(value: prefs)],
       );
       await expectAccessible(tester);

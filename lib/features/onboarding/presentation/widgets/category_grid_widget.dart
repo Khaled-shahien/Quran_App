@@ -7,15 +7,24 @@ class CategoryGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 0.8,
-        ),
+        // Three columns normally; two taller ones when large text needs room.
+        gridDelegate: textScale <= 1.15
+            ? const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 0.8,
+              )
+            : SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                mainAxisExtent: 70 + 45 * textScale,
+              ),
         delegate: SliverChildListDelegate([
           _catCard(
             context,
@@ -98,6 +107,7 @@ class CategoryGridWidget extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               title,
+              textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
             ),
           ],
