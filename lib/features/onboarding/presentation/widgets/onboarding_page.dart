@@ -1,3 +1,5 @@
+import 'package:sakina_app/core/widgets/geometric_pattern.dart';
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
@@ -269,55 +271,69 @@ class _Illustration extends StatelessWidget {
             ),
             border: Border.all(color: colors.primary.withValues(alpha: 0.16)),
           ),
-          child: Column(
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            fit: StackFit.expand,
             children: [
-              if (content.showBasmalah)
-                Image.asset(
-                  'assets/images/بسم الله الرحمن الرحيم.png',
-                  height: 32,
-                  width: 220,
-                  fit: BoxFit.contain,
-                  color: colors.primary,
-                  semanticLabel: AppStrings.basmalah,
-                ),
-              Expanded(
-                child: ExcludeSemantics(
-                  child: content.imagePath != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Image.asset(
-                            content.imagePath!,
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) => Icon(
-                              content.icon,
-                              size: 96,
-                              color: colors.primary,
-                            ),
-                          ),
-                        )
-                      : FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Icon(
-                            content.icon,
-                            size: 150,
-                            color: colors.primary,
-                          ),
-                        ),
-                ),
-              ),
-              // Scale only the decorative caption; explanatory text below
-              // follows the user's text scaling preference.
-              ExcludeSemantics(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    content.caption,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      color: colors.primary,
-                      fontWeight: FontWeight.w600,
-                    ),
+              if (!content.showBasmalah)
+                Positioned.fill(
+                  child: GeometricPattern(
+                    pattern: SakinaDecor.of(context).pattern,
+                    color: colors.primary.withValues(alpha: 0.08),
                   ),
                 ),
+              Column(
+                children: [
+                  if (content.showBasmalah)
+                    Image.asset(
+                      'assets/images/بسم الله الرحمن الرحيم.png',
+                      height: 32,
+                      width: 220,
+                      fit: BoxFit.contain,
+                      color: colors.primary,
+                      semanticLabel: AppStrings.basmalah,
+                    ),
+                  Expanded(
+                    child: ExcludeSemantics(
+                      child: content.imagePath != null
+                          ? Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Image.asset(
+                                content.imagePath!,
+                                fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Icon(
+                                      content.icon,
+                                      size: 96,
+                                      color: colors.primary,
+                                    ),
+                              ),
+                            )
+                          : FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Icon(
+                                content.icon,
+                                size: 150,
+                                color: colors.primary,
+                              ),
+                            ),
+                    ),
+                  ),
+                  // Scale only the decorative caption; explanatory text below
+                  // follows the user's text scaling preference.
+                  ExcludeSemantics(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        content.caption,
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: colors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

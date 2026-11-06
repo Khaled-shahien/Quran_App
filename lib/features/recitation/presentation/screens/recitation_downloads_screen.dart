@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/widgets/empty_state.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,14 +39,9 @@ class _RecitationDownloadsScreenState extends State<RecitationDownloadsScreen> {
       body: !downloads.loaded
           ? const Center(child: CircularProgressIndicator())
           : items.isEmpty
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Text(
-                  l10n.recitationDownloadsEmpty,
-                  textAlign: TextAlign.center,
-                ),
-              ),
+          ? EmptyState(
+              icon: Icons.download_for_offline_outlined,
+              message: l10n.recitationDownloadsEmpty,
             )
           : ListView.builder(
               itemCount: items.length,

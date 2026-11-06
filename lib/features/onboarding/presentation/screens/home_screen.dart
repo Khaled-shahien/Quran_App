@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/widgets/empty_state.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/core/widgets/geometric_pattern.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
@@ -886,16 +887,9 @@ class _HomeScreenState extends State<HomeScreen> {
         final favorites = favoritesProvider.favoriteVerses;
 
         if (favorites.isEmpty) {
-          return Center(
-            child: Text(
-              l10nOf(context).homeScreenMessage59,
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: 0.6),
-              ),
-            ),
+          return EmptyState(
+            icon: Icons.favorite_outline,
+            message: l10nOf(context).homeScreenMessage59,
           );
         }
 

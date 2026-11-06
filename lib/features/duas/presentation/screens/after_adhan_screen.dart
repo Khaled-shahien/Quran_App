@@ -1,3 +1,5 @@
+import 'package:sakina_app/core/widgets/geometric_pattern.dart';
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:flutter/material.dart';
 import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/core/result/failure_messages.dart';
@@ -54,12 +56,39 @@ class _AfterAdhanScreenState extends State<AfterAdhanScreen> {
               padding: const EdgeInsets.all(16),
               children: [
                 if (widget.prayerName case final name?)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Text(
-                      l10n.prayerTimeArrived(name),
-                      style: theme.textTheme.titleLarge,
-                      textAlign: TextAlign.center,
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primary,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned.fill(
+                          child: GeometricPattern(
+                            pattern: SakinaDecor.of(context).pattern,
+                            color: theme.colorScheme.onPrimary.withValues(
+                              alpha: 0.12,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 24,
+                          ),
+                          child: Text(
+                            l10n.prayerTimeArrived(name),
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              color: theme.colorScheme.onPrimary,
+                              fontWeight: FontWeight.w800,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 for (final item in value)
