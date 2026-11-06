@@ -3985,6 +3985,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'التصميم الليلي الذهبي داكن دائمًا. اختر تصميمًا آخر لتغيير المظهر.'**
   String get designNightAlwaysDark;
+
+  /// No description provided for @drawerPrayerSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصلاة'**
+  String get drawerPrayerSection;
 }
 
 class _AppLocalizationsDelegate

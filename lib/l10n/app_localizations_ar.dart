@@ -2180,4 +2180,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get designNightAlwaysDark =>
       'التصميم الليلي الذهبي داكن دائمًا. اختر تصميمًا آخر لتغيير المظهر.';
+
+  @override
+  String get drawerPrayerSection => 'الصلاة';
 }

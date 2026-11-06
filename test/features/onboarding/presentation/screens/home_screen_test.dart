@@ -333,6 +333,7 @@ void main() {
       'منبه سورة الملك',
       'منبه سورة البقرة',
       'الخصوصية ومصادر المحتوى',
+      'إعدادات مواقيت الصلاة',
     ]) {
       expect(
         find.descendant(of: drawer, matching: find.text(duplicate)),

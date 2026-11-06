@@ -788,13 +788,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const Divider(height: 1),
 
-        // 6. مواقيت الصلاة
-        _buildSectionHeader(appL10n.notificationServiceMessage5),
-        _buildMoreMenuItem(
-          title: appL10n.homeScreenMessage36,
-          leadingIcon: Icon(Icons.mosque, color: iconColor),
-          onTap: () => context.push('/prayers'),
-        ),
+        // 6. الصلاة (prayer times open from the home header only)
+        _buildSectionHeader(appL10n.drawerPrayerSection),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage37,
           leadingIcon: Image.asset(
