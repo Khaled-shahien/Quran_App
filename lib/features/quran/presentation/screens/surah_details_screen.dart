@@ -725,7 +725,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
               Text(
                 appL10n.readerContentMessage2(
                   (_revelationLabel(revelationType)).toString(),
-                  (totalAyah).toString(),
+                  context.digits(totalAyah),
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -1179,7 +1179,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
                               (_revelationLabel(
                                 verse.revelationType,
                               )).toString(),
-                              (verse.totalAyah).toString(),
+                              context.digits(verse.totalAyah),
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,

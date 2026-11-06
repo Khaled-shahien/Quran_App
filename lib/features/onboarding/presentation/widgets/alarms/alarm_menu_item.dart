@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,7 @@ class AlarmMenuItem extends StatelessWidget {
         return ListTile(
           leading: Icon(icon, color: iconColor),
           title: Text(title),
-          subtitle: Text('$subtitle • $timeText'),
+          subtitle: Text(context.digits('$subtitle • $timeText')),
           trailing: IconButton(
             icon: const Icon(Icons.access_time),
             onPressed: () => _showTimePicker(context),

@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -114,7 +115,9 @@ class _SurahRow extends StatelessWidget {
     if (progress != null) {
       final fraction = progress.fraction;
       trailing = Semantics(
-        label: l10n.recitationDownloading('${((fraction ?? 0) * 100).round()}'),
+        label: l10n.recitationDownloading(
+          context.digits(((fraction ?? 0) * 100).round()),
+        ),
         child: SizedBox.square(
           dimension: 48,
           child: Padding(
@@ -180,7 +183,9 @@ class _SurahRow extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l10n.surahTitle(surah)),
-        content: Text(l10n.recitationDownloadConfirm(l10n.megabytes(bytes))),
+        content: Text(
+          context.digits(l10n.recitationDownloadConfirm(l10n.megabytes(bytes))),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),

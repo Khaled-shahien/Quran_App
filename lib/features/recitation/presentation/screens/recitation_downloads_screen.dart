@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -57,7 +58,7 @@ class _RecitationDownloadsScreenState extends State<RecitationDownloadsScreen> {
                   subtitle: Text(
                     [
                       if (reciter != null) l10n.reciterLabel(reciter),
-                      l10n.megabytes(d.bytes),
+                      context.digits(l10n.megabytes(d.bytes)),
                     ].join(' • '),
                   ),
                   trailing: IconButton(

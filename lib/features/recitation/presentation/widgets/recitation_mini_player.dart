@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -30,7 +31,7 @@ class RecitationMiniPlayer extends StatelessWidget {
     final error = c.status == RecitationStatus.error;
     final title = l10n.recitationNowPlaying(
       l10n.surahTitle(surah),
-      '${c.currentAyah ?? 1}',
+      context.digits(c.currentAyah ?? 1),
     );
 
     return Material(

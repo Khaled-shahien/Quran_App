@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
@@ -176,7 +177,7 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
                                         l10nOf(
                                           context,
                                         ).khatmaLocationScreenMessage5(
-                                          (juz).toString(),
+                                          context.digits(juz),
                                         ),
                                       ),
                                     );

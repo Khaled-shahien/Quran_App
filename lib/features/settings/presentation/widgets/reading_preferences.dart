@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,10 +54,10 @@ class _ReadingPreferencesPanelState extends State<ReadingPreferencesPanel> {
           min: 22,
           max: 38,
           divisions: 16,
-          label: ReadingPreferences.fontSize(prefs).round().toString(),
+          label: context.digits(ReadingPreferences.fontSize(prefs).round()),
           semanticFormatterCallback: (value) => l10nOf(
             context,
-          ).readingPreferencesMessage2((value.round()).toString()),
+          ).readingPreferencesMessage2(context.digits(value.round())),
           onChanged: (value) {
             prefs.setDouble(ReadingPreferences.fontKey, value);
             setState(() {});
@@ -68,9 +69,10 @@ class _ReadingPreferencesPanelState extends State<ReadingPreferencesPanel> {
           min: 1.5,
           max: 2.5,
           divisions: 20,
-          semanticFormatterCallback: (value) => l10nOf(
-            context,
-          ).readingPreferencesMessage3((value.toStringAsFixed(2)).toString()),
+          semanticFormatterCallback: (value) =>
+              l10nOf(context).readingPreferencesMessage3(
+                context.digits(value.toStringAsFixed(2)),
+              ),
           onChanged: (value) {
             prefs.setDouble(ReadingPreferences.heightKey, value);
             setState(() {});

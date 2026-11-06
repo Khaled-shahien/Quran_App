@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/result/failure_messages.dart';
 import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -294,7 +295,7 @@ class SurahCard extends StatelessWidget {
       button: true,
       label: l10nOf(context).quranScreenMessage4(
         (arabicName).toString(),
-        (versesCount).toString(),
+        context.digits(versesCount),
         (type).toString(),
       ),
       child: Container(
@@ -324,7 +325,7 @@ class SurahCard extends StatelessWidget {
                     ),
                     alignment: Alignment.center,
                     child: Text(
-                      '$index',
+                      context.digits(index),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onPrimary,
                         fontWeight: FontWeight.bold,
@@ -389,7 +390,7 @@ class SurahCard extends StatelessWidget {
                         Text(
                           l10nOf(
                             context,
-                          ).quranScreenMessage5((versesCount).toString()),
+                          ).quranScreenMessage5(context.digits(versesCount)),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(

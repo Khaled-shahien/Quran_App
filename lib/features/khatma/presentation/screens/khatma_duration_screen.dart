@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
@@ -281,14 +282,17 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                       child: Text(
                         _goalType == KhatmaGoalType.byDuration
                             ? l10nOf(context).khatmaDurationScreenMessage11(
-                                (_formatDouble(
-                                  _computedDailyTargetForDuration,
-                                )).toString(),
+                                context.digits(
+                                  _formatDouble(
+                                    _computedDailyTargetForDuration,
+                                  ),
+                                ),
                                 (_unitLabel).toString(),
                               )
                             : l10nOf(context).khatmaDurationScreenMessage12(
-                                ((_remainingUnits / _dailyTarget).ceil())
-                                    .toString(),
+                                context.digits(
+                                  (_remainingUnits / _dailyTarget).ceil(),
+                                ),
                               ),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -450,7 +454,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
               alignment: Alignment.center,
               child: Text(
                 appL10n.khatmaDurationScreenMessage16(
-                  (_durationDays).toString(),
+                  context.digits(_durationDays),
                 ),
                 style: TextStyle(
                   fontSize: 18,
@@ -529,7 +533,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
               ),
               alignment: Alignment.center,
               child: Text(
-                '${_formatDouble(_dailyTarget)} $_unitLabel',
+                context.digits('${_formatDouble(_dailyTarget)} $_unitLabel'),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -634,8 +638,10 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  '${_reminderHour.toString().padLeft(2, '0')}:'
-                  '${_reminderMinute.toString().padLeft(2, '0')}',
+                  context.digits(
+                    '${_reminderHour.toString().padLeft(2, '0')}:'
+                    '${_reminderMinute.toString().padLeft(2, '0')}',
+                  ),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

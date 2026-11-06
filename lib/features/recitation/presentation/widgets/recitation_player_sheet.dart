@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -84,7 +85,7 @@ class _RecitationPlayerSheetState extends State<RecitationPlayerSheet> {
               children: [
                 for (final s in RecitationController.speeds)
                   ChoiceChip(
-                    label: Text(l10n.recitationSpeedValue('$s')),
+                    label: Text(l10n.recitationSpeedValue(context.digits(s))),
                     selected: c.speed == s,
                     onSelected: (_) => c.setSpeed(s),
                   ),
@@ -97,9 +98,9 @@ class _RecitationPlayerSheetState extends State<RecitationPlayerSheet> {
                 const SizedBox(height: 8),
                 Text(
                   l10n.recitationRepeating(
-                    '${r.from}',
-                    '${r.to}',
-                    '${r.times}',
+                    context.digits(r.from),
+                    context.digits(r.to),
+                    context.digits(r.times),
                   ),
                 ),
                 TextButton(
@@ -188,7 +189,7 @@ class _AyahPicker extends StatelessWidget {
         menuMaxHeight: 320,
         items: [
           for (var a = min; a <= count; a++)
-            DropdownMenuItem(value: a, child: Text('$a')),
+            DropdownMenuItem(value: a, child: Text(context.digits(a))),
         ],
         onChanged: (v) {
           if (v != null) onChanged(v);

@@ -458,10 +458,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   showCompleted
                       ? l10nOf(
                           context,
-                        ).homeScreenMessage11((completed).toString())
+                        ).homeScreenMessage11(context.digits(completed))
                       : l10nOf(
                           context,
-                        ).homeScreenMessage12((remaining).toString()),
+                        ).homeScreenMessage12(context.digits(remaining)),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Theme.of(
@@ -504,8 +504,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             contentPadding: EdgeInsets.zero,
                             title: Text(
                               l10nOf(context).homeScreenMessage15(
-                                (wird.fromUnit).toString(),
-                                (wird.toUnit).toString(),
+                                context.digits(wird.fromUnit),
+                                context.digits(wird.toUnit),
                                 (activeKhatma.amountType).toString(),
                               ),
                               style: TextStyle(
@@ -517,7 +517,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             subtitle: Text(
                               l10nOf(
                                 context,
-                              ).homeScreenMessage16((dateLabel).toString()),
+                              ).homeScreenMessage16(context.digits(dateLabel)),
                               style: TextStyle(
                                 color: Theme.of(
                                   context,
@@ -545,7 +545,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: Text(
                             l10nOf(
                               context,
-                            ).homeScreenMessage17((wirdDay).toString()),
+                            ).homeScreenMessage17(context.digits(wirdDay)),
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               color: Theme.of(context).colorScheme.primary,

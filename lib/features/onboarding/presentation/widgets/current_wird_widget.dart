@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'dart:async';
 import 'package:sakina_app/l10n/localization.dart';
@@ -390,7 +391,7 @@ class CurrentWirdWidget extends StatelessWidget {
                   children: [
                     Text(
                       l10nOf(context).currentWirdWidgetMessage15(
-                        (activeKhatma.remainingUnits.ceil()).toString(),
+                        context.digits(activeKhatma.remainingUnits.ceil()),
                         (activeKhatma.amountType).toString(),
                       ),
                       style: TextStyle(
@@ -401,9 +402,9 @@ class CurrentWirdWidget extends StatelessWidget {
                     ),
                     Text(
                       l10nOf(context).currentWirdWidgetMessage16(
-                        ((activeKhatma.progress * 100).toStringAsFixed(
-                          1,
-                        )).toString(),
+                        context.digits(
+                          (activeKhatma.progress * 100).toStringAsFixed(1),
+                        ),
                       ),
                       style: TextStyle(
                         fontSize: 14,

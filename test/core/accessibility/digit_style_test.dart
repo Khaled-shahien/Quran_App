@@ -5,6 +5,7 @@ import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/features/quran/data/repositories/tasbih_repository_impl.dart';
 import 'package:sakina_app/features/quran/presentation/providers/tasbih_controller.dart';
 import 'package:sakina_app/features/quran/presentation/screens/tasbeeh_screen.dart';
+import 'package:sakina_app/features/quran/presentation/widgets/asma_item_card.dart';
 import 'package:sakina_app/features/settings/presentation/providers/digit_style_controller.dart';
 import 'package:sakina_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,5 +59,22 @@ void main() {
     final zeroZero = '${arabic0123456789[0]}${arabic0123456789[0]}';
     expect(find.text(zeroZero), findsOneWidget);
     expect(find.text('00'), findsNothing);
+  });
+
+  testWidgets('Asma numbers follow the chosen digits', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: DigitStyleScope(
+          style: DigitStyle.arabic,
+          child: Scaffold(
+            body: AsmaItemCard(number: '12', arabicName: 'x', meaning: 'y'),
+          ),
+        ),
+      ),
+    );
+    expect(
+      find.text('${arabic0123456789[1]}${arabic0123456789[2]}'),
+      findsOneWidget,
+    );
   });
 }

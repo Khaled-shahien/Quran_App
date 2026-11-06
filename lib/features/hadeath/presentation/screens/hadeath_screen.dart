@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -94,7 +95,7 @@ class _HadeathScreenState extends State<HadeathScreen> {
                       title: hadeath.title.isEmpty
                           ? l10nOf(
                               context,
-                            ).hadeathScreenMessage3((index + 1).toString())
+                            ).hadeathScreenMessage3(context.digits(index + 1))
                           : hadeath.title,
                       onTap: () {
                         context.push('/hadeath/details/$index', extra: hadeath);

@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -140,7 +141,7 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
                           title: Text(surah['name'] as String),
                           subtitle: Text(
                             l10nOf(context).surahAudioModelMessage1(
-                              (surah['number']).toString(),
+                              context.digits('${surah['number']}'),
                             ),
                           ),
                           onTap: () =>
@@ -172,8 +173,8 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
                         ),
                         subtitle: Text(
                           l10nOf(context).quranSearchScreenMessage4(
-                            (result.surahNumber).toString(),
-                            (result.ayah.numberInSurah).toString(),
+                            context.digits(result.surahNumber),
+                            context.digits(result.ayah.numberInSurah),
                           ),
                         ),
                         onTap: () => context.push(

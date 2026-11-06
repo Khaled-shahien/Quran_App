@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:flutter/material.dart';
 
 class AsmaItemCard extends StatelessWidget {
@@ -48,7 +49,7 @@ class AsmaItemCard extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    number,
+                    context.digits(number),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
