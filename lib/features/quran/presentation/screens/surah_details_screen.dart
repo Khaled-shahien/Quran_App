@@ -919,7 +919,13 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
     required Color pageBorder,
   }) {
     if (_isLoading) {
-      return const Center(child: PulseLoader(lines: 8));
+      // Clipped rather than overflowing when large text leaves little room.
+      return const ClipRect(
+        child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          child: PulseLoader(lines: 8),
+        ),
+      );
     }
 
     if (_error != null) {

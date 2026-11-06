@@ -122,7 +122,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
 
     return SliverAppBar(
-      expandedHeight: 220,
+      // Grows with large text so the next-prayer details never clip.
+      expandedHeight:
+          220 +
+          230 * (MediaQuery.textScalerOf(context).scale(1) - 1).clamp(0, 2),
       pinned: true,
       stretch: true,
       backgroundColor: theme.colorScheme.primary,

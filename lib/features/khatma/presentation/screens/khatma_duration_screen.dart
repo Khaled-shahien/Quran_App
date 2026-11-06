@@ -2,6 +2,7 @@ import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
+import '../widgets/labeled_row.dart';
 
 import 'package:provider/provider.dart';
 import '../../../onboarding/presentation/widgets/notification_permission_dialog.dart';
@@ -175,7 +176,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
 
                     Directionality(
                       textDirection: TextDirection.rtl,
-                      child: _LabeledRow(
+                      child: LabeledRow(
                         children: [
                           Text(
                             l10nOf(context).khatmaDurationScreenMessage7,
@@ -432,7 +433,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
   Widget _buildDurationSection(Color cardColor, Color textColor) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: _LabeledRow(
+      child: LabeledRow(
         children: [
           Text(
             appL10n.khatmaDurationScreenMessage15,
@@ -512,7 +513,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
   Widget _buildDailyTargetSection(Color cardColor, Color textColor) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: _LabeledRow(
+      child: LabeledRow(
         children: [
           Text(
             appL10n.khatmaDurationScreenMessage17,
@@ -600,7 +601,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
   Widget _buildReminderSection(Color cardColor, Color textColor) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: _LabeledRow(
+      child: LabeledRow(
         children: [
           Text(
             appL10n.khatmaDurationScreenMessage18,
@@ -653,29 +654,6 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// A label beside its controls; the label moves above them when large
-/// text would not fit on one line. Children: label, gap, controls...
-class _LabeledRow extends StatelessWidget {
-  const _LabeledRow({required this.children});
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    if (MediaQuery.textScalerOf(context).scale(1) <= 1.3) {
-      return Row(children: children);
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        children.first,
-        const SizedBox(height: 8),
-        Row(children: children.skip(2).toList()),
-      ],
     );
   }
 }
