@@ -5,7 +5,6 @@ part 'ayah_model.g.dart';
 /// Ayah Model
 ///
 /// Represents a single Ayah (verse) of the Quran with all its metadata
-// TODO: Verify JSON field casing
 @JsonSerializable()
 class AyahModel {
   @JsonKey(defaultValue: 0)

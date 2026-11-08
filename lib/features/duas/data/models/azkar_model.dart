@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'azkar_model.g.dart';
 
-// TODO: Verify JSON field casing
 @JsonSerializable(explicitToJson: true)
 class AzkarCategoryModel {
   final int id;
@@ -23,7 +22,6 @@ class AzkarCategoryModel {
   Map<String, dynamic> toJson() => _$AzkarCategoryModelToJson(this);
 }
 
-// TODO: Verify JSON field casing
 @JsonSerializable()
 class AzkarItemModel {
   final int id;

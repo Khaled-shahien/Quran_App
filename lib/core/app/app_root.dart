@@ -18,7 +18,7 @@ import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_rep
 import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:sakina_app/features/quran/domain/repositories/surah_repository.dart';
 import 'package:sakina_app/features/quran/presentation/providers/bookmark_provider.dart';
-import 'package:sakina_app/features/quran/data/repositories/tasbih_repository_impl.dart';
+import 'package:sakina_app/features/quran/domain/repositories/tasbih_repository.dart';
 import 'package:sakina_app/features/quran/presentation/providers/tasbih_controller.dart';
 import 'package:sakina_app/core/audio/recitation_audio_engine.dart';
 import 'package:sakina_app/core/utils/surah_names.dart';
@@ -231,10 +231,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
 
     _khatmaProvider = KhatmaProvider(repository: _khatmaRepository);
 
-    // TODO: resolve TasbihRepository from GetIt.
-    _tasbihController = TasbihController(
-      repository: SharedPreferencesTasbihRepository(_prefs),
-    );
+    _tasbihController = TasbihController(repository: getIt<TasbihRepository>());
 
     // Initialize notification provider globally at app startup
     _notificationProvider = NotificationProvider(prefs: _prefs);

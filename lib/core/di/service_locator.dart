@@ -37,6 +37,8 @@ import 'package:sakina_app/features/duas/data/repositories/azkar_repository.dart
 import 'package:sakina_app/features/duas/data/repositories/adhan_adhkar_repository.dart';
 import 'package:sakina_app/features/duas/data/repositories/duas_repository.dart';
 import 'package:sakina_app/features/khatma/data/repositories/khatma_repository.dart';
+import 'package:sakina_app/features/quran/data/repositories/tasbih_repository_impl.dart';
+import 'package:sakina_app/features/quran/domain/repositories/tasbih_repository.dart';
 import 'package:sakina_app/features/media/data/datasources/articles_remote_datasource.dart';
 
 import 'package:sakina_app/features/media/data/datasources/video_remote_datasource.dart';
@@ -150,6 +152,10 @@ Future<void> setupServiceLocator() async {
 
     getIt.registerLazySingleton<KhatmaRepository>(
       () => KhatmaRepositoryImpl(prefs: getIt<SharedPreferences>()),
+    );
+
+    getIt.registerLazySingleton<TasbihRepository>(
+      () => SharedPreferencesTasbihRepository(getIt<SharedPreferences>()),
     );
 
     getIt.registerLazySingleton<MediaRepository>(
