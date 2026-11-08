@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:139097045866:android:cf6b051ae49d536b268313",
+        "android_client_info": {
+          "package_name": "app.sakina.quran"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZwYtupguU5QCwrMz6SPILELRc_o0h2Vk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:139097045866:android:42f7267e096a7124268313",
         "android_client_info": {
           "package_name": "com.example.sakina_app"
@@ -15,7 +34,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAYhoTOkaYG2mr1asxm0uWA6jChJ1U_D_Y"
+          "current_key": "AIzaSyBZwYtupguU5QCwrMz6SPILELRc_o0h2Vk"
         }
       ],
       "services": {
