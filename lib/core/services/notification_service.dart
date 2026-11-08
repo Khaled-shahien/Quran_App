@@ -11,6 +11,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../navigation/notification_router.dart';
 import 'local_timezone_fallback.dart';
+import 'notification_channels.dart';
 import '../../features/prayers/domain/entities/adhan_settings.dart';
 import '../../features/prayers/domain/prayer_notification_ids.dart';
 import '../../features/prayers/domain/services/prayer_alert_planner.dart';
@@ -55,30 +56,6 @@ class NotificationService {
     'المغرب': _maghribPrayerNotificationId,
     'العشاء': _ishaPrayerNotificationId,
   };
-
-  static const String _defaultChannelId = 'sakina_app_channel';
-  static final String _defaultChannelName = appL10n.notificationServiceMessage1;
-  static final String _defaultChannelDescription =
-      appL10n.notificationServiceMessage2;
-
-  static const String _alarmsChannelId = 'sakina_alarms_channel';
-  static final String _alarmsChannelName = appL10n.notificationServiceMessage3;
-  static final String _alarmsChannelDescription =
-      appL10n.notificationServiceMessage4;
-
-  static const String _prayerChannelId = 'prayer_times_default_sound_v2';
-  static final String _prayerChannelName = appL10n.notificationServiceMessage5;
-  static final String _prayerChannelDescription =
-      appL10n.notificationServiceMessage6;
-
-  // Android fixes a channel's sound at creation, so each sound has its own
-  // versioned channel ID; adhan channels will be named per muezzin.
-  static const String _prayerSilentChannelId = 'prayer_times_silent_v1';
-  static const String _prayerReminderChannelId = 'prayer_reminders_v1';
-  static const String _testChannelId = 'test_channel';
-  static final String _testChannelName = appL10n.notificationServiceMessage7;
-  static final String _testChannelDescription =
-      appL10n.notificationServiceMessage8;
 
   // Alarm time keys
   static const String _morningAlarmHourKey = 'morning_alarm_hour';
@@ -201,62 +178,9 @@ class NotificationService {
       return;
     }
 
-    await androidImplementation.createNotificationChannel(
-      AndroidNotificationChannel(
-        _defaultChannelId,
-        _defaultChannelName,
-        description: _defaultChannelDescription,
-        importance: Importance.high,
-      ),
-    );
-
-    await androidImplementation.createNotificationChannel(
-      AndroidNotificationChannel(
-        _alarmsChannelId,
-        _alarmsChannelName,
-        description: _alarmsChannelDescription,
-        importance: Importance.max,
-      ),
-    );
-
-    await androidImplementation.createNotificationChannel(
-      AndroidNotificationChannel(
-        _prayerChannelId,
-        _prayerChannelName,
-        description: _prayerChannelDescription,
-        importance: Importance.max,
-        // Platform default sound until a licensed adhan is bundled.
-        playSound: true,
-        enableVibration: true,
-      ),
-    );
-
-    await androidImplementation.createNotificationChannel(
-      AndroidNotificationChannel(
-        _prayerSilentChannelId,
-        appL10n.prayerSilentChannel,
-        importance: Importance.high,
-        playSound: false,
-        enableVibration: true,
-      ),
-    );
-
-    await androidImplementation.createNotificationChannel(
-      AndroidNotificationChannel(
-        _prayerReminderChannelId,
-        appL10n.prayerReminderChannel,
-        importance: Importance.high,
-      ),
-    );
-
-    await androidImplementation.createNotificationChannel(
-      AndroidNotificationChannel(
-        _testChannelId,
-        _testChannelName,
-        description: _testChannelDescription,
-        importance: Importance.max,
-      ),
-    );
+    for (final channel in NotificationChannels.all()) {
+      await androidImplementation.createNotificationChannel(channel);
+    }
 
     developer.log(
       'Android notification channels ensured',
@@ -476,9 +400,9 @@ class NotificationService {
 
     final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-          _defaultChannelId,
-          _defaultChannelName,
-          channelDescription: _defaultChannelDescription,
+          NotificationChannels.defaultId,
+          NotificationChannels.defaultName,
+          channelDescription: NotificationChannels.defaultDescription,
           importance: Importance.high,
           priority: Priority.high,
           icon: '@drawable/ic_notification',
@@ -559,9 +483,9 @@ class NotificationService {
 
     final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-          _alarmsChannelId,
-          _alarmsChannelName,
-          channelDescription: _alarmsChannelDescription,
+          NotificationChannels.alarmsId,
+          NotificationChannels.alarmsName,
+          channelDescription: NotificationChannels.alarmsDescription,
           importance: Importance.max,
           priority: Priority.high,
           icon: '@drawable/ic_notification',
@@ -662,9 +586,9 @@ class NotificationService {
 
     final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-          _testChannelId,
-          _testChannelName,
-          channelDescription: _testChannelDescription,
+          NotificationChannels.testId,
+          NotificationChannels.testName,
+          channelDescription: NotificationChannels.testDescription,
           importance: Importance.max,
           priority: Priority.high,
           icon: '@drawable/ic_notification',
@@ -742,7 +666,7 @@ class NotificationService {
     final bool withSound = mode != PrayerAlertMode.notificationOnly;
     final AndroidNotificationDetails androidNotificationDetails = isReminder
         ? AndroidNotificationDetails(
-            _prayerReminderChannelId,
+            NotificationChannels.prayerReminderId,
             appL10n.prayerReminderChannel,
             importance: Importance.high,
             priority: Priority.high,
@@ -750,9 +674,9 @@ class NotificationService {
           )
         : withSound
         ? AndroidNotificationDetails(
-            _prayerChannelId,
-            _prayerChannelName,
-            channelDescription: _prayerChannelDescription,
+            NotificationChannels.prayerId,
+            NotificationChannels.prayerName,
+            channelDescription: NotificationChannels.prayerDescription,
             importance: Importance.max,
             priority: Priority.high,
             icon: '@drawable/ic_notification',
@@ -762,7 +686,7 @@ class NotificationService {
             category: AndroidNotificationCategory.alarm,
           )
         : AndroidNotificationDetails(
-            _prayerSilentChannelId,
+            NotificationChannels.prayerSilentId,
             appL10n.prayerSilentChannel,
             importance: Importance.high,
             priority: Priority.high,
@@ -1216,9 +1140,9 @@ class NotificationService {
 
     final AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
-          _testChannelId,
-          _testChannelName,
-          channelDescription: _testChannelDescription,
+          NotificationChannels.testId,
+          NotificationChannels.testName,
+          channelDescription: NotificationChannels.testDescription,
           importance: Importance.max,
           priority: Priority.high,
           icon: '@drawable/ic_notification',
