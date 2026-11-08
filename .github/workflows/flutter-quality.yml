@@ -19,7 +19,7 @@ jobs:
   quality:
     name: Format, analyze, test, and build
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
 
     steps:
       - name: Check out repository
@@ -58,8 +58,20 @@ jobs:
       - name: Run unit and widget tests
         run: flutter test --no-pub
 
-      - name: Build debug Android APK
-        run: flutter build apk --debug --no-pub
+      # Release-only bugs (R8 stripping Gson types, shrunk resources) never
+      # show in debug. Build a real release APK so R8 runs on every change.
+      # The key is generated here, used once and never uploaded; the APK is
+      # a compile check, not a release artifact.
+      - name: Create a throwaway signing key for the release build
+        working-directory: android
+        run: |
+          keytool -genkeypair -noprompt -keystore ci-throwaway.jks \
+            -alias ci -keyalg RSA -keysize 2048 -validity 1 \
+            -storepass ci-only -keypass ci-only -dname "CN=CI"
+          printf 'storeFile=ci-throwaway.jks\nstorePassword=ci-only\nkeyAlias=ci\nkeyPassword=ci-only\n' > key.properties
+
+      - name: Build release Android APK (runs R8)
+        run: flutter build apk --release --no-pub
 
   visual-windows:
     name: Windows visual baselines
