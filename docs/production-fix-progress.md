@@ -1,13 +1,35 @@
 # UPDATED DEVELOPMENT & IMPROVEMENT PLAN
 
-**Current re-audit:** 2026-09-28
-**Previous audit:** 2026-09-22 (`AUDIT_REPORT.md`)
+**Current status update:** 2026-11-08
+**Previous re-audit:** 2026-09-28; audit before that 2026-09-22 (`AUDIT_REPORT.md`)
 **Implementation evidence:** `docs/AUDIT_IMPLEMENTATION.md`
-**Readiness:** **NOT READY**
+**Readiness:** **NOT READY** (code is in good shape; the blockers are decisions, permissions and device evidence)
 
 This document is the current source of truth. The historical progress log remains below so the original implementation trail is not lost. Repository implementation is not treated as runtime, owner-approval, signed-artifact, or production evidence.
 
-## 1. Audit Update Summary
+## 0. Status Update 2026-11-08
+
+What changed since the 2026-09-28 re-audit:
+
+- **Tests:** `flutter test` passes **663 tests**, zero failures; `flutter analyze` reports no issues. The three Quran search failures are fixed (`T10` complete).
+- **Prayer times are calculated on the device** with `adhan_dart`. No coordinates leave the phone; the AlAdhan client and the whole `lib/core/api` layer were removed. Privacy docs corrected.
+- **Analytics removed** (`T07`): `firebase_analytics` is gone. Crashlytics stays, opt-in, production builds only.
+- **No push messaging** (`T11`): no `firebase_messaging` or FCM code remains; reminders are local only.
+- **No runtime font downloads** (`T26`): `google_fonts` removed; all fonts are bundled.
+- **Unused packages removed:** `connectivity_plus`, `logger`, `share_plus`.
+- **CI builds a release APK** with a throwaway key, so R8 runs on every change.
+- **Large-text and accessibility work:** most screens usable at 200% text, labelled icon buttons, 48dp targets, digit style setting (`T27`/`T31` still need a device screen-reader pass).
+- **New features:** in-app recitation player with background playback, per-prayer alert type, adhkar counter, Hijri adjustment, three visual designs, night reading mode, resume per surah.
+
+Open release blockers (none of them is code):
+
+1. **App identity:** `applicationId` is still `com.example.sakina_app` (iOS `com.example.quranApp`). Google Play rejects `com.example`. Deferred by the owner; must be decided before the first upload, together with the Firebase project.
+2. **Content permissions:** written permission from Hisn al-Muslim; QuranCDN/Quran.com recitation needs OAuth credentials behind a backend, and its terms forbid caching over 7 days, which conflicts with offline downloads; KFGQPC font licence if it replaces Amiri Quran.
+3. **Privacy policy:** the draft needs a public URL and owner contact details; Play Data Safety must declare crash logs only.
+4. **Physical devices:** adhan and reminders on Xiaomi, Samsung and Oppo battery managers, reboot, timezone travel, Qibla sensor (`T14`, `T35`).
+5. **iOS:** no `GoogleService-Info.plist`, bundle id or signing (`T34`). Recommended: launch on Android first.
+
+## 1. Audit Update Summary (2026-09-28, historical)
 
 - Original tracked tasks: **40** (`T01`-`T40`), all retained.
 - Completed at repository/test scope: **17**.
@@ -50,11 +72,11 @@ Status: **A Completed**, **B Partially Completed**, **D Needs Rework**, **F Bloc
 | T04 | Dark components | P1 | A | 100 | Component themes and tests present |
 | T05 | Caption contrast | P1 | A | 100 | Dark token and automated contrast check |
 | T06 | Crashlytics | P1 | B | 75 | Opt-in integration; project/iOS/symbol verification pending |
-| T07 | Analytics | P2 | B | 75 | Allowlisted events; dashboard/retention verification pending |
+| T07 | Analytics | P2 | A | 100 | Removed by owner decision 2026-11-08; Crashlytics only |
 | T08 | Privacy | P0 | B | 75 | Draft/inventory; owner/contact/public URL pending |
 | T09 | Settings | P1 | A | 100 | Theme, reading, location, notifications, monitoring, sources |
-| T10 | Quran search | P1 | B | 75 | Verse search works, but all three offline surah name/number acceptance tests fail |
-| T11 | FCM decision | P1 | D | 75 | Local reminders selected; dormant push code/dependency cleanup pending |
+| T10 | Quran search | P1 | A | 100 | Verse, surah name and number search; all search tests pass |
+| T11 | FCM decision | P1 | A | 100 | Local reminders only; no FCM code or dependency remains |
 | T12 | Content provenance | P0 | B | 75 | Metadata/hash/disclosure gates; sources/reviewer approval pending |
 | T13 | Diagnostic route | P1 | A | 100 | Debug-only notification test route |
 | T14 | Device notifications | P0 | B | 50 | Scheduling/routing code; physical matrix and future-day replenishment pending |
@@ -69,7 +91,7 @@ Status: **A Completed**, **B Partially Completed**, **D Needs Rework**, **F Bloc
 | T23 | Color aliases | P2 | A | 100 | Canonical tokens migrated |
 | T24 | Directionality | P2 | B | 75 | Redundant wrapper removed; bidi/icon review pending |
 | T25 | Use-case directories | P3 | A | 100 | `domain/usecases` verified |
-| T26 | Bundled fonts | P1 | A | 100 | Cairo/Amiri assets and licenses bundled |
+| T26 | Bundled fonts | P1 | A | 100 | Cairo/Amiri/Amiri Quran bundled; google_fonts dependency removed |
 | T27 | Semantics | P1 | B | 75 | Labels/settings semantics; screen-reader audit pending |
 | T28 | Dark visual tests | P2 | A | 100 | Settings goldens reviewed |
 | T29 | RTL tests | P1 | A | 100 | 360px/2x text navigation/settings checks |
@@ -81,7 +103,7 @@ Status: **A Completed**, **B Partially Completed**, **D Needs Rework**, **F Bloc
 | T35 | Device matrix | P0 | F | 25 | Matrix documented; physical devices/evidence unavailable |
 | T36 | Security review | P0 | B | 50 | Local checks; independent review and sign-off pending |
 | T37 | Profiling | P2 | B | 50 | Font/splash improvements; profile measurements pending |
-| T38 | Final regression | P0 | B | 50 | Prayer slice passes; full suite is 220 tests with 3 Quran search failures |
+| T38 | Final regression | P0 | B | 75 | 663 tests pass, analyze clean, release APK builds; physical-device and signed-build regression pending |
 | T39 | Store release | P0 | F | 0 | Not performed; all release gates must close |
 | T40 | Operations | P1 | B | 50 | Runbook/monitoring integration; alerts/owners/evidence pending |
 
@@ -241,11 +263,11 @@ owner checks are listed separately and must not be inferred from passing tests.
 | T04 Dark components | Implemented navigation, sheet, dialog, input and scrollbar component themes. |
 | T05 Caption contrast | Implemented dedicated dark caption token; automated contrast check against card/background. |
 | T06 Crashlytics | Integrated opt-in mobile service and Android plugin; off by default. Real project events, iOS upload setup and symbol verification pending. |
-| T07 Analytics | Integrated allowlisted app/settings-open events, no reading/search/location payloads. Dashboard validation pending. |
+| T07 Analytics | Removed 2026-11-08 (owner decision). `firebase_analytics`, its two events and the native flags are gone; only opt-in Crashlytics remains. |
 | T08 Privacy | Arabic policy draft and data inventory prepared. Owner contact, retention approval and public URL pending. |
 | T09 Settings | Implemented theme, reading, location, notifications, reminder times, optional monitoring, about and sources. |
 | T10 Quran search | Existing normalized verse highlighting retained; added offline surah name and Arabic/Western number lookup. |
-| T11 FCM decision | Local reminders selected for production. Startup messaging/token registration and native auto-init disabled. Dormant diagnostic code/dependency retained, no backend push claim. |
+| T11 FCM decision | Local reminders only. No FCM code, token registration or messaging dependency remains. |
 | T12 Content provenance | Added metadata fields and in-app pending-source disclosure. Release gate requires approval. Actual sources, editions, licenses and qualified reviewer approval remain pending. |
 | T13 Diagnostic route | Notification-test route is debug-only. |
 | T14 Notifications on devices | Pending physical foreground/background/terminated, permission, reboot, upgrade and timezone evidence. Future-day prayer replenishment is still incomplete. |
@@ -260,7 +282,7 @@ owner checks are listed separately and must not be inferred from passing tests.
 | T23 Color aliases | Removed legacy aliases and migrated references to canonical tokens. |
 | T24 Directionality | Removed redundant application-level wrapper; Arabic content/screen wrappers retained for now. Broader cleanup remains optional follow-up. |
 | T25 Use-case directories | Verified current tree already uses `domain/usecases`; no `use_cases` references remain. |
-| T26 Bundled fonts | Cairo and Amiri assets and OFL licenses bundled; production widgets no longer fetch GoogleFonts dynamically. |
+| T26 Bundled fonts | Cairo, Amiri and Amiri Quran assets and OFL licenses bundled; the google_fonts dependency was removed 2026-11-08. |
 | T27 Semantics | Added missing icon tooltips and settings section semantics. Complete manual screen-reader audit remains pending. |
 | T28 Dark visual tests | Added Windows light/dark settings goldens with actual Cairo and Material icon fonts; visually inspected. Coverage is settings, not every screen. |
 | T29 RTL tests | Added RTL navigation and settings checks, including 360px width at 2x text in both themes. |
