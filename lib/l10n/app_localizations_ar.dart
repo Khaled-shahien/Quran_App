@@ -1932,7 +1932,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get recitationListenFromHere => 'استمع من هذه الصفحة';
 
   @override
-  String get recitationSource => 'التلاوات من Quran.com';
+  String get recitationSource =>
+      'التلاوات من Quran.com — Quran data provided by Quran.Foundation';
 
   @override
   String get recitationSettings => 'التلاوة';

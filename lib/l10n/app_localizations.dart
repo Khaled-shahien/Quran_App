@@ -3545,7 +3545,7 @@ abstract class AppLocalizations {
   /// No description provided for @recitationSource.
   ///
   /// In ar, this message translates to:
-  /// **'التلاوات من Quran.com'**
+  /// **'التلاوات من Quran.com — Quran data provided by Quran.Foundation'**
   String get recitationSource;
 
   /// No description provided for @recitationSettings.
