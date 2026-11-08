@@ -14,21 +14,12 @@ class Gateway implements MonitoringGateway {
   Future<void> setCrashCollection(bool enabled) async {
     calls.add('crash:$enabled');
     if (enabled) await enableWait?.future;
+    if (enabled && failEnable) throw StateError('SDK unavailable');
     if (!enabled && failDisable) throw StateError('SDK unavailable');
   }
 
   @override
-  Future<void> setAnalyticsCollection(bool enabled) async {
-    calls.add('analytics:$enabled');
-    if (enabled && failEnable) throw StateError('SDK unavailable');
-  }
-
-  @override
   Future<void> deleteUnsentReports() async => calls.add('delete');
-  @override
-  Future<void> resetAnalyticsData() async => calls.add('reset');
-  @override
-  Future<void> logEvent(String name) async => calls.add('event:$name');
   @override
   Future<void> recordError(String type, StackTrace stack) async =>
       calls.add('error:$type');
@@ -74,16 +65,14 @@ void main() {
   });
 
   test(
-    'default off disables both SDKs, clears pending data and sends no events',
+    'default off disables crash collection and clears pending reports',
     () async {
       await service.initialize(prefs);
       expect(service.enabled, isFalse);
-      expect(
-        gateway.calls,
-        containsAll(['crash:false', 'analytics:false', 'delete', 'reset']),
-      );
-      await service.event('app_open');
-      expect(gateway.calls.where((v) => v.startsWith('event:')), isEmpty);
+      expect(gateway.calls, containsAll(['crash:false', 'delete']));
+      FlutterError.onError!(FlutterErrorDetails(exception: StateError('x')));
+      await Future<void>.delayed(Duration.zero);
+      expect(gateway.calls.where((v) => v.startsWith('error:')), isEmpty);
     },
   );
 
@@ -102,21 +91,13 @@ void main() {
     },
   );
 
-  test(
-    'saved opt-in is restored once and only allowlisted events are sent',
-    () async {
-      prefs.consent = true;
-      await service.initialize(prefs);
-      await service.initialize(prefs);
-      await service.event('settings_open');
-      await service.event('query:private text');
-      expect(service.enabled, isTrue);
-      expect(gateway.calls.where((v) => v.startsWith('event:')).toList(), [
-        'event:app_open',
-        'event:settings_open',
-      ]);
-    },
-  );
+  test('saved opt-in is restored once', () async {
+    prefs.consent = true;
+    await service.initialize(prefs);
+    await service.initialize(prefs);
+    expect(service.enabled, isTrue);
+    expect(gateway.calls.where((v) => v == 'crash:true').length, 1);
+  });
 
   test(
     'opt-out stops forwarding immediately and persists before SDK failures',
@@ -127,31 +108,26 @@ void main() {
       gateway.failDisable = true;
       final off = service.setEnabled(false);
       expect(service.enabled, isFalse);
-      await service.event('settings_open');
+      FlutterError.onError!(FlutterErrorDetails(exception: StateError('x')));
       await expectLater(off, throwsStateError);
       expect(prefs.consent, isFalse);
-      expect(
-        gateway.calls,
-        containsAll(['analytics:false', 'delete', 'reset']),
-      );
-      expect(gateway.calls.where((v) => v.startsWith('event:')), isEmpty);
+      expect(gateway.calls, containsAll(['crash:false', 'delete']));
+      expect(gateway.calls.where((v) => v.startsWith('error:')), isEmpty);
     },
   );
 
-  test(
-    'partial SDK opt-in failure rolls both SDKs back and allows retry',
-    () async {
-      await service.initialize(prefs);
-      gateway.failEnable = true;
-      await expectLater(service.setEnabled(true), throwsStateError);
-      expect(service.enabled, isFalse);
-      expect(prefs.consent, isFalse);
-      expect(gateway.calls, containsAll(['crash:false', 'analytics:false']));
-      gateway.failEnable = false;
-      await service.setEnabled(true);
-      expect(service.enabled, isTrue);
-    },
-  );
+  test('failed SDK opt-in rolls back and allows retry', () async {
+    await service.initialize(prefs);
+    gateway.failEnable = true;
+    gateway.calls.clear();
+    await expectLater(service.setEnabled(true), throwsStateError);
+    expect(service.enabled, isFalse);
+    expect(prefs.consent, isFalse);
+    expect(gateway.calls, containsAll(['crash:false', 'delete']));
+    gateway.failEnable = false;
+    await service.setEnabled(true);
+    expect(service.enabled, isTrue);
+  });
 
   test('false preference write cannot be reported as a saved opt-in', () async {
     await service.initialize(prefs);
@@ -159,7 +135,7 @@ void main() {
     await expectLater(service.setEnabled(true), throwsStateError);
     expect(service.enabled, isFalse);
     expect(prefs.consent, isFalse);
-    expect(gateway.calls.last, 'reset');
+    expect(gateway.calls.last, 'delete');
   });
 
   test('late opt-in cannot override a newer opt-out', () async {
@@ -172,7 +148,7 @@ void main() {
     await Future.wait([on, off]);
     expect(service.enabled, isFalse);
     expect(prefs.consent, isFalse);
-    expect(gateway.calls.last, 'reset');
+    expect(gateway.calls.last, 'delete');
   });
 
   test('error forwarding redacts messages and stops after opt-out', () async {

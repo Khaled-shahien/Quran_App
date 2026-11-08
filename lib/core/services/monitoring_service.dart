@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../config/app_environment.dart';
 import 'monitoring_gateway.dart';
 
-/// Optional monitoring. Never includes location, Quran queries or reading history.
+/// Optional crash reporting. Never includes location, Quran queries or reading history.
 class MonitoringService extends ChangeNotifier {
   MonitoringService({MonitoringGateway? gateway, bool? configurationEnabled})
     : _gateway = gateway ?? FirebaseMonitoringGateway(),
@@ -46,7 +46,6 @@ class MonitoringService extends ChangeNotifier {
         if (enabled) unawaited(_record(error, stack));
         return previousPlatform?.call(error, stack) ?? false;
       };
-      await event('app_open');
       _initialized = true;
     } catch (_) {
       available = false;
@@ -57,7 +56,7 @@ class MonitoringService extends ChangeNotifier {
   Future<void> setEnabled(bool value) {
     if (!available) return Future<void>.value();
     final revision = ++_revision;
-    // Stop Dart event/error forwarding immediately, including queued opt-outs.
+    // Stop Dart error forwarding immediately, including queued opt-outs.
     enabled = false;
     notifyListeners();
     final operation = _pending.then((_) => _applyConsent(value, revision));
@@ -72,12 +71,10 @@ class MonitoringService extends ChangeNotifier {
   }
 
   Future<void> _disableSdk() async {
-    // Attempt both SDKs and both cleanup operations even if one fails.
+    // Attempt the cleanup even if switching collection off fails.
     await Future.wait([
       Future.sync(() => _gateway.setCrashCollection(false)),
-      Future.sync(() => _gateway.setAnalyticsCollection(false)),
       Future.sync(_gateway.deleteUnsentReports),
-      Future.sync(_gateway.resetAnalyticsData),
     ]);
   }
 
@@ -90,10 +87,7 @@ class MonitoringService extends ChangeNotifier {
       if (!value) {
         await _disableSdk();
       } else {
-        await Future.wait([
-          Future.sync(() => _gateway.setCrashCollection(true)),
-          Future.sync(() => _gateway.setAnalyticsCollection(true)),
-        ]);
+        await _gateway.setCrashCollection(true);
         if (revision != _revision) {
           await _disableSdk();
           return;
@@ -122,14 +116,5 @@ class MonitoringService extends ChangeNotifier {
     } catch (_) {
       /* Monitoring must never cause another crash. */
     }
-  }
-
-  Future<void> event(String name) async {
-    if (!enabled) return;
-    const allowed = {'app_open', 'settings_open'};
-    if (!allowed.contains(name)) return;
-    try {
-      await _gateway.logEvent(name);
-    } catch (_) {}
   }
 }

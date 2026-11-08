@@ -8,13 +8,14 @@ The app uses optional monitoring tools to improve stability and diagnose product
 
 - Firebase is optional and guarded by build-time configuration.
 - Monitoring is not a required dependency for basic app function.
-- No user account identity is required for crash or analytics events.
+- No user account identity is required for crash reports.
+- No usage analytics SDK is included; adding one needs a fresh privacy review.
 - Only operational and diagnostic signals should be collected.
 
 ## Requirements
 
 - Event payloads must not include raw personal data.
-- Analytics configuration must remain reviewable before a production build.
+- Crash reporting configuration must remain reviewable before a production build.
 - Crash reporting should be used for app health, not for user surveillance.
 - Disable monitoring for local, debug, and staging unless explicitly required.
 

@@ -2035,7 +2035,7 @@
   "@dataSourcesScreenMessage3": {
     "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
   },
-  "dataSourcesScreenMessage4": "تُحفظ المفضلة والعلامات والختمة والإعدادات محلياً. مسح بيانات التطبيق من إعدادات النظام يزيل البيانات المحلية. التذكيرات محلية ولا تحتاج خدمة رسائل عن بُعد. عند إتاحة تقارير الأعطال والاستخدام يمكنك اختيار تفعيلها أو إيقافها من الإعدادات؛ لا نضيف الموقع أو البحث أو سجل القراءة إلى هذه التقارير. قد تتلقى الخدمات الخارجية بيانات الاتصال. حذف البيانات المحلية لا يعني حذف سجلات الخدمات الخارجية أو النسخ الاحتياطية.",
+  "dataSourcesScreenMessage4": "تُحفظ المفضلة والعلامات والختمة والإعدادات محلياً. مسح بيانات التطبيق من إعدادات النظام يزيل البيانات المحلية. التذكيرات محلية ولا تحتاج خدمة رسائل عن بُعد. عند إتاحة تقارير الأعطال يمكنك اختيار تفعيلها أو إيقافها من الإعدادات؛ لا نضيف الموقع أو البحث أو سجل القراءة إلى هذه التقارير. قد تتلقى الخدمات الخارجية بيانات الاتصال. حذف البيانات المحلية لا يعني حذف سجلات الخدمات الخارجية أو النسخ الاحتياطية.",
   "@dataSourcesScreenMessage4": {
     "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
   },
@@ -2242,7 +2242,7 @@
   "@settingsScreenMessage12": {
     "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
   },
-  "settingsScreenMessage13": "إرسال تقارير الأعطال وبيانات الاستخدام",
+  "settingsScreenMessage13": "إرسال تقارير الأعطال",
   "@settingsScreenMessage13": {
     "description": "Display text used in lib/features/settings/presentation/screens/settings_screen.dart."
   },

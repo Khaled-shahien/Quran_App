@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/providers/settings_provider.dart';
-import '../../../../core/services/monitoring_service.dart';
 import '../../../onboarding/presentation/widgets/alarms/alarm_menu_item.dart';
 import '../widgets/reading_preferences.dart';
 import '../widgets/settings_controls.dart';
@@ -16,12 +15,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  @override
-  void initState() {
-    super.initState();
-    MonitoringService.instance.event('settings_open');
-  }
-
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsProvider>();

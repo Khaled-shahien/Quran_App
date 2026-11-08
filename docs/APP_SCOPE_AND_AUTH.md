@@ -27,9 +27,9 @@ If a future release introduces account features, the project should add a fresh 
 - password reset, account deletion, and export controls
 - admin and support flows where relevant
 
-## Monitoring and Analytics
+## Crash Monitoring
 
-Firebase monitoring remains optional and compile-time gated. When enabled, it should only collect aggregate operational data and crash information needed to maintain the app. No user account identity should be attached to analytics.
+Firebase monitoring remains optional and compile-time gated. When enabled, it collects only crash information needed to maintain the app. The app ships no usage analytics SDK. No user account identity is attached to crash reports.
 
 ## Release Signoff
 

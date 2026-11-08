@@ -2759,7 +2759,7 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'تُحفظ المفضلة والعلامات والختمة والإعدادات محلياً. مسح بيانات التطبيق من إعدادات النظام يزيل البيانات المحلية. التذكيرات محلية ولا تحتاج خدمة رسائل عن بُعد. عند إتاحة تقارير الأعطال والاستخدام يمكنك اختيار تفعيلها أو إيقافها من الإعدادات؛ لا نضيف الموقع أو البحث أو سجل القراءة إلى هذه التقارير. قد تتلقى الخدمات الخارجية بيانات الاتصال. حذف البيانات المحلية لا يعني حذف سجلات الخدمات الخارجية أو النسخ الاحتياطية.'**
+  /// **'تُحفظ المفضلة والعلامات والختمة والإعدادات محلياً. مسح بيانات التطبيق من إعدادات النظام يزيل البيانات المحلية. التذكيرات محلية ولا تحتاج خدمة رسائل عن بُعد. عند إتاحة تقارير الأعطال يمكنك اختيار تفعيلها أو إيقافها من الإعدادات؛ لا نضيف الموقع أو البحث أو سجل القراءة إلى هذه التقارير. قد تتلقى الخدمات الخارجية بيانات الاتصال. حذف البيانات المحلية لا يعني حذف سجلات الخدمات الخارجية أو النسخ الاحتياطية.'**
   String get dataSourcesScreenMessage4;
 
   /// Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart.
@@ -3047,7 +3047,7 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/settings/presentation/screens/settings_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'إرسال تقارير الأعطال وبيانات الاستخدام'**
+  /// **'إرسال تقارير الأعطال'**
   String get settingsScreenMessage13;
 
   /// Display text used in lib/features/settings/presentation/screens/settings_screen.dart.

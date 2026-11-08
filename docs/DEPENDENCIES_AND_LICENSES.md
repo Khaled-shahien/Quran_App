@@ -13,7 +13,6 @@ lints) are not shipped and are not listed.
 | connectivity_plus | 5.0.2 | BSD-3-Clause | Offline detection |
 | cupertino_icons | 1.0.9 | MIT | iOS icons |
 | firebase_core | 3.15.2 | BSD-3-Clause | Firebase setup (monitoring, opt-in) |
-| firebase_analytics | 11.6.0 | BSD-3-Clause | Opt-in usage events |
 | firebase_crashlytics | 4.3.10 | BSD-3-Clause | Opt-in crash reports |
 | flutter_local_notifications | 18.0.1 | BSD-3-Clause | Prayer alerts and reminders |
 | flutter_timezone | 4.1.1 | Apache-2.0 | Device timezone |

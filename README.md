@@ -25,7 +25,7 @@ A modern Islamic Flutter application for Quran reading, prayer times, adhkar/dua
 
 - Flutter
 - Dart
-- Firebase (Core + optional Analytics/Crashlytics)
+- Firebase (Core + optional Crashlytics)
 - Material 3
 
 ### 📦 Key Packages

@@ -16,7 +16,7 @@
 - `WorkManagerService` owns durable background registration and callback execution.
 - `CachedApiService` owns cache age, invalidation, and parsed-cache rejection.
 - `PreferenceSchema` owns persisted-preference version migration.
-- `MonitoringService` owns optional analytics/crash-reporting configuration.
+- `MonitoringService` owns optional crash-reporting configuration.
 
 ## Known Scope Boundaries
 
