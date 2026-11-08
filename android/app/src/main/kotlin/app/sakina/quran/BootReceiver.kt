@@ -1,4 +1,4 @@
-package com.example.sakina_app
+package app.sakina.quran
 
 import android.content.BroadcastReceiver
 import android.content.Context

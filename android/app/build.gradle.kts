@@ -23,7 +23,7 @@ gradle.taskGraph.whenReady {
 }
 
 android {
-    namespace = "com.example.sakina_app"
+    namespace = "app.sakina.quran"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -40,7 +40,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.sakina_app"
+        applicationId = "app.sakina.quran"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = maxOf(21, flutter.minSdkVersion)

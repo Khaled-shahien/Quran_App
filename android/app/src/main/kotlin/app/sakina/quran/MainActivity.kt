@@ -1,4 +1,4 @@
-package com.example.sakina_app
+package app.sakina.quran
 
 import com.ryanheise.audioservice.AudioServiceActivity
 import io.flutter.embedding.engine.FlutterEngine

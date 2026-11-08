@@ -12,7 +12,7 @@ void main() {
     'android/app/src/main/AndroidManifest.xml',
   ).readAsStringSync();
   final bootReceiver = File(
-    'android/app/src/main/kotlin/com/example/sakina_app/BootReceiver.kt',
+    'android/app/src/main/kotlin/app/sakina/quran/BootReceiver.kt',
   ).readAsStringSync();
 
   test('iOS permits and registers the periodic reschedule task', () {
