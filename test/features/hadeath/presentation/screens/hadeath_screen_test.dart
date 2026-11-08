@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:sakina_app/core/widgets/pulse_loader.dart';
@@ -37,9 +36,7 @@ class FakeHadeathRepository implements HadeathRepository {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUpAll(() {
-    GoogleFonts.config.allowRuntimeFetching = false;
-  });
+  setUpAll(() {});
 
   Widget buildScreen(HadeathRepository repository) {
     final provider = HadeathProvider(repository: repository);

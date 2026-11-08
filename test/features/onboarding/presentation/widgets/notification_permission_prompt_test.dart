@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sakina_app/core/providers/notification_provider.dart';
@@ -8,8 +7,6 @@ import 'package:sakina_app/features/onboarding/presentation/widgets/notification
 import 'package:sakina_app/l10n/app_localizations.dart';
 
 void main() {
-  setUp(() => GoogleFonts.config.allowRuntimeFetching = false);
-
   Future<void> pumpAndPrompt(WidgetTester tester) async {
     final prefs = await SharedPreferences.getInstance();
     await tester.pumpWidget(

@@ -2,7 +2,6 @@ import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dar
 import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 
@@ -185,9 +184,7 @@ class FailingCancellationScheduler extends NoopPrayerNotificationScheduler {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUp(() {
-    GoogleFonts.config.allowRuntimeFetching = false;
-  });
+  setUp(() {});
 
   for (final brightness in Brightness.values) {
     testWidgets('manual save error is visible in RTL $brightness', (

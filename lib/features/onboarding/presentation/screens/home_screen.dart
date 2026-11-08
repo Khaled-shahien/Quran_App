@@ -6,7 +6,6 @@ import 'dart:async';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/theme_provider.dart';
@@ -953,7 +952,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (verse['english'] != null)
                     Text(
                       verse['english']!,
-                      style: GoogleFonts.roboto(
+                      style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(
                           context,

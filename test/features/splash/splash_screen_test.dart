@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sakina_app/core/navigation/notification_router.dart';
 import 'package:sakina_app/features/splash/presentation/screens/splash_screen.dart';
 
 void main() {
-  setUp(() => GoogleFonts.config.allowRuntimeFetching = false);
   tearDown(NotificationRouter.clearNavigationCallback);
 
   Future<void> pumpSplash(WidgetTester tester) async {

@@ -1,7 +1,6 @@
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 import '../providers/favorites_provider.dart';
@@ -150,7 +149,7 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
                     _selectedVerse['english']!,
                     textDirection: TextDirection.ltr,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.roboto(color: Colors.white70),
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ],
               );

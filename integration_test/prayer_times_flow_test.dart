@@ -2,7 +2,6 @@ import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dar
 import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
@@ -62,9 +61,7 @@ class FlakyPrayerTimesRepository implements PrayerTimesRepository {
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  setUpAll(() {
-    GoogleFonts.config.allowRuntimeFetching = true;
-  });
+  setUpAll(() {});
 
   testWidgets('Prayer flow: load -> error -> retry -> display', (tester) async {
     final repository = FlakyPrayerTimesRepository();

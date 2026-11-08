@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:provider/provider.dart';
 
@@ -36,9 +35,7 @@ class FakeAzkarRepository implements AzkarRepository {
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  setUpAll(() {
-    GoogleFonts.config.allowRuntimeFetching = true;
-  });
+  setUpAll(() {});
 
   testWidgets('Duas flow: azkar list -> details navigation', (tester) async {
     final provider = AzkarProvider(repository: FakeAzkarRepository());

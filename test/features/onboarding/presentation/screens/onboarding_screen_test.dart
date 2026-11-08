@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sakina_app/core/theme/app_colors.dart';
@@ -11,7 +10,6 @@ import 'package:sakina_app/features/onboarding/presentation/widgets/onboarding_p
 
 void main() {
   setUp(() {
-    GoogleFonts.config.allowRuntimeFetching = false;
     SharedPreferences.setMockInitialValues({
       'has_seen_notification_permission': true,
     });

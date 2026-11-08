@@ -20,7 +20,6 @@ lints) are not shipped and are not listed.
 | geolocator | 14.0.2 | MIT | Optional location for prayer times and qibla |
 | get_it | 7.7.0 | MIT | Service locator |
 | go_router | 17.5.0 | BSD-3-Clause | Navigation |
-| google_fonts | 6.3.3 | BSD-3-Clause | Font loading (bundled fonts; runtime fetching off) |
 | hijri | 3.0.1 | BSD-2-Clause | Hijri calendar |
 | http | 1.6.0 | BSD-3-Clause | Network requests |
 | intl | 0.20.3 | BSD-3-Clause | Localisation and formatting |

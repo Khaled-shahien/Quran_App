@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/core/theme/app_typography.dart';
 import 'package:sakina_app/features/quran/domain/entities/surah_entity.dart';
@@ -61,7 +60,6 @@ SelectableText _firstPageText(WidgetTester tester) =>
 
 void main() {
   setUp(() {
-    GoogleFonts.config.allowRuntimeFetching = false;
     // A cached load from a previous test's fake clock would never complete.
     rootBundle.evict('assets/quran_master.json');
   });
