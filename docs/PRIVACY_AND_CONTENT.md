@@ -4,14 +4,14 @@ Implementation inventory, not a legally approved privacy policy. Publication rem
 
 | Data | Purpose and storage | Deletion/control |
 |---|---|---|
-| Selected prayer coordinates, label and method | Local SharedPreferences; coordinates sent to Aladhan on foreground refresh and background replenishment of today plus two future days; background work uses saved coordinates, not GPS | Change location in Prayer; disabling prayer reminders stops background prayer fetches; clearing app storage removes local preferences |
+| Selected prayer coordinates, label and method | Local SharedPreferences only. Prayer times are calculated on the device (adhan_dart); coordinates are never sent to a server. Background work uses saved coordinates, not GPS | Change location in Prayer; clearing app storage removes local preferences |
 | Device location | Used for Qibla direction, and for prayer times when the user chooses "use my location"; saved as the prayer location in that case | Revoke location permission in OS settings |
 | Prayer response cache | Local date/location/method cache with retrieval timestamp; old same-day cache labeled stale | Clearing app storage removes cache |
 | Bookmarks, favorites, Khatma, preferences | Local SharedPreferences | Existing feature controls; clearing app storage removes all local state |
 | Notification schedules | OS/plugin schedule storage | OS notification settings and existing notification controls |
 | Optional crash reports | Disabled by default; supported mobile builds require `APP_ENV=production` or `ENABLE_FIREBASE_MONITORING=true`, plus user opt-in. Sends exception types and stacks only, not reading/search/location values. No usage analytics SDK is included | Settings opt-out disables collection and deletes unsent reports; server retention needs owner approval |
 | Push notifications | Not supported; messaging dependency, handlers and token controls removed | Local reminders do not register push tokens; optional monitoring is separately controlled |
-| Media/network requests | Aladhan, configured media sources and externally opened links; Firebase when configured for optional monitoring | Network services receive request metadata; their retention is not controlled by this repository |
+| Media/network requests | Configured media sources (RSS, YouTube), recitation audio and externally opened links; Firebase Crashlytics when configured and the user opts in | Network services receive request metadata; their retention is not controlled by this repository |
 
 No claim is made that uninstall deletes third-party records or OS backups. A unified in-app data deletion flow and backend token deletion contract remain pending. API URL query values and prayer response bodies must not be logged.
 

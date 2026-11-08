@@ -10,7 +10,6 @@ lints) are not shipped and are not listed.
 | audio_service | 0.18.19 | MIT | Background recitation and lock-screen controls |
 | audio_session | 0.2.4 | MIT | Audio focus (pausing for calls, adhan) |
 | just_audio | 0.10.6 | Apache-2.0 | Recitation playback |
-| connectivity_plus | 5.0.2 | BSD-3-Clause | Offline detection |
 | cupertino_icons | 1.0.9 | MIT | iOS icons |
 | firebase_core | 3.15.2 | BSD-3-Clause | Firebase setup (monitoring, opt-in) |
 | firebase_crashlytics | 4.3.10 | BSD-3-Clause | Opt-in crash reports |
@@ -24,10 +23,8 @@ lints) are not shipped and are not listed.
 | http | 1.6.0 | BSD-3-Clause | Network requests |
 | intl | 0.20.3 | BSD-3-Clause | Localisation and formatting |
 | json_annotation | 4.12.0 | BSD-3-Clause | JSON models |
-| logger | 2.8.0 | MIT | Debug logging |
 | path_provider | 2.1.6 | BSD-3-Clause | Recitation download folder |
 | provider | 6.1.5+1 | MIT | State management |
-| share_plus | 12.0.2 | BSD-3-Clause | Sharing verses and adhkar |
 | shared_preferences | 2.5.5 | BSD-3-Clause | Settings and progress |
 | url_launcher | 6.3.2 | BSD-3-Clause | External links (with confirmation) |
 | workmanager | 0.9.3 | MIT | Re-scheduling alerts in the background |

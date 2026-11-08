@@ -36,7 +36,7 @@ A modern Islamic Flutter application for Quran reading, prayer times, adhkar/dua
 - Serialization: json_annotation + json_serializable
 - Local Storage: shared_preferences
 - Notifications: flutter_local_notifications + workmanager + timezone
-- Utilities: connectivity_plus + logger + share_plus + url_launcher
+- Utilities: url_launcher
 
 ## 🏗️ Architecture
 
