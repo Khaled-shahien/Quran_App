@@ -39,11 +39,19 @@ Step 'Scan for committed secrets' { dart run scripts/check_secrets.dart }
 Step 'Static analysis' { flutter analyze --no-pub }
 Step 'Unit and widget tests' { flutter test --no-pub }
 
-$python = Get-Command python -ErrorAction SilentlyContinue
-if ($python) {
-    Step 'Religious content integrity' { python scripts/verify_content.py }
+# Find a Python that really runs. On Windows `python` is often the Microsoft
+# Store alias stub, which exists on PATH but fails with exit 9009.
+$pythonCmd = $null
+foreach ($candidate in @('py', 'python', 'python3')) {
+    if (-not (Get-Command $candidate -ErrorAction SilentlyContinue)) { continue }
+    $probe = & $candidate --version 2>&1 | Out-String
+    if ($LASTEXITCODE -eq 0 -and $probe -match 'Python \d') { $pythonCmd = $candidate; break }
+}
+$global:LASTEXITCODE = 0
+if ($pythonCmd) {
+    Step "Religious content integrity ($pythonCmd)" { & $pythonCmd scripts/verify_content.py }
 } else {
-    Write-Host 'Python not found: skipping content integrity check (CI still runs it).' -ForegroundColor Yellow
+    Write-Host 'Python not installed: skipping content integrity check (CI runs it on every push).' -ForegroundColor Yellow
 }
 
 Step 'Build signed App Bundle' {
