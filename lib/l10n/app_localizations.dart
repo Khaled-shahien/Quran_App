@@ -457,13 +457,13 @@ abstract class AppLocalizations {
   /// Display text used in lib/core/services/notification_service.dart.
   ///
   /// In ar, this message translates to:
-  /// **'إشعارات الاختبار'**
+  /// **'تجربة التنبيهات'**
   String get notificationServiceMessage7;
 
   /// Display text used in lib/core/services/notification_service.dart.
   ///
   /// In ar, this message translates to:
-  /// **'إشعارات اختبار التطبيق'**
+  /// **'تنبيه تجريبي تطلبه من الإعدادات للتأكد أن التنبيهات تعمل'**
   String get notificationServiceMessage8;
 
   /// Display text used in lib/core/services/notification_service.dart.
@@ -2747,7 +2747,7 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'تُحفظ إحداثيات موقع الصلاة وطريقة الحساب على الجهاز، وتُرسل إلى خدمة Aladhan لجلب المواقيت. يمكنك تعديلها من شاشة الصلاة. تستخدم القبلة إذن الموقع لحساب الاتجاه. يمكن إلغاء الإذن من إعدادات الجهاز.'**
+  /// **'تُحفظ إحداثيات موقع الصلاة وطريقة الحساب على الجهاز، وتُحسب المواقيت على الجهاز نفسه دون إرسال الإحداثيات إلى أي خادم. يمكنك تعديلها من شاشة الصلاة. تستخدم القبلة إذن الموقع لحساب الاتجاه. يمكن إلغاء الإذن من إعدادات الجهاز.'**
   String get dataSourcesScreenMessage2;
 
   /// Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart.
@@ -2771,7 +2771,7 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart.
   ///
   /// In ar, this message translates to:
-  /// **'القرآن والأحاديث والأدعية متاحة ضمن ملفات التطبيق للعمل دون اتصال. توثيق الطبعة والمصدر والترخيص واعتماد المراجعة لكل مجموعة لم يكتمل بعد. بصمات سلامة الملفات تكشف التغييرات ولا تُعد توثيقاً شرعياً للمحتوى.'**
+  /// **'القرآن والأحاديث والأدعية متاحة ضمن ملفات التطبيق للعمل دون اتصال. نص المصحف بالرسم العثماني من مشروع تنزيل (tanzil.net) ويُعرض دون تعديل. توثيق الطبعة والمصدر والترخيص واعتماد المراجعة لكل مجموعة لم يكتمل بعد. بصمات سلامة الملفات تكشف التغييرات ولا تُعد توثيقاً شرعياً للمحتوى.'**
   String get dataSourcesScreenMessage6;
 
   /// Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart.

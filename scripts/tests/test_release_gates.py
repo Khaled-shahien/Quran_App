@@ -13,7 +13,7 @@ import unittest
 SCRIPTS = Path(__file__).resolve().parents[1]
 COLLECTIONS = ('assets/quran_master.json', 'assets/quran_duas.json',
                'assets/prayers_data.json', 'assets/hadeath/ahadeth.txt',
-               'assets/islamic_guide.json')
+               'assets/islamic_guide.json', 'assets/adhan_adhkar.json')
 
 
 class ReleaseGatesTest(unittest.TestCase):
@@ -49,7 +49,7 @@ class ReleaseGatesTest(unittest.TestCase):
             'GOOGLE_APP_ID': 'fixture-app'}).decode())
         self.write('ios/Runner.xcodeproj/project.pbxproj',
                    'PRODUCT_BUNDLE_IDENTIFIER = org.fixture.sakina;\n')
-                self.write('lib/firebase_options.dart', """
+        self.write('lib/firebase_options.dart', """
 class DefaultFirebaseOptions {
     static const FirebaseOptions android = FirebaseOptions(
         projectId: 'fixture-project',
@@ -148,8 +148,8 @@ class DefaultFirebaseOptions {
         self.write('ios/Runner/GoogleService-Info.plist', plistlib.dumps({}).decode())
         self.assert_blocked(self.run_gate('verify_release.py'))
 
-        def test_mismatched_dart_firebase_options_are_rejected(self):
-                self.write('lib/firebase_options.dart', """
+    def test_mismatched_dart_firebase_options_are_rejected(self):
+        self.write('lib/firebase_options.dart', """
 class DefaultFirebaseOptions {
     static const FirebaseOptions android = FirebaseOptions(
         projectId: 'other-project',
@@ -160,7 +160,7 @@ class DefaultFirebaseOptions {
     );
 }
 """)
-                self.assert_blocked(self.run_gate('verify_release.py'))
+        self.assert_blocked(self.run_gate('verify_release.py'))
 
 
 if __name__ == '__main__':

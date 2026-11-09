@@ -1,5 +1,20 @@
 # Release requirements
 
+## Status 2026-11-09 — closed-testing readiness
+
+| Item | State |
+|---|---|
+| Android ID `app.sakina.quran`, Firebase project `quran-app-10d05` | Set; Dart Firebase options trimmed to Android/iOS |
+| Upload signing (`android/key.properties`) | Present locally; build via `scripts/build_release.ps1` |
+| Toolchain | CI pinned to Flutter 3.47.9 stable; local release build must be on stable |
+| Privacy policy | Final, `site/privacy.html`, published by `.github/workflows/pages.yml` |
+| Store listing assets | Text in `STORE_LISTING_AR.md`, icon + feature graphic in `store/`; screenshots pending |
+| Play Console answers | `PLAY_CONSOLE_GUIDE_AR.md` |
+| Content provenance | Sources proposed in `content_manifest.json`; owner approval pending (`CONTENT_SOURCES_REVIEW_AR.md`) — blocks production, not closed testing |
+| Device evidence | Pending; run during the 14-day closed test |
+| iOS | Out of scope for the first Android release |
+
+
 Android release builds no longer fall back to debug signing. Create ignored `android/key.properties` with `storeFile` (absolute or relative to android), `storePassword`, `keyAlias`, and `keyPassword`. Keep the keystore and passwords outside version control and in protected CI secrets. Build/install verification of a signed artifact is still required.
 
 The existing sample Android identifier and inconsistent Firebase/iOS identities have deliberately not been replaced with invented production values. Before release the owner must supply:

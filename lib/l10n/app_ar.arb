@@ -213,11 +213,11 @@
   "@notificationServiceMessage6": {
     "description": "Display text used in lib/core/services/notification_service.dart."
   },
-  "notificationServiceMessage7": "إشعارات الاختبار",
+  "notificationServiceMessage7": "تجربة التنبيهات",
   "@notificationServiceMessage7": {
     "description": "Display text used in lib/core/services/notification_service.dart."
   },
-  "notificationServiceMessage8": "إشعارات اختبار التطبيق",
+  "notificationServiceMessage8": "تنبيه تجريبي تطلبه من الإعدادات للتأكد أن التنبيهات تعمل",
   "@notificationServiceMessage8": {
     "description": "Display text used in lib/core/services/notification_service.dart."
   },
@@ -2027,7 +2027,7 @@
   "@dataSourcesScreenMessage1": {
     "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
   },
-  "dataSourcesScreenMessage2": "تُحفظ إحداثيات موقع الصلاة وطريقة الحساب على الجهاز، وتُرسل إلى خدمة Aladhan لجلب المواقيت. يمكنك تعديلها من شاشة الصلاة. تستخدم القبلة إذن الموقع لحساب الاتجاه. يمكن إلغاء الإذن من إعدادات الجهاز.",
+  "dataSourcesScreenMessage2": "تُحفظ إحداثيات موقع الصلاة وطريقة الحساب على الجهاز، وتُحسب المواقيت على الجهاز نفسه دون إرسال الإحداثيات إلى أي خادم. يمكنك تعديلها من شاشة الصلاة. تستخدم القبلة إذن الموقع لحساب الاتجاه. يمكن إلغاء الإذن من إعدادات الجهاز.",
   "@dataSourcesScreenMessage2": {
     "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
   },
@@ -2043,7 +2043,7 @@
   "@dataSourcesScreenMessage5": {
     "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
   },
-  "dataSourcesScreenMessage6": "القرآن والأحاديث والأدعية متاحة ضمن ملفات التطبيق للعمل دون اتصال. توثيق الطبعة والمصدر والترخيص واعتماد المراجعة لكل مجموعة لم يكتمل بعد. بصمات سلامة الملفات تكشف التغييرات ولا تُعد توثيقاً شرعياً للمحتوى.",
+  "dataSourcesScreenMessage6": "القرآن والأحاديث والأدعية متاحة ضمن ملفات التطبيق للعمل دون اتصال. نص المصحف بالرسم العثماني من مشروع تنزيل (tanzil.net) ويُعرض دون تعديل. توثيق الطبعة والمصدر والترخيص واعتماد المراجعة لكل مجموعة لم يكتمل بعد. بصمات سلامة الملفات تكشف التغييرات ولا تُعد توثيقاً شرعياً للمحتوى.",
   "@dataSourcesScreenMessage6": {
     "description": "Display text used in lib/features/settings/presentation/screens/data_sources_screen.dart."
   },

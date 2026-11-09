@@ -8,7 +8,7 @@ from pathlib import Path
 REQUIRED_COLLECTIONS = {
     'assets/quran_master.json', 'assets/quran_duas.json',
     'assets/prayers_data.json', 'assets/hadeath/ahadeth.txt',
-    'assets/islamic_guide.json',
+    'assets/islamic_guide.json', 'assets/adhan_adhkar.json',
 }
 
 root = Path(__file__).resolve().parents[1]

@@ -17,38 +17,21 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions are only configured for Android and iOS.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
         return ios;
-      case TargetPlatform.macOS:
-        return macos;
-      case TargetPlatform.windows:
-        return windows;
-      case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
         );
     }
   }
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDNpWxsbBkt0Z7UvsCr80A8t8Q4VzPAaAk',
-    appId: '1:896557837272:web:2999b066e4588df56c20ad',
-    messagingSenderId: '896557837272',
-    projectId: 'quran-app-754e2',
-    authDomain: 'quran-app-754e2.firebaseapp.com',
-    storageBucket: 'quran-app-754e2.firebasestorage.app',
-    measurementId: 'G-N79DRDYBK2',
-  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBZwYtupguU5QCwrMz6SPILELRc_o0h2Vk',
@@ -64,23 +47,5 @@ class DefaultFirebaseOptions {
     projectId: 'quran-app-10d05',
     storageBucket: 'quran-app-10d05.firebasestorage.app',
     iosBundleId: 'app.sakina.quran',
-  );
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBMwzvxfOdowk83AqQh7Fc-dLXdskqYBrU',
-    appId: '1:896557837272:ios:be024dc0e4d2e8cd6c20ad',
-    messagingSenderId: '896557837272',
-    projectId: 'quran-app-754e2',
-    storageBucket: 'quran-app-754e2.firebasestorage.app',
-    iosBundleId: 'com.example.quranApp',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDNpWxsbBkt0Z7UvsCr80A8t8Q4VzPAaAk',
-    appId: '1:896557837272:web:cb8a292fbca49c386c20ad',
-    messagingSenderId: '896557837272',
-    projectId: 'quran-app-754e2',
-    authDomain: 'quran-app-754e2.firebaseapp.com',
-    storageBucket: 'quran-app-754e2.firebasestorage.app',
-    measurementId: 'G-PS7XWQLGNL',
   );
 }

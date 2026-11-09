@@ -190,10 +190,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get notificationServiceMessage6 => 'إشعارات أوقات الصلاة الخمس';
 
   @override
-  String get notificationServiceMessage7 => 'إشعارات الاختبار';
+  String get notificationServiceMessage7 => 'تجربة التنبيهات';
 
   @override
-  String get notificationServiceMessage8 => 'إشعارات اختبار التطبيق';
+  String get notificationServiceMessage8 =>
+      'تنبيه تجريبي تطلبه من الإعدادات للتأكد أن التنبيهات تعمل';
 
   @override
   String get notificationServiceMessage9 => 'تذكير أذكار الصباح';
@@ -1484,7 +1485,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dataSourcesScreenMessage2 =>
-      'تُحفظ إحداثيات موقع الصلاة وطريقة الحساب على الجهاز، وتُرسل إلى خدمة Aladhan لجلب المواقيت. يمكنك تعديلها من شاشة الصلاة. تستخدم القبلة إذن الموقع لحساب الاتجاه. يمكن إلغاء الإذن من إعدادات الجهاز.';
+      'تُحفظ إحداثيات موقع الصلاة وطريقة الحساب على الجهاز، وتُحسب المواقيت على الجهاز نفسه دون إرسال الإحداثيات إلى أي خادم. يمكنك تعديلها من شاشة الصلاة. تستخدم القبلة إذن الموقع لحساب الاتجاه. يمكن إلغاء الإذن من إعدادات الجهاز.';
 
   @override
   String get dataSourcesScreenMessage3 => 'البيانات والتذكيرات';
@@ -1498,7 +1499,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dataSourcesScreenMessage6 =>
-      'القرآن والأحاديث والأدعية متاحة ضمن ملفات التطبيق للعمل دون اتصال. توثيق الطبعة والمصدر والترخيص واعتماد المراجعة لكل مجموعة لم يكتمل بعد. بصمات سلامة الملفات تكشف التغييرات ولا تُعد توثيقاً شرعياً للمحتوى.';
+      'القرآن والأحاديث والأدعية متاحة ضمن ملفات التطبيق للعمل دون اتصال. نص المصحف بالرسم العثماني من مشروع تنزيل (tanzil.net) ويُعرض دون تعديل. توثيق الطبعة والمصدر والترخيص واعتماد المراجعة لكل مجموعة لم يكتمل بعد. بصمات سلامة الملفات تكشف التغييرات ولا تُعد توثيقاً شرعياً للمحتوى.';
 
   @override
   String get dataSourcesScreenMessage7 =>

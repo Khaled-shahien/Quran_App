@@ -10,7 +10,11 @@
       "license": null,
       "reviewer": null,
       "approvalDate": null,
-      "evidenceUrl": null
+      "evidenceUrl": null,
+      "proposedSource": "Tanzil Quran Text (Uthmani), as packaged by AlQuran.cloud edition \"quran-uthmani\"",
+      "proposedEdition": "Tanzil Uthmani 1.x via api.alquran.cloud/v1/quran/quran-uthmani (owner to confirm exact version)",
+      "proposedLicense": "Tanzil Quran Text license: verbatim copying and redistribution allowed with attribution to tanzil.net; no modification of the text",
+      "proposalNotes": "Proposed from file structure (number/englishName/revelationType/ayahs with juz, manzil, page, ruku, hizbQuarter, sajda). Owner must confirm source and compare against a printed King Fahd Complex mushaf before approval."
     },
     {
       "path": "assets/quran_duas.json",
@@ -20,7 +24,11 @@
       "license": null,
       "reviewer": null,
       "approvalDate": null,
-      "evidenceUrl": null
+      "evidenceUrl": null,
+      "proposedSource": "Quranic supplications selected for the app; verse text in simplified (imla'i) script with surah/ayah references",
+      "proposedEdition": "App-authored selection (Sakina)",
+      "proposedLicense": "Quran text is not copyrightable; selection authored for this app",
+      "proposalNotes": "Every verse must be checked word-by-word against the mushaf because it is not in Uthmani script."
     },
     {
       "path": "assets/prayers_data.json",
@@ -30,7 +38,11 @@
       "license": null,
       "reviewer": null,
       "approvalDate": null,
-      "evidenceUrl": null
+      "evidenceUrl": null,
+      "proposedSource": "Hisn al-Muslim (حصن المسلم) by Sa'id ibn Ali ibn Wahf al-Qahtani, plus Quranic verses and hadith references (Bukhari, Muslim, Abu Dawud, Tirmidhi)",
+      "proposedEdition": "Hisn al-Muslim item numbers as cited in each entry (owner to confirm edition)",
+      "proposedLicense": "Pending: confirm redistribution terms for Hisn al-Muslim text (see DEPENDENCIES_AND_LICENSES.md)",
+      "proposalNotes": "References cite Hisn al-Muslim item numbers; repeat counts and wording must be checked against the cited edition."
     },
     {
       "path": "assets/hadeath/ahadeth.txt",
@@ -40,7 +52,11 @@
       "license": null,
       "reviewer": null,
       "approvalDate": null,
-      "evidenceUrl": null
+      "evidenceUrl": null,
+      "proposedSource": "Al-Arba'in al-Nawawiyya (42 hadith) completed to 50 by Ibn Rajab (Jami' al-Ulum wal-Hikam)",
+      "proposedEdition": "Unknown digital transcription (owner to identify origin)",
+      "proposedLicense": "Classical text in the public domain; transcription source unverified",
+      "proposalNotes": "Transcription contains spacing/tatweel artefacts (e.g. \"الحد يث\", \"المحد ثين\"); proofread against a printed edition before approval."
     },
     {
       "path": "assets/islamic_guide.json",
@@ -50,7 +66,11 @@
       "license": null,
       "reviewer": null,
       "approvalDate": null,
-      "evidenceUrl": null
+      "evidenceUrl": null,
+      "proposedSource": "Authored for Sakina; Quranic verses referenced by surah/ayah and rendered from quran_master.json",
+      "proposedEdition": "Sakina islamic_guide schemaVersion as bundled",
+      "proposedLicense": "Original app content (c) Khaled Shahien",
+      "proposalNotes": "Hadith texts and numbered citations need a qualified reviewer."
     },
     {
       "path": "assets/adhan_adhkar.json",
@@ -60,7 +80,12 @@
       "license": null,
       "reviewer": null,
       "approvalDate": null,
-      "evidenceUrl": null
+      "evidenceUrl": null,
+      "proposedSource": "Hisn al-Muslim (حصن المسلم) adhan section, items as cited",
+      "proposedEdition": "Hisn al-Muslim item numbers as cited in each entry",
+      "proposedLicense": "Pending: same terms as prayers_data.json",
+      "proposalNotes": "Check wording against the cited Hisn al-Muslim items."
     }
-  ]
+  ],
+  "proposalStatus": "sources_proposed_2026-11-09_awaiting_owner_review"
 }

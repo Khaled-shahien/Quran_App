@@ -1,8 +1,11 @@
 # Sakina — Arabic store listing draft
 
-Status: copy prepared; do not submit until the release gates are met. The support
-contact, public privacy URL, publisher identity, content approvals and screenshots
-of the final signed candidate are still required.
+Status (2026-11-09): ready for the closed-testing track. Publisher: Khaled Shahien;
+support/privacy contact: shahienk856@gmail.com (a dedicated support address will
+replace it later); privacy URL: https://khaled-shahien.github.io/quran_app/privacy.html.
+Icon and feature graphic are in `store/`. Still required: screenshots of the signed
+candidate, and content approvals before production. Step-by-step Console answers:
+`PLAY_CONSOLE_GUIDE_AR.md`.
 
 ## App title
 
@@ -40,7 +43,7 @@ explicitly selected test city rather than the owner's private location:
 5. Adhkar category and counter.
 6. Settings in dark mode.
 
-Produce the feature graphic and final store icon from the approved brand assets.
+Feature graphic and 512px store icon: `store/feature_graphic_1024x500.png`, `store/play_icon_512.png` (generated from `assets/images`).
 Do not use test screenshots that contain diagnostic overlays or synthetic content.
 
 ## Submission fields requiring the owner
