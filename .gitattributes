@@ -1,2 +1,6 @@
 # Hooks run under sh, which a CRLF checkout would break.
 .githooks/* text eol=lf
+
+# Religious content is hashed in content_manifest.json; keep identical bytes on every OS.
+assets/**/*.json text eol=lf
+assets/**/*.txt text eol=lf

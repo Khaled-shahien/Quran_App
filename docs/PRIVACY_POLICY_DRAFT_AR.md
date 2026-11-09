@@ -1,7 +1,7 @@
 # سياسة خصوصية سكينة — النسخة المعتمدة للنشر
 
 النسخة العامة المنشورة هي `site/privacy.html` (عربي + إنجليزي) عبر GitHub Pages:
-`https://khaled-shahien.github.io/quran_app/privacy.html`
+`https://khaled-shahien.github.io/Quran_App/privacy.html`
 
 هذا الملف يبقى مرجعاً داخلياً. أي تعديل على البيانات التي يعالجها التطبيق
 يستلزم تحديث `site/privacy.html` وتاريخ السريان وإجابات Data Safety معاً

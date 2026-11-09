@@ -2,7 +2,7 @@
 
 Status (2026-11-09): ready for the closed-testing track. Publisher: Khaled Shahien;
 support/privacy contact: shahienk856@gmail.com (a dedicated support address will
-replace it later); privacy URL: https://khaled-shahien.github.io/quran_app/privacy.html.
+replace it later); privacy URL: https://khaled-shahien.github.io/Quran_App/privacy.html.
 Icon and feature graphic are in `store/`. Still required: screenshots of the signed
 candidate, and content approvals before production. Step-by-step Console answers:
 `PLAY_CONSOLE_GUIDE_AR.md`.

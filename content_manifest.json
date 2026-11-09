@@ -18,7 +18,7 @@
     },
     {
       "path": "assets/quran_duas.json",
-      "sha256": "cf3c02cda7956b14373468018ffc04c1b65bc065e785f73342833941d9763fea",
+      "sha256": "baee284da602c80fdb40dafee47465c57d59836586689dcd17d40195a3bccd33",
       "source": "pending_owner_review",
       "edition": null,
       "license": null,
@@ -32,7 +32,7 @@
     },
     {
       "path": "assets/prayers_data.json",
-      "sha256": "b527213626372d061840ef33275a7ac828606a7bad05af59d63780c8ba2c7e6a",
+      "sha256": "62a0f914d758c9c7492c4b4bd0f7a706a2d979f3c8e8f65da42d9311995a822c",
       "source": "pending_owner_review",
       "edition": null,
       "license": null,
@@ -46,7 +46,7 @@
     },
     {
       "path": "assets/hadeath/ahadeth.txt",
-      "sha256": "0d1612239f653c238b3fd025b9b6cecc2d24b28d1127e5b0ea6ed404bcdba9c4",
+      "sha256": "188e7570cf0b8603ebba1ff2afbfb97f079705224ca37c2728a78a5d1e270d2e",
       "source": "pending_owner_review",
       "edition": null,
       "license": null,

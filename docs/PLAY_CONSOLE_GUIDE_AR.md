@@ -17,7 +17,7 @@
 2. **ارفع التعديلات على GitHub** (commit + push على `main`).
 3. **فعّل GitHub Pages:** Settings → Pages → Source: **GitHub Actions**.
    الـ workflow `pages.yml` بينشر مجلد `site/` بس، ورابط السياسة هيبقى:
-   `https://khaled-shahien.github.io/quran_app/privacy.html`
+   `https://khaled-shahien.github.io/Quran_App/privacy.html`
    - افتح الرابط في المتصفح واتأكد إنه شغال قبل ما تحطه في Play Console.
    - Pages المجاني محتاج الريبو يكون **Public**. لو الريبو Private، يا إما تخليه Public،
      يا إما تعمل ريبو صغير منفصل Public فيه مجلد `site/` بس.
@@ -59,14 +59,14 @@ Play Console → **Create app**
 | Category | Lifestyle (أو Books & Reference) |
 | Tags | Religion, Quran |
 | Email | shahienk856@gmail.com |
-| Website | `https://khaled-shahien.github.io/quran_app/` |
+| Website | `https://khaled-shahien.github.io/Quran_App/` |
 
 ---
 
 ## 3. App content (Policy → App content)
 
 ### Privacy policy
-`https://khaled-shahien.github.io/quran_app/privacy.html`
+`https://khaled-shahien.github.io/Quran_App/privacy.html`
 
 ### App access
 **All functionality is available without special access** (مفيش تسجيل دخول).

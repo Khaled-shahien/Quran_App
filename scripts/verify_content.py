@@ -1,4 +1,8 @@
-"""Verify the reviewed baseline bytes, without claiming religious authenticity."""
+"""Verify the reviewed baseline bytes, without claiming religious authenticity.
+
+Hashes are taken over LF-normalised bytes so a Windows CRLF checkout and a
+Linux CI checkout of the same reviewed text produce the same digest.
+"""
 import hashlib
 import argparse
 import json
@@ -35,7 +39,8 @@ for item in collections:
     path = root / item['path']
     try:
         valid = (path.resolve().is_relative_to(root.resolve()) and path.is_file()
-                 and hashlib.sha256(path.read_bytes()).hexdigest() == item.get('sha256'))
+                 and hashlib.sha256(path.read_bytes().replace(b'\r\n', b'\n')).hexdigest()
+                 == item.get('sha256'))
     except OSError:
         valid = False
     if not valid:
