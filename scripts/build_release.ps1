@@ -47,7 +47,9 @@ if ($python) {
 }
 
 Step 'Build signed App Bundle' {
-    flutter build appbundle --release --no-pub `
+    # Without --no-pub so the plugin registrant is regenerated for release
+    # (the test step leaves one that lists dev-only plugins such as integration_test).
+    flutter build appbundle --release `
         --obfuscate --split-debug-info=build/symbols/android `
         --dart-define=APP_ENV=production `
         --dart-define-from-file=.env

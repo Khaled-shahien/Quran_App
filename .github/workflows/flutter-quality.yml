@@ -78,8 +78,11 @@ jobs:
             -storepass ci-only -keypass ci-only -dname "CN=CI"
           printf 'storeFile=ci-throwaway.jks\nstorePassword=ci-only\nkeyAlias=ci\nkeyPassword=ci-only\n' > key.properties
 
+      # No --no-pub here: the pub step regenerates the plugin registrant for
+      # release mode. `flutter test` above left a debug registrant that still
+      # lists dev-only plugins (integration_test), which release builds exclude.
       - name: Build release Android APK (runs R8)
-        run: flutter build apk --release --no-pub
+        run: flutter build apk --release
 
   visual-windows:
     name: Windows visual baselines
