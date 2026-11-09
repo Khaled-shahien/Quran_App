@@ -40,12 +40,22 @@ Step 'Static analysis' { flutter analyze --no-pub }
 Step 'Unit and widget tests' { flutter test --no-pub }
 
 # Find a Python that really runs. On Windows `python` is often the Microsoft
-# Store alias stub, which exists on PATH but fails with exit 9009.
+# Store alias stub under \Microsoft\WindowsApps\, which exists on PATH but
+# prints to stderr and exits 9009. Skip the stub, and probe the rest with
+# ErrorActionPreference 'Continue' so PowerShell 5.1 does not turn native
+# stderr into a terminating NativeCommandError.
 $pythonCmd = $null
 foreach ($candidate in @('py', 'python', 'python3')) {
-    if (-not (Get-Command $candidate -ErrorAction SilentlyContinue)) { continue }
-    $probe = & $candidate --version 2>&1 | Out-String
-    if ($LASTEXITCODE -eq 0 -and $probe -match 'Python \d') { $pythonCmd = $candidate; break }
+    $resolved = Get-Command $candidate -CommandType Application -ErrorAction SilentlyContinue |
+        Where-Object { $_.Source -notlike '*\Microsoft\WindowsApps\*' } |
+        Select-Object -First 1
+    if (-not $resolved) { continue }
+    $works = & {
+        $ErrorActionPreference = 'Continue'
+        $probe = & $resolved.Source --version 2>&1 | Out-String
+        ($LASTEXITCODE -eq 0) -and ($probe -match 'Python \d')
+    }
+    if ($works) { $pythonCmd = $resolved.Source; break }
 }
 $global:LASTEXITCODE = 0
 if ($pythonCmd) {
