@@ -26,6 +26,13 @@
     <!-- Quran recitation keeps playing in the background and on the lock screen -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+    <!-- Strip foreground-service types merged in by plugins that Sakina does not use.
+         Location is read once (getCurrentPosition) and WorkManager never calls setForeground,
+         so these would only trigger unnecessary Play Console FGS declarations. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" tools:node="remove" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" tools:node="remove" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SHORT_SERVICE" tools:node="remove" />
     
     <application
         android:label="سكينة"
@@ -93,6 +100,10 @@
             </intent-filter>
         </receiver>
         
+        <!-- Unused foreground services merged in by geolocator and WorkManager. -->
+        <service android:name="com.baseflow.geolocator.GeolocatorLocationService" tools:node="remove" />
+        <service android:name="androidx.work.impl.foreground.SystemForegroundService" tools:node="remove" />
+
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
