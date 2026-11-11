@@ -39,8 +39,9 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "app.sakina.quran"
+        // Play package name (permanent). app.sakina.quran was already taken on Google Play.
+        // namespace stays app.sakina.quran so Kotlin sources and R keep their package.
+        applicationId = "io.github.khaledshahien.sakina"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = maxOf(21, flutter.minSdkVersion)
