@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_motion.dart';
+
 class AnimatedEntrance extends StatefulWidget {
   final Widget child;
   final Duration delay;
@@ -9,7 +11,7 @@ class AnimatedEntrance extends StatefulWidget {
     super.key,
     required this.child,
     this.delay = Duration.zero,
-    this.duration = const Duration(milliseconds: 350),
+    this.duration = AppMotion.medium,
   });
 
   @override
@@ -30,11 +32,15 @@ class _AnimatedEntranceState extends State<AnimatedEntrance>
     _slide = Tween<Offset>(
       begin: const Offset(0, 0.12),
       end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+    ).animate(CurvedAnimation(parent: _controller, curve: AppMotion.enter));
 
-    Future<void>.delayed(widget.delay, () {
-      if (mounted) _controller.forward();
-    });
+    if (widget.delay == Duration.zero) {
+      _controller.forward();
+    } else {
+      Future<void>.delayed(widget.delay, () {
+        if (mounted) _controller.forward();
+      });
+    }
   }
 
   @override

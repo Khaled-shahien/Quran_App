@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -63,11 +64,16 @@ class _AdhanPreferencesState extends State<AdhanPreferences> {
         ListTile(title: Text(l10n.prayerAlertsTitle)),
         for (final prayer in DailyPrayer.values)
           Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 8),
+            padding: const EdgeInsetsDirectional.fromSTEB(
+              AppSpacing.md,
+              0,
+              AppSpacing.md,
+              AppSpacing.sm,
+            ),
             child: Row(
               children: [
                 Expanded(child: Text(l10n.prayerName(prayer))),
-                const SizedBox(width: 12),
+                const SizedBox(width: AppSpacing.ms),
                 Flexible(
                   flex: 2,
                   child: DropdownButtonFormField<PrayerAlertMode>(
@@ -91,14 +97,24 @@ class _AdhanPreferencesState extends State<AdhanPreferences> {
           ),
         if (usesAdhan)
           Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 8),
+            padding: const EdgeInsetsDirectional.fromSTEB(
+              AppSpacing.md,
+              0,
+              AppSpacing.md,
+              AppSpacing.sm,
+            ),
             child: Text(
               l10n.adhanRecordingsPending,
               style: theme.textTheme.bodySmall,
             ),
           ),
         Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            AppSpacing.md,
+            AppSpacing.sm,
+            AppSpacing.md,
+            AppSpacing.sm,
+          ),
           child: DropdownButtonFormField<int>(
             key: const Key('adhan-reminder'),
             initialValue: settings.reminderMinutes,
@@ -154,7 +170,7 @@ class _AdhanPreferencesState extends State<AdhanPreferences> {
             ),
           ),
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpacing.md),
           child: OutlinedButton.icon(
             icon: const Icon(Icons.notifications_active_rounded),
             label: Text(l10n.testAdhanButton),

@@ -24,7 +24,8 @@ class _PrayerTimeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = l10nOf(context);
-    final onPrimary = theme.colorScheme.onPrimary;
+    final decor = SakinaDecor.of(context);
+    final onPrimary = decor.onFeature;
 
     return Consumer<PrayerTimesProvider>(
       builder: (context, provider, child) {
@@ -49,13 +50,9 @@ class _PrayerTimeHeader extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                theme.colorScheme.primary,
-                theme.colorScheme.primary.withValues(alpha: 0.72),
-                theme.colorScheme.tertiary.withValues(alpha: 0.58),
-              ],
+              begin: AlignmentDirectional.topStart,
+              end: AlignmentDirectional.bottomEnd,
+              colors: decor.heroColors,
             ),
           ),
           child: Stack(
@@ -63,8 +60,8 @@ class _PrayerTimeHeader extends StatelessWidget {
               // Faint geometric ornament in the chosen design's style.
               Positioned.fill(
                 child: GeometricPattern(
-                  pattern: SakinaDecor.of(context).pattern,
-                  color: onPrimary.withValues(alpha: 0.12),
+                  pattern: decor.pattern,
+                  color: onPrimary.withValues(alpha: 0.08),
                 ),
               ),
               Material(
@@ -86,7 +83,12 @@ class _PrayerTimeHeader extends StatelessWidget {
                       bottom: false,
                       child: Padding(
                         // Bottom space keeps clear of the collapsing app title.
-                        padding: const EdgeInsets.fromLTRB(24, 56, 24, 52),
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSpacing.lg,
+                          56,
+                          AppSpacing.lg,
+                          52,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
@@ -100,12 +102,17 @@ class _PrayerTimeHeader extends StatelessWidget {
                             ),
                             Text(
                               title,
-                              style: TextStyle(
-                                fontSize: next == null ? 22 : 36,
-                                fontWeight: FontWeight.w900,
-                                color: onPrimary,
-                                height: 1.15,
-                              ),
+                              style:
+                                  (next == null
+                                          ? theme.textTheme.titleLarge
+                                          : theme.textTheme.displaySmall)
+                                      ?.copyWith(
+                                        color: onPrimary,
+                                        fontWeight: FontWeight.w800,
+                                        // Tight, so a long prompt still
+                                        // fits the header at large text.
+                                        height: 1.2,
+                                      ),
                             ),
                             if (countdown != null)
                               Text(

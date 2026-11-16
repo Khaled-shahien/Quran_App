@@ -2184,4 +2184,94 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get drawerPrayerSection => 'الصلاة';
+
+  @override
+  String get readerLayoutTitle => 'طريقة العرض';
+
+  @override
+  String get readerLayoutContinuous => 'متصل';
+
+  @override
+  String get readerLayoutPages => 'صفحات';
+
+  @override
+  String get readerLayoutVerses => 'آية بآية';
+
+  @override
+  String get readerLayoutPagesHint =>
+      'حدود الصفحات مطابقة للمصحف، أما توزيع الأسطر فبحسب حجم الشاشة والخط.';
+
+  @override
+  String readerMushafPage(String page) {
+    return 'صفحة $page';
+  }
+
+  @override
+  String readerVerseActions(String number) {
+    return 'خيارات الآية $number';
+  }
+
+  @override
+  String get readerVersePlay => 'استمع من هذه الآية';
+
+  @override
+  String get readerVerseBookmark => 'ضع العلامة هنا';
+
+  @override
+  String get readerVerseCopy => 'نسخ الآية';
+
+  @override
+  String get readerVerseCopied => 'تم نسخ الآية';
+
+  @override
+  String get readerVerseHint => 'اضغط مطولاً على الآية لعرض خياراتها';
+
+  @override
+  String get readerPageCompressed =>
+      'صُغّر الخط لتتسع الصفحة للشاشة؛ وضع «متصل» يعرض خطاً أكبر';
+
+  @override
+  String get notificationCategoryAdhkar => 'الأذكار';
+
+  @override
+  String get notificationCategoryQuran => 'القرآن الكريم';
+
+  @override
+  String get notificationCategoryPrayer => 'الصلاة';
+
+  @override
+  String get notificationCategoryVerse => 'آية اليوم';
+
+  @override
+  String get notificationActionStartAdhkar => 'ابدأ الأذكار';
+
+  @override
+  String get notificationActionReadNow => 'اقرأ الآن';
+
+  @override
+  String get notificationActionAfterAdhan => 'دعاء ما بعد الأذان';
+
+  @override
+  String get notificationActionPrayerTimes => 'مواقيت الصلاة';
+
+  @override
+  String get notificationActionOpenVerse => 'اقرأ في المصحف';
+
+  @override
+  String prayerNotificationTimeLine(String time) {
+    return 'وقت الأذان $time';
+  }
+
+  @override
+  String prayerReminderTimeLine(String time) {
+    return 'موعد الصلاة $time';
+  }
+
+  @override
+  String dailyVerseNotificationReference(String surah, String ayah) {
+    return '$surah · الآية $ayah';
+  }
+
+  @override
+  String get dailyVerseReminderSubtitle => 'آية كل يوم في الوقت الذي تختاره';
 }

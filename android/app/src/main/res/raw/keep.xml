@@ -3,4 +3,4 @@
      resource shrinking would delete them and every schedule call would fail
      with "invalid_icon". -->
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@drawable/ic_notification,@mipmap/ic_launcher" />
+    tools:keep="@drawable/ic_notification,@drawable/ic_notification_large,@mipmap/ic_launcher" />

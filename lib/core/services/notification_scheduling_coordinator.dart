@@ -19,6 +19,7 @@ class NotificationSchedulingCoordinator {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   }) async {
     await _alarmScheduler.initialize(requestPermissions: false);
     await _alarmScheduler.updateAllAlarms(
@@ -26,6 +27,7 @@ class NotificationSchedulingCoordinator {
       isEveningEnabled: isEveningEnabled,
       isMulkEnabled: isMulkEnabled,
       isBaqarahEnabled: isBaqarahEnabled,
+      isDailyVerseEnabled: isDailyVerseEnabled,
     );
   }
 

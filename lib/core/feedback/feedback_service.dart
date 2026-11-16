@@ -24,6 +24,24 @@ enum FeedbackEvent {
 
   /// A counter was reset.
   reset,
+
+  /// A tab, segment, design or list choice changed.
+  selection,
+
+  /// A switch was turned on or off.
+  toggle,
+
+  /// A bookmark or reading position was saved.
+  bookmark,
+
+  /// A verse was added to or removed from favourites.
+  favorite,
+
+  /// A task finished: a wird, a khatma, a saved setting.
+  success,
+
+  /// Something was refused or needs attention.
+  warning,
 }
 
 enum HapticKind { selection, light, medium, heavy, success }
@@ -36,6 +54,12 @@ const Map<FeedbackEvent, ({HapticKind haptic, bool sound})> feedbackMap = {
   FeedbackEvent.adhkarComplete: (haptic: HapticKind.success, sound: true),
   FeedbackEvent.qiblaAligned: (haptic: HapticKind.success, sound: false),
   FeedbackEvent.reset: (haptic: HapticKind.medium, sound: false),
+  FeedbackEvent.selection: (haptic: HapticKind.selection, sound: false),
+  FeedbackEvent.toggle: (haptic: HapticKind.light, sound: false),
+  FeedbackEvent.bookmark: (haptic: HapticKind.light, sound: true),
+  FeedbackEvent.favorite: (haptic: HapticKind.light, sound: true),
+  FeedbackEvent.success: (haptic: HapticKind.success, sound: true),
+  FeedbackEvent.warning: (haptic: HapticKind.heavy, sound: false),
 };
 
 /// Device side of feedback, replaceable in tests.
@@ -91,6 +115,10 @@ class FeedbackService extends ChangeNotifier {
   bool _haptics;
   bool _sounds;
 
+  /// Returns true while religious audio (recitation, adhan) is playing.
+  /// Interface sounds stay silent then; haptics are unaffected.
+  bool Function()? isSacredAudioPlaying;
+
   bool get hapticsEnabled => _haptics;
   bool get soundsEnabled => _sounds;
 
@@ -112,7 +140,9 @@ class FeedbackService extends ChangeNotifier {
   void play(FeedbackEvent event) {
     final spec = feedbackMap[event]!;
     if (_haptics) unawaited(_safely(() => _platform.haptic(spec.haptic)));
-    if (_sounds && spec.sound) unawaited(_safely(_platform.click));
+    if (_sounds && spec.sound && !(isSacredAudioPlaying?.call() ?? false)) {
+      unawaited(_safely(_platform.click));
+    }
   }
 
   Future<void> _safely(Future<void> Function() action) async {
@@ -122,6 +152,11 @@ class FeedbackService extends ChangeNotifier {
       debugPrint('Feedback unavailable: $error');
     }
   }
+}
+
+/// Marker provided once recitation state is linked to interface sounds.
+class SacredAudioGate {
+  const SacredAudioGate();
 }
 
 /// Plays [event] if the app provides a [FeedbackService]; silent otherwise.

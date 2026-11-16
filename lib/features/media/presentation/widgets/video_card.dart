@@ -1,7 +1,6 @@
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
-import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/features/media/domain/entities/video.dart';
 import 'package:sakina_app/features/media/domain/entities/video_channel.dart';
@@ -17,10 +16,6 @@ class VideoCard extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.sm),
-      ),
       child: InkWell(
         onTap: () => _openUrl(context, video.watchUrl),
         child: Column(
@@ -34,6 +29,11 @@ class VideoCard extends StatelessWidget {
                   : Image.network(
                       video.thumbnailUrl,
                       fit: BoxFit.cover,
+                      // Decode at screen width, not the source size.
+                      cacheWidth:
+                          (MediaQuery.sizeOf(context).width *
+                                  MediaQuery.devicePixelRatioOf(context))
+                              .round(),
                       errorBuilder: (_, _, _) => const _VideoFallbackImage(),
                     ),
             ),
@@ -45,23 +45,21 @@ class VideoCard extends StatelessWidget {
                   Text(
                     video.title,
                     textDirection: TextDirection.rtl,
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.start,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      color: theme.colorScheme.primary,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
                     video.channelTitle,
                     textDirection: TextDirection.rtl,
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.start,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
@@ -89,14 +87,14 @@ class VideoChannelCard extends StatelessWidget {
         horizontal: AppSpacing.md,
         vertical: AppSpacing.xs,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.sm),
-      ),
       child: ListTile(
         onTap: () => _openUrl(context, channel.url),
         leading: CircleAvatar(
-          backgroundColor: Theme.of(context).colorScheme.error,
-          child: const Icon(Icons.play_arrow_rounded, color: Colors.white),
+          backgroundColor: theme.colorScheme.secondary,
+          child: Icon(
+            Icons.play_arrow_rounded,
+            color: theme.colorScheme.primary,
+          ),
         ),
         title: Text(
           channel.name,

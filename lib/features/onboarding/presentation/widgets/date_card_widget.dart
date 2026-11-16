@@ -7,9 +7,9 @@ import 'package:sakina_app/l10n/localization.dart';
 
 import '../../../../core/providers/settings_provider.dart';
 import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/utils/dual_date.dart';
+import '../../../../core/widgets/sakina_card.dart';
 
 /// Home card showing today's Hijri and Gregorian dates.
 ///
@@ -89,22 +89,12 @@ class _DateCardWidgetState extends State<DateCardWidget>
         context.digits(_date.gregorian),
       ),
       excludeSemantics: true,
-      child: Container(
+      child: SakinaCard(
         margin: const EdgeInsets.fromLTRB(
+          AppSpacing.page,
           AppSpacing.md,
-          AppSpacing.md,
-          AppSpacing.md,
+          AppSpacing.page,
           0,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.md,
-        ),
-        decoration: BoxDecoration(
-          color: scheme.surface,
-          borderRadius: AppRadius.card,
-          border: Border.all(color: scheme.primary.withValues(alpha: 0.22)),
-          boxShadow: AppShadows.subtle,
         ),
         child: Row(
           children: <Widget>[
@@ -113,8 +103,8 @@ class _DateCardWidgetState extends State<DateCardWidget>
               height: 48,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: scheme.primary.withValues(alpha: 0.12),
-                shape: BoxShape.circle,
+                color: scheme.secondary,
+                borderRadius: AppRadius.controls,
               ),
               child: Icon(Icons.calendar_month_rounded, color: scheme.primary),
             ),
@@ -183,7 +173,7 @@ class _DateLine extends StatelessWidget {
       ),
       style:
           (emphasized ? theme.textTheme.titleSmall : theme.textTheme.bodySmall)
-              ?.copyWith(fontFamily: 'Cairo', height: 1.6),
+              ?.copyWith(height: 1.6),
     );
   }
 }

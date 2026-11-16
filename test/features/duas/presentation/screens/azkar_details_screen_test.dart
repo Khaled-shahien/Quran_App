@@ -161,7 +161,8 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.byType(ListView), findsOneWidget);
+      // The adhkar are one lazy list under the collapsing header.
+      expect(find.byType(SliverList), findsOneWidget);
     });
 
     testWidgets('should have back button in AppBar', (

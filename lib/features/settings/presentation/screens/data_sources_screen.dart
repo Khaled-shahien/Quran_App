@@ -1,3 +1,5 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -6,55 +8,48 @@ import 'package:flutter/services.dart';
 class DataSourcesScreen extends StatelessWidget {
   const DataSourcesScreen({super.key});
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(l10nOf(context).homeScreenMessage25)),
-    body: SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: SelectionArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10nOf(context).dataSourcesScreenMessage1,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+  Widget build(BuildContext context) => SakinaHeroScaffold(
+    title: l10nOf(context).homeScreenMessage25,
+    slivers: [
+      SliverPadding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        sliver: SliverToBoxAdapter(
+          child: SelectionArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10nOf(context).dataSourcesScreenMessage1,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-              ),
-              const SizedBox(height: 12),
-              Text(l10nOf(context).dataSourcesScreenMessage2),
-              const SizedBox(height: 24),
-              Text(
-                l10nOf(context).dataSourcesScreenMessage3,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: AppSpacing.ms),
+                Text(l10nOf(context).dataSourcesScreenMessage2),
+                const SizedBox(height: AppSpacing.lg),
+                Text(
+                  l10nOf(context).dataSourcesScreenMessage3,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-              ),
-              const SizedBox(height: 12),
-              Text(l10nOf(context).dataSourcesScreenMessage4),
-              const SizedBox(height: 24),
-              Text(
-                l10nOf(context).dataSourcesScreenMessage5,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: AppSpacing.ms),
+                Text(l10nOf(context).dataSourcesScreenMessage4),
+                const SizedBox(height: AppSpacing.lg),
+                Text(
+                  l10nOf(context).dataSourcesScreenMessage5,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-              ),
-              const SizedBox(height: 12),
-              Text(l10nOf(context).dataSourcesScreenMessage6),
-              const SizedBox(height: 24),
-              Text(l10nOf(context).dataSourcesScreenMessage7),
-              const SizedBox(height: 24),
-              Text(l10nOf(context).dataSourcesScreenMessage8),
-              const SizedBox(height: 24),
-              const ContentProvenanceView(),
-            ],
+                const SizedBox(height: AppSpacing.ms),
+                Text(l10nOf(context).dataSourcesScreenMessage6),
+                const SizedBox(height: AppSpacing.lg),
+                Text(l10nOf(context).dataSourcesScreenMessage7),
+                const SizedBox(height: AppSpacing.lg),
+                Text(l10nOf(context).dataSourcesScreenMessage8),
+                const SizedBox(height: AppSpacing.lg),
+                const ContentProvenanceView(),
+              ],
+            ),
           ),
         ),
       ),
-    ),
+    ],
   );
 }
 

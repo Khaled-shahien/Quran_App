@@ -13,7 +13,14 @@ void handleNotificationNavigation(String route, Map<String, dynamic>? data) {
   final router = GoRouter.of(context);
   final location = _locationFor(route, data);
   router.go('/home');
-  if (location != '/home') router.push(location);
+  if (location != '/home') router.push(location, extra: _extraFor(route, data));
+}
+
+/// The daily verse opens the reader at its ayah.
+Map<String, dynamic>? _extraFor(String route, Map<String, dynamic>? data) {
+  if (route != '/quran') return null;
+  final int? ayah = int.tryParse(data?['ayahNumber']?.toString() ?? '');
+  return ayah == null || ayah < 1 ? null : {'initialAyahNumber': ayah};
 }
 
 String _locationFor(String route, Map<String, dynamic>? data) {

@@ -50,13 +50,28 @@ Future<SharedPreferences> _openReader(
   return prefs;
 }
 
-/// The page body is the rich SelectableText (other SelectableTexts are plain).
+/// The span of a flowing Quran paragraph inside [widget], or null.
+///
+/// `Text.rich` wraps the span it is given in an outer span, so the verses
+/// are the children of that single child. The basmala line is a plain
+/// `Text` with no children and is not matched.
+TextSpan? quranParagraphSpan(Widget widget) {
+  if (widget is! RichText || widget.text is! TextSpan) return null;
+  final List<InlineSpan>? outer = (widget.text as TextSpan).children;
+  if (outer == null || outer.length != 1 || outer.single is! TextSpan) {
+    return null;
+  }
+  final TextSpan inner = outer.single as TextSpan;
+  if (inner.style?.fontFamily != quranFontFamily) return null;
+  return (inner.children?.isNotEmpty ?? false) ? inner : null;
+}
+
 final Finder _pageTextFinder = find.byWidgetPredicate(
-  (widget) => widget is SelectableText && widget.textSpan != null,
+  (widget) => quranParagraphSpan(widget) != null,
 );
 
-SelectableText _firstPageText(WidgetTester tester) =>
-    tester.widget<SelectableText>(_pageTextFinder.first);
+TextSpan _firstPageText(WidgetTester tester) =>
+    quranParagraphSpan(tester.widget(_pageTextFinder.first))!;
 
 void main() {
   setUp(() {
@@ -71,9 +86,13 @@ void main() {
 
     expect(find.byKey(const Key('surah-basmala-2')), findsOneWidget);
     expect(find.text(uthmaniBasmala), findsOneWidget);
-    final plain = _firstPageText(tester).textSpan!.toPlainText();
+    final plain = _firstPageText(tester).toPlainText();
     expect(plain, isNot(contains(uthmaniBasmala)));
-    expect(plain.trimLeft(), startsWith('￼'), reason: 'header first');
+    expect(
+      tester.getTopLeft(find.byKey(const Key('surah-basmala-2'))).dy,
+      lessThan(tester.getTopLeft(_pageTextFinder.first).dy),
+      reason: 'header first',
+    );
   });
 
   testWidgets('At-Tawbah has no basmala header', (tester) async {
@@ -87,8 +106,10 @@ void main() {
     await _openReader(tester, 1);
 
     expect(find.byKey(const Key('surah-basmala-1')), findsNothing);
-    final plain = _firstPageText(tester).textSpan!.toPlainText();
+    final plain = _firstPageText(tester).toPlainText();
     expect(plain, startsWith(uthmaniBasmala));
+    // The basmala appears once: as ayah 1, with no separate banner.
+    expect(find.text(uthmaniBasmala), findsNothing);
   });
 
   testWidgets('Quran text uses the Quran font at the saved size', (
@@ -96,7 +117,7 @@ void main() {
   ) async {
     await _openReader(tester, 2, stored: {ReadingPreferences.fontKey: 36.0});
 
-    final style = _firstPageText(tester).textSpan!.style!;
+    final style = _firstPageText(tester).style!;
     expect(style.fontFamily, quranFontFamily);
     expect(style.fontSize, 36.0);
   });
@@ -111,7 +132,7 @@ void main() {
     expect(
       find.ancestor(
         of: _pageTextFinder.first,
-        matching: find.byType(SingleChildScrollView),
+        matching: find.byType(CustomScrollView),
       ),
       findsOneWidget,
     );

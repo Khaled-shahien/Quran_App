@@ -1,3 +1,5 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/widgets/geometric_pattern.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -112,7 +114,10 @@ class OnboardingPage extends StatelessWidget {
 
         return SingleChildScrollView(
           primary: false,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
+          ),
           child: ConstrainedBox(
             constraints: BoxConstraints(
               minHeight: (constraints.maxHeight - 32).clamp(
@@ -124,13 +129,17 @@ class OnboardingPage extends StatelessWidget {
                 ? Row(
                     children: [
                       Expanded(child: illustration),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: AppSpacing.xl),
                       Expanded(child: copy),
                     ],
                   )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [illustration, const SizedBox(height: 28), copy],
+                    children: [
+                      illustration,
+                      const SizedBox(height: AppSpacing.lg),
+                      copy,
+                    ],
                   ),
           ),
         );
@@ -163,7 +172,7 @@ class _PageCopy extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.ms),
         Text(
           content.description,
           textAlign: TextAlign.center,
@@ -172,21 +181,21 @@ class _PageCopy extends StatelessWidget {
             height: 1.8,
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: AppSpacing.lg),
         Wrap(
           alignment: WrapAlignment.center,
-          spacing: 8,
-          runSpacing: 8,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
           children: content.features
               .map(
                 (feature) => Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                    horizontal: AppSpacing.ms,
+                    vertical: AppSpacing.sm,
                   ),
                   decoration: BoxDecoration(
                     color: colors.secondary,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: AppRadius.hero,
                   ),
                   child: Text(
                     feature,
@@ -199,13 +208,13 @@ class _PageCopy extends StatelessWidget {
               .toList(),
         ),
         if (content.permissionNotes.isNotEmpty) ...[
-          const SizedBox(height: 20),
+          const SizedBox(height: AppSpacing.lg),
           Container(
             key: const Key('onboarding-permission-notes'),
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.md),
             decoration: BoxDecoration(
               color: colors.primary.withValues(alpha: 0.06),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: AppRadius.card,
               border: Border.all(color: colors.primary.withValues(alpha: 0.16)),
             ),
             child: Column(
@@ -213,7 +222,9 @@ class _PageCopy extends StatelessWidget {
               children: [
                 for (final note in content.permissionNotes)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.sm,
+                    ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -224,7 +235,7 @@ class _PageCopy extends StatelessWidget {
                             color: colors.primary,
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: AppSpacing.ms),
                         Expanded(
                           child: Text(
                             note.text,
@@ -262,12 +273,12 @@ class _Illustration extends StatelessWidget {
         child: Container(
           height: height,
           width: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           decoration: BoxDecoration(
             color: colors.secondary.withValues(alpha: 0.55),
             borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(180),
-              bottom: Radius.circular(28),
+              top: Radius.circular(AppRadius.xl),
+              bottom: Radius.circular(AppRadius.xl),
             ),
             border: Border.all(color: colors.primary.withValues(alpha: 0.16)),
           ),
@@ -297,7 +308,7 @@ class _Illustration extends StatelessWidget {
                     child: ExcludeSemantics(
                       child: content.imagePath != null
                           ? Padding(
-                              padding: const EdgeInsets.all(12),
+                              padding: const EdgeInsets.all(AppSpacing.ms),
                               child: Image.asset(
                                 content.imagePath!,
                                 fit: BoxFit.contain,

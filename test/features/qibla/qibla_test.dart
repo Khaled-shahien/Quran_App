@@ -211,6 +211,7 @@ void main() {
     device.readings.add(const QiblaHeading(0));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
-    expect(find.byType(SingleChildScrollView), findsOneWidget);
+    // Everything scrolls in one page under the collapsing header.
+    expect(find.byType(CustomScrollView), findsOneWidget);
   });
 }

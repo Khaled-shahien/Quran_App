@@ -5,6 +5,15 @@ enum DigitStyle { western, arabic }
 
 const List<int> _arabicIndicZero = [0x0660];
 
+/// Preference key holding the chosen [DigitStyle] by name.
+const String digitStylePreferenceKey = 'digit_style';
+
+/// The saved style, or Western digits when nothing valid is saved.
+DigitStyle digitStyleFromName(Object? name) => DigitStyle.values.firstWhere(
+  (s) => s.name == name,
+  orElse: () => DigitStyle.western,
+);
+
 /// Converts Western digits in [text] for display. Data is never stored
 /// converted; call this only when building a widget.
 String applyDigitStyle(String text, DigitStyle style) {

@@ -14,15 +14,18 @@ void main() {
     testWidgets('RTL reader arrows and paging agree, dark=$dark', (
       tester,
     ) async {
-      SharedPreferences.setMockInitialValues({});
-      final bookmark = BookmarkProvider(
-        prefs: await SharedPreferences.getInstance(),
-      );
+      // Arrows and paging belong to the page layout.
+      SharedPreferences.setMockInitialValues({'reading_layout': 'pages'});
+      final prefs = await SharedPreferences.getInstance();
+      final bookmark = BookmarkProvider(prefs: prefs);
       addTearDown(bookmark.dispose);
       await tester.runAsync(() async {
         await tester.pumpWidget(
-          ChangeNotifierProvider.value(
-            value: bookmark,
+          MultiProvider(
+            providers: [
+              Provider<SharedPreferences>.value(value: prefs),
+              ChangeNotifierProvider.value(value: bookmark),
+            ],
             child: MaterialApp(
               theme: dark ? AppTheme.darkTheme : AppTheme.lightTheme,
               home: Directionality(

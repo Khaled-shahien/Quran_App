@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -23,11 +24,16 @@ class IslamicGuideScreen extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
 
     if (provider.sections.isEmpty) {
-      return Scaffold(
-        appBar: AppBar(title: Text(l10nOf(context).guideTitle)),
-        body: provider.hasError
-            ? _ErrorView(onRetry: provider.load)
-            : const Center(child: PulseLoader(lines: 6)),
+      return SakinaHeroScaffold(
+        title: l10nOf(context).guideTitle,
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: provider.hasError
+                ? _ErrorView(onRetry: provider.load)
+                : const Center(child: PulseLoader(lines: 6)),
+          ),
+        ],
       );
     }
 
@@ -39,27 +45,37 @@ class IslamicGuideScreen extends StatelessWidget {
     return DefaultTabController(
       length: sections.length,
       initialIndex: initialIndex,
+      // Tabs under a collapsing header: the standard pattern. The absorber
+      // records how much of the pinned header covers the tabs' lists, and
+      // each list's injector makes room for it.
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(l10nOf(context).guideTitle),
-          bottom: TabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            labelStyle: theme.textTheme.labelLarge?.copyWith(
-              fontWeight: FontWeight.w800,
+        body: NestedScrollView(
+          headerSliverBuilder: (context, _) => <Widget>[
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: SakinaHeroAppBar(
+                title: l10nOf(context).guideTitle,
+                bottom: TabBar(
+                  isScrollable: true,
+                  tabAlignment: TabAlignment.start,
+                  labelStyle: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                  unselectedLabelStyle: theme.textTheme.labelLarge?.copyWith(),
+                  tabs: <Widget>[
+                    for (final GuideSection section in sections)
+                      Tab(text: section.title),
+                  ],
+                ),
+              ),
             ),
-            unselectedLabelStyle: theme.textTheme.labelLarge?.copyWith(),
-            tabs: <Widget>[
+          ],
+          body: TabBarView(
+            children: <Widget>[
               for (final GuideSection section in sections)
-                Tab(text: section.title),
+                _SectionView(key: PageStorageKey(section.id), section: section),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: <Widget>[
-            for (final GuideSection section in sections)
-              _SectionView(key: PageStorageKey(section.id), section: section),
-          ],
         ),
       ),
     );
@@ -76,21 +92,32 @@ class _SectionView extends StatelessWidget {
     // Short sections read like an article, so open their cards by default.
     final bool expandAll = section.items.length <= 3;
 
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.md,
-        AppSpacing.md,
-        AppSpacing.md,
-        AppSpacing.xl,
+    return Builder(
+      builder: (context) => CustomScrollView(
+        slivers: [
+          SliverOverlapInjector(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.md,
+              AppSpacing.md,
+              AppSpacing.md,
+              AppSpacing.xl,
+            ),
+            sliver: SliverList.builder(
+              itemCount: section.items.length + 1,
+              itemBuilder: (context, index) {
+                if (index == 0) return _SectionIntro(section: section);
+                return GuideItemCard(
+                  item: section.items[index - 1],
+                  initiallyExpanded: expandAll && index == 1,
+                );
+              },
+            ),
+          ),
+        ],
       ),
-      itemCount: section.items.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) return _SectionIntro(section: section);
-        return GuideItemCard(
-          item: section.items[index - 1],
-          initiallyExpanded: expandAll && index == 1,
-        );
-      },
     );
   }
 }

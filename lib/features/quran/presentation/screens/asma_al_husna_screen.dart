@@ -1,3 +1,5 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
@@ -81,7 +83,7 @@ class _AsmaAlHusnaScreenState extends State<AsmaAlHusnaScreen> {
     {'number': '22', 'name': 'الْخَافِضُ', 'meaning': 'The Abaser'},
     {'number': '23', 'name': 'الرَّافِعُ', 'meaning': 'The Exalter'},
     {'number': '24', 'name': 'الْمُعِزُّ', 'meaning': 'The Giver of Honor'},
-    {'number': '25', 'name': 'الذَّلِيلُ', 'meaning': 'The Giver of Dishonor'},
+    {'number': '25', 'name': 'الْمُذِلُّ', 'meaning': 'The Giver of Dishonor'},
     {'number': '26', 'name': 'السَّمِيعُ', 'meaning': 'The All-Hearing'},
     {'number': '27', 'name': 'الْبَصِيرُ', 'meaning': 'The All-Seeing'},
     {
@@ -292,80 +294,64 @@ class _AsmaAlHusnaScreenState extends State<AsmaAlHusnaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          l10nOf(context).asmaAlHusnaScreenMessage1,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
+    return SakinaHeroScaffold(
+      title: l10nOf(context).asmaAlHusnaScreenMessage1,
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.page,
+            AppSpacing.sm,
+            AppSpacing.page,
+            AppSpacing.lg,
           ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          tooltip: l10nOf(context).appStringsMessage13,
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: SafeArea(
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            // Rows size to their tallest card, so long meanings never
-            // overflow (a fixed-height grid cannot fit every name).
-            child: Builder(
-              builder: (context) {
-                final perRow = MediaQuery.textScalerOf(context).scale(1) <= 1.15
-                    ? 2
-                    : 1;
-                final rows = (_names.length / perRow).ceil();
-                return ListView.separated(
-                  itemCount: rows,
-                  separatorBuilder: (_, _) => const SizedBox(height: 16),
-                  itemBuilder: (context, row) {
-                    final cards = <Widget>[
-                      for (
-                        var i = row * perRow;
-                        i < (row + 1) * perRow && i < _names.length;
-                        i++
-                      )
-                        Expanded(
-                          child: AsmaItemCard(
-                            number: _names[i]['number']!,
-                            arabicName: _names[i]['name']!,
-                            meaning: _names[i]['meaning']!,
-                          ),
+          // Rows size to their tallest card, so long meanings never
+          // overflow (a fixed-height grid cannot fit every name).
+          sliver: Builder(
+            builder: (context) {
+              final perRow = MediaQuery.textScalerOf(context).scale(1) <= 1.15
+                  ? 2
+                  : 1;
+              final rows = (_names.length / perRow).ceil();
+              return SliverList.separated(
+                itemCount: rows,
+                separatorBuilder: (_, _) =>
+                    const SizedBox(height: AppSpacing.ms),
+                itemBuilder: (context, row) {
+                  final cards = <Widget>[
+                    for (
+                      var i = row * perRow;
+                      i < (row + 1) * perRow && i < _names.length;
+                      i++
+                    )
+                      Expanded(
+                        child: AsmaItemCard(
+                          number: _names[i]['number']!,
+                          arabicName: _names[i]['name']!,
+                          meaning: _names[i]['meaning']!,
                         ),
-                    ];
-                    // Keeps a lone last card at half width.
-                    if (cards.length < perRow) {
-                      cards.add(const Expanded(child: SizedBox.shrink()));
-                    }
-                    return IntrinsicHeight(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          for (var i = 0; i < cards.length; i++) ...[
-                            if (i > 0) const SizedBox(width: 16),
-                            cards[i],
-                          ],
-                        ],
                       ),
-                    );
-                  },
-                );
-              },
-            ),
+                  ];
+                  // Keeps a lone last card at half width.
+                  if (cards.length < perRow) {
+                    cards.add(const Expanded(child: SizedBox.shrink()));
+                  }
+                  return IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        for (var i = 0; i < cards.length; i++) ...[
+                          if (i > 0) const SizedBox(width: AppSpacing.ms),
+                          cards[i],
+                        ],
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
           ),
         ),
-      ),
+      ],
     );
   }
 }

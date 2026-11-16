@@ -43,8 +43,8 @@ void main() {
 
     expect(find.text('سورة الفاتحة'), findsOneWidget);
     expect(find.textContaining('مكية'), findsOneWidget);
-    expect(find.text('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ'), findsOneWidget);
-    expect(find.byType(SelectableText), findsOneWidget);
+    // No basmala banner above the text: in Al-Fatiha it is ayah 1.
+    expect(find.text('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ'), findsNothing);
   });
 
   testWidgets('SurahDetailsScreen saves bookmark and shows confirmation', (

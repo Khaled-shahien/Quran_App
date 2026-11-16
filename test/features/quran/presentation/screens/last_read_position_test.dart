@@ -52,7 +52,10 @@ void main() {
   testWidgets('reopening a surah resumes on the last page read', (
     tester,
   ) async {
-    SharedPreferences.setMockInitialValues({});
+    // Paging is tested in the page layout.
+    SharedPreferences.setMockInitialValues({
+      ReadingPreferences.layoutKey: 'pages',
+    });
     final prefs = await SharedPreferences.getInstance();
     final bookmark = BookmarkProvider(prefs: prefs);
     addTearDown(bookmark.dispose);
@@ -78,6 +81,7 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({
+      ReadingPreferences.layoutKey: 'pages',
       ReadingPreferences.lastAyahKey(2): 100,
     });
     final prefs = await SharedPreferences.getInstance();

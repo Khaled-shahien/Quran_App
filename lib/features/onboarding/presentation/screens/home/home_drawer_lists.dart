@@ -3,9 +3,6 @@ part of '../home_screen.dart';
 /// Settings and favourites lists shown in the home side menu.
 extension _HomeDrawerLists on _HomeScreenState {
   Widget _buildSettingsList() {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-    final isDark = themeProvider.isDarkMode;
-
     void showComingSoon() {
       _showOverlayMessage(appL10n.homeScreenMessage24);
     }
@@ -13,7 +10,7 @@ extension _HomeDrawerLists on _HomeScreenState {
     final Color iconColor = Theme.of(context).colorScheme.primary;
 
     return ListView(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
       children: [
         _buildMoreMenuItem(
           title: appL10n.appStringsMessage16,
@@ -27,7 +24,7 @@ extension _HomeDrawerLists on _HomeScreenState {
         _buildSectionHeader(appL10n.appRouterMessage1),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage9,
-          leadingIcon: Icon(Icons.history, color: iconColor),
+          leadingIcon: Icon(Icons.history_rounded, color: iconColor),
           onTap: () => _showKhatmaWirdSheet(showCompleted: true),
         ),
         _buildMoreMenuItem(
@@ -37,30 +34,28 @@ extension _HomeDrawerLists on _HomeScreenState {
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage26,
-          leadingIcon: Icon(Icons.bookmark_border, color: iconColor),
+          leadingIcon: Icon(Icons.bookmark_outline_rounded, color: iconColor),
           onTap: _openSavedBookmark,
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage35,
-          leadingIcon: Icon(Icons.add, color: iconColor),
+          leadingIcon: Icon(Icons.add_rounded, color: iconColor),
           onTap: () => context.push('/khatma/location'),
         ),
-        const Divider(height: 1),
 
         // 3. كل الوسائط
         _buildSectionHeader(appL10n.homeScreenMessage27),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage28,
-          leadingIcon: Icon(Icons.video_library, color: iconColor),
+          leadingIcon: Icon(Icons.video_library_outlined, color: iconColor),
           onTap: () => context.push('/media'),
         ),
-        const Divider(height: 1),
 
         // 4. سنن قرآنية
         _buildSectionHeader(appL10n.homeScreenMessage29),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage30,
-          leadingIcon: Icon(Icons.book, color: iconColor),
+          leadingIcon: Icon(Icons.book_outlined, color: iconColor),
           onTap: () {
             context.push(
               '/quran/surah/18',
@@ -79,7 +74,7 @@ extension _HomeDrawerLists on _HomeScreenState {
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage31,
-          leadingIcon: Icon(Icons.menu_book, color: iconColor),
+          leadingIcon: Icon(Icons.menu_book_outlined, color: iconColor),
           onTap: () {
             context.push(
               '/quran/surah/67',
@@ -98,7 +93,7 @@ extension _HomeDrawerLists on _HomeScreenState {
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage32,
-          leadingIcon: Icon(Icons.auto_stories, color: iconColor),
+          leadingIcon: Icon(Icons.auto_stories_outlined, color: iconColor),
           onTap: () {
             context.push(
               '/quran/surah/2',
@@ -115,25 +110,17 @@ extension _HomeDrawerLists on _HomeScreenState {
             );
           },
         ),
-        const Divider(height: 1),
 
         // 6. الصلاة (prayer times open from the home header only)
         _buildSectionHeader(appL10n.drawerPrayerSection),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage37,
-          leadingIcon: Image.asset(
-            'assets/images/kaaba.png',
-            width: 24,
-            height: 24,
-            color: isDark ? Colors.white : null,
-            errorBuilder: (c, e, s) => Icon(Icons.explore, color: iconColor),
-          ),
+          leadingIcon: Icon(Icons.explore_outlined, color: iconColor),
           onTap: () {
             Navigator.pop(context);
             context.push('/qibla');
           },
         ),
-        const Divider(height: 1),
 
         // 9. تطبيق سكينة
         _buildSectionHeader(appL10n.homeScreenMessage48),
@@ -146,27 +133,16 @@ extension _HomeDrawerLists on _HomeScreenState {
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage49,
-          leadingIcon: Icon(Icons.settings, color: iconColor),
+          leadingIcon: Icon(Icons.language_rounded, color: iconColor),
           onTap: () => showDialog<void>(
             context: context,
             builder: (dialogContext) => AlertDialog(
-              title: Text(
-                appL10n.homeScreenMessage50,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.right,
-              ),
-              content: Text(
-                appL10n.homeScreenMessage51,
-                style: const TextStyle(),
-                textAlign: TextAlign.right,
-              ),
+              title: Text(appL10n.homeScreenMessage50),
+              content: Text(appL10n.homeScreenMessage51),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(dialogContext),
-                  child: Text(
-                    appL10n.appStringsMessage8,
-                    style: const TextStyle(),
-                  ),
+                  child: Text(appL10n.appStringsMessage8),
                 ),
               ],
             ),
@@ -174,28 +150,22 @@ extension _HomeDrawerLists on _HomeScreenState {
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage52,
-          leadingIcon: Icon(Icons.info_outline, color: iconColor),
+          leadingIcon: Icon(Icons.mail_outline_rounded, color: iconColor),
           onTap: showComingSoon,
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage54,
-          leadingIcon: const Icon(
-            Icons.flutter_dash,
-            color: Colors.lightBlue,
-          ), // Placeholder for Twitter
+          leadingIcon: Icon(Icons.alternate_email_rounded, color: iconColor),
           onTap: showComingSoon,
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage55,
-          leadingIcon: const Icon(
-            Icons.camera_alt,
-            color: Colors.purple,
-          ), // Placeholder for Instagram
+          leadingIcon: Icon(Icons.photo_camera_outlined, color: iconColor),
           onTap: showComingSoon,
         ),
         _buildMoreMenuItem(
           title: appL10n.homeScreenMessage56,
-          leadingIcon: Icon(Icons.share, color: iconColor),
+          leadingIcon: Icon(Icons.share_outlined, color: iconColor),
           onTap: showComingSoon,
         ),
         _buildMoreMenuItem(
@@ -220,69 +190,67 @@ extension _HomeDrawerLists on _HomeScreenState {
         }
 
         return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           itemCount: favorites.length,
           itemBuilder: (context, index) {
             final verse = favorites[index];
-            return Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
-                borderRadius: BorderRadius.circular(15),
+            final text = Theme.of(context).textTheme;
+            final scheme = Theme.of(context).colorScheme;
+            return SakinaCard(
+              tone: SakinaCardTone.tinted,
+              margin: const EdgeInsets.only(bottom: AppSpacing.ms),
+              padding: const EdgeInsetsDirectional.fromSTEB(
+                AppSpacing.md,
+                AppSpacing.xs,
+                AppSpacing.xs,
+                AppSpacing.md,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: AppSpacing.ms),
+                          child: Text(
+                            verse['arabic'] ?? '',
+                            style: AppTypography.script.copyWith(
+                              fontSize: 19,
+                              color: scheme.onSecondary,
+                            ),
+                          ),
+                        ),
+                      ),
                       // Full 48dp target; the icon stays small.
                       IconButton(
                         tooltip: l10nOf(context).homeScreenMessage60,
                         icon: Icon(
-                          Icons.cancel,
-                          color: Theme.of(context).colorScheme.primary,
+                          Icons.close_rounded,
+                          color: scheme.onSurfaceVariant,
                           size: 20,
                         ),
                         onPressed: () {
+                          playFeedback(context, FeedbackEvent.favorite);
                           favoritesProvider.removeFavorite(verse);
                         },
                       ),
-                      Expanded(
-                        child: Text(
-                          verse['arabic'] ?? '',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            fontFamily: 'Amiri',
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSpacing.xs),
                   Text(
                     verse['surah'] ?? '',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.8),
-                    ),
+                    style: text.labelMedium?.copyWith(color: scheme.primary),
                   ),
                   if (verse['english'] != null)
-                    Text(
-                      verse['english']!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.primary.withValues(alpha: 0.6),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        verse['english']!,
+                        textDirection: TextDirection.ltr,
+                        style: text.bodySmall,
                       ),
-                      textAlign: TextAlign.left,
                     ),
                 ],
               ),

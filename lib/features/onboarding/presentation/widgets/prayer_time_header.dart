@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,13 +48,18 @@ class PrayerTimeHeader extends StatelessWidget {
               SafeArea(
                 bottom: false,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 56, 24, 52),
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.lg,
+                    56,
+                    AppSpacing.lg,
+                    52,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
                         currentName,
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.start,
                         style: theme.textTheme.labelLarge?.copyWith(
                           color: theme.colorScheme.onPrimary.withValues(
                             alpha: 0.78,
@@ -63,13 +69,12 @@ class PrayerTimeHeader extends StatelessWidget {
                       ),
                       Text(
                         currentTime,
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontSize: 38,
-                          fontWeight: FontWeight.w900,
-                          color: theme.colorScheme.onPrimary,
-                          height: 1.05,
-                        ),
+                        textAlign: TextAlign.start,
+                        style: Theme.of(context).textTheme.displaySmall
+                            ?.copyWith(
+                              color: theme.colorScheme.onPrimary,
+                              fontWeight: FontWeight.w800,
+                            ),
                       ),
                       const Spacer(),
                       Container(
@@ -81,7 +86,7 @@ class PrayerTimeHeader extends StatelessWidget {
                           color: theme.colorScheme.onPrimary.withValues(
                             alpha: 0.13,
                           ),
-                          borderRadius: BorderRadius.circular(18),
+                          borderRadius: AppRadius.card,
                           border: Border.all(
                             color: theme.colorScheme.onPrimary.withValues(
                               alpha: 0.18,

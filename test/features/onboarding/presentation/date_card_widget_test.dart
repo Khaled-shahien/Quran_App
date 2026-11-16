@@ -112,6 +112,7 @@ class _NoopAlarmScheduler implements AlarmScheduler {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   }) async {}
 }
 

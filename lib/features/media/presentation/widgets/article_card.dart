@@ -20,10 +20,6 @@ class ArticleCard extends StatelessWidget {
         horizontal: AppSpacing.md,
         vertical: AppSpacing.sm,
       ),
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.sm),
-      ),
       child: InkWell(
         onTap: () => _openArticle(context),
         child: Padding(
@@ -45,10 +41,8 @@ class ArticleCard extends StatelessWidget {
                     ),
                     child: Text(
                       article.sourceName,
-                      style: TextStyle(
-                        fontSize: 11,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
                         color: theme.colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -58,27 +52,23 @@ class ArticleCard extends StatelessWidget {
               Text(
                 article.title,
                 textDirection: TextDirection.rtl,
-                textAlign: TextAlign.right,
+                textAlign: TextAlign.start,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: theme.colorScheme.primary,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
               ),
               if (article.description.isNotEmpty) ...[
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   article.description,
                   textDirection: TextDirection.rtl,
-                  textAlign: TextAlign.right,
+                  textAlign: TextAlign.start,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 13,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
-                    height: 1.5,
                   ),
                 ),
               ],
@@ -88,13 +78,12 @@ class ArticleCard extends StatelessWidget {
                   Icon(
                     Icons.open_in_new_rounded,
                     size: 16,
-                    color: theme.colorScheme.primary,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                   const Spacer(),
                   Text(
                     _formatDate(article.pubDate),
-                    style: TextStyle(
-                      fontSize: 11,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
@@ -120,7 +109,6 @@ class ArticleCard extends StatelessWidget {
         content: Text(
           l10nOf(context).articleCardMessage1,
           textAlign: TextAlign.center,
-          style: const TextStyle(),
         ),
       ),
     );

@@ -27,6 +27,12 @@ abstract final class NotificationChannels {
   static final String testName = appL10n.notificationServiceMessage7;
   static final String testDescription = appL10n.notificationServiceMessage8;
 
+  /// The daily verse: a gentle notification with sound but no pop-up.
+  static const String dailyVerseId = 'sakina_daily_verse_v1';
+  static final String dailyVerseName = appL10n.notificationCategoryVerse;
+  static final String dailyVerseDescription =
+      appL10n.dailyVerseReminderSubtitle;
+
   /// Every channel the app creates on Android, in creation order.
   static List<AndroidNotificationChannel> all() => <AndroidNotificationChannel>[
     AndroidNotificationChannel(
@@ -67,6 +73,12 @@ abstract final class NotificationChannels {
       testName,
       description: testDescription,
       importance: Importance.max,
+    ),
+    AndroidNotificationChannel(
+      dailyVerseId,
+      dailyVerseName,
+      description: dailyVerseDescription,
+      importance: Importance.defaultImportance,
     ),
   ];
 }

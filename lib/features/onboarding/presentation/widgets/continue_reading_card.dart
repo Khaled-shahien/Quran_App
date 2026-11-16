@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/core/utils/arabic_text.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,12 @@ class ContinueReadingCard extends StatelessWidget {
     final bookmark = context.watch<BookmarkProvider>();
     if (!bookmark.hasBookmark) return const SizedBox.shrink();
     return Card(
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      margin: const EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.md,
+        AppSpacing.md,
+        0,
+      ),
       child: ListTile(
         leading: const Icon(Icons.bookmark),
         title: Text(l10nOf(context).continueReadingCardMessage1),

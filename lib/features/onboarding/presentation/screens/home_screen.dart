@@ -5,12 +5,20 @@ import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'dart:async';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/theme/theme_provider.dart';
+import '../../../../core/widgets/pressable.dart';
+import '../../../../core/widgets/sakina_segmented.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/feedback/feedback_service.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/animated_entrance.dart';
+import '../../../../core/widgets/sakina_card.dart';
 import '../../../khatma/domain/models/khatma_model.dart';
 import '../../../khatma/domain/services/khatma_quran_locator.dart';
 import '../../../khatma/presentation/providers/khatma_provider.dart';
@@ -114,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // المحتوى المتغير
             _buildDynamicContent(),
 
-            const SliverToBoxAdapter(child: SizedBox(height: 50)),
+            const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xxl)),
           ],
         ),
       ),
@@ -123,22 +131,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   SliverAppBar _buildSliverAppBar() {
     final theme = Theme.of(context);
+    final decor = SakinaDecor.of(context);
 
     return SliverAppBar(
       // Grows with large text so the next-prayer details never clip.
       expandedHeight:
           220 +
-          230 * (MediaQuery.textScalerOf(context).scale(1) - 1).clamp(0, 2),
+          250 * (MediaQuery.textScalerOf(context).scale(1) - 1).clamp(0, 2),
       pinned: true,
       stretch: true,
-      backgroundColor: theme.colorScheme.primary,
-      foregroundColor: theme.colorScheme.onPrimary,
+      backgroundColor: decor.heroColors.last,
+      foregroundColor: decor.onFeature,
+      // Light status icons: this header is dark in every design.
+      systemOverlayStyle: SystemUiOverlayStyle.light,
+      iconTheme: IconThemeData(color: decor.onFeature),
+      actionsIconTheme: IconThemeData(color: decor.onFeature),
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       centerTitle: true,
       leading: IconButton(
         tooltip: appL10n.appStringsMessage15,
-        icon: const Icon(Icons.search, size: 26),
+        icon: const Icon(Icons.search_rounded, size: 26),
         onPressed: () => context.push('/quran/search'),
       ),
       flexibleSpace: FlexibleSpaceBar(
@@ -154,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: theme.textTheme.titleMedium?.copyWith(
-            color: theme.colorScheme.onPrimary,
+            color: decor.onFeature,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -173,83 +186,34 @@ class _HomeScreenState extends State<HomeScreen> {
   // --- 2. القائمة الجانبية المطورة ---
   Widget _buildNavigationDrawer() {
     return Drawer(
-      width: MediaQuery.of(context).size.width * 0.85,
+      width: (MediaQuery.sizeOf(context).width * 0.85).clamp(0.0, 380.0),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Column(
           children: [
-            // رأس القائمة الداكن
-            Container(
-              padding: const EdgeInsets.only(
-                top: 50,
-                bottom: 20,
-                right: 20,
-                left: 20,
-              ),
-              color: SakinaDecor.of(context).featureCard,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Semantics(
-                    button: true,
-                    label: appL10n.homeScreenMessage2,
-                    child: IconButton(
-                      tooltip: l10nOf(context).appStringsMessage13,
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      AppStrings.appName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const CircleAvatar(
-                    backgroundColor: Colors.white24,
-                    child: Icon(Icons.menu_book, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-
-            // مفتاح التبديل.
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    _drawerTabItem(appL10n.homeScreenMessage3, 0),
-                    _drawerTabItem(appL10n.homeScreenMessage4, 1),
-                  ],
-                ),
-              ),
+            _DrawerHeader(onClose: () => Navigator.pop(context)),
+            SakinaSegmented(
+              margin: const EdgeInsets.all(AppSpacing.md),
+              labels: [appL10n.homeScreenMessage3, appL10n.homeScreenMessage4],
+              semanticLabelFor: (label) => appL10n.homeScreenMessage5(label),
+              selectedIndex: drawerSubTab,
+              onChanged: (index) => setState(() => drawerSubTab = index),
             ),
 
             // محتوى القائمة المتغير.
             Expanded(
-              child: drawerSubTab == 0
-                  ? _buildSettingsList()
-                  : _buildFavoritesList(),
+              child: AnimatedSwitcher(
+                duration: AppMotion.of(context, AppMotion.base),
+                switchInCurve: AppMotion.enter,
+                switchOutCurve: AppMotion.leave,
+                child: KeyedSubtree(
+                  key: ValueKey<int>(drawerSubTab),
+                  child: drawerSubTab == 0
+                      ? _buildSettingsList()
+                      : _buildFavoritesList(),
+                ),
+              ),
             ),
           ],
         ),
@@ -259,52 +223,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // --- مكونات واجهة المستخدم المساعدة ---
 
-  Widget _drawerTabItem(String label, int index) {
-    bool active = drawerSubTab == index;
-    return Expanded(
-      child: Semantics(
-        button: true,
-        selected: active,
-        label: appL10n.homeScreenMessage5((label).toString()),
-        child: GestureDetector(
-          onTap: () => setState(() => drawerSubTab = index),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            decoration: BoxDecoration(
-              color: active
-                  ? SakinaDecor.of(context).accent
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: active
-                    ? SakinaDecor.of(context).onAccent
-                    : Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   // --- Helper Widgets for the More (المزيد) Menu ---
 
   Widget _buildSectionHeader(String title) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16, bottom: 8, right: 20, left: 20),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
-          fontSize: 14,
+      padding: const EdgeInsetsDirectional.fromSTEB(
+        AppSpacing.lg,
+        AppSpacing.md,
+        AppSpacing.lg,
+        AppSpacing.xs,
+      ),
+      child: Semantics(
+        header: true,
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
-        textAlign: TextAlign.right,
       ),
     );
   }
@@ -316,37 +252,54 @@ class _HomeScreenState extends State<HomeScreen> {
     VoidCallback? onTap,
     Color? textColor,
   }) {
-    return Semantics(
-      button: true,
-      label: title,
-      child: InkWell(
+    final ThemeData theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+      child: Pressable(
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: Row(
-            children: [
-              if (leadingIcon != null) ...[
-                leadingIcon,
-                const SizedBox(width: 16),
-              ],
-              if (leadingIcon == null) const SizedBox(width: 40),
-
-              Expanded(
-                child: Text(
-                  title,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: textColor ?? Theme.of(context).colorScheme.primary,
+        scale: false,
+        borderRadius: AppRadius.controls,
+        semanticLabel: title,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: AppSpacing.touchTarget),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.ms,
+              vertical: AppSpacing.sm,
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: leadingIcon == null
+                      ? null
+                      : DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.secondary,
+                            borderRadius: AppRadius.chip,
+                          ),
+                          child: IconTheme.merge(
+                            data: const IconThemeData(size: 20),
+                            child: Center(child: leadingIcon),
+                          ),
+                        ),
+                ),
+                const SizedBox(width: AppSpacing.ms),
+                Expanded(
+                  child: Text(
+                    title,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: textColor ?? theme.colorScheme.onSurface,
+                    ),
                   ),
                 ),
-              ),
-              if (trailingWidget != null) ...[
-                const SizedBox(width: 16),
-                trailingWidget,
+                if (trailingWidget != null) ...[
+                  const SizedBox(width: AppSpacing.ms),
+                  trailingWidget,
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
@@ -361,38 +314,52 @@ class _HomeScreenState extends State<HomeScreen> {
     _messageEntry?.remove();
     _messageEntry?.dispose();
 
+    // Shown above the drawer, which a snackbar would sit behind.
     final overlay = Overlay.of(context, rootOverlay: true);
     late final OverlayEntry entry;
     entry = OverlayEntry(
       builder: (context) {
+        final decor = SakinaDecor.of(context);
         final bottomPadding = MediaQuery.of(context).padding.bottom;
         return Positioned(
-          left: 16,
-          right: 16,
-          bottom: bottomPadding + 16,
+          left: AppSpacing.md,
+          right: AppSpacing.md,
+          bottom: bottomPadding + AppSpacing.md,
           child: IgnorePointer(
-            child: Material(
-              color: Colors.transparent,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 14,
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: 0, end: 1),
+              duration: AppMotion.of(context, AppMotion.base),
+              curve: AppMotion.enter,
+              builder: (context, t, child) => Opacity(
+                opacity: t,
+                child: Transform.translate(
+                  offset: Offset(0, 12 * (1 - t)),
+                  child: child,
                 ),
-                decoration: BoxDecoration(
-                  color: backgroundColor ?? SakinaDecor.of(context).featureCard,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 8,
-                      offset: Offset(0, 3),
+              ),
+              child: Semantics(
+                liveRegion: true,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.lg,
+                      vertical: AppSpacing.ms,
                     ),
-                  ],
-                ),
-                child: Text(
-                  message,
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
+                    decoration: BoxDecoration(
+                      color: backgroundColor ?? decor.featureCard,
+                      borderRadius: AppRadius.controls,
+                      boxShadow: AppShadows.floating,
+                    ),
+                    child: Text(
+                      message,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: decor.onFeature,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -418,5 +385,85 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       return const SliverToBoxAdapter(child: PrayerTimesWidget());
     }
+  }
+}
+
+/// The side menu's header: the app name on the design's feature gradient.
+class _DrawerHeader extends StatelessWidget {
+  const _DrawerHeader({required this.onClose});
+
+  final VoidCallback onClose;
+
+  @override
+  Widget build(BuildContext context) {
+    final decor = SakinaDecor.of(context);
+    final theme = Theme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: AlignmentDirectional.topStart,
+          end: AlignmentDirectional.bottomEnd,
+          colors: decor.heroColors,
+        ),
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: GeometricPattern(
+              pattern: decor.pattern,
+              color: decor.onFeature.withValues(alpha: 0.08),
+            ),
+          ),
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.sm,
+                AppSpacing.lg,
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: decor.onFeature.withValues(alpha: 0.14),
+                      borderRadius: AppRadius.controls,
+                    ),
+                    child: Icon(
+                      Icons.menu_book_rounded,
+                      color: decor.onFeature,
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.ms),
+                  Expanded(
+                    child: Text(
+                      AppStrings.appName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        color: decor.onFeature,
+                      ),
+                    ),
+                  ),
+                  Semantics(
+                    button: true,
+                    label: appL10n.homeScreenMessage2,
+                    child: IconButton(
+                      tooltip: l10nOf(context).appStringsMessage13,
+                      icon: Icon(Icons.close_rounded, color: decor.onFeature),
+                      onPressed: onClose,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../features/recitation/presentation/widgets/recitation_mini_player.dart';
+import '../theme/app_motion.dart';
 import '../theme/noise_background.dart';
 
 /// What surrounds every screen: the background and, below the screens, the
@@ -24,8 +25,14 @@ class AppFrame extends StatelessWidget {
         child: Column(
           children: [
             Expanded(child: child),
-            // Stays visible on every screen while a surah is loaded.
-            RecitationMiniPlayer(sheetContext: sheetContext),
+            // Stays visible on every screen while a surah is loaded; slides
+            // in and out instead of jumping.
+            AnimatedSize(
+              duration: AppMotion.of(context, AppMotion.base),
+              curve: AppMotion.standard,
+              alignment: Alignment.topCenter,
+              child: RecitationMiniPlayer(sheetContext: sheetContext),
+            ),
           ],
         ),
       ),

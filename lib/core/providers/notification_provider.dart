@@ -178,10 +178,13 @@ class NotificationProvider extends ChangeNotifier {
   Future<void> rescheduleAllAlarms() async {
     try {
       await _notificationGateway.updateAllAlarms(
-        isMorningEnabled: prefs.getBool('morning_alarm_enabled') ?? true,
-        isEveningEnabled: prefs.getBool('evening_alarm_enabled') ?? true,
-        isMulkEnabled: prefs.getBool('mulk_alarm_enabled') ?? true,
-        isBaqarahEnabled: prefs.getBool('baqarah_alarm_enabled') ?? true,
+        // A reminder never set is off, as in settings and background work.
+        isMorningEnabled: prefs.getBool('morning_alarm_enabled') ?? false,
+        isEveningEnabled: prefs.getBool('evening_alarm_enabled') ?? false,
+        isMulkEnabled: prefs.getBool('mulk_alarm_enabled') ?? false,
+        isBaqarahEnabled: prefs.getBool('baqarah_alarm_enabled') ?? false,
+        isDailyVerseEnabled:
+            prefs.getBool('daily_verse_alarm_enabled') ?? false,
       );
       _addLog('All alarms rescheduled');
       notifyListeners();

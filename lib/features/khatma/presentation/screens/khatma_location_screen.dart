@@ -1,8 +1,12 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
-import 'package:sakina_app/core/theme/app_design.dart';
+import 'package:sakina_app/core/theme/app_motion.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/core/widgets/sakina_card.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../widgets/khatma_dropdown.dart';
 import '../widgets/labeled_row.dart';
 
 class KhatmaLocationScreen extends StatefulWidget {
@@ -24,230 +28,128 @@ class _KhatmaLocationScreenState extends State<KhatmaLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    final textColor = Theme.of(context).colorScheme.onSurfaceVariant;
-    final cardColor = SakinaDecor.of(context).card;
-    final dropdownTextColor = Theme.of(context).colorScheme.onSurface;
+    final ThemeData theme = Theme.of(context);
+    final TextTheme text = theme.textTheme;
+    final bool customJuz =
+        _selectedStartMode == appL10n.khatmaLocationScreenMessage1;
 
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        title: Text(
-          l10nOf(context).khatmaDurationScreenMessage1,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-        centerTitle:
-            false, // In RTL, this puts it to the left of the back button
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Theme.of(context).colorScheme.onPrimary,
-        ),
-      ),
-      body: SafeArea(
-        // Scrolls when large text needs more room; the continue button
-        // stays at the bottom when everything fits.
-        child: CustomScrollView(
-          slivers: [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
-                  vertical: 40.0,
+    return SakinaHeroScaffold(
+      title: l10nOf(context).khatmaDurationScreenMessage1,
+      // Scrolls when large text needs more room; the continue button stays
+      // at the bottom when everything fits.
+      slivers: [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.xl,
+              AppSpacing.lg,
+              AppSpacing.lg,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  l10nOf(context).khatmaLocationScreenMessage2,
+                  textAlign: TextAlign.center,
+                  style: text.titleLarge,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Title text
-                    Text(
-                      l10nOf(context).khatmaLocationScreenMessage2,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: textColor, // Dark brownish-grey or light
-                        height: 1.4,
-                      ),
-                    ),
-                    const SizedBox(height: 60),
-
-                    // Dropdown
-                    Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: LabeledRow(
+                const SizedBox(height: AppSpacing.xl),
+                SakinaCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      LabeledRow(
                         children: [
                           Text(
                             l10nOf(context).khatmaLocationScreenMessage3,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: textColor,
-                            ),
+                            style: text.titleSmall,
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: AppSpacing.md),
                           Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
-                              decoration: BoxDecoration(
-                                color: cardColor,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  value: _selectedStartMode,
-                                  icon: Icon(
-                                    Icons.arrow_drop_down,
-                                    color: isDarkMode
-                                        ? Colors.white54
-                                        : Theme.of(
-                                            context,
-                                          ).colorScheme.onSurfaceVariant,
+                            child: KhatmaDropdown<String>(
+                              value: _selectedStartMode,
+                              items: [
+                                for (final mode in _startModes)
+                                  DropdownMenuItem<String>(
+                                    value: mode,
+                                    child: Text(mode),
                                   ),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: dropdownTextColor,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  isExpanded: true,
-                                  items: _startModes.map((String mode) {
-                                    return DropdownMenuItem<String>(
-                                      value: mode,
-                                      child: Text(mode),
-                                    );
-                                  }).toList(),
-                                  onChanged: (String? newValue) {
-                                    if (newValue != null) {
-                                      setState(() {
-                                        _selectedStartMode = newValue;
-                                      });
-                                    }
-                                  },
-                                ),
-                              ),
+                              ],
+                              onChanged: (value) =>
+                                  setState(() => _selectedStartMode = value),
                             ),
                           ),
                         ],
                       ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Show Juz selector if manual is selected
-                    if (_selectedStartMode == 'جزء مخصص')
-                      Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: LabeledRow(
-                          children: [
-                            Text(
-                              l10nOf(context).khatmaLocationScreenMessage4,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: textColor,
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
+                      // The juz picker opens only for a custom start.
+                      AnimatedSize(
+                        duration: AppMotion.of(context, AppMotion.base),
+                        curve: AppMotion.standard,
+                        alignment: AlignmentDirectional.topStart,
+                        child: !customJuz
+                            ? const SizedBox(width: double.infinity)
+                            : Padding(
+                                padding: const EdgeInsets.only(
+                                  top: AppSpacing.md,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: cardColor,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<int>(
-                                    value: _selectedJuz,
-                                    icon: Icon(
-                                      Icons.arrow_drop_down,
-                                      color: isDarkMode
-                                          ? Colors.white54
-                                          : Theme.of(
-                                              context,
-                                            ).colorScheme.onSurfaceVariant,
+                                child: LabeledRow(
+                                  children: [
+                                    Text(
+                                      l10nOf(
+                                        context,
+                                      ).khatmaLocationScreenMessage4,
+                                      style: text.titleSmall,
                                     ),
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: dropdownTextColor,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    isExpanded: true,
-                                    items:
-                                        List.generate(
-                                          30,
-                                          (index) => index + 1,
-                                        ).map((int juz) {
-                                          return DropdownMenuItem<int>(
-                                            value: juz,
-                                            child: Text(
-                                              l10nOf(
-                                                context,
-                                              ).khatmaLocationScreenMessage5(
-                                                context.digits(juz),
+                                    const SizedBox(width: AppSpacing.md),
+                                    Expanded(
+                                      child: KhatmaDropdown<int>(
+                                        value: _selectedJuz,
+                                        items: [
+                                          for (var juz = 1; juz <= 30; juz++)
+                                            DropdownMenuItem<int>(
+                                              value: juz,
+                                              child: Text(
+                                                l10nOf(
+                                                  context,
+                                                ).khatmaLocationScreenMessage5(
+                                                  context.digits(juz),
+                                                ),
                                               ),
                                             ),
-                                          );
-                                        }).toList(),
-                                    onChanged: (int? newValue) {
-                                      if (newValue != null) {
-                                        setState(() {
-                                          _selectedJuz = newValue;
-                                        });
-                                      }
-                                    },
-                                  ),
+                                        ],
+                                        onChanged: (value) => setState(
+                                          () => _selectedJuz = value,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
                       ),
-
-                    const Spacer(),
-
-                    // Continue Button
-                    ElevatedButton(
-                      onPressed: () {
-                        context.push(
-                          '/khatma/duration',
-                          extra: {
-                            'startMode': _selectedStartMode,
-                            'startJuz': _selectedJuz,
-                          },
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Text(
-                        l10nOf(context).khatmaDurationScreenMessage14,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+                const Spacer(),
+                const SizedBox(height: AppSpacing.lg),
+                FilledButton(
+                  onPressed: () {
+                    context.push(
+                      '/khatma/duration',
+                      extra: {
+                        'startMode': _selectedStartMode,
+                        'startJuz': _selectedJuz,
+                      },
+                    );
+                  },
+                  child: Text(l10nOf(context).khatmaDurationScreenMessage14),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

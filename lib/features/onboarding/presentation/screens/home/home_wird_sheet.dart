@@ -31,12 +31,12 @@ extension _HomeWirdActions on _HomeScreenState {
       isScrollControlled: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.md)),
       ),
       builder: (context) {
         return SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+            padding: const EdgeInsets.fromLTRB(20, AppSpacing.md, 20, 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -44,13 +44,11 @@ extension _HomeWirdActions on _HomeScreenState {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Text(
                   showCompleted
                       ? l10nOf(
@@ -66,17 +64,18 @@ extension _HomeWirdActions on _HomeScreenState {
                     ).colorScheme.primary.withValues(alpha: 0.7),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.ms),
                 if (count == 0)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.lg,
+                    ),
                     child: Text(
                       showCompleted
                           ? l10nOf(context).homeScreenMessage13
                           : l10nOf(context).homeScreenMessage14,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(
                           context,
                         ).colorScheme.primary.withValues(alpha: 0.7),
@@ -109,7 +108,7 @@ extension _HomeWirdActions on _HomeScreenState {
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
-                              textAlign: TextAlign.right,
+                              textAlign: TextAlign.start,
                             ),
                             subtitle: Text(
                               l10nOf(
@@ -120,7 +119,7 @@ extension _HomeWirdActions on _HomeScreenState {
                                   context,
                                 ).colorScheme.primary.withValues(alpha: 0.65),
                               ),
-                              textAlign: TextAlign.right,
+                              textAlign: TextAlign.start,
                             ),
                             leading: Icon(
                               Icons.open_in_new,
@@ -147,7 +146,7 @@ extension _HomeWirdActions on _HomeScreenState {
                               fontWeight: FontWeight.w600,
                               color: Theme.of(context).colorScheme.primary,
                             ),
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.start,
                           ),
                           subtitle: Text(
                             l10nOf(context).homeScreenMessage18,
@@ -156,7 +155,7 @@ extension _HomeWirdActions on _HomeScreenState {
                                 context,
                               ).colorScheme.primary.withValues(alpha: 0.65),
                             ),
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.start,
                           ),
                           leading: Icon(
                             Icons.schedule,
@@ -263,7 +262,8 @@ extension _HomeWirdActions on _HomeScreenState {
       unawaited(
         context.push(
           '/quran/surah/$surahNumber',
-          extra: <String, dynamic>{'surah': targetSurah},
+          // Open at the bookmark itself, not where reading last stopped.
+          extra: <String, dynamic>{'surah': targetSurah, 'openBookmark': true},
         ),
       );
     } catch (_) {

@@ -16,11 +16,13 @@ class SettingsProvider extends ChangeNotifier {
   static const String _eveningAlarmKey = 'evening_alarm_enabled';
   static const String _mulkAlarmKey = 'mulk_alarm_enabled';
   static const String _baqarahAlarmKey = 'baqarah_alarm_enabled';
+  static const String _dailyVerseAlarmKey = 'daily_verse_alarm_enabled';
 
   bool _isMorningAlarmEnabled = false;
   bool _isEveningAlarmEnabled = false;
   bool _isMulkAlarmEnabled = false;
   bool _isBaqarahAlarmEnabled = false;
+  bool _isDailyVerseAlarmEnabled = false;
 
   SettingsProvider({
     required this.prefs,
@@ -59,6 +61,7 @@ class SettingsProvider extends ChangeNotifier {
   bool get isEveningAlarmEnabled => _isEveningAlarmEnabled;
   bool get isMulkAlarmEnabled => _isMulkAlarmEnabled;
   bool get isBaqarahAlarmEnabled => _isBaqarahAlarmEnabled;
+  bool get isDailyVerseAlarmEnabled => _isDailyVerseAlarmEnabled;
 
   static bool _validatedBoolValue(
     SharedPreferences preferences,
@@ -108,6 +111,11 @@ class SettingsProvider extends ChangeNotifier {
       _baqarahAlarmKey,
       fallback: false,
     );
+    _isDailyVerseAlarmEnabled = _validatedBoolValue(
+      prefs,
+      _dailyVerseAlarmKey,
+      fallback: false,
+    );
 
     notifyListeners();
 
@@ -125,6 +133,7 @@ class SettingsProvider extends ChangeNotifier {
         isEveningEnabled: _isEveningAlarmEnabled,
         isMulkEnabled: _isMulkAlarmEnabled,
         isBaqarahEnabled: _isBaqarahAlarmEnabled,
+        isDailyVerseEnabled: _isDailyVerseAlarmEnabled,
       );
     } catch (error) {
       developer.log(
@@ -175,6 +184,15 @@ class SettingsProvider extends ChangeNotifier {
     unawaited(_schedulingCoordinator.requestReschedule('toggle_baqarah'));
   }
 
+  Future<void> toggleDailyVerseAlarm(bool value) async {
+    _isDailyVerseAlarmEnabled = value;
+    await prefs.setBool(_dailyVerseAlarmKey, value);
+    notifyListeners();
+
+    unawaited(_updateAllAlarms());
+    unawaited(_schedulingCoordinator.requestReschedule('toggle_verse'));
+  }
+
   /// Set custom alarm time for a specific type
   Future<void> setAlarmTime({
     required String type,
@@ -193,6 +211,7 @@ class SettingsProvider extends ChangeNotifier {
       'evening' => _isEveningAlarmEnabled,
       'mulk' => _isMulkAlarmEnabled,
       'baqarah' => _isBaqarahAlarmEnabled,
+      'verse' => _isDailyVerseAlarmEnabled,
       _ => throw ArgumentError('Unknown alarm type: $type'),
     };
 

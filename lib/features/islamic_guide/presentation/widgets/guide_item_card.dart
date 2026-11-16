@@ -1,7 +1,10 @@
+import 'package:sakina_app/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/l10n/localization.dart';
 
+import '../../../../core/theme/app_design.dart';
+import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
@@ -26,10 +29,12 @@ class GuideItemCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: AppSpacing.md),
       decoration: BoxDecoration(
-        color: scheme.surface,
+        color: SakinaDecor.of(context).card,
         borderRadius: AppRadius.card,
-        border: Border.all(color: scheme.primary.withValues(alpha: 0.22)),
-        boxShadow: AppShadows.subtle,
+        border: Border.all(color: scheme.outlineVariant),
+        boxShadow: theme.brightness == Brightness.dark
+            ? null
+            : AppShadows.subtle,
       ),
       child: Theme(
         // Removes the default divider lines ExpansionTile draws.
@@ -55,13 +60,16 @@ class GuideItemCard extends StatelessWidget {
             AppSpacing.md,
           ),
           expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
+          expansionAnimationStyle: AnimationStyle(
+            duration: AppMotion.of(context, AppMotion.base),
+            curve: AppMotion.standard,
+          ),
           iconColor: scheme.primary,
           collapsedIconColor: scheme.primary,
           title: Text(
             item.title,
             style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-              color: scheme.onSurface,
+              fontWeight: FontWeight.w700,
             ),
           ),
           subtitle: _subtitle(theme),
@@ -94,17 +102,17 @@ class GuideItemCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.sm,
-                vertical: 2,
+                vertical: AppSpacing.xxs,
               ),
               decoration: BoxDecoration(
-                color: scheme.primary.withValues(alpha: 0.12),
+                color: scheme.secondary,
                 borderRadius: AppRadius.pill,
               ),
               child: Text(
                 badge,
                 style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w700,
-                  color: scheme.primary,
+                  color: scheme.onSecondary,
                 ),
               ),
             ),
@@ -192,16 +200,16 @@ class _StepsView extends StatelessWidget {
                   child: Container(
                     width: 26,
                     height: 26,
-                    margin: const EdgeInsets.only(top: 2),
+                    margin: const EdgeInsets.only(top: AppSpacing.xxs),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: scheme.primary,
+                      color: scheme.secondary,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       '${i + 1}',
                       style: theme.textTheme.labelMedium?.copyWith(
-                        color: scheme.onPrimary,
+                        color: scheme.primary,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -240,10 +248,10 @@ class _DuaView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: scheme.primary.withValues(alpha: 0.07),
-        borderRadius: AppRadius.card,
+        color: scheme.secondary,
+        borderRadius: AppRadius.controls,
         border: BorderDirectional(
-          start: BorderSide(color: scheme.primary, width: 3),
+          start: BorderSide(color: SakinaDecor.of(context).accent, width: 3),
         ),
       ),
       // SelectionArea rather than SelectableText: the latter owns a
@@ -252,11 +260,11 @@ class _DuaView extends StatelessWidget {
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: 'Amiri',
+          style: AppTypography.script.copyWith(
             fontSize: 19,
             height: 1.9,
-            color: scheme.onSurface,
+            fontWeight: FontWeight.w400,
+            color: scheme.onSecondary,
           ),
         ),
       ),
@@ -293,8 +301,8 @@ class _QuranRefViewState extends State<_QuranRefView> {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
-        color: scheme.secondaryContainer.withValues(alpha: 0.45),
-        borderRadius: AppRadius.card,
+        color: scheme.secondary,
+        borderRadius: AppRadius.controls,
       ),
       child: FutureBuilder<List<GuideVerse>>(
         future: _verses,
@@ -343,11 +351,11 @@ class _QuranRefViewState extends State<_QuranRefView> {
                 child: Text(
                   text,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Amiri',
+                  style: AppTypography.script.copyWith(
                     fontSize: 20,
                     height: 2,
-                    color: scheme.onSurface,
+                    fontWeight: FontWeight.w400,
+                    color: scheme.onSecondary,
                   ),
                 ),
               ),

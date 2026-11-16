@@ -9,6 +9,7 @@ abstract class AlarmScheduler {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   });
 
   Future<void> saveAlarmTime({
@@ -79,12 +80,14 @@ class NotificationAlarmScheduler implements AlarmScheduler {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   }) {
     return _notificationService.updateAllAlarms(
       isMorningEnabled: isMorningEnabled,
       isEveningEnabled: isEveningEnabled,
       isMulkEnabled: isMulkEnabled,
       isBaqarahEnabled: isBaqarahEnabled,
+      isDailyVerseEnabled: isDailyVerseEnabled,
     );
   }
 }

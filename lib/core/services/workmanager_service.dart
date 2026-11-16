@@ -89,6 +89,7 @@ Future<void> _handleRescheduleAlarms({Map<String, dynamic>? inputData}) async {
       isEveningEnabled: prefs.getBool('evening_alarm_enabled') ?? false,
       isMulkEnabled: prefs.getBool('mulk_alarm_enabled') ?? false,
       isBaqarahEnabled: prefs.getBool('baqarah_alarm_enabled') ?? false,
+      isDailyVerseEnabled: prefs.getBool('daily_verse_alarm_enabled') ?? false,
     );
 
     await PrayerReplenishmentService(

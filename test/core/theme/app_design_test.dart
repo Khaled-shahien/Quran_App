@@ -15,6 +15,8 @@ double contrast(Color a, Color b) {
 
 void main() {
   const palettes = {
+    'warm light': AppPalette.warmLight,
+    'warm dark': AppPalette.warmDark,
     'sage light': AppPalette.sageLight,
     'sage dark': AppPalette.sageDark,
     'night': AppPalette.night,
@@ -40,9 +42,14 @@ void main() {
       }
       // Light text sits on the feature card in every design.
       expect(
-        contrast(Colors.white, p.decor.featureCard),
+        contrast(p.decor.onFeature, p.decor.featureCard),
         greaterThanOrEqualTo(4.5),
       );
+      // Body and caption text also sit on cards and tiles.
+      expect(contrast(p.body, p.decor.card), greaterThanOrEqualTo(4.5));
+      expect(contrast(p.caption, p.decor.card), greaterThanOrEqualTo(4.5));
+      expect(contrast(p.primary, p.secondary), greaterThanOrEqualTo(4.5));
+      expect(contrast(p.primary, p.background), greaterThanOrEqualTo(4.5));
     });
   }
 

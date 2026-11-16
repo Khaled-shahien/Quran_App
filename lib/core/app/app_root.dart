@@ -290,6 +290,15 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
                 appL10n.surahAudioModelMessage1(surahNameAr(surah) ?? '$surah'),
           )..initialize(),
         ),
+        // Interface sounds never play over recitation.
+        ProxyProvider<RecitationController, SacredAudioGate>(
+          lazy: false,
+          update: (_, recitation, _) {
+            getIt<FeedbackService>().isSacredAudioPlaying = () =>
+                recitation.isPlaying;
+            return const SacredAudioGate();
+          },
+        ),
         ChangeNotifierProvider<ReadingModeController>(
           create: (_) => ReadingModeController(_prefs),
         ),

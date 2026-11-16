@@ -1,81 +1,79 @@
-import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sakina_app/l10n/localization.dart';
 
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/widgets/sakina_card.dart';
+
+/// The media library's three destinations.
 class MediaTilesWidget extends StatelessWidget {
   const MediaTilesWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildListDelegate([
-        _mediaTile(
-          l10nOf(context).articlesScreenMessage1,
-          const Color(0xFF235347),
-          Icons.article_outlined,
-          () => context.push('/media/articles'),
+    final l10n = l10nOf(context);
+    return SliverList.list(
+      children: [
+        _MediaTile(
+          title: l10n.articlesScreenMessage1,
+          icon: Icons.article_outlined,
+          route: '/media/articles',
         ),
-        _mediaTile(
-          l10nOf(context).audioScreenMessage1,
-          const Color(0xFF2D2D2D),
-          Icons.graphic_eq_rounded,
-          () => context.push('/media/audio'),
+        _MediaTile(
+          title: l10n.audioScreenMessage1,
+          icon: Icons.graphic_eq_rounded,
+          route: '/media/audio',
         ),
-        _mediaTile(
-          l10nOf(context).videoScreenMessage1,
-          const Color(0xFF8B4242),
-          Icons.video_library_outlined,
-          () => context.push('/media/videos'),
+        _MediaTile(
+          title: l10n.videoScreenMessage1,
+          icon: Icons.video_library_outlined,
+          route: '/media/videos',
         ),
-      ]),
+      ],
     );
   }
+}
 
-  Widget _mediaTile(
-    String title,
-    Color color,
-    IconData icon,
-    VoidCallback onTap,
-  ) => Semantics(
-    button: true,
-    label: title,
-    child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(15),
+class _MediaTile extends StatelessWidget {
+  const _MediaTile({
+    required this.title,
+    required this.icon,
+    required this.route,
+  });
+
+  final String title;
+  final IconData icon;
+  final String route;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    return SakinaCard(
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.page,
+        vertical: AppSpacing.xs + AppSpacing.xxs,
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(15),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              children: [
-                Icon(icon, color: Colors.white, size: 28),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                const Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.white,
-                  size: 18,
-                ),
-              ],
+      onTap: () => context.push(route),
+      semanticLabel: title,
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: scheme.secondary,
+              borderRadius: AppRadius.controls,
             ),
+            child: Icon(icon, color: scheme.primary, size: 26),
           ),
-        ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(child: Text(title, style: theme.textTheme.titleMedium)),
+          Icon(Icons.chevron_right_rounded, color: scheme.onSurfaceVariant),
+        ],
       ),
-    ),
-  );
+    );
+  }
 }

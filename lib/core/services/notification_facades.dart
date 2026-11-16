@@ -41,6 +41,7 @@ abstract class LocalNotificationGateway {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   });
 }
 
@@ -114,12 +115,14 @@ class NotificationServiceGateway implements LocalNotificationGateway {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   }) {
     return _notificationService.updateAllAlarms(
       isMorningEnabled: isMorningEnabled,
       isEveningEnabled: isEveningEnabled,
       isMulkEnabled: isMulkEnabled,
       isBaqarahEnabled: isBaqarahEnabled,
+      isDailyVerseEnabled: isDailyVerseEnabled,
     );
   }
 }

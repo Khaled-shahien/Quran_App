@@ -1,11 +1,13 @@
 import 'package:sakina_app/core/accessibility/digit_style.dart';
+import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../core/providers/settings_provider.dart';
 import 'alarm_time_picker_dialog.dart';
 
-/// A clickable alarm menu item with time display
+/// One reminder on a single row: tap the row to change its time, use the
+/// switch to turn it on or off.
 class AlarmMenuItem extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -26,8 +28,6 @@ class AlarmMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = Theme.of(context).colorScheme.onSurface;
-
     return FutureBuilder<Map<String, int>>(
       future: Provider.of<SettingsProvider>(
         context,
@@ -44,13 +44,18 @@ class AlarmMenuItem extends StatelessWidget {
         }
 
         return ListTile(
-          leading: Icon(icon, color: iconColor),
+          leading: Icon(icon),
           title: Text(title),
           subtitle: Text(context.digits('$subtitle • $timeText')),
-          trailing: IconButton(
-            icon: const Icon(Icons.access_time),
-            onPressed: () => _showTimePicker(context),
-            tooltip: l10nOf(context).alarmMenuItemMessage1((title).toString()),
+          trailing: Semantics(
+            label: l10nOf(context).settingsScreenMessage10(title),
+            child: Switch(
+              value: isEnabled,
+              onChanged: (value) {
+                playFeedback(context, FeedbackEvent.toggle);
+                onChanged(value);
+              },
+            ),
           ),
           onTap: () => _showTimePicker(context),
         );

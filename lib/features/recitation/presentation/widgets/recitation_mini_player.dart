@@ -1,3 +1,7 @@
+import 'package:sakina_app/core/theme/app_design.dart';
+import 'package:sakina_app/core/theme/app_motion.dart';
+import 'package:sakina_app/core/theme/app_radius.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,8 +39,9 @@ class RecitationMiniPlayer extends StatelessWidget {
     );
 
     return Material(
-      color: scheme.surfaceContainerHigh,
-      elevation: 3,
+      color: SakinaDecor.of(context).card,
+      // A hairline, not a shadow, separates the player from the screen.
+      shape: Border(top: BorderSide(color: scheme.outlineVariant)),
       child: SafeArea(
         top: false,
         child: InkWell(
@@ -45,11 +50,29 @@ class RecitationMiniPlayer extends StatelessWidget {
             if (ctx != null) showRecitationPlayerSheet(ctx);
           },
           child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(12, 6, 4, 6),
+            padding: const EdgeInsetsDirectional.fromSTEB(
+              AppSpacing.ms,
+              AppSpacing.sm,
+              AppSpacing.xs,
+              AppSpacing.sm,
+            ),
             child: Row(
               children: [
-                Icon(Icons.menu_book_rounded, color: scheme.primary),
-                const SizedBox(width: 12),
+                Container(
+                  width: 40,
+                  height: 40,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: scheme.secondary,
+                    borderRadius: AppRadius.controls,
+                  ),
+                  child: Icon(
+                    Icons.graphic_eq_rounded,
+                    color: scheme.primary,
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.ms),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,12 +116,20 @@ class RecitationMiniPlayer extends StatelessWidget {
                         ? l10n.recitationPause
                         : l10n.recitationPlay,
                     onPressed: c.togglePlay,
-                    icon: Icon(
-                      error
-                          ? Icons.refresh_rounded
-                          : c.isPlaying
-                          ? Icons.pause_rounded
-                          : Icons.play_arrow_rounded,
+                    icon: AnimatedSwitcher(
+                      duration: AppMotion.of(context, AppMotion.base),
+                      transitionBuilder: (child, animation) =>
+                          ScaleTransition(scale: animation, child: child),
+                      child: Icon(
+                        error
+                            ? Icons.refresh_rounded
+                            : c.isPlaying
+                            ? Icons.pause_rounded
+                            : Icons.play_arrow_rounded,
+                        key: ValueKey<String>(
+                          error ? 'retry' : (c.isPlaying ? 'pause' : 'play'),
+                        ),
+                      ),
                     ),
                   ),
                 IconButton(

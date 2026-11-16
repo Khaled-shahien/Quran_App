@@ -1,12 +1,25 @@
 part of '../surah_details_screen.dart';
 
-/// The page body: verses, surah header and basmala.
+/// The reading area in its three layouts.
 extension _SurahReaderPage on _SurahDetailsScreenState {
-  Widget _buildBodyContent({
-    required Color textColor,
-    required Color pageSurface,
-    required Color pageBorder,
-  }) {
+  _ReaderStyle _readerStyle(Color textColor) {
+    final ThemeData theme = Theme.of(context);
+    return _ReaderStyle(
+      fontSize: _fontSize,
+      lineHeight: _lineHeight,
+      textColor: textColor,
+      // The same ink as the text: the accent colour is too pale on light
+      // paper to carry the verse numbers.
+      markerColor: textColor,
+      tintColor: theme.colorScheme.primary.withValues(alpha: 0.14),
+      showMarkers: _showVerseMarkers,
+    );
+  }
+
+  /// The verse being recited and the verse being acted on.
+  Set<_VerseRef> get _tintedVerses => <_VerseRef>{?_highlighted, ?_selected};
+
+  Widget _buildBodyContent({required Color textColor}) {
     if (_isLoading) {
       // Clipped rather than overflowing when large text leaves little room.
       return const ClipRect(
@@ -17,316 +30,380 @@ extension _SurahReaderPage on _SurahDetailsScreenState {
       );
     }
 
-    if (_error != null) {
-      return Center(
-        child: Text(
-          _error!,
-          style: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.error,
-            fontFamily: 'Amiri',
-          ),
-        ),
-      );
-    }
+    if (_error != null) return StatusView.error(message: _error!);
 
     if (_surahPages.isEmpty) {
-      return Center(
-        child: Text(
-          appL10n.readerContentMessage1,
-          style: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontFamily: 'Amiri',
-          ),
-        ),
+      return EmptyState(
+        icon: Icons.menu_book_outlined,
+        message: appL10n.readerContentMessage1,
       );
     }
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return PageView.builder(
-          controller: _pageController,
-          padEnds: false,
-          reverse: false,
-          itemCount: _surahPages.length,
-          onPageChanged: (index) {
-            _onPageChanged(index);
-          },
-          itemBuilder: (context, pageIndex) {
-            final pageData = _surahPages[pageIndex];
+    final _ReaderStyle style = _readerStyle(textColor);
+    // The Quran has its own size control in the reader, so the app's text
+    // size setting does not scale it a second time.
+    return SystemTextScale(
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: switch (_layout) {
+          ReaderLayout.continuous => _buildContinuous(style),
+          ReaderLayout.pages => _buildPaged(style),
+          ReaderLayout.verses => _buildVerseList(style),
+        },
+      ),
+    );
+  }
 
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(14, 8, 14, 10),
-              child: Listener(
-                onPointerDown: (_) => _setPagePressed(true),
-                onPointerUp: (_) => _setPagePressed(false),
-                onPointerCancel: (_) => _setPagePressed(false),
-                child: AnimatedContainer(
-                  duration: MediaQuery.of(context).disableAnimations
-                      ? Duration.zero
-                      : const Duration(milliseconds: 120),
-                  decoration: BoxDecoration(
-                    color: _pagePressed
-                        ? Theme.of(
-                            context,
-                          ).colorScheme.primary.withValues(alpha: 0.07)
-                        : pageSurface,
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: pageBorder),
-                    boxShadow: AppShadows.card,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
-                    // Never scale the text down to fit: large Quran text and
-                    // large system font sizes scroll within the page instead.
-                    child: SingleChildScrollView(
-                      key: PageStorageKey<String>('surah-page-$pageIndex'),
-                      child: SizedBox(
-                        width: constraints.maxWidth,
-                        // The Quran has its own size control in the reader.
-                        child: SystemTextScale(
-                          child: Directionality(
-                            textDirection: TextDirection.rtl,
-                            child: SelectableText.rich(
-                              TextSpan(
-                                style: TextStyle(
-                                  fontFamily: quranFontFamily,
-                                  fontSize: _fontSize,
-                                  color: textColor,
-                                  height: _lineHeight,
-                                ),
-                                children: _buildVersesWithNumbers(
-                                  pageData,
-                                  constraints.maxWidth,
-                                ),
-                              ),
-                              textAlign: TextAlign.justify,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+  static const EdgeInsets _readingPadding = EdgeInsets.fromLTRB(
+    AppSpacing.lg,
+    AppSpacing.sm,
+    AppSpacing.lg,
+    AppSpacing.xl,
+  );
+
+  /// One vertical scroll; each mushaf page is a lazily built block.
+  Widget _buildContinuous(_ReaderStyle style) {
+    return _AnchoredList(
+      key: const Key('reader-continuous'),
+      itemCount: _surahPages.length,
+      anchor: _anchor,
+      padding: _readingPadding,
+      onTopItemChanged: _onPageChanged,
+      itemBuilder: (context, index) => _buildPageBlock(
+        _surahPages[index],
+        style,
+        // The last block needs no marker below it.
+        pageMarker: index < _surahPages.length - 1,
+      ),
+    );
+  }
+
+  /// One mushaf page per swipe. Each page is a fixed surface: its text is
+  /// sized to fit the screen, and nothing on it scrolls vertically.
+  Widget _buildPaged(_ReaderStyle style) {
+    return PageView.builder(
+      key: const Key('reader-pages'),
+      controller: _pageController,
+      // Horizontal only. In right-to-left the next page comes in from the
+      // left, as in a printed mushaf.
+      scrollDirection: Axis.horizontal,
+      padEnds: false,
+      itemCount: _surahPages.length,
+      onPageChanged: _onPageChanged,
+      itemBuilder: (context, pageIndex) {
+        return Padding(
+          padding: _fixedPagePadding,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final QuranPageFit fit = _fitPage(
+                pageIndex,
+                constraints.biggest,
+                style,
+              );
+              final _ReaderStyle fitted = style.copyWith(
+                fontSize: fit.fontSize,
+                lineHeight: fit.lineHeight,
+              );
+              // The fit is measured, so this never clips on a phone in
+              // portrait; the clip only guards against a rounding pixel.
+              return ClipRect(
+                child: OverflowBox(
+                  alignment: Alignment.topCenter,
+                  minHeight: 0,
+                  maxHeight: double.infinity,
+                  child: _buildPageBlock(
+                    _surahPages[pageIndex],
+                    fitted,
+                    pageMarker: false,
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         );
       },
     );
   }
 
-  List<InlineSpan> _buildVersesWithNumbers(
-    _SurahPageData pageData,
-    double pageWidth,
-  ) {
-    final List<InlineSpan> spans = [];
+  static const EdgeInsets _fixedPagePadding = EdgeInsets.fromLTRB(
+    AppSpacing.ms,
+    AppSpacing.xs,
+    AppSpacing.ms,
+    AppSpacing.xs,
+  );
 
-    for (int i = 0; i < pageData.verses.length; i++) {
-      final _SurahVerseData verse = pageData.verses[i];
-
-      if (verse.showSurahHeader) {
-        if (spans.isNotEmpty) {
-          spans.add(const TextSpan(text: '\n'));
-        }
-        spans.add(
-          WidgetSpan(
-            alignment: PlaceholderAlignment.baseline,
-            baseline: TextBaseline.alphabetic,
-            child: _buildSurahHeader(verse, pageWidth),
-          ),
-        );
-        spans.add(const TextSpan(text: '\n'));
-      } else if (verse.showBasmala) {
-        // In range mode the surah header already includes the basmala.
-        if (spans.isNotEmpty) {
-          spans.add(const TextSpan(text: '\n'));
-        }
-        spans.add(
-          WidgetSpan(
-            alignment: PlaceholderAlignment.baseline,
-            baseline: TextBaseline.alphabetic,
-            child: SizedBox(
-              width: pageWidth.clamp(180.0, 720.0),
-              child: _buildBasmala(verse),
-            ),
-          ),
-        );
-        spans.add(const TextSpan(text: '\n'));
-      }
-
-      final bool reciting =
-          _highlighted?.surah == verse.surahNumber &&
-          _highlighted?.ayah == verse.verseNumber;
-      spans.add(
-        TextSpan(
-          text: '${verse.text}  ',
-          // The ayah being recited, so listeners can follow along.
-          style: reciting
-              ? TextStyle(
-                  backgroundColor: Theme.of(
-                    context,
-                  ).colorScheme.primary.withValues(alpha: 0.16),
-                )
-              : null,
-        ),
-      );
-
-      if (_showVerseMarkers) {
-        spans.add(
-          WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 5),
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 1,
-                ),
-                color: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: 0.08),
-              ),
-              child: Text(
-                context.digits(verse.verseNumber),
-                style: TextStyle(
-                  fontSize: _fontSize * 0.45,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Amiri',
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ),
-          ),
-        );
-      }
-
-      if (i < pageData.verses.length - 1) {
-        spans.add(const TextSpan(text: ' '));
-      }
+  /// The pieces of a page, as [_buildPageBlock] draws them.
+  List<QuranPagePiece> _pagePieces(_SurahPageData page) {
+    final List<QuranPagePiece> pieces = <QuranPagePiece>[];
+    List<QuranVerseText> run = <QuranVerseText>[];
+    void flush() {
+      if (run.isEmpty) return;
+      pieces.add(QuranVersesPiece(run));
+      run = <QuranVerseText>[];
     }
 
-    return spans;
+    for (final _SurahVerseData verse in page.verses) {
+      if (verse.showSurahHeader || verse.showBasmala) {
+        flush();
+        if (verse.showSurahHeader) {
+          pieces.add(
+            QuranTitlePiece(
+              name: verse.surahName,
+              subtitle: _titleSubtitle(verse),
+            ),
+          );
+        }
+        if (verse.showBasmala) pieces.add(const QuranBasmalaPiece());
+      }
+      run.add((text: verse.text, number: verse.verseNumber));
+    }
+    flush();
+    return pieces;
   }
 
-  Widget _buildSurahHeader(_SurahVerseData verse, double pageWidth) {
-    final ThemeData theme = Theme.of(context);
-    final Color primary = theme.colorScheme.primary;
-    final double headerWidth = pageWidth.clamp(180.0, 720.0);
+  String _titleSubtitle(_SurahVerseData verse) => appL10n.readerContentMessage2(
+    _revelationLabel(verse.revelationType),
+    context.digits(verse.totalAyah),
+  );
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: SizedBox(
-        width: headerWidth,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+  /// The size page [pageIndex] is drawn at in [area], measured once per
+  /// page, area and reading setting.
+  QuranPageFit _fitPage(int pageIndex, Size area, _ReaderStyle style) {
+    final TextScaler scaler = MediaQuery.textScalerOf(context);
+    final String key =
+        '$pageIndex|${area.width.toStringAsFixed(1)}x'
+        '${area.height.toStringAsFixed(1)}|${style.fontSize}|'
+        '${style.lineHeight}|${style.showMarkers}|${scaler.scale(100)}';
+    final QuranPageFit? cached = _pageFits[key];
+    if (cached != null) return cached;
+    final QuranPageFit fit = _pageFits[key] = fitQuranPage(
+      pieces: _pagePieces(_surahPages[pageIndex]),
+      area: area,
+      quranStyle: style.text,
+      subtitleStyle: _subtitleStyle,
+      markerColor: style.markerColor,
+      showMarkers: style.showMarkers,
+      textScaler: scaler,
+      rootStyle: DefaultTextStyle.of(context).style,
+      preferredSize: style.fontSize,
+      preferredLineHeight: style.lineHeight,
+    );
+    // The page bar is built before pages measure themselves; let it catch
+    // up once when the page in view turns out to be reduced.
+    if (fit.compressed && pageIndex == _currentSurahPage) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _refreshChrome();
+      });
+    }
+    return fit;
+  }
+
+  TextStyle get _subtitleStyle {
+    final ThemeData theme = Theme.of(context);
+    return theme.textTheme.labelSmall!.copyWith(
+      color: theme.colorScheme.onSurfaceVariant,
+    );
+  }
+
+  /// One verse per row.
+  Widget _buildVerseList(_ReaderStyle style) {
+    final List<_SurahVerseData> verses = _allVerses;
+    final _VerseRef? target = _anchorVerse;
+    int anchor = target == null
+        ? -1
+        : verses.indexWhere(
+            (verse) =>
+                verse.surahNumber == target.surah &&
+                verse.verseNumber == target.ayah,
+          );
+    if (anchor < 0) anchor = _firstVerseIndexOfPage(_anchor);
+
+    return _AnchoredList(
+      key: const Key('reader-verses'),
+      itemCount: verses.length,
+      anchor: anchor,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.ms,
+        AppSpacing.sm,
+        AppSpacing.ms,
+        AppSpacing.xl,
+      ),
+      onTopItemChanged: (index) {
+        final int page = _pageIndexOfVerse(index);
+        if (page != _currentSurahPage) _onPageChanged(page);
+      },
+      itemBuilder: (context, index) {
+        final _SurahVerseData verse = verses[index];
+        final bool tinted = _tintedVerses.contains((
+          surah: verse.surahNumber,
+          ayah: verse.verseNumber,
+        ));
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              width: double.infinity,
-              child: Container(
-                key: Key('surah-header-${verse.surahNumber}'),
-                width: double.infinity,
-                margin: const EdgeInsets.only(top: 10, bottom: 8),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.secondary.withValues(alpha: 0.45),
-                  borderRadius: AppRadius.card,
-                  border: Border.all(color: primary.withValues(alpha: 0.18)),
-                  boxShadow: AppShadows.subtle,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Divider(color: primary.withValues(alpha: 0.28)),
-                    ),
-                    const SizedBox(width: AppSpacing.md),
-                    Expanded(
-                      flex: 4,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            verse.surahName,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Amiri',
-                              fontSize: (_fontSize * 0.82).clamp(20.0, 28.0),
-                              fontWeight: FontWeight.bold,
-                              color: primary,
-                              height: 1.2,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            appL10n.readerContentMessage2(
-                              (_revelationLabel(
-                                verse.revelationType,
-                              )).toString(),
-                              context.digits(verse.totalAyah),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: primary.withValues(alpha: 0.7),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.md),
-                    Expanded(
-                      child: Divider(color: primary.withValues(alpha: 0.28)),
-                    ),
-                  ],
-                ),
+            ..._headersFor(verse, style),
+            _VerseRow(
+              verse: verse,
+              style: style,
+              tinted: tinted,
+              actionsTooltip: appL10n.readerVerseActions(
+                context.digits(verse.verseNumber),
               ),
+              onActions: () => _showVerseActions(verse),
             ),
-            if (verse.showBasmala) _buildBasmala(verse),
+            if (index < verses.length - 1)
+              Divider(
+                height: AppSpacing.sm,
+                indent: AppSpacing.ms,
+                endIndent: AppSpacing.ms,
+                color: style.markerColor.withValues(alpha: 0.18),
+              ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 
-  /// Unnumbered basmala header above ayah 1 (never for Al-Fatiha or
-  /// At-Tawbah; see [splitLeadingBasmala]). It scales with the Quran text
-  /// size so large-text readers get a large basmala too.
-  Widget _buildBasmala(_SurahVerseData verse) {
-    final ThemeData theme = Theme.of(context);
-    final Color primary = theme.colorScheme.primary;
-    return Container(
-      key: Key('surah-basmala-${verse.surahNumber}'),
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: primary.withValues(alpha: 0.14)),
-      ),
-      child: Text(
-        uthmaniBasmala,
-        textAlign: TextAlign.center,
-        textDirection: TextDirection.rtl,
-        style: TextStyle(
-          fontFamily: quranFontFamily,
-          fontSize: _fontSize * 0.9,
-          color: primary,
-          height: 1.6,
+  /// What precedes a verse that opens a surah: its title (inside a wird)
+  /// and the basmala.
+  List<Widget> _headersFor(_SurahVerseData verse, _ReaderStyle style) {
+    return <Widget>[
+      if (verse.showSurahHeader)
+        _SurahTitleBand(
+          verse: verse,
+          style: style,
+          subtitle: _titleSubtitle(verse),
         ),
+      if (verse.showBasmala)
+        _BasmalaLine(surahNumber: verse.surahNumber, style: style),
+    ];
+  }
+
+  /// The verses of one mushaf page: flowing paragraphs, broken only where a
+  /// surah begins.
+  Widget _buildPageBlock(
+    _SurahPageData page,
+    _ReaderStyle style, {
+    required bool pageMarker,
+  }) {
+    final List<Widget> children = <Widget>[];
+    List<_SurahVerseData> run = <_SurahVerseData>[];
+
+    void flush() {
+      if (run.isEmpty) return;
+      children.add(
+        _QuranParagraph(
+          verses: run,
+          style: style,
+          highlighted: _tintedVerses,
+          onVerseLongPress: _showVerseActions,
+        ),
+      );
+      run = <_SurahVerseData>[];
+    }
+
+    for (final _SurahVerseData verse in page.verses) {
+      if (verse.showSurahHeader || verse.showBasmala) {
+        flush();
+        children.addAll(_headersFor(verse, style));
+      }
+      run.add(verse);
+    }
+    flush();
+
+    if (pageMarker) {
+      children.add(
+        _PageMarker(
+          label: appL10n.readerMushafPage(context.digits(page.pageNumber)),
+          color: style.markerColor,
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children,
+    );
+  }
+
+  /// Selects [verse] and offers what can be done with it.
+  Future<void> _showVerseActions(_SurahVerseData verse) async {
+    playFeedback(context, FeedbackEvent.selection);
+    _selectVerse((surah: verse.surahNumber, ayah: verse.verseNumber));
+    final l10n = l10nOf(context);
+    final RecitationController? recitation = _recitation;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        final ThemeData theme = Theme.of(sheetContext);
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.xs,
+                ),
+                child: Text(
+                  '${verse.surahName} • '
+                  '${l10n.readerVerseActions(context.digits(verse.verseNumber))}',
+                  style: theme.textTheme.titleSmall,
+                ),
+              ),
+              if (recitation != null)
+                ListTile(
+                  leading: const Icon(Icons.play_arrow_rounded),
+                  title: Text(l10n.readerVersePlay),
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    unawaited(
+                      recitation.playSurah(
+                        verse.surahNumber,
+                        fromAyah: verse.verseNumber,
+                      ),
+                    );
+                  },
+                ),
+              ListTile(
+                leading: const Icon(Icons.bookmark_add_outlined),
+                title: Text(l10n.readerVerseBookmark),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  playFeedback(context, FeedbackEvent.bookmark);
+                  unawaited(_saveBookmark(verse: verse));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.copy_rounded),
+                title: Text(l10n.readerVerseCopy),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  unawaited(_copyVerse(verse));
+                },
+              ),
+              const SizedBox(height: AppSpacing.sm),
+            ],
+          ),
+        );
+      },
+    );
+    if (mounted) _selectVerse(null);
+  }
+
+  /// Copies the verse exactly as stored, followed by its reference.
+  Future<void> _copyVerse(_SurahVerseData verse) async {
+    await Clipboard.setData(
+      ClipboardData(
+        text: '${verse.text}\n[${verse.surahName}: ${verse.verseNumber}]',
       ),
     );
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(SnackBar(content: Text(appL10n.readerVerseCopied)));
   }
 }

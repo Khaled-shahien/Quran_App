@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -93,7 +94,7 @@ Future<void> showPrayerLocationDialog(
                         : null;
                   },
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.ms),
                 Text(l10nOf(context).prayerLocationDialogMessage4),
                 Text(l10nOf(context).prayerLocationDialogMessage5),
                 TextFormField(

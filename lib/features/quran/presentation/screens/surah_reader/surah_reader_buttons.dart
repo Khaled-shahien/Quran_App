@@ -19,7 +19,7 @@ class _BookmarkButtonState extends State<_BookmarkButton>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 200),
+      duration: AppMotion.base,
       lowerBound: 0.85,
       upperBound: 1,
       value: 1,
@@ -35,6 +35,7 @@ class _BookmarkButtonState extends State<_BookmarkButton>
   Future<void> _handleTap() async {
     final bool disableAnimations = MediaQuery.of(context).disableAnimations;
 
+    playFeedback(context, FeedbackEvent.bookmark);
     await widget.onTap();
 
     if (disableAnimations || !mounted) {
@@ -51,11 +52,7 @@ class _BookmarkButtonState extends State<_BookmarkButton>
       scale: _controller,
       child: IconButton(
         tooltip: l10nOf(context).readerButtonsMessage1,
-        style: IconButton.styleFrom(
-          backgroundColor: widget.color.withValues(alpha: 0.1),
-          side: BorderSide(color: widget.color.withValues(alpha: 0.18)),
-        ),
-        icon: Icon(Icons.bookmark, color: widget.color),
+        icon: Icon(Icons.bookmark_rounded, color: widget.color),
         onPressed: _handleTap,
       ),
     );
