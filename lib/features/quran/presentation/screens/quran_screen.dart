@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/result/failure_messages.dart';
 import 'package:sakina_app/core/result/result.dart';
@@ -7,11 +8,14 @@ import 'package:go_router/go_router.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_shadows.dart';
+import '../../../../core/theme/app_design.dart';
+import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/animated_entrance.dart';
 import '../../../../core/widgets/pulse_loader.dart';
+import '../../../../core/widgets/sakina_hero_app_bar.dart';
+import '../../../../core/widgets/sakina_card.dart';
+import '../../../../core/widgets/status_view.dart';
 import '../../domain/entities/surah_entity.dart';
 import '../../domain/repositories/surah_repository.dart';
 
@@ -76,9 +80,9 @@ class _QuranScreenState extends State<_QuranScreenContent> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final Color primaryColor = theme.colorScheme.primary;
+    final SakinaDecor decor = SakinaDecor.of(context);
     final Color backgroundColor = theme.scaffoldBackgroundColor;
-    final Color cardBackground = theme.colorScheme.surface;
+    final Color cardBackground = decor.card;
     final Color accentColor = theme.colorScheme.primary;
 
     return Scaffold(
@@ -88,61 +92,9 @@ class _QuranScreenState extends State<_QuranScreenContent> {
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
-            SliverAppBar(
-              expandedHeight: 150,
-              pinned: true,
-              stretch: true,
-              elevation: 0,
-              backgroundColor: theme.colorScheme.primary,
-              foregroundColor: theme.colorScheme.onPrimary,
-              leading: Semantics(
-                button: true,
-                label: l10nOf(context).azkarDetailsScreenMessage1,
-                child: IconButton(
-                  tooltip: l10nOf(context).appStringsMessage13,
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ),
-              flexibleSpace: FlexibleSpaceBar(
-                stretchModes: const [
-                  StretchMode.zoomBackground,
-                  StretchMode.fadeTitle,
-                ],
-                centerTitle: true,
-                title: Text(
-                  l10nOf(context).continueReadingCardMessage2,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.onPrimary,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                background: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [
-                        primaryColor,
-                        primaryColor.withValues(alpha: 0.72),
-                      ],
-                    ),
-                  ),
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 24),
-                      child: Icon(
-                        Icons.menu_book_rounded,
-                        size: 92,
-                        color: theme.colorScheme.onPrimary.withValues(
-                          alpha: 0.12,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+            SakinaHeroAppBar(
+              title: l10nOf(context).continueReadingCardMessage2,
+              backTooltip: l10nOf(context).appStringsMessage13,
             ),
             ..._buildBodySlivers(theme, accentColor, cardBackground),
           ],
@@ -169,35 +121,11 @@ class _QuranScreenState extends State<_QuranScreenContent> {
       return [
         SliverFillRemaining(
           hasScrollBody: false,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.error_outline,
-                  size: 64,
-                  color: theme.colorScheme.error,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  _error!,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: theme.colorScheme.error,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                Semantics(
-                  button: true,
-                  label: appL10n.quranScreenMessage1,
-                  child: ElevatedButton(
-                    onPressed: _loadSurahs,
-                    child: Text(appL10n.retry),
-                  ),
-                ),
-              ],
-            ),
+          child: StatusView.error(
+            message: _error!,
+            actionLabel: appL10n.retry,
+            actionSemanticLabel: appL10n.quranScreenMessage1,
+            onAction: _loadSurahs,
           ),
         ),
       ];
@@ -215,23 +143,27 @@ class _QuranScreenState extends State<_QuranScreenContent> {
           itemCount: _surahs.length,
           itemBuilder: (context, index) {
             final surah = _surahs[index];
-            return RepaintBoundary(
-              child: AnimatedEntrance(
-                delay: Duration(milliseconds: (index > 8 ? 8 : index) * 30),
-                child: SurahCard(
-                  index: index + 1,
-                  arabicName: surah.name,
-                  englishName: surah.englishName,
-                  translation: surah.englishNameTranslation,
-                  versesCount: surah.totalAyah,
-                  type: _getRevelationPlaceArabic(surah.revelationType),
-                  accentColor: accentColor,
-                  cardBackground: cardBackground,
-                  textColor: theme.colorScheme.onSurface,
-                  secondaryTextColor: theme.colorScheme.onSurfaceVariant,
-                  onTap: () => _onSurahTap(context, surah, index + 1),
-                ),
+            final Widget card = RepaintBoundary(
+              child: SurahCard(
+                index: index + 1,
+                arabicName: surah.name,
+                englishName: surah.englishName,
+                translation: surah.englishNameTranslation,
+                versesCount: surah.totalAyah,
+                type: _getRevelationPlaceArabic(surah.revelationType),
+                accentColor: accentColor,
+                cardBackground: cardBackground,
+                textColor: theme.colorScheme.onSurface,
+                secondaryTextColor: theme.colorScheme.onSurfaceVariant,
+                onTap: () => _onSurahTap(context, surah, index + 1),
               ),
+            );
+            // Only the first screenful enters in sequence; rows scrolled
+            // into view later appear at once.
+            if (index > 7) return card;
+            return AnimatedEntrance(
+              delay: AppMotion.stagger * index,
+              child: card,
             );
           },
         ),
@@ -291,6 +223,7 @@ class SurahCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme text = Theme.of(context).textTheme;
     return Semantics(
       button: true,
       label: l10nOf(context).quranScreenMessage4(
@@ -298,115 +231,130 @@ class SurahCard extends StatelessWidget {
         context.digits(versesCount),
         (type).toString(),
       ),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-          color: cardBackground,
-          borderRadius: AppRadius.card,
-          border: Border.all(color: accentColor.withValues(alpha: 0.28)),
-          boxShadow: AppShadows.subtle,
-        ),
-        child: Material(
-          color: cardBackground,
-          borderRadius: AppRadius.card,
-          child: InkWell(
-            borderRadius: AppRadius.card,
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: accentColor,
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: Alignment.center,
+      excludeSemantics: true,
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: AppSpacing.ms),
+        child: SakinaCard(
+          onTap: onTap,
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.ms,
+          ),
+          child: Row(
+            children: [
+              // The surah number sits in an eight-pointed star, the same
+              // ornament the headers use.
+              SizedBox.square(
+                dimension: 46,
+                child: CustomPaint(
+                  painter: _StarBadgePainter(accentColor),
+                  child: Center(
                     child: Text(
                       context.digits(index),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                      style: text.labelLarge?.copyWith(
+                        color: accentColor,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          arabicName,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: textColor,
-                          ),
-                        ),
-                        Text(
-                          englishName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: accentColor.withAlpha((0.8 * 255).round()),
-                          ),
-                        ),
-                        Text(
-                          translation,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: secondaryTextColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Flexible(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          type,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: accentColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          l10nOf(
-                            context,
-                          ).quranScreenMessage5(context.digits(versesCount)),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: secondaryTextColor,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      arabicName,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: text.titleMedium?.copyWith(
+                        color: textColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Text(
+                      '$englishName · $translation',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textDirection: TextDirection.ltr,
+                      textAlign: TextAlign.end,
+                      style: text.bodySmall?.copyWith(
+                        color: secondaryTextColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: AppSpacing.ms),
+              Flexible(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      type,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: text.labelMedium?.copyWith(color: accentColor),
+                    ),
+                    const SizedBox(height: AppSpacing.xxs),
+                    Text(
+                      l10nOf(
+                        context,
+                      ).quranScreenMessage5(context.digits(versesCount)),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: text.bodySmall?.copyWith(
+                        color: secondaryTextColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+}
+
+/// An eight-pointed star outline: two squares, one turned 45 degrees.
+class _StarBadgePainter extends CustomPainter {
+  const _StarBadgePainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = color.withValues(alpha: 0.55)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.4
+      ..strokeJoin = StrokeJoin.round;
+    final Offset center = size.center(Offset.zero);
+    final double side = size.shortestSide * 0.68;
+    final Rect square = Rect.fromCenter(
+      center: center,
+      width: side,
+      height: side,
+    );
+    final RRect rounded = RRect.fromRectAndRadius(
+      square,
+      const Radius.circular(AppRadius.xs),
+    );
+    canvas.drawRRect(rounded, paint);
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(0.785398);
+    canvas.translate(-center.dx, -center.dy);
+    canvas.drawRRect(rounded, paint);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(_StarBadgePainter oldDelegate) =>
+      oldDelegate.color != color;
 }

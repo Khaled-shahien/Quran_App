@@ -40,7 +40,8 @@ void main() {
         greaterThanOrEqualTo(4.5),
       );
     }
-    expect(theme.dialogTheme.backgroundColor, theme.colorScheme.surface);
+    // Dialogs sit on the card colour so they lift off the page.
+    expect(theme.dialogTheme.backgroundColor, theme.cardTheme.color);
     expect(theme.inputDecorationTheme.filled, isTrue);
     expect(theme.navigationBarTheme.indicatorColor, isNotNull);
   });
@@ -136,7 +137,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
-      await tester.drag(find.byType(ListView), const Offset(0, -1000));
+      await tester.drag(find.byType(CustomScrollView), const Offset(0, -1000));
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
     });

@@ -19,6 +19,8 @@ Widget _page(String name) => Builder(
 );
 
 void main() {
+  Object? lastExtra;
+
   Future<GoRouter> pumpRouter(WidgetTester tester) async {
     final router = GoRouter(
       navigatorKey: appNavigatorKey,
@@ -33,7 +35,14 @@ void main() {
           '/after-adhan',
           '/khatma',
         ])
-          GoRoute(path: path, builder: (_, state) => _page(state.uri.path)),
+          GoRoute(
+            path: path,
+            builder: (_, state) {
+              // Only the reader is checked; home rebuilds under it.
+              if (path.startsWith('/quran')) lastExtra = state.extra;
+              return _page(state.uri.path);
+            },
+          ),
       ],
     );
     addTearDown(router.dispose);
@@ -72,5 +81,33 @@ void main() {
 
     expect(find.text('/home'), findsOneWidget);
     expect(router.canPop(), isFalse);
+  });
+
+  testWidgets('the daily verse opens the reader at its ayah', (tester) async {
+    await pumpRouter(tester);
+
+    handleNotificationNavigation('/quran', {
+      'surahNumber': 13,
+      'ayahNumber': 28,
+    });
+    await tester.pumpAndSettle();
+
+    expect(find.text('/quran/surah/13'), findsOneWidget);
+    expect(lastExtra, {'initialAyahNumber': 28});
+  });
+
+  testWidgets('a bad ayah number opens the surah from its start', (
+    tester,
+  ) async {
+    await pumpRouter(tester);
+
+    handleNotificationNavigation('/quran', {
+      'surahNumber': 2,
+      'ayahNumber': 'x',
+    });
+    await tester.pumpAndSettle();
+
+    expect(find.text('/quran/surah/2'), findsOneWidget);
+    expect(lastExtra, isNull);
   });
 }

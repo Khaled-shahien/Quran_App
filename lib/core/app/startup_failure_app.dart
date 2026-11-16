@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../../l10n/app_localizations.dart';
@@ -40,23 +41,23 @@ class _StartupFailureAppState extends State<StartupFailureApp> {
             body: SafeArea(
               child: Center(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(AppSpacing.lg),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.error_outline, size: 48),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.md),
                       Text(
                         l10n.startupFailureTitle,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppSpacing.sm),
                       Text(
                         l10n.startupFailureMessage,
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: AppSpacing.lg),
                       FilledButton(
                         onPressed: _retrying ? null : _retry,
                         child: Text(l10n.startupFailureRetry),

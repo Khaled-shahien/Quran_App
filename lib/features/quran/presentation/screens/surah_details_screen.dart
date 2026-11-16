@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
@@ -13,6 +14,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/surah_entity.dart';
 import '../../domain/services/basmala.dart';
+import '../../domain/services/reader_layout.dart';
+import '../../../../core/widgets/empty_state.dart';
+import '../../../../core/widgets/status_view.dart';
 import '../../../../core/accessibility/app_text_scale.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../settings/presentation/providers/reading_mode_controller.dart';
@@ -20,16 +24,20 @@ import '../../../recitation/presentation/providers/recitation_controller.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../settings/presentation/widgets/reading_preferences.dart';
 import '../../../khatma/presentation/providers/khatma_provider.dart';
+import '../../../../core/feedback/feedback_service.dart';
+import '../../../../core/theme/app_design.dart';
+import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/widgets/pulse_loader.dart';
 import '../providers/bookmark_provider.dart';
+import '../widgets/quran_page_layout.dart';
 import '../widgets/quran_settings_dialog.dart';
 
 part 'surah_reader/surah_reader_models.dart';
 part 'surah_reader/surah_reader_chrome.dart';
 part 'surah_reader/surah_reader_page.dart';
+part 'surah_reader/surah_reader_text.dart';
 part 'surah_reader/surah_reader_buttons.dart';
 
 /// The Quran reader. In night-reading mode the whole reader (page, ayah
@@ -44,6 +52,10 @@ class SurahDetailsScreen extends StatelessWidget {
   final int? rangeFromUnit;
   final int? rangeToUnit;
 
+  /// Opened from the saved bookmark: start at the bookmarked verse rather
+  /// than where reading last stopped.
+  final bool openAtBookmark;
+
   const SurahDetailsScreen({
     super.key,
     required this.surah,
@@ -54,6 +66,7 @@ class SurahDetailsScreen extends StatelessWidget {
     this.rangeTrackingUnit,
     this.rangeFromUnit,
     this.rangeToUnit,
+    this.openAtBookmark = false,
   });
 
   @override
@@ -67,6 +80,7 @@ class SurahDetailsScreen extends StatelessWidget {
       rangeTrackingUnit: rangeTrackingUnit,
       rangeFromUnit: rangeFromUnit,
       rangeToUnit: rangeToUnit,
+      openAtBookmark: openAtBookmark,
     );
     // Optional so the reader still works where the setting is not provided.
     final night = context.watch<ReadingModeController?>()?.night ?? false;
@@ -83,6 +97,7 @@ class _SurahReaderBody extends StatefulWidget {
   final String? rangeTrackingUnit;
   final int? rangeFromUnit;
   final int? rangeToUnit;
+  final bool openAtBookmark;
 
   const _SurahReaderBody({
     required this.surah,
@@ -93,6 +108,7 @@ class _SurahReaderBody extends StatefulWidget {
     this.rangeTrackingUnit,
     this.rangeFromUnit,
     this.rangeToUnit,
+    this.openAtBookmark = false,
   });
 
   @override
@@ -111,7 +127,52 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
   double _lineHeight = 1.95;
   bool _showVerseMarkers = true;
   bool _immersiveMode = false;
-  bool _pagePressed = false;
+  ReaderLayout _layout = ReaderLayout.continuous;
+
+  /// The mushaf-page block the scrolling layouts open at. It changes only
+  /// when the reader jumps (opening, resuming, following recitation), never
+  /// while the user scrolls.
+  int _anchor = 0;
+
+  /// A verse to open at, when the target is finer than a page.
+  _VerseRef? _anchorVerse;
+
+  /// The verse whose actions are open.
+  _VerseRef? _selected;
+
+  /// Measured sizes of fixed mushaf pages, by page, area and setting.
+  final Map<String, QuranPageFit> _pageFits = <String, QuranPageFit>{};
+
+  /// Whether the mushaf page in view had to be drawn below the comfortable
+  /// reading size to fit the screen.
+  bool get _currentPageCompressed {
+    final String prefix = '$_currentSurahPage|';
+    return _pageFits.entries.any(
+      (entry) => entry.key.startsWith(prefix) && entry.value.compressed,
+    );
+  }
+
+  /// Every verse on screen, in reading order.
+  List<_SurahVerseData> get _allVerses => <_SurahVerseData>[
+    for (final _SurahPageData page in _surahPages) ...page.verses,
+  ];
+
+  int _firstVerseIndexOfPage(int pageIndex) {
+    int index = 0;
+    for (int i = 0; i < pageIndex && i < _surahPages.length; i++) {
+      index += _surahPages[i].verses.length;
+    }
+    return index;
+  }
+
+  int _pageIndexOfVerse(int verseIndex) {
+    int seen = 0;
+    for (int i = 0; i < _surahPages.length; i++) {
+      seen += _surahPages[i].verses.length;
+      if (verseIndex < seen) return i;
+    }
+    return _surahPages.isEmpty ? 0 : _surahPages.length - 1;
+  }
 
   bool get _hasUnitRange =>
       widget.rangeTrackingUnit != null &&
@@ -144,6 +205,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
     _fontSize = ReadingPreferences.fontSize(prefs);
     _lineHeight = ReadingPreferences.lineHeight(prefs);
     _showVerseMarkers = prefs.getBool(ReadingPreferences.markersKey) ?? true;
+    _layout = ReaderLayout.parse(prefs.get(ReadingPreferences.layoutKey));
   }
 
   /// Optional so the reader also works where no player is provided.
@@ -190,15 +252,27 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
         (v) => v.surahNumber == next.surah && v.verseNumber == next.ayah,
       ),
     );
-    if (page >= 0 && page != _currentSurahPage && _pageController.hasClients) {
-      final reduceMotion = MediaQuery.of(context).disableAnimations;
-      if (reduceMotion) {
+    if (page < 0) return;
+    if (_layout != ReaderLayout.pages) {
+      // The scrolling layouts move to the verse; verse-by-verse follows
+      // every verse, continuous only when the page changes.
+      if (_layout == ReaderLayout.verses || page != _currentSurahPage) {
+        setState(() {
+          _anchor = page;
+          _anchorVerse = next;
+          _currentSurahPage = page;
+        });
+      }
+      return;
+    }
+    if (page != _currentSurahPage && _pageController.hasClients) {
+      if (AppMotion.reduced(context)) {
         _pageController.jumpToPage(page);
       } else {
         _pageController.animateToPage(
           page,
-          duration: const Duration(milliseconds: 350),
-          curve: Curves.easeInOut,
+          duration: AppMotion.medium,
+          curve: AppMotion.standard,
         );
       }
     }
@@ -227,6 +301,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
   }
 
   void _focusInitialTarget() {
+    if (widget.openAtBookmark && _focusBookmarkedPage()) return;
     if (_focusInitialAyahIfProvided()) {
       return;
     }
@@ -284,6 +359,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
 
     setState(() {
       _currentSurahPage = pageIndex;
+      _anchor = pageIndex;
     });
 
     if (_pageController.hasClients) {
@@ -293,13 +369,6 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
 
     _pageController.dispose();
     _pageController = PageController(initialPage: pageIndex);
-  }
-
-  void _setPagePressed(bool pressed) {
-    if (_pagePressed == pressed || !mounted) return;
-    setState(() {
-      _pagePressed = pressed;
-    });
   }
 
   bool _focusInitialPageIfProvided() {
@@ -333,24 +402,55 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
       }
     }
 
+    _anchorVerse = (surah: targetSurah, ayah: targetAyah);
     _setCurrentPage(targetPage);
     return true;
   }
 
-  void _focusBookmarkedPage() {
+  /// Opens at the saved bookmark in this surah; false when there is none.
+  bool _focusBookmarkedPage() {
     final bookmarkProvider = Provider.of<BookmarkProvider>(
       context,
       listen: false,
     );
 
-    if (bookmarkProvider.surahNumber == widget.surahNumber &&
-        bookmarkProvider.pageIndex != null &&
-        _surahPages.isNotEmpty) {
-      final int targetPage = bookmarkProvider.pageIndex!;
-      if (targetPage < _surahPages.length) {
-        _setCurrentPage(targetPage);
-      }
+    if (bookmarkProvider.surahNumber != widget.surahNumber ||
+        _surahPages.isEmpty) {
+      return false;
     }
+
+    // Bookmarks store a verse. One saved by the old reader only has a page
+    // index under the old pagination, which is replayed to find its verse.
+    int? ayah = bookmarkProvider.ayahNumber;
+    final int? legacyIndex = bookmarkProvider.pageIndex;
+    if (ayah == null && legacyIndex != null) {
+      ayah = legacyPageLeadAyah(
+        verses: <LegacyVerse>[
+          for (final _SurahVerseData verse in _allVerses)
+            if (verse.surahNumber == widget.surahNumber)
+              (
+                ayah: verse.verseNumber,
+                length: verse.text.length,
+                basmala: verse.showBasmala,
+              ),
+        ],
+        pageIndex: legacyIndex,
+        basmalaLength: uthmaniBasmala.length,
+      );
+    }
+    if (ayah == null) return false;
+
+    final int page = _surahPages.indexWhere(
+      (page) => page.verses.any(
+        (verse) =>
+            verse.surahNumber == widget.surahNumber &&
+            verse.verseNumber == ayah,
+      ),
+    );
+    if (page < 0) return false;
+    _anchorVerse = (surah: widget.surahNumber, ayah: ayah);
+    _setCurrentPage(page);
+    return true;
   }
 
   int? _unitValueForAyah(Map<String, dynamic> ayah) {
@@ -476,87 +576,46 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
           ? _ayahsForUnitRange(quran: quran, minUnit: minUnit, maxUnit: maxUnit)
           : surahAyahs;
 
-      final List<_SurahPageData> paginatedVerses = [];
-      List<_SurahVerseData> currentPageVerses = [];
-      int currentLength = 0;
-      int? currentPageStartVerseIndex;
-      int? currentRangeSurahNumber;
-      const int maxCharsPerPage = 550;
-
-      for (int i = 0; i < selectedAyahs.length; i++) {
-        final Map<String, dynamic> ayah = selectedAyahs[i];
+      // The verses to show, the basmala taken off ayah 1 where it is shown
+      // as a header. The verse text is otherwise exactly as stored.
+      final List<_SurahVerseData> verses = <_SurahVerseData>[];
+      int? previousSurah;
+      for (final Map<String, dynamic> ayah in selectedAyahs) {
         final int verseNumber = (ayah['numberInSurah'] as num?)?.toInt() ?? 1;
-        final int pageNumber = (ayah['page'] as num?)?.toInt() ?? 1;
         final int surahNumber =
             (ayah['_surahNumber'] as num?)?.toInt() ?? widget.surahNumber;
-        // The basmala is shown as an unnumbered header, not inside ayah 1.
         final BasmalaSplit basmala = splitLeadingBasmala(
           surahNumber: surahNumber,
           ayahNumber: verseNumber,
           text: (ayah['text'] as String? ?? '').trim(),
         );
-        final String verseText = basmala.ayahText;
-        if (verseText.isEmpty) {
-          continue;
-        }
-
-        final bool showSurahHeader =
-            hasRange && surahNumber != currentRangeSurahNumber;
-        if (showSurahHeader) {
-          if (currentPageVerses.isNotEmpty &&
-              currentPageStartVerseIndex != null) {
-            paginatedVerses.add(
-              _SurahPageData(
-                List<_SurahVerseData>.from(currentPageVerses),
-                currentPageStartVerseIndex,
-              ),
-            );
-            currentPageVerses = [];
-            currentLength = 0;
-            currentPageStartVerseIndex = null;
-          }
-          currentRangeSurahNumber = surahNumber;
-          currentLength += 180;
-        }
-
-        currentPageStartVerseIndex ??= (verseNumber - 1).clamp(0, 9999);
-        currentPageVerses.add(
+        if (basmala.ayahText.isEmpty) continue;
+        verses.add(
           _SurahVerseData(
-            text: verseText,
+            text: basmala.ayahText,
             surahNumber: surahNumber,
             verseNumber: verseNumber,
-            pageNumber: pageNumber,
+            pageNumber: (ayah['page'] as num?)?.toInt() ?? 1,
             surahName: ayah['_surahName']?.toString() ?? '',
             revelationType: ayah['_surahRevelationType']?.toString() ?? '',
             totalAyah: (ayah['_surahTotalAyah'] as num?)?.toInt() ?? 0,
-            showSurahHeader: showSurahHeader,
+            // A wird can cross surahs; each new surah gets its title.
+            showSurahHeader: hasRange && surahNumber != previousSurah,
             showBasmala: basmala.hasBasmala,
           ),
         );
-        currentLength += verseText.length;
-        if (basmala.hasBasmala) currentLength += uthmaniBasmala.length;
-
-        if (currentLength >= maxCharsPerPage) {
-          paginatedVerses.add(
-            _SurahPageData(
-              List<_SurahVerseData>.from(currentPageVerses),
-              currentPageStartVerseIndex,
-            ),
-          );
-          currentPageVerses = [];
-          currentLength = 0;
-          currentPageStartVerseIndex = null;
-        }
+        previousSurah = surahNumber;
       }
 
-      if (currentPageVerses.isNotEmpty && currentPageStartVerseIndex != null) {
-        paginatedVerses.add(
-          _SurahPageData(
-            List<_SurahVerseData>.from(currentPageVerses),
-            currentPageStartVerseIndex,
-          ),
-        );
-      }
+      // Blocks follow the mushaf's pages and nothing else.
+      final List<_SurahPageData> paginatedVerses = <_SurahPageData>[
+        for (final List<int> page in groupByMushafPage(<int>[
+          for (final _SurahVerseData verse in verses) verse.pageNumber,
+        ]))
+          _SurahPageData(<_SurahVerseData>[
+            for (final int i in page) verses[i],
+          ], (verses[page.first].verseNumber - 1).clamp(0, 9999)),
+      ];
 
       setState(() {
         _surahPages = paginatedVerses;
@@ -584,10 +643,14 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
     final bool night = context.watch<ReadingModeController?>()?.night ?? false;
     final Color pageSurface = night
         ? AppTheme.nightPage
-        : theme.brightness == Brightness.dark
-        ? const Color(0xFF1A1A1A)
-        : const Color(0xFFFFFCF5);
-    final Color pageBorder = theme.colorScheme.primary.withValues(alpha: 0.22);
+        // The page sits just above the paper: between page and card colour.
+        : Color.lerp(
+            theme.scaffoldBackgroundColor,
+            SakinaDecor.of(context).card,
+            0.5,
+          )!;
+    final Color pageBorder = theme.colorScheme.outlineVariant;
+    final bool paged = _layout == ReaderLayout.pages;
 
     return Scaffold(
       backgroundColor: paperColor,
@@ -596,41 +659,16 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
         top: !_immersiveMode,
         child: Column(
           children: [
-            if (!_immersiveMode && !_hasUnitRange && widget.surahNumber != 9)
-              Container(
-                margin: const EdgeInsets.fromLTRB(16, 6, 16, 8),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: pageSurface,
-                  borderRadius: AppRadius.card,
-                  border: Border.all(color: pageBorder),
-                  boxShadow: AppShadows.subtle,
-                ),
-                width: double.infinity,
-                child: SelectableText(
-                  l10nOf(context).readerContentMessage3,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Amiri',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: textColor,
-                  ),
-                ),
+            // How far through the surah or wird the reader is.
+            if (!_immersiveMode && !paged && _surahPages.length > 1)
+              LinearProgressIndicator(
+                value: (_currentSurahPage + 1) / _surahPages.length,
+                minHeight: 2,
+                backgroundColor: Colors.transparent,
+                color: SakinaDecor.of(context).accent,
               ),
-            Expanded(
-              child: _buildBodyContent(
-                textColor: textColor,
-                pageSurface: pageSurface,
-                pageBorder: pageBorder,
-              ),
-            ),
-            if (!_immersiveMode &&
-                _surahPages.isNotEmpty &&
-                _surahPages.length > 1)
+            Expanded(child: _buildBodyContent(textColor: textColor)),
+            if (!_immersiveMode && paged && _surahPages.length > 1)
               _buildBottomNavigation(theme, pageSurface, pageBorder),
           ],
         ),
@@ -639,13 +677,37 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
   }
 
   void _onPageChanged(int index) {
+    if (index == _currentSurahPage) return;
     setState(() {
       _currentSurahPage = index;
     });
     _rememberPage(index);
   }
 
-  Future<void> _saveBookmark() async {
+  /// Rebuilds the app bar and page bar around unchanged pages.
+  void _refreshChrome() => setState(() {});
+
+  void _selectVerse(_VerseRef? verse) {
+    setState(() => _selected = verse);
+  }
+
+  void _setLayout(ReaderLayout layout) {
+    if (layout == _layout) return;
+    playFeedback(context, FeedbackEvent.selection);
+    // The new layout opens where the reader is now.
+    _pageController.dispose();
+    _pageController = PageController(initialPage: _currentSurahPage);
+    setState(() {
+      _layout = layout;
+      _anchor = _currentSurahPage;
+      _anchorVerse = null;
+    });
+    _prefs?.setString(ReadingPreferences.layoutKey, layout.name);
+  }
+
+  /// Saves the bookmark at [verse], or at the first verse of the page in
+  /// view when none is given.
+  Future<void> _saveBookmark({_SurahVerseData? verse}) async {
     final bookmarkProvider = Provider.of<BookmarkProvider>(
       context,
       listen: false,
@@ -653,12 +715,16 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
     final KhatmaProvider? khatmaProvider = _hasUnitRange
         ? Provider.of<KhatmaProvider?>(context, listen: false)
         : null;
-    final _SurahVerseData? currentVerse = _currentPageLeadVerse;
+    final _SurahVerseData? currentVerse = verse ?? _currentPageLeadVerse;
 
     await bookmarkProvider.saveBookmark(
       surahNumber: widget.surahNumber,
       surahName: widget.surah.name,
       pageIndex: _currentSurahPage,
+      // A wird can show other surahs; the bookmark belongs to this one.
+      ayahNumber: currentVerse?.surahNumber == widget.surahNumber
+          ? currentVerse?.verseNumber
+          : null,
     );
 
     bool savedWirdPosition = false;
@@ -682,12 +748,9 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
           savedWirdPosition
               ? appL10n.readerControlsMessage3
               : appL10n.readerControlsMessage4,
-          style: const TextStyle(fontFamily: 'Amiri', fontSize: 16),
           textAlign: TextAlign.center,
         ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
         duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -695,33 +758,68 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
   void _showReadingControlsSheet() {
     showModalBottomSheet<void>(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-      ),
+      isScrollControlled: true,
+      showDragHandle: true,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setLocalState) {
             return SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  0,
+                  AppSpacing.lg,
+                  AppSpacing.md,
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
                       l10nOf(context).readerControlsMessage5,
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      l10nOf(context).readerLayoutTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    SegmentedButton<ReaderLayout>(
+                      key: const Key('reader-layout'),
+                      showSelectedIcon: false,
+                      segments: [
+                        ButtonSegment(
+                          value: ReaderLayout.continuous,
+                          label: Text(l10nOf(context).readerLayoutContinuous),
+                        ),
+                        ButtonSegment(
+                          value: ReaderLayout.pages,
+                          label: Text(l10nOf(context).readerLayoutPages),
+                        ),
+                        ButtonSegment(
+                          value: ReaderLayout.verses,
+                          label: Text(l10nOf(context).readerLayoutVerses),
+                        ),
+                      ],
+                      selected: {_layout},
+                      onSelectionChanged: (selection) {
+                        _setLayout(selection.single);
+                        setLocalState(() {});
+                      },
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      _layout == ReaderLayout.pages
+                          ? l10nOf(context).readerLayoutPagesHint
+                          : l10nOf(context).readerVerseHint,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
                     Text(
                       l10nOf(context).readerControlsMessage6,
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                     Slider(
                       value: _fontSize,
@@ -738,8 +836,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
                     ),
                     Text(
                       l10nOf(context).readerControlsMessage7,
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                     Slider(
                       value: _lineHeight,
@@ -767,7 +864,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
                         },
                         title: Text(
                           l10nOf(context).readingNightMode,
-                          textAlign: TextAlign.right,
+                          textAlign: TextAlign.start,
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         subtitle: Text(l10nOf(context).readingNightModeHint),
@@ -783,7 +880,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
                       },
                       title: Text(
                         l10nOf(context).readerControlsMessage8,
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.start,
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),
@@ -797,7 +894,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
                       },
                       title: Text(
                         l10nOf(context).readerControlsMessage9,
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.start,
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),

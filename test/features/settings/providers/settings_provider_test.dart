@@ -10,6 +10,7 @@ class FakeAlarmScheduler implements AlarmScheduler {
   int saveTimeCalls = 0;
   int rescheduleSingleCalls = 0;
   String? lastRescheduledType;
+  bool? lastDailyVerseEnabled;
 
   @override
   Future<Map<String, int>> getAlarmTime(String type) async {
@@ -47,8 +48,10 @@ class FakeAlarmScheduler implements AlarmScheduler {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   }) async {
     updateAllCalls++;
+    lastDailyVerseEnabled = isDailyVerseEnabled;
   }
 }
 
@@ -147,5 +150,31 @@ void main() {
     expect(prefs.getBool('evening_alarm_enabled'), isFalse);
     expect(prefs.getBool('mulk_alarm_enabled'), isTrue);
     expect(prefs.getBool('baqarah_alarm_enabled'), isFalse);
+  });
+
+  test('the daily verse is off until turned on, and is saved', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final scheduler = FakeAlarmScheduler();
+    final reschedule = FakeRescheduleTaskService();
+    final provider = SettingsProvider(
+      prefs: prefs,
+      alarmScheduler: scheduler,
+      rescheduleTaskService: reschedule,
+    );
+    await flushAsyncTasks();
+
+    expect(provider.isDailyVerseAlarmEnabled, isFalse);
+    expect(scheduler.lastDailyVerseEnabled, isFalse);
+
+    await provider.toggleDailyVerseAlarm(true);
+    await flushAsyncTasks();
+
+    expect(prefs.getBool('daily_verse_alarm_enabled'), isTrue);
+    expect(scheduler.lastDailyVerseEnabled, isTrue);
+    expect(reschedule.lastSource, 'toggle_verse');
+
+    await provider.setAlarmTime(type: 'verse', hour: 6, minute: 30);
+    expect(scheduler.lastRescheduledType, 'verse');
   });
 }

@@ -1,3 +1,6 @@
+import 'package:sakina_app/core/theme/app_motion.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -38,8 +41,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       } else {
         await _pageController.animateToPage(
           page,
-          duration: const Duration(milliseconds: 320),
-          curve: Curves.easeInOutCubic,
+          duration: AppMotion.medium,
+          curve: AppMotion.standard,
         );
       }
     } finally {
@@ -70,9 +73,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
-    final animationDuration = MediaQuery.disableAnimationsOf(context)
-        ? Duration.zero
-        : const Duration(milliseconds: 250);
+    final animationDuration = AppMotion.of(context, AppMotion.base);
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -85,7 +86,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.lg,
+                    ),
                     child: Row(
                       children: [
                         Icon(
@@ -93,7 +96,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           color: colors.primary,
                           size: 22,
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: AppSpacing.sm),
                         Expanded(
                           child: Text(
                             AppStrings.appName,
@@ -130,7 +133,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+                    padding: const EdgeInsets.fromLTRB(
+                      AppSpacing.lg,
+                      AppSpacing.ms,
+                      AppSpacing.lg,
+                      AppSpacing.lg,
+                    ),
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 480),
                       child: Column(
@@ -151,7 +159,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 return AnimatedContainer(
                                   duration: animationDuration,
                                   margin: const EdgeInsets.symmetric(
-                                    horizontal: 4,
+                                    horizontal: AppSpacing.xs,
                                   ),
                                   height: 7,
                                   width: selected ? 28 : 7,
@@ -161,13 +169,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                         : colors.primary.withValues(
                                             alpha: 0.18,
                                           ),
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: AppRadius.chip,
                                   ),
                                 );
                               }),
                             ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: AppSpacing.lg),
                           Row(
                             children: [
                               if (_currentPage > 0) ...[
@@ -186,7 +194,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   ),
                                   icon: const Icon(Icons.arrow_back_rounded),
                                 ),
-                                const SizedBox(width: 12),
+                                const SizedBox(width: AppSpacing.ms),
                               ],
                               Expanded(
                                 child: FilledButton(
@@ -198,11 +206,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   style: FilledButton.styleFrom(
                                     minimumSize: const Size.fromHeight(56),
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 24,
-                                      vertical: 14,
+                                      horizontal: AppSpacing.lg,
+                                      vertical: AppSpacing.ms,
                                     ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18),
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: AppRadius.card,
                                     ),
                                     textStyle: theme.textTheme.titleMedium
                                         ?.copyWith(fontWeight: FontWeight.w700),

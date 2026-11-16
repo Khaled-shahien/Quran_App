@@ -80,6 +80,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Matched to the artwork in assets/images/logo.png, not to a theme: the
+    // splash looks the same in every design.
     const backgroundColor = Color(0xFF5E3B29);
     const logoGold = Color(0xFFE7C37A);
 
@@ -104,21 +106,22 @@ class _SplashScreenState extends State<SplashScreen>
                         child: Text(
                           l10nOf(context).splashScreenMessage1,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: logoGold,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            height: 1.4,
-                          ),
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
+                                color: logoGold,
+                                fontWeight: FontWeight.w600,
+                              ),
                         ),
                       ),
                       const SizedBox(height: 24),
                       const SizedBox(
-                        width: 30,
-                        height: 30,
+                        width: 24,
+                        height: 24,
                         child: CircularProgressIndicator(
-                          strokeWidth: 3,
+                          strokeWidth: 2,
+                          strokeCap: StrokeCap.round,
                           color: logoGold,
+                          backgroundColor: Colors.transparent,
                         ),
                       ),
                       const Spacer(),

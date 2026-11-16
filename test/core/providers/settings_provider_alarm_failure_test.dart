@@ -12,6 +12,7 @@ class _FailingCoordinator extends NotificationSchedulingCoordinator {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   }) async {
     attempts++;
     throw StateError('scheduling refused');

@@ -3991,6 +3991,162 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الصلاة'**
   String get drawerPrayerSection;
+
+  /// No description provided for @readerLayoutTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة العرض'**
+  String get readerLayoutTitle;
+
+  /// No description provided for @readerLayoutContinuous.
+  ///
+  /// In ar, this message translates to:
+  /// **'متصل'**
+  String get readerLayoutContinuous;
+
+  /// No description provided for @readerLayoutPages.
+  ///
+  /// In ar, this message translates to:
+  /// **'صفحات'**
+  String get readerLayoutPages;
+
+  /// No description provided for @readerLayoutVerses.
+  ///
+  /// In ar, this message translates to:
+  /// **'آية بآية'**
+  String get readerLayoutVerses;
+
+  /// No description provided for @readerLayoutPagesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدود الصفحات مطابقة للمصحف، أما توزيع الأسطر فبحسب حجم الشاشة والخط.'**
+  String get readerLayoutPagesHint;
+
+  /// No description provided for @readerMushafPage.
+  ///
+  /// In ar, this message translates to:
+  /// **'صفحة {page}'**
+  String readerMushafPage(String page);
+
+  /// No description provided for @readerVerseActions.
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات الآية {number}'**
+  String readerVerseActions(String number);
+
+  /// No description provided for @readerVersePlay.
+  ///
+  /// In ar, this message translates to:
+  /// **'استمع من هذه الآية'**
+  String get readerVersePlay;
+
+  /// No description provided for @readerVerseBookmark.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضع العلامة هنا'**
+  String get readerVerseBookmark;
+
+  /// No description provided for @readerVerseCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخ الآية'**
+  String get readerVerseCopy;
+
+  /// No description provided for @readerVerseCopied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم نسخ الآية'**
+  String get readerVerseCopied;
+
+  /// No description provided for @readerVerseHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط مطولاً على الآية لعرض خياراتها'**
+  String get readerVerseHint;
+
+  /// No description provided for @readerPageCompressed.
+  ///
+  /// In ar, this message translates to:
+  /// **'صُغّر الخط لتتسع الصفحة للشاشة؛ وضع «متصل» يعرض خطاً أكبر'**
+  String get readerPageCompressed;
+
+  /// No description provided for @notificationCategoryAdhkar.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأذكار'**
+  String get notificationCategoryAdhkar;
+
+  /// No description provided for @notificationCategoryQuran.
+  ///
+  /// In ar, this message translates to:
+  /// **'القرآن الكريم'**
+  String get notificationCategoryQuran;
+
+  /// No description provided for @notificationCategoryPrayer.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصلاة'**
+  String get notificationCategoryPrayer;
+
+  /// No description provided for @notificationCategoryVerse.
+  ///
+  /// In ar, this message translates to:
+  /// **'آية اليوم'**
+  String get notificationCategoryVerse;
+
+  /// No description provided for @notificationActionStartAdhkar.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ الأذكار'**
+  String get notificationActionStartAdhkar;
+
+  /// No description provided for @notificationActionReadNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقرأ الآن'**
+  String get notificationActionReadNow;
+
+  /// No description provided for @notificationActionAfterAdhan.
+  ///
+  /// In ar, this message translates to:
+  /// **'دعاء ما بعد الأذان'**
+  String get notificationActionAfterAdhan;
+
+  /// No description provided for @notificationActionPrayerTimes.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواقيت الصلاة'**
+  String get notificationActionPrayerTimes;
+
+  /// No description provided for @notificationActionOpenVerse.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقرأ في المصحف'**
+  String get notificationActionOpenVerse;
+
+  /// No description provided for @prayerNotificationTimeLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الأذان {time}'**
+  String prayerNotificationTimeLine(String time);
+
+  /// No description provided for @prayerReminderTimeLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد الصلاة {time}'**
+  String prayerReminderTimeLine(String time);
+
+  /// No description provided for @dailyVerseNotificationReference.
+  ///
+  /// In ar, this message translates to:
+  /// **'{surah} · الآية {ayah}'**
+  String dailyVerseNotificationReference(String surah, String ayah);
+
+  /// No description provided for @dailyVerseReminderSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'آية كل يوم في الوقت الذي تختاره'**
+  String get dailyVerseReminderSubtitle;
 }
 
 class _AppLocalizationsDelegate

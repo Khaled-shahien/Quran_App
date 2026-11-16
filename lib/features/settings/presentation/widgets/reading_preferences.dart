@@ -12,6 +12,9 @@ class ReadingPreferences {
   static const heightKey = 'reading_line_height';
   static const markersKey = 'reading_verse_markers';
 
+  /// continuous | pages | verses; see `ReaderLayout`.
+  static const layoutKey = 'reading_layout';
+
   static double fontSize(SharedPreferences prefs) =>
       (prefs.getDouble(fontKey) ?? 28).clamp(22, 38);
   static double lineHeight(SharedPreferences prefs) =>

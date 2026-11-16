@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
@@ -30,58 +31,55 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            l10nOf(context).articlesScreenMessage1,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        body: SafeArea(
-          child: Consumer<ArticlesProvider>(
+      child: SakinaHeroScaffold(
+        title: l10nOf(context).articlesScreenMessage1,
+        onRefresh: context.read<ArticlesProvider>().loadArticles,
+        slivers: [
+          Consumer<ArticlesProvider>(
             builder: (context, provider, child) {
-              if (provider.isLoading) return const MediaLoadingView();
-
-              if (provider.hasError) {
-                return MediaErrorView(
-                  message: provider.errorMessage!,
-                  onRetry: provider.loadArticles,
+              if (provider.isLoading) {
+                return const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: MediaLoadingView(),
                 );
               }
 
-              return Column(
-                children: [
-                  _SourceChips(provider: provider),
-                  Expanded(
-                    child: provider.articles.isEmpty
-                        ? MediaEmptyView(
-                            message: l10nOf(context).articlesScreenMessage2,
-                            icon: Icons.article_outlined,
-                          )
-                        : RefreshIndicator(
-                            onRefresh: provider.loadArticles,
-                            child: ListView.builder(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              padding: const EdgeInsets.only(
-                                bottom: AppSpacing.lg,
-                              ),
-                              itemCount: provider.articles.length,
-                              itemBuilder: (context, index) {
-                                return ArticleCard(
-                                  article: provider.articles[index],
-                                );
-                              },
-                            ),
-                          ),
+              if (provider.hasError) {
+                return SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: MediaErrorView(
+                    message: provider.errorMessage!,
+                    onRetry: provider.loadArticles,
                   ),
+                );
+              }
+
+              return SliverMainAxisGroup(
+                slivers: [
+                  SliverToBoxAdapter(child: _SourceChips(provider: provider)),
+                  if (provider.articles.isEmpty)
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: MediaEmptyView(
+                        message: l10nOf(context).articlesScreenMessage2,
+                        icon: Icons.article_outlined,
+                      ),
+                    )
+                  else
+                    SliverPadding(
+                      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+                      sliver: SliverList.builder(
+                        itemCount: provider.articles.length,
+                        itemBuilder: (context, index) {
+                          return ArticleCard(article: provider.articles[index]);
+                        },
+                      ),
+                    ),
                 ],
               );
             },
           ),
-        ),
+        ],
       ),
     );
   }

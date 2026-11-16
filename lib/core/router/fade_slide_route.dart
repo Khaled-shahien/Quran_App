@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../theme/app_motion.dart';
+
 class FadeSlideRoute<T> extends PageRouteBuilder<T> {
   final Widget child;
 
   FadeSlideRoute({required this.child})
     : super(
-        transitionDuration: const Duration(milliseconds: 350),
-        reverseTransitionDuration: const Duration(milliseconds: 250),
+        transitionDuration: AppMotion.medium,
+        reverseTransitionDuration: AppMotion.exit,
         pageBuilder: (_, _, _) => child,
         transitionsBuilder: (context, animation, _, child) {
           if (MediaQuery.of(context).disableAnimations) return child;
@@ -16,13 +18,10 @@ class FadeSlideRoute<T> extends PageRouteBuilder<T> {
             parent: animation,
             curve: Curves.easeOut,
           );
-          final Animation<Offset> slide =
-              Tween<Offset>(
-                begin: const Offset(0, 0.04),
-                end: Offset.zero,
-              ).animate(
-                CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
-              );
+          final Animation<Offset> slide = Tween<Offset>(
+            begin: const Offset(0, 0.04),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: animation, curve: AppMotion.enter));
 
           return FadeTransition(
             opacity: fade,
@@ -39,8 +38,8 @@ CustomTransitionPage<T> buildFadeSlidePage<T>({
   return CustomTransitionPage<T>(
     key: state.pageKey,
     child: child,
-    transitionDuration: const Duration(milliseconds: 350),
-    reverseTransitionDuration: const Duration(milliseconds: 250),
+    transitionDuration: AppMotion.medium,
+    reverseTransitionDuration: AppMotion.exit,
     transitionsBuilder: (context, animation, _, child) {
       if (MediaQuery.of(context).disableAnimations) return child;
 
@@ -51,7 +50,7 @@ CustomTransitionPage<T> buildFadeSlidePage<T>({
       final Animation<Offset> slide = Tween<Offset>(
         begin: const Offset(0, 0.04),
         end: Offset.zero,
-      ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic));
+      ).animate(CurvedAnimation(parent: animation, curve: AppMotion.enter));
 
       return FadeTransition(
         opacity: fade,

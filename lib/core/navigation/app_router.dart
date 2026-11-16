@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/foundation.dart';
 import 'main_navigation_shell.dart';
@@ -152,6 +153,7 @@ final GoRouter appRouter = GoRouter(
             extra?['rangeTrackingUnit'] as String?;
         final int? rangeFromUnit = _routeInt(extra, 'rangeFromUnit');
         final int? rangeToUnit = _routeInt(extra, 'rangeToUnit');
+        final bool openAtBookmark = extra?['openBookmark'] == true;
 
         if (surahNumber == null) {
           return _fadePage(
@@ -171,6 +173,7 @@ final GoRouter appRouter = GoRouter(
               rangeTrackingUnit: rangeTrackingUnit,
               rangeFromUnit: rangeFromUnit,
               rangeToUnit: rangeToUnit,
+              openAtBookmark: openAtBookmark,
             ),
           );
         }
@@ -186,6 +189,7 @@ final GoRouter appRouter = GoRouter(
             rangeTrackingUnit: rangeTrackingUnit,
             rangeFromUnit: rangeFromUnit,
             rangeToUnit: rangeToUnit,
+            openAtBookmark: openAtBookmark,
           ),
         );
       },
@@ -360,7 +364,7 @@ class _RouteDataErrorScreen extends StatelessWidget {
       appBar: AppBar(title: Text(l10nOf(context).appRouterMessage5)),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           child: Text(message, textAlign: TextAlign.center),
         ),
       ),
@@ -376,6 +380,7 @@ class _SurahDetailsRouteLoader extends StatelessWidget {
   final String? rangeTrackingUnit;
   final int? rangeFromUnit;
   final int? rangeToUnit;
+  final bool openAtBookmark;
 
   const _SurahDetailsRouteLoader({
     required this.surahNumber,
@@ -385,6 +390,7 @@ class _SurahDetailsRouteLoader extends StatelessWidget {
     this.rangeTrackingUnit,
     this.rangeFromUnit,
     this.rangeToUnit,
+    this.openAtBookmark = false,
   });
 
   @override
@@ -411,6 +417,7 @@ class _SurahDetailsRouteLoader extends StatelessWidget {
         rangeTrackingUnit: rangeTrackingUnit,
         rangeFromUnit: rangeFromUnit,
         rangeToUnit: rangeToUnit,
+        openAtBookmark: openAtBookmark,
       );
     },
   );

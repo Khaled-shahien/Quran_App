@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/core/widgets/empty_state.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:flutter/material.dart';
@@ -34,53 +35,62 @@ class _RecitationDownloadsScreenState extends State<RecitationDownloadsScreen> {
       for (final r in context.watch<RecitationController>().reciters) r.id: r,
     };
     final items = downloads.downloads;
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.recitationDownloadsTitle)),
-      body: !downloads.loaded
-          ? const Center(child: CircularProgressIndicator())
-          : items.isEmpty
-          ? EmptyState(
+    return SakinaHeroScaffold(
+      title: l10n.recitationDownloadsTitle,
+      slivers: [
+        if (!downloads.loaded)
+          const SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(child: CircularProgressIndicator()),
+          )
+        else if (items.isEmpty)
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: EmptyState(
               icon: Icons.download_for_offline_outlined,
               message: l10n.recitationDownloadsEmpty,
-            )
-          : ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, i) {
-                final d = items[i];
-                final reciter = reciters[d.reciterId];
-                return ListTile(
-                  minTileHeight: 56,
-                  title: Text(l10n.surahTitle(d.surah)),
-                  subtitle: Text(
-                    [
-                      if (reciter != null) l10n.reciterLabel(reciter),
-                      context.digits(l10n.megabytes(d.bytes)),
-                    ].join(' • '),
-                  ),
-                  trailing: IconButton(
-                    tooltip: l10n.recitationDelete,
-                    icon: const Icon(Icons.delete_outline_rounded),
-                    onPressed: () {
-                      downloads.deleteWithUndo(d.reciterId, d.surah);
-                      ScaffoldMessenger.of(context)
-                        ..clearSnackBars()
-                        ..showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              l10n.recitationDeleted(l10n.surahTitle(d.surah)),
-                            ),
-                            action: SnackBarAction(
-                              label: l10n.currentWirdWidgetMessage13,
-                              onPressed: () =>
-                                  downloads.undoDelete(d.reciterId, d.surah),
-                            ),
-                          ),
-                        );
-                    },
-                  ),
-                );
-              },
             ),
+          )
+        else
+          SliverList.builder(
+            itemCount: items.length,
+            itemBuilder: (context, i) {
+              final d = items[i];
+              final reciter = reciters[d.reciterId];
+              return ListTile(
+                minTileHeight: 56,
+                title: Text(l10n.surahTitle(d.surah)),
+                subtitle: Text(
+                  [
+                    if (reciter != null) l10n.reciterLabel(reciter),
+                    context.digits(l10n.megabytes(d.bytes)),
+                  ].join(' • '),
+                ),
+                trailing: IconButton(
+                  tooltip: l10n.recitationDelete,
+                  icon: const Icon(Icons.delete_outline_rounded),
+                  onPressed: () {
+                    downloads.deleteWithUndo(d.reciterId, d.surah);
+                    ScaffoldMessenger.of(context)
+                      ..clearSnackBars()
+                      ..showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            l10n.recitationDeleted(l10n.surahTitle(d.surah)),
+                          ),
+                          action: SnackBarAction(
+                            label: l10n.currentWirdWidgetMessage13,
+                            onPressed: () =>
+                                downloads.undoDelete(d.reciterId, d.surah),
+                          ),
+                        ),
+                      );
+                  },
+                ),
+              );
+            },
+          ),
+      ],
     );
   }
 }

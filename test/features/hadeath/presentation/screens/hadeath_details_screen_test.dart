@@ -107,13 +107,14 @@ void main() {
       expect(directionality, findsWidgets);
     });
 
-    testWidgets('should have SingleChildScrollView for content', (
+    testWidgets('header and content scroll together as one page', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(createTestWidget(testHadeath));
       await tester.pumpAndSettle();
 
-      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(find.byType(CustomScrollView), findsOneWidget);
+      expect(find.byType(SliverAppBar), findsOneWidget);
     });
 
     testWidgets('should be scrollable with long content', (
@@ -130,13 +131,18 @@ void main() {
       await tester.pumpWidget(createTestWidget(longHadeath));
       await tester.pumpAndSettle();
 
-      await tester.drag(
-        find.byType(SingleChildScrollView),
-        const Offset(0, -100),
-      );
+      final scroll = find.byType(CustomScrollView);
+      final position = tester
+          .state<ScrollableState>(
+            find.descendant(of: scroll, matching: find.byType(Scrollable)),
+          )
+          .position;
+      expect(position.maxScrollExtent, greaterThan(0));
+
+      await tester.drag(scroll, const Offset(0, -100));
       await tester.pumpAndSettle();
 
-      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(position.pixels, greaterThan(0), reason: 'the page moved');
     });
 
     testWidgets('should display title in Amiri font', (
@@ -203,14 +209,20 @@ void main() {
       expect(find.byType(AppBar), findsOneWidget);
     });
 
-    testWidgets('should display expanded column layout', (
+    testWidgets('shows the basmala band above the hadith text', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(createTestWidget(testHadeath));
       await tester.pumpAndSettle();
 
-      expect(find.byType(Column), findsOneWidget);
-      expect(find.byType(Expanded), findsOneWidget);
+      final band = find.textContaining('بِسْمِ');
+      final body = find.textContaining('نص الحديث');
+      expect(band, findsOneWidget);
+      expect(body, findsWidgets);
+      expect(
+        tester.getTopLeft(band).dy,
+        lessThan(tester.getTopLeft(body.first).dy),
+      );
     });
 
     testWidgets('should have correct scaffold background', (

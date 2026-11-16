@@ -22,11 +22,9 @@ extension _SurahReaderChrome on _SurahDetailsScreenState {
         color: primary,
         onPressed: () => Navigator.pop(context),
       ),
-      titleSpacing: 4,
+      titleSpacing: AppSpacing.xs,
       title: AnimatedSwitcher(
-        duration: MediaQuery.of(context).disableAnimations
-            ? Duration.zero
-            : const Duration(milliseconds: 300),
+        duration: AppMotion.of(context, AppMotion.medium),
         transitionBuilder: (child, animation) {
           if (MediaQuery.of(context).disableAnimations) return child;
           return FadeTransition(
@@ -51,15 +49,13 @@ extension _SurahReaderChrome on _SurahDetailsScreenState {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Amiri',
+                style: AppTypography.script.copyWith(
                   fontSize: 21,
                   color: primary,
-                  fontWeight: FontWeight.bold,
                   height: 1.15,
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: AppSpacing.xxs),
               Text(
                 appL10n.readerContentMessage2(
                   (_revelationLabel(revelationType)).toString(),
@@ -68,10 +64,8 @@ extension _SurahReaderChrome on _SurahDetailsScreenState {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: primary.withValues(alpha: 0.72),
-                  fontWeight: FontWeight.w600,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
             ],
@@ -92,13 +86,13 @@ extension _SurahReaderChrome on _SurahDetailsScreenState {
           ),
         _buildAppBarIconButton(
           tooltip: appL10n.surahDetailsScreenMessage1,
-          icon: Icons.tune,
+          icon: Icons.tune_rounded,
           color: primary,
           onPressed: _showReadingControlsSheet,
         ),
         _buildAppBarIconButton(
           tooltip: appL10n.appStringsMessage16,
-          icon: Icons.settings,
+          icon: Icons.settings_outlined,
           color: primary,
           onPressed: () {
             showDialog(
@@ -119,17 +113,10 @@ extension _SurahReaderChrome on _SurahDetailsScreenState {
     required Color color,
     required VoidCallback onPressed,
   }) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 0),
-      child: IconButton(
-        tooltip: tooltip,
-        style: IconButton.styleFrom(
-          backgroundColor: color.withValues(alpha: 0.1),
-          side: BorderSide(color: color.withValues(alpha: 0.18)),
-        ),
-        icon: Icon(icon, color: color),
-        onPressed: onPressed,
-      ),
+    return IconButton(
+      tooltip: tooltip,
+      icon: Icon(icon, color: color),
+      onPressed: onPressed,
     );
   }
 
@@ -144,6 +131,8 @@ extension _SurahReaderChrome on _SurahDetailsScreenState {
     return value;
   }
 
+  /// The page bar of the mushaf page layout: one slim row, so the page
+  /// keeps as much of the screen as possible.
   Widget _buildBottomNavigation(
     ThemeData theme,
     Color pageSurface,
@@ -152,98 +141,99 @@ extension _SurahReaderChrome on _SurahDetailsScreenState {
     final int currentPage = _currentSurahPage + 1;
     final int totalPages = _surahPages.length;
     final double progress = totalPages == 0 ? 0 : currentPage / totalPages;
+    final int mushafPage =
+        _surahPages[_currentSurahPage.clamp(0, totalPages - 1)].pageNumber;
 
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor.withValues(alpha: 0.92),
-        boxShadow: AppShadows.card,
+        color: theme.scaffoldBackgroundColor,
+        border: Border(top: BorderSide(color: pageBorder)),
       ),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
-        decoration: BoxDecoration(
-          color: pageSurface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          border: Border.all(color: pageBorder),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.xs,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Row(
           children: [
-            ClipRRect(
-              borderRadius: AppRadius.pill,
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 4,
-                backgroundColor: theme.colorScheme.secondary.withValues(
-                  alpha: 0.55,
-                ),
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  theme.colorScheme.primary,
+            _ReaderNavButton(
+              tooltip: appL10n.readerControlsMessage1,
+              icon: Icons.chevron_right,
+              onPressed: _currentSurahPage > 0
+                  ? () => _pageController.previousPage(
+                      duration: AppMotion.of(context, AppMotion.exit),
+                      curve: AppMotion.enter,
+                    )
+                  : null,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: AnimatedSwitcher(
+                            duration: AppMotion.of(context, AppMotion.base),
+                            child: Text(
+                              '${appL10n.readerMushafPage(context.digits(mushafPage))}'
+                              '  •  ${context.digits('$currentPage/$totalPages')}',
+                              key: ValueKey<int>(currentPage),
+                              textAlign: TextAlign.center,
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                                fontFeatures: const [
+                                  FontFeature.tabularFigures(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        // The page only fits this screen at a reduced size;
+                        // tapping the mark says so and what to do.
+                        if (_currentPageCompressed) ...[
+                          const SizedBox(width: AppSpacing.xs),
+                          Tooltip(
+                            key: const Key('reader-page-compressed'),
+                            message: appL10n.readerPageCompressed,
+                            triggerMode: TooltipTriggerMode.tap,
+                            child: Icon(
+                              Icons.text_decrease_rounded,
+                              size: 16,
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    ClipRRect(
+                      borderRadius: AppRadius.pill,
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        minHeight: 3,
+                        backgroundColor: theme.colorScheme.secondary,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          theme.colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            const SizedBox(height: AppSpacing.sm),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _ReaderNavButton(
-                  tooltip: appL10n.readerControlsMessage1,
-                  icon: Icons.chevron_right,
-                  onPressed: _currentSurahPage > 0
-                      ? () => _pageController.previousPage(
-                          duration: const Duration(milliseconds: 240),
-                          curve: Curves.easeOut,
-                        )
-                      : null,
-                ),
-                Expanded(
-                  child: AnimatedSwitcher(
-                    duration: MediaQuery.of(context).disableAnimations
-                        ? Duration.zero
-                        : const Duration(milliseconds: 200),
-                    transitionBuilder: (child, animation) {
-                      if (MediaQuery.of(context).disableAnimations) {
-                        return child;
-                      }
-                      return FadeTransition(
-                        opacity: animation,
-                        child: SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(0, 0.4),
-                            end: Offset.zero,
-                          ).animate(animation),
-                          child: child,
-                        ),
-                      );
-                    },
-                    child: Text(
-                      appL10n.onboardingScreenMessage3(
-                        context.digits(currentPage),
-                        context.digits(totalPages),
-                      ),
-                      key: ValueKey<int>(currentPage),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: theme.colorScheme.primary.withValues(
-                          alpha: 0.78,
-                        ),
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ),
-                _ReaderNavButton(
-                  tooltip: appL10n.readerControlsMessage2,
-                  icon: Icons.chevron_left,
-                  onPressed: _currentSurahPage < _surahPages.length - 1
-                      ? () => _pageController.nextPage(
-                          duration: const Duration(milliseconds: 240),
-                          curve: Curves.easeOut,
-                        )
-                      : null,
-                ),
-              ],
+            _ReaderNavButton(
+              tooltip: appL10n.readerControlsMessage2,
+              icon: Icons.chevron_left,
+              onPressed: _currentSurahPage < totalPages - 1
+                  ? () => _pageController.nextPage(
+                      duration: AppMotion.of(context, AppMotion.exit),
+                      curve: AppMotion.enter,
+                    )
+                  : null,
             ),
           ],
         ),

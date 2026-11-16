@@ -1,3 +1,5 @@
+import '../services/notification_style.dart';
+
 /// Navigation callback type
 typedef NavigationCallback =
     void Function(String route, Map<String, dynamic>? data);
@@ -8,7 +10,8 @@ typedef NavigationCallback =
 class NotificationRouter {
   static NavigationCallback? _onNavigate;
   static bool _held = false;
-  static ({String type, Map<String, dynamic>? data})? _pending;
+  static ({String type, Map<String, dynamic>? data, String? actionId})?
+  _pending;
 
   /// Keep taps until startup routing has finished, so it cannot replace them.
   static void hold() {
@@ -22,7 +25,11 @@ class NotificationRouter {
     final pending = _pending;
     _pending = null;
     if (pending != null && !dropPending) {
-      handleNotification(type: pending.type, data: pending.data);
+      handleNotification(
+        type: pending.type,
+        data: pending.data,
+        actionId: pending.actionId,
+      );
     }
   }
 
@@ -31,13 +38,20 @@ class NotificationRouter {
     _onNavigate = callback;
   }
 
-  /// Handle notification tap and navigate to appropriate screen
+  /// Handle a tap on a notification, or on one of its buttons ([actionId]),
+  /// and navigate to the screen it belongs to.
   static void handleNotification({
     required String type,
     Map<String, dynamic>? data,
+    String? actionId,
   }) {
     if (_held || _onNavigate == null) {
-      _pending = (type: type, data: data);
+      _pending = (type: type, data: data, actionId: actionId);
+      return;
+    }
+    // The "prayer times" button goes there from any prayer notification.
+    if (actionId == NotificationActionIds.prayerTimes) {
+      _onNavigate!('/prayers', null);
       return;
     }
     switch (type) {
@@ -54,7 +68,21 @@ class NotificationRouter {
         _navigateToSurah(2, data);
         break;
       case 'prayer_time':
-        _navigateToPrayerTimes(data);
+        // Before the prayer, the reminder opens the times; at the prayer,
+        // the alert opens the dua after the adhan.
+        if (data?['reminder'] == true) {
+          _onNavigate!('/prayers', null);
+        } else {
+          _navigateToPrayerTimes(data);
+        }
+        break;
+      case 'daily_verse':
+        final int? surah = int.tryParse('${data?['surahNumber']}');
+        if (surah == null) {
+          _navigateToHome(data);
+        } else {
+          _navigateToSurah(surah, data);
+        }
         break;
       case 'khatma':
         _navigateToKhatma(data);

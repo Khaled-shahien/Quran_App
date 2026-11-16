@@ -1,3 +1,6 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/core/theme/app_typography.dart';
+import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +13,7 @@ class QuranSettingsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.card),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -21,11 +24,11 @@ class QuranSettingsDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(width: 48), // Balance close button
+                const SizedBox(width: AppSpacing.xxl), // Balance close button
                 Text(
                   l10nOf(context).quranSettingsDialogMessage1,
                   style: TextStyle(
-                    fontFamily: 'Amiri',
+                    fontFamily: AppTypography.scriptFontFamily,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
@@ -50,7 +53,7 @@ class QuranSettingsDialog extends StatelessWidget {
                     Text(
                       l10nOf(context).quranSettingsDialogMessage3,
                       style: TextStyle(
-                        fontFamily: 'Amiri',
+                        fontFamily: AppTypography.scriptFontFamily,
                         fontSize: 18,
                         color: Theme.of(context).colorScheme.primary,
                       ),

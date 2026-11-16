@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -102,7 +103,7 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.md),
             child: TextField(
               autofocus: true,
               decoration: InputDecoration(

@@ -1,10 +1,14 @@
 part of '../surah_details_screen.dart';
 
+/// The verses of one mushaf page (within the surah or wird being read).
 class _SurahPageData {
   final List<_SurahVerseData> verses;
   final int startVerseIndex;
 
   _SurahPageData(this.verses, this.startVerseIndex);
+
+  /// The mushaf page these verses are on.
+  int get pageNumber => verses.first.pageNumber;
 }
 
 class _SurahVerseData {

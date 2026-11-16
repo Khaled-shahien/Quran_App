@@ -30,9 +30,12 @@ class SakinaDecor extends ThemeExtension<SakinaDecor> {
     required this.featureCard,
     required this.pattern,
     this.heroColors = _warmHero,
+    this.success = const Color(0xFF2F6B4F),
+    this.warning = const Color(0xFF8A5A00),
+    this.onFeature = const Color(0xFFFFFFFF),
   });
 
-  static const List<Color> _warmHero = [Color(0xCCFFB300), Color(0xF23E2723)];
+  static const List<Color> _warmHero = [Color(0xFF8A6450), Color(0xFF4E342E)];
 
   /// Highlights: selected tabs, progress, undo actions.
   final Color accent;
@@ -48,23 +51,38 @@ class SakinaDecor extends ThemeExtension<SakinaDecor> {
 
   final DecorPattern pattern;
 
-  /// Background of the next-prayer cards; white text sits on it.
+  /// Background of the next-prayer cards; [onFeature] text sits on it.
   final List<Color> heroColors;
+
+  /// Something finished or went right (also shown with an icon).
+  final Color success;
+
+  /// Needs attention but is not an error (also shown with an icon).
+  final Color warning;
+
+  /// Text and icons on [featureCard] and [heroColors].
+  final Color onFeature;
+
+  /// Secondary text on [featureCard] and [heroColors].
+  Color get onFeatureMuted => onFeature.withValues(alpha: 0.80);
 
   static const SakinaDecor warmLight = SakinaDecor(
     accent: AppColors.lightPageAccent,
-    onAccent: AppColors.white,
+    onAccent: Color(0xFF2A1F1A),
     card: AppColors.white,
-    featureCard: AppColors.darkCard,
+    featureCard: Color(0xFF3A2A22),
     pattern: DecorPattern.star,
   );
 
   static const SakinaDecor warmDark = SakinaDecor(
     accent: AppColors.lightPageAccent,
-    onAccent: AppColors.white,
-    card: AppColors.darkCardContent,
-    featureCard: AppColors.darkCard,
+    onAccent: Color(0xFF21160F),
+    card: Color(0xFF211A16),
+    featureCard: Color(0xFF2E221B),
     pattern: DecorPattern.star,
+    heroColors: [Color(0xFF6B4A3A), Color(0xFF3A2620)],
+    success: Color(0xFF8FC7AE),
+    warning: Color(0xFFE2B55A),
   );
 
   /// Falls back to the original look where no app theme is installed.
@@ -82,6 +100,9 @@ class SakinaDecor extends ThemeExtension<SakinaDecor> {
     Color? featureCard,
     DecorPattern? pattern,
     List<Color>? heroColors,
+    Color? success,
+    Color? warning,
+    Color? onFeature,
   }) => SakinaDecor(
     accent: accent ?? this.accent,
     onAccent: onAccent ?? this.onAccent,
@@ -89,6 +110,9 @@ class SakinaDecor extends ThemeExtension<SakinaDecor> {
     featureCard: featureCard ?? this.featureCard,
     pattern: pattern ?? this.pattern,
     heroColors: heroColors ?? this.heroColors,
+    success: success ?? this.success,
+    warning: warning ?? this.warning,
+    onFeature: onFeature ?? this.onFeature,
   );
 
   @override
@@ -101,6 +125,9 @@ class SakinaDecor extends ThemeExtension<SakinaDecor> {
       featureCard: Color.lerp(featureCard, other.featureCard, t)!,
       pattern: t < 0.5 ? pattern : other.pattern,
       heroColors: t < 0.5 ? heroColors : other.heroColors,
+      success: Color.lerp(success, other.success, t)!,
+      warning: Color.lerp(warning, other.warning, t)!,
+      onFeature: Color.lerp(onFeature, other.onFeature, t)!,
     );
   }
 }
@@ -144,6 +171,36 @@ class AppPalette {
   final Color outline;
   final SakinaDecor decor;
 
+  /// Warm paper and brown: the app's own identity.
+  static const AppPalette warmLight = AppPalette(
+    brightness: Brightness.light,
+    primary: AppColors.lightPrimary,
+    onPrimary: Color(0xFFFFFFFF),
+    secondary: AppColors.lightSecondary,
+    onSecondary: Color(0xFF2A1F1A),
+    background: AppColors.lightBackground,
+    text: Color(0xFF2A1F1A),
+    body: Color(0xFF54463F),
+    caption: AppColors.captions,
+    outline: Color(0xFF81756F),
+    decor: SakinaDecor.warmLight,
+  );
+
+  /// The same paper at night: espresso surfaces and sand text, never grey.
+  static const AppPalette warmDark = AppPalette(
+    brightness: Brightness.dark,
+    primary: Color(0xFFD9B690),
+    onPrimary: Color(0xFF21160F),
+    secondary: Color(0xFF2A211C),
+    onSecondary: Color(0xFFF1E6DA),
+    background: Color(0xFF17120F),
+    text: Color(0xFFF3EAE0),
+    body: Color(0xFFD9CCBF),
+    caption: Color(0xFFB3A497),
+    outline: Color(0xFF8C7B6E),
+    decor: SakinaDecor.warmDark,
+  );
+
   static const AppPalette sageLight = AppPalette(
     brightness: Brightness.light,
     primary: Color(0xFF1F5C4A),
@@ -183,6 +240,8 @@ class AppPalette {
       featureCard: Color(0xFF16463A),
       pattern: DecorPattern.rings,
       heroColors: [Color(0xFF1F5C4A), Color(0xFF0F2E25)],
+      success: Color(0xFF8FC7AE),
+      warning: Color(0xFFE2B55A),
     ),
   );
 
@@ -204,6 +263,8 @@ class AppPalette {
       featureCard: Color(0xFF0B1220),
       pattern: DecorPattern.star,
       heroColors: [Color(0xFF2A3A5C), Color(0xFF0B1220)],
+      success: Color(0xFF8FC7AE),
+      warning: Color(0xFFE2B55A),
     ),
   );
 }

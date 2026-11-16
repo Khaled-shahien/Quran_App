@@ -6,31 +6,6 @@ abstract class AppConstants {
   static final String appName = appL10n.appConstantsMessage1;
   static const String appVersion = '1.0.0';
 
-  // Dimensions
-  static const double kPaddingSmall = 8.0;
-  static const double kPaddingMedium = 16.0;
-  static const double kPaddingLarge = 24.0;
-  static const double kPaddingExtraLarge = 32.0;
-
-  static const double kBorderRadiusSmall = 4.0;
-  static const double kBorderRadiusMedium = 8.0;
-  static const double kBorderRadiusLarge = 12.0;
-  static const double kBorderRadiusExtraLarge = 16.0;
-
-  static const double kElevationSmall = 2.0;
-  static const double kElevationMedium = 4.0;
-  static const double kElevationLarge = 8.0;
-
-  // Spacing
-  static const EdgeInsets kPaddingAllMedium = EdgeInsets.all(kPaddingMedium);
-  static const EdgeInsets kPaddingAllLarge = EdgeInsets.all(kPaddingLarge);
-  static const EdgeInsets kPaddingSymmetricHMedium = EdgeInsets.symmetric(
-    horizontal: kPaddingMedium,
-  );
-  static const EdgeInsets kPaddingSymmetricVMedium = EdgeInsets.symmetric(
-    vertical: kPaddingMedium,
-  );
-
   // Sizes
   static const double kButtonHeight = 48.0;
   static const double kTextFieldHeight = 56.0;

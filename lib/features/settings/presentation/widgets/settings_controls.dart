@@ -1,3 +1,5 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +41,12 @@ class HijriAdjustmentPreference extends StatelessWidget {
     final settings = context.watch<SettingsProvider>();
     final l10n = l10nOf(context);
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
+      padding: const EdgeInsetsDirectional.fromSTEB(
+        AppSpacing.md,
+        AppSpacing.sm,
+        AppSpacing.md,
+        AppSpacing.sm,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -47,12 +54,12 @@ class HijriAdjustmentPreference extends StatelessWidget {
             l10n.hijriAdjustmentTitle,
             style: Theme.of(context).textTheme.titleSmall,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             l10n.hijriAdjustmentSubtitle,
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           SegmentedButton<int>(
             showSelectedIcon: false,
             segments: [
@@ -79,36 +86,55 @@ class ThemePreference extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeProvider>();
     final locked = theme.design.alwaysDark;
+    final l10n = l10nOf(context);
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: DropdownButtonFormField<ThemeMode>(
-        key: ValueKey('theme-mode-${theme.design.name}'),
-        isExpanded: true,
-        initialValue: locked ? ThemeMode.dark : theme.themeMode,
-        decoration: InputDecoration(
-          labelText: l10nOf(context).settingsScreenMessage2,
-          helperText: locked ? l10nOf(context).designNightAlwaysDark : null,
-          helperMaxLines: 2,
-        ),
-        items: [
-          DropdownMenuItem(
-            value: ThemeMode.system,
-            child: Text(l10nOf(context).settingsScreenMessage3),
+      padding: const EdgeInsetsDirectional.fromSTEB(
+        AppSpacing.md,
+        AppSpacing.sm,
+        AppSpacing.md,
+        AppSpacing.sm,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            l10n.settingsScreenMessage2,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
-          DropdownMenuItem(
-            value: ThemeMode.light,
-            child: Text(l10nOf(context).settingsScreenMessage4),
+          const SizedBox(height: AppSpacing.sm),
+          SegmentedButton<ThemeMode>(
+            key: ValueKey('theme-mode-${theme.design.name}'),
+            showSelectedIcon: false,
+            segments: [
+              ButtonSegment(
+                value: ThemeMode.system,
+                label: Text(l10n.settingsScreenMessage3),
+              ),
+              ButtonSegment(
+                value: ThemeMode.light,
+                label: Text(l10n.settingsScreenMessage4),
+              ),
+              ButtonSegment(
+                value: ThemeMode.dark,
+                label: Text(l10n.settingsScreenMessage5),
+              ),
+            ],
+            selected: {locked ? ThemeMode.dark : theme.themeMode},
+            onSelectionChanged: locked
+                ? null
+                : (selection) {
+                    playFeedback(context, FeedbackEvent.selection);
+                    theme.setThemeMode(selection.single);
+                  },
           ),
-          DropdownMenuItem(
-            value: ThemeMode.dark,
-            child: Text(l10nOf(context).settingsScreenMessage5),
-          ),
+          if (locked) ...[
+            const SizedBox(height: AppSpacing.xs),
+            Text(
+              l10n.designNightAlwaysDark,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
         ],
-        onChanged: locked
-            ? null
-            : (value) {
-                if (value != null) theme.setThemeMode(value);
-              },
       ),
     );
   }
@@ -131,7 +157,7 @@ class _PrayerPreferencesState extends State<PrayerPreferences> {
           leading: const Icon(Icons.location_on_outlined),
           title: Text(l10nOf(context).settingsScreenMessage6),
           subtitle: Text(prayer.locationLabel),
-          trailing: const Icon(Icons.chevron_right),
+          trailing: const Icon(Icons.chevron_right_rounded),
           onTap: () => showPrayerLocationDialog(context, prayer),
         ),
         SwitchListTile(
@@ -139,6 +165,7 @@ class _PrayerPreferencesState extends State<PrayerPreferences> {
           subtitle: Text(l10nOf(context).settingsScreenMessage8),
           value: settings.prefs.getBool('prayer_notifications_enabled') ?? true,
           onChanged: (enabled) async {
+            playFeedback(context, FeedbackEvent.toggle);
             await settings.prefs.setBool(
               'prayer_notifications_enabled',
               enabled,
@@ -192,6 +219,7 @@ class MonitoringPreference extends StatelessWidget {
             subtitle: Text(l10nOf(context).settingsScreenMessage14),
             value: MonitoringService.instance.enabled,
             onChanged: (value) async {
+              playFeedback(context, FeedbackEvent.toggle);
               try {
                 await MonitoringService.instance.setEnabled(value);
               } catch (_) {
@@ -237,7 +265,10 @@ class TextSizePreference extends StatelessWidget {
       AppTextSize.largest: l10n.appTextSizeLargest,
     };
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
       child: DropdownButtonFormField<AppTextSize>(
         key: const Key('app-text-size'),
         isExpanded: true,
@@ -266,25 +297,37 @@ class DigitStylePreference extends StatelessWidget {
     final l10n = l10nOf(context);
     final controller = context.watch<DigitStyleController>();
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: DropdownButtonFormField<DigitStyle>(
-        key: const Key('digit-style'),
-        isExpanded: true,
-        initialValue: controller.style,
-        decoration: InputDecoration(labelText: l10n.digitStyle),
-        items: [
-          DropdownMenuItem(
-            value: DigitStyle.western,
-            child: Text(l10n.digitStyleWestern),
-          ),
-          DropdownMenuItem(
-            value: DigitStyle.arabic,
-            child: Text(l10n.digitStyleArabic),
+      padding: const EdgeInsetsDirectional.fromSTEB(
+        AppSpacing.md,
+        AppSpacing.sm,
+        AppSpacing.md,
+        AppSpacing.sm,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(l10n.digitStyle, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: AppSpacing.sm),
+          SegmentedButton<DigitStyle>(
+            key: const Key('digit-style'),
+            showSelectedIcon: false,
+            segments: [
+              ButtonSegment(
+                value: DigitStyle.western,
+                label: Text(l10n.digitStyleWestern),
+              ),
+              ButtonSegment(
+                value: DigitStyle.arabic,
+                label: Text(l10n.digitStyleArabic),
+              ),
+            ],
+            selected: {controller.style},
+            onSelectionChanged: (selection) {
+              playFeedback(context, FeedbackEvent.selection);
+              controller.setStyle(selection.single);
+            },
           ),
         ],
-        onChanged: (value) {
-          if (value != null) controller.setStyle(value);
-        },
       ),
     );
   }
@@ -305,7 +348,11 @@ class FeedbackPreferences extends StatelessWidget {
           title: Text(l10n.feedbackHaptics),
           subtitle: Text(l10n.feedbackHapticsHint),
           value: feedback.hapticsEnabled,
-          onChanged: feedback.setHapticsEnabled,
+          onChanged: (value) async {
+            await feedback.setHapticsEnabled(value);
+            // Confirms the choice by feel when it was just turned on.
+            feedback.play(FeedbackEvent.toggle);
+          },
         ),
         SwitchListTile(
           key: const Key('feedback-sounds'),
@@ -313,7 +360,11 @@ class FeedbackPreferences extends StatelessWidget {
           title: Text(l10n.feedbackSounds),
           subtitle: Text(l10n.feedbackSoundsHint),
           value: feedback.soundsEnabled,
-          onChanged: feedback.setSoundsEnabled,
+          onChanged: (value) async {
+            await feedback.setSoundsEnabled(value);
+            // Turning sounds on plays one, so the choice is heard.
+            feedback.play(value ? FeedbackEvent.success : FeedbackEvent.toggle);
+          },
         ),
       ],
     );
@@ -324,10 +375,23 @@ class FeedbackPreferences extends StatelessWidget {
 class DesignPreference extends StatelessWidget {
   const DesignPreference({super.key});
 
-  static const _swatches = {
-    AppDesign.warm: [Color(0xFF795547), Color(0xFFFEFBF4), Color(0xFFCC9B76)],
-    AppDesign.sage: [Color(0xFF1F5C4A), Color(0xFFF6F4EE), Color(0xFFC9A66B)],
-    AppDesign.night: [Color(0xFF101826), Color(0xFF182235), Color(0xFFD4AF6A)],
+  /// Primary, page and accent of each design, read from its palette so the
+  /// preview can never drift from the real theme.
+  static List<Color> _preview(AppPalette p) => [
+    p.primary,
+    p.background,
+    p.decor.accent,
+  ];
+
+  static final _swatches = {
+    AppDesign.warm: _preview(AppPalette.warmLight),
+    AppDesign.sage: _preview(AppPalette.sageLight),
+    // Night's primary is its accent, so show its two surfaces instead.
+    AppDesign.night: [
+      AppPalette.night.background,
+      AppPalette.night.decor.card,
+      AppPalette.night.decor.accent,
+    ],
   };
 
   @override
@@ -341,15 +405,20 @@ class DesignPreference extends StatelessWidget {
       AppDesign.night: (l10n.designNight, l10n.designNightHint),
     };
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.md,
+        AppSpacing.sm,
+        AppSpacing.md,
+        0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(l10n.designTitle, style: Theme.of(context).textTheme.titleSmall),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           for (final design in AppDesign.values)
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
               child: Semantics(
                 inMutuallyExclusiveGroup: true,
                 checked: provider.design == design,
@@ -358,7 +427,7 @@ class DesignPreference extends StatelessWidget {
                       ? scheme.primary.withValues(alpha: 0.10)
                       : Colors.transparent,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: AppRadius.card,
                     side: BorderSide(
                       color: provider.design == design
                           ? scheme.primary
@@ -368,10 +437,15 @@ class DesignPreference extends StatelessWidget {
                   ),
                   child: InkWell(
                     key: Key('design-${design.name}'),
-                    borderRadius: BorderRadius.circular(16),
-                    onTap: () => provider.setDesign(design),
+                    borderRadius: AppRadius.card,
+                    onTap: () {
+                      if (provider.design != design) {
+                        playFeedback(context, FeedbackEvent.selection);
+                      }
+                      provider.setDesign(design);
+                    },
                     child: Padding(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(AppSpacing.ms),
                       child: Row(
                         children: [
                           ExcludeSemantics(
@@ -383,7 +457,7 @@ class DesignPreference extends StatelessWidget {
                                     width: 22,
                                     height: 22,
                                     margin: const EdgeInsetsDirectional.only(
-                                      end: 4,
+                                      end: AppSpacing.xs,
                                     ),
                                     decoration: BoxDecoration(
                                       color: color,
@@ -398,7 +472,7 @@ class DesignPreference extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppSpacing.ms),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,7 +491,10 @@ class DesignPreference extends StatelessWidget {
                             ),
                           ),
                           if (provider.design == design)
-                            Icon(Icons.check_circle, color: scheme.primary),
+                            Icon(
+                              Icons.check_circle_rounded,
+                              color: scheme.primary,
+                            ),
                         ],
                       ),
                     ),

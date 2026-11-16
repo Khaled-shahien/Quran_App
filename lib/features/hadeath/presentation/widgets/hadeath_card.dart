@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
+
+/// One hadith in the list: its title on a quiet tile.
 class HadeathCard extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
@@ -8,45 +13,47 @@ class HadeathCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme scheme = Theme.of(context).colorScheme;
     return Card(
-      color: Theme.of(context).colorScheme.secondary,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-        side: BorderSide(
-          color: Theme.of(context).colorScheme.primary,
-          width: 1,
-        ),
-      ),
-      elevation: 2,
+      color: scheme.secondary,
+      elevation: 0,
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.card),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: AppRadius.card,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(
+            vertical: AppSpacing.md,
+            horizontal: AppSpacing.md,
+          ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(
-                Icons.menu_book,
-                color: Theme.of(context).colorScheme.primary,
-                size: 24,
+              Container(
+                width: 40,
+                height: 40,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: scheme.surface,
+                  borderRadius: AppRadius.controls,
+                ),
+                child: Icon(Icons.menu_book, color: scheme.primary, size: 22),
               ),
+              const SizedBox(width: AppSpacing.ms),
               Expanded(
                 child: Text(
                   title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Amiri',
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).colorScheme.primary,
+                  style: AppTypography.script.copyWith(
+                    fontSize: 20,
+                    height: 1.6,
+                    color: scheme.onSecondary,
                   ),
                 ),
               ),
+              const SizedBox(width: AppSpacing.sm),
               Icon(
                 Icons.chevron_right,
-                color: Theme.of(context).colorScheme.primary,
-                size: 20,
+                color: scheme.onSurfaceVariant,
+                size: 22,
               ),
             ],
           ),

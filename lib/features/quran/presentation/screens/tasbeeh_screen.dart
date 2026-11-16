@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
@@ -6,7 +7,11 @@ import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/pressable.dart';
 import '../../domain/entities/tasbih_phrase.dart';
 import '../providers/tasbih_controller.dart';
 
@@ -44,169 +49,157 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
     final target = selected?.target ?? 0;
     final phraseText = selected == null ? '' : tasbihPhraseText(selected, l10n);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          tooltip: l10n.appStringsMessage13,
-          icon: Icon(Icons.arrow_back_ios, color: scheme.primary),
-          onPressed: () => Navigator.pop(context),
+    return SakinaHeroScaffold(
+      title: l10n.tasbeehScreenMessage5,
+      actions: [
+        IconButton(
+          tooltip: l10n.tasbeehScreenMessage7,
+          icon: const Icon(Icons.add_rounded),
+          onPressed: _showAddTasbeehDialog,
         ),
-        actions: [
-          IconButton(
-            tooltip: l10n.tasbeehScreenMessage7,
-            icon: Icon(Icons.add_rounded, color: scheme.primary),
-            onPressed: _showAddTasbeehDialog,
-          ),
-          IconButton(
-            tooltip: l10n.tasbeehScreenMessage8,
-            icon: Icon(Icons.refresh, color: scheme.error),
-            onPressed: _resetCounters,
-          ),
-        ],
-        title: Text(
-          l10n.tasbeehScreenMessage5,
-          style: TextStyle(
-            color: scheme.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+        IconButton(
+          tooltip: l10n.tasbeehScreenMessage8,
+          icon: Icon(Icons.refresh, color: scheme.error),
+          onPressed: _resetCounters,
         ),
-      ),
-      body: SafeArea(
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Padding(
-            padding: const EdgeInsets.all(AppConstants.kPaddingMedium),
-            child: Column(
-              children: [
-                // One large tap area: count without looking at the screen.
-                Expanded(
-                  flex: 3,
-                  child: Semantics(
-                    container: true,
-                    button: true,
-                    label: phraseText,
-                    value: target > 0
-                        ? l10n.adhkarProgress(
-                            context.digits(count),
-                            context.digits(target),
-                          )
-                        : '$count',
-                    excludeSemantics: true,
-                    child: Material(
-                      color: scheme.secondary,
-                      borderRadius: BorderRadius.circular(
-                        AppConstants.kBorderRadiusLarge,
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: InkWell(
-                        key: const Key('tasbih-tap-area'),
-                        onTap: selected == null ? null : _incrementCounter,
-                        child: Center(
-                          child: SingleChildScrollView(
-                            padding: const EdgeInsets.all(
-                              AppConstants.kPaddingLarge,
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  context.digits(
-                                    count.toString().padLeft(2, '0'),
-                                  ),
-                                  style: TextStyle(
-                                    fontSize: 64,
-                                    fontWeight: FontWeight.w800,
-                                    color: scheme.primary,
-                                    height: 1.1,
-                                  ),
-                                ),
-                                Text(
-                                  phraseText,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: 'Amiri',
-                                    fontSize: 28,
-                                    color: scheme.primary,
-                                    height: 1.5,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: AppConstants.kPaddingSmall,
-                                ),
-                                if (target > 0) ...[
-                                  const SizedBox(
-                                    height: AppConstants.kPaddingSmall,
-                                  ),
-                                  SizedBox(
-                                    width: 160,
-                                    child: LinearProgressIndicator(
-                                      value: (count / target).clamp(0.0, 1.0),
-                                      minHeight: 6,
-                                      borderRadius: BorderRadius.circular(3),
+      ],
+      // A fixed tool: the tap area and the phrase list share the space under
+      // the header, so the header stays open here.
+      slivers: [
+        SliverFillRemaining(
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: Column(
+                children: [
+                  // One large tap area: count without looking at the screen.
+                  Expanded(
+                    flex: 3,
+                    child: Semantics(
+                      container: true,
+                      button: true,
+                      label: phraseText,
+                      value: target > 0
+                          ? l10n.adhkarProgress(
+                              context.digits(count),
+                              context.digits(target),
+                            )
+                          : '$count',
+                      excludeSemantics: true,
+                      child: Material(
+                        color: scheme.secondary,
+                        borderRadius: AppRadius.hero,
+                        clipBehavior: Clip.antiAlias,
+                        child: InkWell(
+                          key: const Key('tasbih-tap-area'),
+                          onTap: selected == null ? null : _incrementCounter,
+                          child: Center(
+                            child: SingleChildScrollView(
+                              padding: const EdgeInsets.all(AppSpacing.lg),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  _CounterRing(
+                                    progress: target > 0
+                                        ? (count / target).clamp(0.0, 1.0)
+                                        : null,
+                                    complete: target > 0 && count >= target,
+                                    // The number gives a small bump on each
+                                    // count, so a tap is seen as well as felt.
+                                    child: TweenAnimationBuilder<double>(
+                                      key: ValueKey<int>(count),
+                                      tween: Tween<double>(begin: 1.1, end: 1),
+                                      duration: AppMotion.of(
+                                        context,
+                                        AppMotion.base,
+                                      ),
+                                      curve: AppMotion.enter,
+                                      builder: (context, scale, child) =>
+                                          Transform.scale(
+                                            scale: scale,
+                                            child: child,
+                                          ),
+                                      child: Text(
+                                        context.digits(
+                                          count.toString().padLeft(2, '0'),
+                                        ),
+                                        style: AppTypography.numeral.copyWith(
+                                          fontSize: 56,
+                                          color: scheme.primary,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: AppSpacing.sm),
                                   Text(
-                                    l10n.adhkarProgress(
-                                      context.digits(count),
-                                      context.digits(target),
+                                    phraseText,
+                                    textAlign: TextAlign.center,
+                                    style: AppTypography.script.copyWith(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w400,
+                                      color: scheme.onSecondary,
+                                      height: 1.5,
                                     ),
-                                    style: theme.textTheme.bodyMedium,
+                                  ),
+                                  const SizedBox(height: AppSpacing.sm),
+                                  if (target > 0) ...[
+                                    Text(
+                                      l10n.adhkarProgress(
+                                        context.digits(count),
+                                        context.digits(target),
+                                      ),
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
+                                  ],
+                                  const SizedBox(height: AppSpacing.xs),
+                                  Text(
+                                    l10n.tasbihTapHint,
+                                    textAlign: TextAlign.center,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: scheme.onSurfaceVariant,
+                                    ),
                                   ),
                                 ],
-                                const SizedBox(height: 4),
-                                Text(
-                                  l10n.tasbihTapHint,
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: scheme.onSurfaceVariant,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: AppConstants.kPaddingSmall),
-                // Phrases: tap to choose, swipe to delete (with undo).
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: scheme.secondary,
-                      borderRadius: BorderRadius.circular(
-                        AppConstants.kBorderRadiusLarge,
+                  const SizedBox(height: AppSpacing.sm),
+                  // Phrases: tap to choose, swipe to delete (with undo).
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: scheme.secondary,
+                        borderRadius: AppRadius.hero,
+                      ),
+                      padding: const EdgeInsets.all(AppSpacing.sm),
+                      child: ListView.builder(
+                        itemCount: phrases.length,
+                        itemBuilder: (context, index) {
+                          final phrase = phrases[index];
+                          return _tasbeehRow(
+                            itemKey: phrase.id,
+                            index: index,
+                            title: tasbihPhraseText(phrase, l10n),
+                            counter: context.digits(phrase.count),
+                            isCompleted: phrase.isComplete,
+                            isSelected: index == controller.selectedIndex,
+                          );
+                        },
                       ),
                     ),
-                    padding: const EdgeInsets.all(AppConstants.kPaddingSmall),
-                    child: ListView.builder(
-                      itemCount: phrases.length,
-                      itemBuilder: (context, index) {
-                        final phrase = phrases[index];
-                        return _tasbeehRow(
-                          itemKey: phrase.id,
-                          index: index,
-                          title: tasbihPhraseText(phrase, l10n),
-                          counter: context.digits(phrase.count),
-                          isCompleted: phrase.isComplete,
-                          isSelected: index == controller.selectedIndex,
-                        );
-                      },
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -262,13 +255,9 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              appL10n.tasbeehScreenMessage12((title).toString()),
-              style: const TextStyle(),
-            ),
+            content: Text(appL10n.tasbeehScreenMessage12((title).toString())),
             action: SnackBarAction(
               label: appL10n.currentWirdWidgetMessage13,
-              textColor: SakinaDecor.of(context).accent,
               onPressed: () => _controller.restore(removed),
             ),
             duration: const Duration(seconds: 4),
@@ -276,81 +265,149 @@ class _TasbeehScreenState extends State<TasbeehScreen> {
         );
       },
       background: Container(
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        margin: const EdgeInsets.symmetric(vertical: 4),
+        alignment: AlignmentDirectional.centerStart,
+        padding: const EdgeInsetsDirectional.only(start: AppSpacing.lg),
+        margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.error,
-          borderRadius: BorderRadius.circular(AppConstants.kBorderRadiusMedium),
+          borderRadius: AppRadius.controls,
         ),
-        child: const Icon(Icons.delete, color: Colors.white, size: 24),
+        child: Icon(
+          Icons.delete_outline_rounded,
+          color: Theme.of(context).colorScheme.onError,
+          size: 24,
+        ),
       ),
-      child: Semantics(
-        button: true,
-        selected: isSelected,
-        child: GestureDetector(
-          onTap: () => _controller.select(index),
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 4),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                AppConstants.kBorderRadiusMedium,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+        child: Semantics(
+          button: true,
+          selected: isSelected,
+          child: Pressable(
+            onTap: () => _controller.select(index),
+            feedback: isSelected ? null : FeedbackEvent.selection,
+            scale: false,
+            borderRadius: AppRadius.controls,
+            child: AnimatedContainer(
+              duration: AppMotion.of(context, AppMotion.base),
+              curve: AppMotion.standard,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.ms,
+                vertical: AppSpacing.sm,
               ),
-              color: isSelected
-                  ? SakinaDecor.of(context).accent.withValues(alpha: 0.2)
-                  : Theme.of(context).scaffoldBackgroundColor,
-              border: Border.all(
-                color: isCompleted
-                    ? Theme.of(context).colorScheme.primary
-                    : (isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.transparent),
-                width: isSelected ? 1.5 : 1,
+              decoration: BoxDecoration(
+                borderRadius: AppRadius.controls,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.surface
+                    : Colors.transparent,
+                border: Border.all(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.transparent,
+                  width: 1.5,
+                ),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: isCompleted
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.primary,
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.normal,
+              child: Row(
+                children: [
+                  // Finished phrases get a tick, not only a colour.
+                  Icon(
+                    isCompleted
+                        ? Icons.check_circle_rounded
+                        : Icons.circle_outlined,
+                    size: 18,
+                    color: isCompleted
+                        ? SakinaDecor.of(context).success
+                        : Theme.of(context).colorScheme.outline,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
+                  const SizedBox(width: AppSpacing.sm),
+                  Container(
+                    constraints: const BoxConstraints(minWidth: 44),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                      vertical: AppSpacing.xs,
+                    ),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(
-                        AppConstants.kBorderRadiusSmall,
-                      ),
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: AppRadius.pill,
                     ),
                     child: Text(
                       counter,
-                      style: TextStyle(
-                        fontSize: 14,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w600,
+                        fontFeatures: const [FontFeature.tabularFigures()],
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// The count inside a ring that fills towards the phrase's target.
+class _CounterRing extends StatelessWidget {
+  const _CounterRing({
+    required this.child,
+    required this.progress,
+    required this.complete,
+  });
+
+  final Widget child;
+
+  /// 0..1, or null when the phrase has no target (the ring stays empty).
+  final double? progress;
+  final bool complete;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final decor = SakinaDecor.of(context);
+    return SizedBox.square(
+      dimension: 168,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned.fill(
+            child: ExcludeSemantics(
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(end: progress ?? 0),
+                duration: AppMotion.of(context, AppMotion.base),
+                curve: AppMotion.enter,
+                builder: (context, value, _) => CircularProgressIndicator(
+                  value: value,
+                  strokeWidth: 6,
+                  strokeCap: StrokeCap.round,
+                  backgroundColor: scheme.surface,
+                  color: complete ? decor.success : scheme.primary,
+                ),
+              ),
+            ),
+          ),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              child: child,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -376,63 +433,31 @@ class _AddPhraseDialogState extends State<_AddPhraseDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog.adaptive(
-      title: Text(
-        l10nOf(context).tasbeehScreenMessage9,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.primary,
-          fontSize: 18,
-        ),
-      ),
+      title: Text(l10nOf(context).tasbeehScreenMessage9),
       content: TextField(
         controller: controller,
+        autofocus: true,
+        textInputAction: TextInputAction.done,
+        onSubmitted: (value) {
+          if (value.trim().isNotEmpty) Navigator.of(context).pop(value);
+        },
         decoration: InputDecoration(
           hintText: l10nOf(context).tasbeehScreenMessage10,
-          hintStyle: const TextStyle(),
-          filled: true,
-          fillColor: Theme.of(context).scaffoldBackgroundColor,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(
-              AppConstants.kBorderRadiusMedium,
-            ),
-            borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.primary,
-              width: 1,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(
-              AppConstants.kBorderRadiusMedium,
-            ),
-            borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.primary,
-              width: 2,
-            ),
-          ),
         ),
-        textAlign: TextAlign.right,
-        style: TextStyle(color: Theme.of(context).colorScheme.primary),
       ),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text(
-            l10nOf(context).appStringsMessage9,
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
+          child: Text(l10nOf(context).appStringsMessage9),
         ),
-        ElevatedButton(
+        FilledButton(
           onPressed: () {
             if (controller.text.trim().isNotEmpty) {
               Navigator.of(context).pop(controller.text);
             }
           },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            foregroundColor: Theme.of(context).colorScheme.onPrimary,
-          ),
           child: Text(l10nOf(context).tasbeehScreenMessage11),
         ),
       ],

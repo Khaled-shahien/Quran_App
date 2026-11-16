@@ -2681,5 +2681,69 @@
   "designNight": "ليلي ذهبي",
   "designNightHint": "كحلي وذهبي، داكن دائمًا ومريح ليلًا",
   "designNightAlwaysDark": "التصميم الليلي الذهبي داكن دائمًا. اختر تصميمًا آخر لتغيير المظهر.",
-  "drawerPrayerSection": "الصلاة"
+  "drawerPrayerSection": "الصلاة",
+  "readerLayoutTitle": "طريقة العرض",
+  "readerLayoutContinuous": "متصل",
+  "readerLayoutPages": "صفحات",
+  "readerLayoutVerses": "آية بآية",
+  "readerLayoutPagesHint": "حدود الصفحات مطابقة للمصحف، أما توزيع الأسطر فبحسب حجم الشاشة والخط.",
+  "readerMushafPage": "صفحة {page}",
+  "@readerMushafPage": {
+    "placeholders": {
+      "page": {
+        "type": "String"
+      }
+    }
+  },
+  "readerVerseActions": "خيارات الآية {number}",
+  "@readerVerseActions": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "readerVersePlay": "استمع من هذه الآية",
+  "readerVerseBookmark": "ضع العلامة هنا",
+  "readerVerseCopy": "نسخ الآية",
+  "readerVerseCopied": "تم نسخ الآية",
+  "readerVerseHint": "اضغط مطولاً على الآية لعرض خياراتها",
+  "readerPageCompressed": "صُغّر الخط لتتسع الصفحة للشاشة؛ وضع «متصل» يعرض خطاً أكبر",
+  "notificationCategoryAdhkar": "الأذكار",
+  "notificationCategoryQuran": "القرآن الكريم",
+  "notificationCategoryPrayer": "الصلاة",
+  "notificationCategoryVerse": "آية اليوم",
+  "notificationActionStartAdhkar": "ابدأ الأذكار",
+  "notificationActionReadNow": "اقرأ الآن",
+  "notificationActionAfterAdhan": "دعاء ما بعد الأذان",
+  "notificationActionPrayerTimes": "مواقيت الصلاة",
+  "notificationActionOpenVerse": "اقرأ في المصحف",
+  "prayerNotificationTimeLine": "وقت الأذان {time}",
+  "@prayerNotificationTimeLine": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerReminderTimeLine": "موعد الصلاة {time}",
+  "@prayerReminderTimeLine": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "dailyVerseNotificationReference": "{surah} · الآية {ayah}",
+  "@dailyVerseNotificationReference": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "String"
+      }
+    }
+  },
+  "dailyVerseReminderSubtitle": "آية كل يوم في الوقت الذي تختاره"
 }

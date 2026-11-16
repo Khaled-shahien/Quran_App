@@ -1,3 +1,8 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/core/theme/app_typography.dart';
+import 'package:sakina_app/core/theme/app_radius.dart';
+import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'dart:async';
@@ -74,32 +79,37 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
     textDirection: TextDirection.rtl,
     child: AnimatedBuilder(
       animation: controller,
-      builder: (context, _) => Scaffold(
-        appBar: AppBar(
-          title: Text(l10nOf(context).homeScreenMessage37),
-          actions: [
-            IconButton(
-              tooltip: l10nOf(context).qiblaScreenMessage2,
-              onPressed: controller.status == QiblaStatus.loading
-                  ? null
-                  : () => controller.start(),
-              icon: const Icon(Icons.refresh),
+      builder: (context, _) => SakinaHeroScaffold(
+        title: l10nOf(context).homeScreenMessage37,
+        actions: [
+          IconButton(
+            tooltip: l10nOf(context).qiblaScreenMessage2,
+            onPressed: controller.status == QiblaStatus.loading
+                ? null
+                : () => controller.start(),
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.xl,
             ),
-          ],
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 440),
-                child: controller.status == QiblaStatus.ready
-                    ? _compass(context)
-                    : _status(context),
+            sliver: SliverToBoxAdapter(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 440),
+                  child: controller.status == QiblaStatus.ready
+                      ? _compass(context)
+                      : _status(context),
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     ),
   );
@@ -138,19 +148,19 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
       ),
     };
     return Padding(
-      padding: const EdgeInsets.only(top: 48),
+      padding: const EdgeInsets.only(top: AppSpacing.xxl),
       child: Column(
         children: [
           Icon(icon, size: 64, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.lg),
           Text(
             title,
             style: Theme.of(context).textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.ms),
           Text(message, textAlign: TextAlign.center),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.lg),
           if (controller.status == QiblaStatus.loading)
             const CircularProgressIndicator()
           else if (controller.status != QiblaStatus.unsupported) ...[
@@ -182,7 +192,7 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
     final needsCalibration = heading?.needsCalibration ?? false;
     if (controller.nearKaaba) {
       return Padding(
-        padding: const EdgeInsets.only(top: 48),
+        padding: const EdgeInsets.only(top: AppSpacing.xxl),
         child: Text(
           l10nOf(context).qiblaScreenMessage17,
           textAlign: TextAlign.center,
@@ -214,13 +224,13 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
           textAlign: TextAlign.center,
           style: theme.textTheme.titleMedium,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
         Text(
           l10nOf(context).qiblaScreenMessage26,
           textAlign: TextAlign.center,
           style: theme.textTheme.bodyMedium,
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: AppSpacing.lg),
         if (heading != null && !controller.sensorUnavailable)
           QiblaDial(
             bearing: controller.bearing!,
@@ -240,7 +250,7 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
                   : const CircularProgressIndicator(),
             ),
           ),
-        const SizedBox(height: 24),
+        const SizedBox(height: AppSpacing.lg),
         Semantics(
           liveRegion: true,
           child: Text(
@@ -248,12 +258,12 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
             textAlign: TextAlign.center,
             style: theme.textTheme.titleLarge?.copyWith(
               color: controller.aligned
-                  ? const Color(0xFF28734F)
+                  ? SakinaDecor.of(context).success
                   : theme.colorScheme.primary,
             ),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.ms),
         Text(
           l10nOf(context).qiblaScreenMessage27(
             (controller.bearing!.toStringAsFixed(1)).toString(),
@@ -261,13 +271,13 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
           textAlign: TextAlign.center,
           style: theme.textTheme.titleMedium,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: AppSpacing.lg),
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
             color: theme.colorScheme.primary.withValues(alpha: .07),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: AppRadius.hero,
           ),
           child: Text(
             controller.sensorUnavailable
@@ -311,7 +321,9 @@ class _QiblaDialState extends State<QiblaDial> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final accent = widget.aligned ? const Color(0xFF28734F) : colors.primary;
+    final accent = widget.aligned
+        ? SakinaDecor.of(context).success
+        : colors.primary;
     final duration = MediaQuery.disableAnimationsOf(context)
         ? Duration.zero
         : const Duration(milliseconds: 250);
@@ -341,7 +353,7 @@ class _QiblaDialState extends State<QiblaDial> {
                 color: colors.surface,
                 border: Border.all(color: accent.withValues(alpha: .25)),
               ),
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.all(AppSpacing.ms),
               child: Image.asset(
                 'assets/images/kaaba.png',
                 errorBuilder: (_, _, _) => Icon(Icons.mosque, color: accent),
@@ -399,11 +411,7 @@ class _CompassPainter extends CustomPainter {
       final label = TextPainter(
         text: TextSpan(
           text: entry.value,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.labelMedium.copyWith(color: textColor),
         ),
         textDirection: TextDirection.rtl,
       )..layout();

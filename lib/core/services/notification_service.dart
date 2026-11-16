@@ -9,9 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+import '../accessibility/digit_style.dart';
 import '../navigation/notification_router.dart';
 import 'local_timezone_fallback.dart';
 import 'notification_channels.dart';
+import 'notification_style.dart';
+import '../../features/quran/data/daily_verse_source.dart';
 import '../../features/prayers/domain/entities/adhan_settings.dart';
 import '../../features/prayers/domain/prayer_notification_ids.dart';
 import '../../features/prayers/domain/services/prayer_alert_planner.dart';
@@ -23,6 +26,7 @@ import '../../features/prayers/domain/services/prayer_alert_planner.dart';
 /// - Evening Adhkar alarm (5:30 PM)
 /// - Surah Al-Mulk alarm (9:00 PM)
 /// - Surah Al-Baqarah alarm (8:30 PM)
+/// - The daily verse (9:00 AM, off until the user turns it on)
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
   static NotificationService get instance => _instance;
@@ -49,6 +53,13 @@ class NotificationService {
     _mulkNotificationId,
     _baqarahNotificationId,
   ];
+
+  /// The daily verse: one notification per day, a week ahead. A day uses
+  /// slot 4000 + weekday, so seven consecutive days never share an id.
+  @visibleForTesting
+  static int dailyVerseNotificationId(DateTime date) => 4000 + date.weekday;
+
+  static const int _dailyVerseDaysAhead = 7;
   static const Map<String, int> _prayerNotificationIdsByName = <String, int>{
     'الفجر': _fajrPrayerNotificationId,
     'الظهر': _dhuhrPrayerNotificationId,
@@ -66,6 +77,8 @@ class NotificationService {
   static const String _mulkAlarmMinuteKey = 'mulk_alarm_minute';
   static const String _baqarahAlarmHourKey = 'baqarah_alarm_hour';
   static const String _baqarahAlarmMinuteKey = 'baqarah_alarm_minute';
+  static const String _verseAlarmHourKey = 'verse_alarm_hour';
+  static const String _verseAlarmMinuteKey = 'verse_alarm_minute';
 
   // Default times
   static const int _defaultMorningHour = 7;
@@ -76,12 +89,16 @@ class NotificationService {
   static const int _defaultMulkMinute = 0;
   static const int _defaultBaqarahHour = 20; // 8 PM
   static const int _defaultBaqarahMinute = 30;
+  static const int _defaultVerseHour = 9;
+  static const int _defaultVerseMinute = 0;
 
   bool _isInitialized = false;
   bool _isPluginAvailable = true;
   String? _lastAppliedAlarmStateSignature;
   Future<void>? _initFuture;
   bool _launchNotificationHandled = false;
+  static ({int? id, String? actionId, String? payload, DateTime at})?
+  _lastRouted;
   Future<void> _alarmUpdates = Future<void>.value();
 
   /// Initialize the notification service.
@@ -111,13 +128,15 @@ class NotificationService {
 
       const AndroidInitializationSettings androidInit =
           AndroidInitializationSettings('@mipmap/ic_launcher');
-      const DarwinInitializationSettings iosInit = DarwinInitializationSettings(
+      // Buttons on iOS belong to categories registered here.
+      final DarwinInitializationSettings iosInit = DarwinInitializationSettings(
         requestAlertPermission: false,
         requestBadgePermission: false,
         requestSoundPermission: false,
+        notificationCategories: darwinNotificationCategories(),
       );
 
-      const InitializationSettings initializationSettings =
+      final InitializationSettings initializationSettings =
           InitializationSettings(android: androidInit, iOS: iosInit);
 
       await flutterLocalNotificationsPlugin.initialize(
@@ -340,8 +359,41 @@ class NotificationService {
 
   /// Handle notification tap.
   void _onNotificationTapped(NotificationResponse response) {
-    routeNotificationPayload(response.payload);
+    routeNotificationResponse(
+      id: response.id,
+      actionId: response.actionId,
+      payload: response.payload,
+    );
   }
+
+  /// Routes a tap on a notification or one of its buttons. The same tap
+  /// reported twice within two seconds (as a launch and as a response, or a
+  /// double tap) opens its screen only once.
+  @visibleForTesting
+  static void routeNotificationResponse({
+    int? id,
+    String? actionId,
+    String? payload,
+    DateTime? now,
+  }) {
+    final DateTime at = now ?? DateTime.now();
+    final last = _lastRouted;
+    // Every real notification has an id; without one there is nothing to
+    // tell two taps apart by, so each is routed.
+    if (id != null &&
+        last != null &&
+        last.id == id &&
+        last.actionId == actionId &&
+        last.payload == payload &&
+        at.difference(last.at).abs() < const Duration(seconds: 2)) {
+      return;
+    }
+    _lastRouted = (id: id, actionId: actionId, payload: payload, at: at);
+    routeNotificationPayload(payload, actionId: actionId);
+  }
+
+  @visibleForTesting
+  static void resetRoutingHistory() => _lastRouted = null;
 
   /// Routes the notification that launched a terminated app, once per process.
   /// `onDidReceiveNotificationResponse` does not report this tap.
@@ -358,11 +410,16 @@ class NotificationService {
   @visibleForTesting
   static void routeLaunchDetails(NotificationAppLaunchDetails? details) {
     if (details == null || !details.didNotificationLaunchApp) return;
-    routeNotificationPayload(details.notificationResponse?.payload);
+    final NotificationResponse? response = details.notificationResponse;
+    routeNotificationResponse(
+      id: response?.id,
+      actionId: response?.actionId,
+      payload: response?.payload,
+    );
   }
 
   @visibleForTesting
-  static void routeNotificationPayload(String? rawPayload) {
+  static void routeNotificationPayload(String? rawPayload, {String? actionId}) {
     final String payload = rawPayload ?? '';
     if (payload.isEmpty) {
       NotificationRouter.handleNotification(type: 'general');
@@ -377,7 +434,11 @@ class NotificationService {
         final Map<String, dynamic> data = rawData is Map
             ? Map<String, dynamic>.from(rawData)
             : <String, dynamic>{};
-        NotificationRouter.handleNotification(type: type, data: data);
+        NotificationRouter.handleNotification(
+          type: type,
+          data: data,
+          actionId: actionId,
+        );
         return;
       }
     } catch (_) {
@@ -398,26 +459,10 @@ class NotificationService {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
 
-    final AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-          NotificationChannels.defaultId,
-          NotificationChannels.defaultName,
-          channelDescription: NotificationChannels.defaultDescription,
-          importance: Importance.high,
-          priority: Priority.high,
-          icon: '@drawable/ic_notification',
-        );
-
-    const DarwinNotificationDetails iosNotificationDetails =
-        DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        );
-
-    final NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: iosNotificationDetails,
+    final NotificationDetails notificationDetails = buildNotificationDetails(
+      SakinaNotificationKind.general,
+      title: title,
+      body: body,
     );
 
     final String resolvedType = (payload == null || payload.isEmpty)
@@ -481,30 +526,10 @@ class NotificationService {
       name: 'sakina_app.notifications',
     );
 
-    final AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-          NotificationChannels.alarmsId,
-          NotificationChannels.alarmsName,
-          channelDescription: NotificationChannels.alarmsDescription,
-          importance: Importance.max,
-          priority: Priority.high,
-          icon: '@drawable/ic_notification',
-          playSound: true,
-          enableVibration: true,
-          category: AndroidNotificationCategory.alarm,
-        );
-
-    const DarwinNotificationDetails iosNotificationDetails =
-        DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-          interruptionLevel: InterruptionLevel.timeSensitive,
-        );
-
-    final NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: iosNotificationDetails,
+    final NotificationDetails notificationDetails = buildNotificationDetails(
+      dailyReminderKind(payload),
+      title: localizedContent.title,
+      body: localizedContent.body,
     );
 
     final String resolvedType = (payload == null || payload.isEmpty)
@@ -533,6 +558,15 @@ class NotificationService {
       name: 'sakina_app.notifications',
     );
   }
+
+  /// The look of a daily reminder: adhkar or Quran reading. Every daily
+  /// reminder has always used the reminders channel, and still does.
+  @visibleForTesting
+  static SakinaNotificationKind dailyReminderKind(String? payload) =>
+      switch (payload) {
+        'morning_adhkar' || 'evening_adhkar' => SakinaNotificationKind.adhkar,
+        _ => SakinaNotificationKind.quranReading,
+      };
 
   ({String title, String body}) _resolveDailyNotificationContent({
     required String title,
@@ -584,28 +618,10 @@ class NotificationService {
       scheduleAtLocal = now.add(const Duration(seconds: 5));
     }
 
-    final AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-          NotificationChannels.testId,
-          NotificationChannels.testName,
-          channelDescription: NotificationChannels.testDescription,
-          importance: Importance.max,
-          priority: Priority.high,
-          icon: '@drawable/ic_notification',
-          playSound: true,
-          enableVibration: true,
-        );
-
-    const DarwinNotificationDetails iosNotificationDetails =
-        DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        );
-
-    final NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: iosNotificationDetails,
+    final NotificationDetails notificationDetails = buildNotificationDetails(
+      SakinaNotificationKind.test,
+      title: title,
+      body: body,
     );
 
     final String resolvedType = (payload == null || payload.isEmpty)
@@ -663,52 +679,23 @@ class NotificationService {
       return;
     }
 
-    final bool withSound = mode != PrayerAlertMode.notificationOnly;
-    final AndroidNotificationDetails androidNotificationDetails = isReminder
-        ? AndroidNotificationDetails(
-            NotificationChannels.prayerReminderId,
-            appL10n.prayerReminderChannel,
-            importance: Importance.high,
-            priority: Priority.high,
-            icon: '@drawable/ic_notification',
-          )
-        : withSound
-        ? AndroidNotificationDetails(
-            NotificationChannels.prayerId,
-            NotificationChannels.prayerName,
-            channelDescription: NotificationChannels.prayerDescription,
-            importance: Importance.max,
-            priority: Priority.high,
-            icon: '@drawable/ic_notification',
-            // Platform default sound until a licensed adhan is bundled.
-            playSound: true,
-            enableVibration: true,
-            category: AndroidNotificationCategory.alarm,
-          )
-        : AndroidNotificationDetails(
-            NotificationChannels.prayerSilentId,
-            appL10n.prayerSilentChannel,
-            importance: Importance.high,
-            priority: Priority.high,
-            icon: '@drawable/ic_notification',
-            playSound: false,
-            enableVibration: true,
-            category: AndroidNotificationCategory.reminder,
-          );
-
-    final DarwinNotificationDetails iosNotificationDetails =
-        DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: withSound,
-          interruptionLevel: isReminder
-              ? InterruptionLevel.active
-              : InterruptionLevel.timeSensitive,
-        );
-
-    final NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: iosNotificationDetails,
+    final content = prayerNotificationContent(
+      prayerName: prayerName,
+      prayerTime: prayerTime,
+      mode: mode,
+      isReminder: isReminder,
+      reminderMinutes: reminderMinutes,
+      digits: await _digitStyle(),
+    );
+    final Duration lead = Duration(minutes: isReminder ? reminderMinutes : 0);
+    final NotificationDetails notificationDetails = buildNotificationDetails(
+      content.kind,
+      title: content.title,
+      body: content.body,
+      summary: content.summary,
+      when: prayerTime.add(lead),
+      // The reminder leaves the tray when the prayer alert itself is due.
+      timeoutAfter: lead > Duration.zero ? lead : null,
     );
 
     final String serializedPayload = jsonEncode({
@@ -716,15 +703,14 @@ class NotificationService {
       'data': <String, dynamic>{
         'prayerName': prayerName,
         'scheduledAt': prayerTime.toIso8601String(),
+        if (isReminder) 'reminder': true,
       },
     });
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
-      isReminder
-          ? appL10n.prayerReminderBody('$reminderMinutes', prayerName)
-          : appL10n.notificationServiceMessage17((prayerName).toString()),
-      isReminder ? null : appL10n.prayerNotificationBody,
+      content.title,
+      content.body,
       scheduledDate,
       notificationDetails,
       androidScheduleMode: await _androidScheduleMode(),
@@ -737,6 +723,60 @@ class NotificationService {
       'Prayer notification $id scheduled for $prayerName at $scheduledDate',
       name: 'sakina_app.notifications',
     );
+  }
+
+  /// What a prayer alert or "prayer is near" reminder says. The alert keeps
+  /// its title and body and adds the prayer time; the reminder, which had
+  /// only a title, now says when the prayer is. [prayerTime] is when the
+  /// notification fires: for a reminder, [reminderMinutes] before the prayer.
+  @visibleForTesting
+  static ({
+    SakinaNotificationKind kind,
+    String title,
+    String body,
+    String? summary,
+  })
+  prayerNotificationContent({
+    required String prayerName,
+    required DateTime prayerTime,
+    PrayerAlertMode mode = PrayerAlertMode.sound,
+    bool isReminder = false,
+    int reminderMinutes = 0,
+    DigitStyle digits = DigitStyle.western,
+  }) {
+    if (isReminder) {
+      final String time = formatNotificationTime(
+        prayerTime.add(Duration(minutes: reminderMinutes)),
+        digits,
+      );
+      return (
+        kind: SakinaNotificationKind.prayerReminder,
+        title: appL10n.prayerReminderBody(
+          applyDigitStyle('$reminderMinutes', digits),
+          prayerName,
+        ),
+        body: appL10n.prayerReminderTimeLine(time),
+        summary: null,
+      );
+    }
+    final String time = formatNotificationTime(prayerTime, digits);
+    return (
+      kind: mode == PrayerAlertMode.notificationOnly
+          ? SakinaNotificationKind.prayerSilent
+          : SakinaNotificationKind.prayer,
+      title: appL10n.notificationServiceMessage17(prayerName),
+      body: appL10n.prayerNotificationBody,
+      summary: appL10n.prayerNotificationTimeLine(time),
+    );
+  }
+
+  Future<DigitStyle> _digitStyle() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return digitStyleFromName(prefs.get(digitStylePreferenceKey));
+    } catch (_) {
+      return DigitStyle.western;
+    }
   }
 
   /// Replace only the supplied calendar day's slot, preserving other days.
@@ -951,6 +991,86 @@ class NotificationService {
     await cancelNotification(_baqarahNotificationId);
   }
 
+  // ==================== DAILY VERSE ====================
+
+  /// Schedules the verse of each of the next seven days at the saved time.
+  /// Rebuilt with the other reminders, so the week keeps rolling forward.
+  Future<void> scheduleDailyVerseNotifications({
+    int? hour,
+    int? minute,
+    DailyVerseSource? source,
+  }) async {
+    await initialize(requestPermissions: false);
+    if (!_isPluginAvailable) return;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final int h = hour ?? prefs.getInt(_verseAlarmHourKey) ?? _defaultVerseHour;
+    final int m =
+        minute ?? prefs.getInt(_verseAlarmMinuteKey) ?? _defaultVerseMinute;
+    await cancelDailyVerseNotifications();
+
+    final DailyVerseSource verses = source ?? DailyVerseSource();
+    final DigitStyle digits = await _digitStyle();
+    final AndroidScheduleMode mode = await _androidScheduleMode();
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    final tz.TZDateTime first = nextDailyOccurrence(now, h, m);
+    for (var day = 0; day < _dailyVerseDaysAhead; day++) {
+      final tz.TZDateTime at = tz.TZDateTime(
+        first.location,
+        first.year,
+        first.month,
+        first.day + day,
+        h,
+        m,
+      );
+      final verse = await verses.verseFor(at);
+      final content = dailyVerseNotificationContent(verse, digits);
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        dailyVerseNotificationId(at),
+        content.title,
+        content.body,
+        at,
+        buildNotificationDetails(
+          SakinaNotificationKind.dailyVerse,
+          title: content.title,
+          body: content.body,
+          summary: content.summary,
+        ),
+        androidScheduleMode: mode,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        payload: jsonEncode({
+          'type': 'daily_verse',
+          'data': <String, dynamic>{
+            'surahNumber': verse.surah,
+            'ayahNumber': verse.ayah,
+          },
+        }),
+      );
+    }
+    developer.log(
+      'Daily verse scheduled for $_dailyVerseDaysAhead days from $first',
+      name: 'sakina_app.notifications',
+    );
+  }
+
+  /// Title, the whole ayah as the body, and where it is in the Quran.
+  @visibleForTesting
+  static ({String title, String body, String summary})
+  dailyVerseNotificationContent(DailyVerse verse, DigitStyle digits) => (
+    title: appL10n.notificationCategoryVerse,
+    body: verse.text,
+    summary: appL10n.dailyVerseNotificationReference(
+      verse.surahName,
+      applyDigitStyle('${verse.ayah}', digits),
+    ),
+  );
+
+  Future<void> cancelDailyVerseNotifications() async {
+    for (var weekday = 1; weekday <= 7; weekday++) {
+      await cancelNotification(4000 + weekday);
+    }
+  }
+
   // ==================== UPDATE ALL ALARMS ====================
 
   /// Update all active alarms based on settings. Updates run one at a time so
@@ -960,6 +1080,7 @@ class NotificationService {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   }) {
     final Future<void> update = _alarmUpdates.then(
       (_) => _applyAlarmState(
@@ -967,6 +1088,7 @@ class NotificationService {
         isEveningEnabled: isEveningEnabled,
         isMulkEnabled: isMulkEnabled,
         isBaqarahEnabled: isBaqarahEnabled,
+        isDailyVerseEnabled: isDailyVerseEnabled,
       ),
     );
     _alarmUpdates = update.catchError((Object _) {});
@@ -978,14 +1100,18 @@ class NotificationService {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   }) async {
     await initialize(requestPermissions: false);
 
+    // The verse window is a week of separate days, so a new day is a change.
+    final DateTime today = DateTime.now();
     final String newSignature =
         '${isMorningEnabled ? 1 : 0}-'
         '${isEveningEnabled ? 1 : 0}-'
         '${isMulkEnabled ? 1 : 0}-'
-        '${isBaqarahEnabled ? 1 : 0}';
+        '${isBaqarahEnabled ? 1 : 0}-'
+        '${isDailyVerseEnabled ? '${today.year}${today.month}${today.day}' : 0}';
 
     if (_lastAppliedAlarmStateSignature == newSignature) {
       developer.log(
@@ -1009,15 +1135,35 @@ class NotificationService {
     if (isBaqarahEnabled) {
       await scheduleBaqarahAlarm();
     }
+    if (isDailyVerseEnabled) {
+      await _scheduleDailyVerseSafely();
+    } else {
+      await cancelDailyVerseNotifications();
+    }
 
     _lastAppliedAlarmStateSignature = newSignature;
 
     developer.log(
       'Updated all alarms. Morning: $isMorningEnabled, '
       'Evening: $isEveningEnabled, '
-      'Mulk: $isMulkEnabled, Baqarah: $isBaqarahEnabled',
+      'Mulk: $isMulkEnabled, Baqarah: $isBaqarahEnabled, '
+      'Verse: $isDailyVerseEnabled',
       name: 'sakina_app.notifications',
     );
+  }
+
+  /// A verse that cannot be read must not stop the other reminders.
+  Future<void> _scheduleDailyVerseSafely({int? hour, int? minute}) async {
+    try {
+      await scheduleDailyVerseNotifications(hour: hour, minute: minute);
+    } catch (error) {
+      developer.log(
+        'Daily verse scheduling failed',
+        name: 'sakina_app.notifications',
+        level: 1000,
+        error: error,
+      );
+    }
   }
 
   /// Reschedule one alarm type without touching other notifications.
@@ -1051,6 +1197,13 @@ class NotificationService {
         await cancelNotification(_baqarahNotificationId);
         if (enabled) {
           await scheduleBaqarahAlarm(hour: hour, minute: minute);
+        }
+        break;
+      case 'verse':
+        if (enabled) {
+          await _scheduleDailyVerseSafely(hour: hour, minute: minute);
+        } else {
+          await cancelDailyVerseNotifications();
         }
         break;
       default:
@@ -1087,6 +1240,10 @@ class NotificationService {
         await prefs.setInt(_baqarahAlarmHourKey, hour);
         await prefs.setInt(_baqarahAlarmMinuteKey, minute);
         break;
+      case 'verse':
+        await prefs.setInt(_verseAlarmHourKey, hour);
+        await prefs.setInt(_verseAlarmMinuteKey, minute);
+        break;
     }
 
     developer.log(
@@ -1118,6 +1275,10 @@ class NotificationService {
         hour = prefs.getInt(_baqarahAlarmHourKey) ?? _defaultBaqarahHour;
         minute = prefs.getInt(_baqarahAlarmMinuteKey) ?? _defaultBaqarahMinute;
         break;
+      case 'verse':
+        hour = prefs.getInt(_verseAlarmHourKey) ?? _defaultVerseHour;
+        minute = prefs.getInt(_verseAlarmMinuteKey) ?? _defaultVerseMinute;
+        break;
     }
 
     return <String, int>{'hour': hour, 'minute': minute};
@@ -1138,28 +1299,10 @@ class NotificationService {
     );
     developer.log('Body: $body', name: 'sakina_app.notifications');
 
-    final AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-          NotificationChannels.testId,
-          NotificationChannels.testName,
-          channelDescription: NotificationChannels.testDescription,
-          importance: Importance.max,
-          priority: Priority.high,
-          icon: '@drawable/ic_notification',
-          playSound: true,
-          enableVibration: true,
-        );
-
-    const DarwinNotificationDetails iosNotificationDetails =
-        DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        );
-
-    final NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: iosNotificationDetails,
+    final NotificationDetails notificationDetails = buildNotificationDetails(
+      SakinaNotificationKind.test,
+      title: title,
+      body: body,
     );
 
     await flutterLocalNotificationsPlugin.show(

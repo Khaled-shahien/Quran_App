@@ -1,149 +1,147 @@
-import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sakina_app/l10n/localization.dart';
 
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/widgets/pressable.dart';
+
+/// The home screen's grid of destinations.
 class CategoryGridWidget extends StatelessWidget {
   const CategoryGridWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
     final textScale = MediaQuery.textScalerOf(context).scale(1);
+    final tiles = <_Tile>[
+      _Tile(l10n.appStringsMessage30, '/duas/all', image: 'الادعيه'),
+      _Tile(
+        l10n.categoryGridWidgetMessage1,
+        '/tasbeeh',
+        image: 'التسبيح_الالكتروني',
+      ),
+      _Tile(
+        l10n.categoryGridWidgetMessage2,
+        '/asma',
+        image: 'اسماء_الله_الحسني',
+      ),
+      _Tile(l10n.appStringsMessage28, '/quran', image: 'القران'),
+      _Tile(l10n.mainNavigationShellMessage2, '/duas', image: 'الاذكار'),
+      _Tile(l10n.categoryGridWidgetMessage3, '/hadeath', image: 'الاحاديث'),
+      _Tile(
+        l10n.guideTileProphets,
+        '/guide?section=prophets',
+        icon: Icons.auto_stories_rounded,
+      ),
+      _Tile(
+        l10n.guideTilePrayer,
+        '/guide?section=prayer',
+        icon: Icons.mosque_rounded,
+      ),
+      _Tile(
+        l10n.guideTilePillars,
+        '/guide?section=pillars',
+        icon: Icons.account_balance_rounded,
+      ),
+    ];
+
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      sliver: SliverGrid(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.page),
+      sliver: SliverGrid.builder(
         // Three columns normally; two taller ones when large text needs room.
         gridDelegate: textScale <= 1.15
             ? const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 0.8,
+                mainAxisSpacing: AppSpacing.ms,
+                crossAxisSpacing: AppSpacing.ms,
+                childAspectRatio: 0.86,
               )
             : SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                mainAxisExtent: 70 + 45 * textScale,
+                mainAxisSpacing: AppSpacing.ms,
+                crossAxisSpacing: AppSpacing.ms,
+                mainAxisExtent: 84 + 48 * textScale,
               ),
-        delegate: SliverChildListDelegate([
-          _catCard(
-            context,
-            l10nOf(context).appStringsMessage30,
-            'assets/images/الادعيه.png',
-            onTap: () => context.push('/duas/all'),
-          ),
-          _catCard(
-            context,
-            l10nOf(context).categoryGridWidgetMessage1,
-            'assets/images/التسبيح_الالكتروني.png',
-            onTap: () => context.push('/tasbeeh'),
-          ),
-          _catCard(
-            context,
-            l10nOf(context).categoryGridWidgetMessage2,
-            'assets/images/اسماء_الله_الحسني.png',
-            onTap: () => context.push('/asma'),
-          ),
-          _catCard(
-            context,
-            l10nOf(context).appStringsMessage28,
-            'assets/images/القران.png',
-            onTap: () => context.push('/quran'),
-          ),
-          _catCard(
-            context,
-            l10nOf(context).mainNavigationShellMessage2,
-            'assets/images/الاذكار.png',
-            onTap: () => context.push('/duas'),
-          ),
-          _catCard(
-            context,
-            l10nOf(context).categoryGridWidgetMessage3,
-            'assets/images/الاحاديث.png',
-            onTap: () => context.push('/hadeath'),
-          ),
-          _iconCard(
-            context,
-            l10nOf(context).guideTileProphets,
-            Icons.auto_stories_rounded,
-            onTap: () => context.push('/guide?section=prophets'),
-          ),
-          _iconCard(
-            context,
-            l10nOf(context).guideTilePrayer,
-            Icons.mosque_rounded,
-            onTap: () => context.push('/guide?section=prayer'),
-          ),
-          _iconCard(
-            context,
-            l10nOf(context).guideTilePillars,
-            Icons.account_balance_rounded,
-            onTap: () => context.push('/guide?section=pillars'),
-          ),
-        ]),
+        itemCount: tiles.length,
+        itemBuilder: (context, index) => _CategoryTile(tile: tiles[index]),
       ),
     );
   }
+}
 
-  Widget _catCard(
-    BuildContext context,
-    String title,
-    String imagePath, {
-    VoidCallback? onTap,
-  }) => Semantics(
-    button: true,
-    label: title,
-    excludeSemantics: true,
-    child: Material(
-      color: Theme.of(context).colorScheme.secondary,
-      borderRadius: BorderRadius.circular(15),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(15),
-        onTap: onTap,
+class _Tile {
+  const _Tile(this.title, this.route, {this.image, this.icon});
+
+  final String title;
+  final String route;
+
+  /// File name (without extension) under `assets/images/`.
+  final String? image;
+  final IconData? icon;
+}
+
+class _CategoryTile extends StatelessWidget {
+  const _CategoryTile({required this.tile});
+
+  final _Tile tile;
+
+  static const double _medallion = 56;
+  static const double _art = 34;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+    final double pixelRatio = MediaQuery.devicePixelRatioOf(context);
+
+    return Pressable(
+      onTap: () => context.push(tile.route),
+      color: scheme.secondary,
+      semanticLabel: tile.title,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.ms,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(imagePath, width: 40, height: 40, fit: BoxFit.contain),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+            Container(
+              width: _medallion,
+              height: _medallion,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: scheme.surface,
+                borderRadius: AppRadius.card,
+              ),
+              child: tile.image != null
+                  ? Image.asset(
+                      'assets/images/${tile.image}.png',
+                      width: _art,
+                      height: _art,
+                      fit: BoxFit.contain,
+                      // Decode at display size, not the source size.
+                      cacheWidth: (_art * pixelRatio).round(),
+                    )
+                  : Icon(tile.icon, size: _art - 4, color: scheme.primary),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Flexible(
+              child: Text(
+                tile.title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: scheme.onSecondary,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
           ],
         ),
       ),
-    ),
-  );
-
-  Widget _iconCard(
-    BuildContext context,
-    String title,
-    IconData icon, {
-    required VoidCallback onTap,
-  }) => Semantics(
-    button: true,
-    label: title,
-    excludeSemantics: true,
-    child: Material(
-      color: Theme.of(context).colorScheme.secondary,
-      borderRadius: BorderRadius.circular(15),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(15),
-        onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 40, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
+    );
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:flutter/widgets.dart';
 
 /// A label beside its controls; the label moves above them when large
@@ -16,7 +17,7 @@ class LabeledRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         children.first,
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
         Row(children: children.skip(2).toList()),
       ],
     );

@@ -1,3 +1,5 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -31,67 +33,71 @@ class _RecitationScreenState extends State<RecitationScreen> {
     final l10n = l10nOf(context);
     final c = context.watch<RecitationController>();
     final reciter = c.reciter;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.recitationTitle),
-        actions: [
-          IconButton(
-            tooltip: l10n.recitationManageDownloads,
-            icon: const Icon(Icons.download_done_rounded),
-            onPressed: () => context.push('/recitation/downloads'),
-          ),
-        ],
-      ),
-      body: reciter == null
-          ? Center(
+    return SakinaHeroScaffold(
+      title: l10n.recitationTitle,
+      actions: [
+        IconButton(
+          tooltip: l10n.recitationManageDownloads,
+          icon: const Icon(Icons.download_done_rounded),
+          onPressed: () => context.push('/recitation/downloads'),
+        ),
+      ],
+      slivers: [
+        if (reciter == null)
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
               child: c.failure == null
                   ? const CircularProgressIndicator()
                   : Text(l10n.recitationFailure(c.failure)),
-            )
-          : CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: DropdownButtonFormField<int>(
-                      key: const Key('recitation-screen-reciter'),
-                      initialValue: reciter.id,
-                      isExpanded: true,
-                      decoration: InputDecoration(
-                        labelText: l10n.recitationReciter,
-                        border: const OutlineInputBorder(),
-                      ),
-                      items: [
-                        for (final r in c.reciters)
-                          DropdownMenuItem(
-                            value: r.id,
-                            child: Text(l10n.reciterLabel(r)),
-                          ),
-                      ],
-                      onChanged: (id) {
-                        final match = c.reciters.where((r) => r.id == id);
-                        if (match.isNotEmpty) c.selectReciter(match.first);
-                      },
-                    ),
-                  ),
-                ),
-                SliverList.builder(
-                  itemCount: 114,
-                  itemBuilder: (context, i) =>
-                      _SurahRow(surah: i + 1, reciterId: reciter.id),
-                ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      l10n.recitationSource,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ),
-                ),
-              ],
             ),
+          )
+        else
+          SliverMainAxisGroup(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  child: DropdownButtonFormField<int>(
+                    key: const Key('recitation-screen-reciter'),
+                    initialValue: reciter.id,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      labelText: l10n.recitationReciter,
+                      border: const OutlineInputBorder(),
+                    ),
+                    items: [
+                      for (final r in c.reciters)
+                        DropdownMenuItem(
+                          value: r.id,
+                          child: Text(l10n.reciterLabel(r)),
+                        ),
+                    ],
+                    onChanged: (id) {
+                      final match = c.reciters.where((r) => r.id == id);
+                      if (match.isNotEmpty) c.selectReciter(match.first);
+                    },
+                  ),
+                ),
+              ),
+              SliverList.builder(
+                itemCount: 114,
+                itemBuilder: (context, i) =>
+                    _SurahRow(surah: i + 1, reciterId: reciter.id),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  child: Text(
+                    l10n.recitationSource,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ),
+            ],
+          ),
+      ],
     );
   }
 }
@@ -121,7 +127,7 @@ class _SurahRow extends StatelessWidget {
         child: SizedBox.square(
           dimension: 48,
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(AppSpacing.ms),
             child: CircularProgressIndicator(value: fraction, strokeWidth: 3),
           ),
         ),

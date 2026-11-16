@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
@@ -31,99 +32,66 @@ class NotificationPermissionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      backgroundColor: Theme.of(context).cardColor,
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         // Scrolls so large text cannot push the answers off a small screen.
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: const EdgeInsets.all(16),
+                width: 80,
+                height: 80,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.primary.withValues(alpha: 0.1),
+                  color: scheme.secondary,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  Icons.notifications_active_rounded,
-                  size: 48,
-                  color: Theme.of(context).colorScheme.primary,
+                  Icons.notifications_active_outlined,
+                  size: 38,
+                  color: scheme.primary,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.md),
               Text(
                 l10nOf(context).notificationPermissionDialogMessage1,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                style: theme.textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.sm),
               Text(
                 l10nOf(context).notificationPermissionDialogMessage2,
-                style: TextStyle(
-                  fontSize: 15,
-                  height: 1.5,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                style: theme.textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 24),
-              ConstrainedBox(
-                constraints: const BoxConstraints(
-                  minWidth: double.infinity,
-                  minHeight: 56,
-                ),
+              const SizedBox(height: AppSpacing.lg),
+              // The buttons take their colours and shape from the theme.
+              SizedBox(
+                width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
                     await _handlePermissionRequest(context, true);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                   child: Text(
                     l10nOf(context).notificationPermissionDialogMessage3,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      height: 1.4,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
-              ConstrainedBox(
-                constraints: const BoxConstraints(
-                  minWidth: double.infinity,
-                  minHeight: 50,
-                ),
+              const SizedBox(height: AppSpacing.sm),
+              SizedBox(
+                width: double.infinity,
                 child: TextButton(
                   onPressed: () async {
                     await _handlePermissionRequest(context, false);
                   },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                   child: Text(
                     l10nOf(context).notificationPermissionDialogMessage4,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),

@@ -20,6 +20,7 @@ class FakeAlarmScheduler implements AlarmScheduler {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   }) async {
     updateAllCalls += 1;
   }
@@ -76,6 +77,7 @@ void main() {
         isEveningEnabled: false,
         isMulkEnabled: true,
         isBaqarahEnabled: false,
+        isDailyVerseEnabled: false,
       );
 
       expect(scheduler.initializeCalls, 1);

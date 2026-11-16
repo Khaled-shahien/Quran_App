@@ -1,3 +1,6 @@
+import 'package:sakina_app/core/feedback/feedback_service.dart';
+import 'package:sakina_app/core/theme/app_motion.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +47,12 @@ class _RecitationPlayerSheetState extends State<RecitationPlayerSheet> {
 
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsetsDirectional.fromSTEB(20, 0, 20, 24),
+        padding: const EdgeInsetsDirectional.fromSTEB(
+          AppSpacing.lg,
+          0,
+          AppSpacing.lg,
+          AppSpacing.lg,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -54,12 +62,12 @@ class _RecitationPlayerSheetState extends State<RecitationPlayerSheet> {
                 style: theme.textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
               _Transport(controller: c),
               const Divider(height: 32),
             ],
             Text(l10n.recitationReciter, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             DropdownButtonFormField<int>(
               key: const Key('recitation-reciter'),
               initialValue: c.reciter?.id,
@@ -76,26 +84,31 @@ class _RecitationPlayerSheetState extends State<RecitationPlayerSheet> {
                 if (r.isNotEmpty) c.selectReciter(r.first);
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: AppSpacing.lg),
             Text(l10n.recitationSpeed, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
               children: [
                 for (final s in RecitationController.speeds)
                   ChoiceChip(
                     label: Text(l10n.recitationSpeedValue(context.digits(s))),
                     selected: c.speed == s,
-                    onSelected: (_) => c.setSpeed(s),
+                    onSelected: (_) {
+                      if (c.speed != s) {
+                        playFeedback(context, FeedbackEvent.selection);
+                      }
+                      c.setSpeed(s);
+                    },
                   ),
               ],
             ),
             if (surah != null && ayahCount > 0) ...[
-              const SizedBox(height: 20),
+              const SizedBox(height: AppSpacing.lg),
               Text(l10n.recitationRepeat, style: theme.textTheme.titleMedium),
               if (c.repeat case final r?) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Text(
                   l10n.recitationRepeating(
                     context.digits(r.from),
@@ -108,10 +121,10 @@ class _RecitationPlayerSheetState extends State<RecitationPlayerSheet> {
                   child: Text(l10n.recitationRepeatOff),
                 ),
               ] else ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Wrap(
-                  spacing: 12,
-                  runSpacing: 8,
+                  spacing: AppSpacing.ms,
+                  runSpacing: AppSpacing.sm,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     _AyahPicker(
@@ -143,14 +156,14 @@ class _RecitationPlayerSheetState extends State<RecitationPlayerSheet> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 FilledButton.tonal(
                   onPressed: () => c.setRepeat(from, to, _times),
                   child: Text(l10n.recitationRepeatStart),
                 ),
               ],
             ],
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.md),
             Text(
               l10n.recitationSource,
               style: theme.textTheme.bodySmall,
@@ -183,7 +196,7 @@ class _AyahPicker extends StatelessWidget {
     mainAxisSize: MainAxisSize.min,
     children: [
       Text(label),
-      const SizedBox(width: 8),
+      const SizedBox(width: AppSpacing.sm),
       DropdownButton<int>(
         value: value,
         menuMaxHeight: 320,
@@ -221,14 +234,14 @@ class _Transport extends StatelessWidget {
           onPressed: c.previousAyah,
           icon: const Icon(Icons.skip_previous_rounded),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppSpacing.ms),
         SizedBox.square(
           dimension: 64,
           child: busy
               ? Semantics(
                   label: l10n.recitationLoading,
                   child: const Padding(
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(AppSpacing.md),
                     child: CircularProgressIndicator(),
                   ),
                 )
@@ -238,14 +251,21 @@ class _Transport extends StatelessWidget {
                       ? l10n.recitationPause
                       : l10n.recitationPlay,
                   onPressed: c.togglePlay,
-                  icon: Icon(
-                    c.isPlaying
-                        ? Icons.pause_rounded
-                        : Icons.play_arrow_rounded,
+                  // The icon turns over when playback starts or stops.
+                  icon: AnimatedSwitcher(
+                    duration: AppMotion.of(context, AppMotion.base),
+                    transitionBuilder: (child, animation) =>
+                        ScaleTransition(scale: animation, child: child),
+                    child: Icon(
+                      c.isPlaying
+                          ? Icons.pause_rounded
+                          : Icons.play_arrow_rounded,
+                      key: ValueKey<bool>(c.isPlaying),
+                    ),
                   ),
                 ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppSpacing.ms),
         IconButton(
           iconSize: 32,
           tooltip: l10n.recitationNextAyah,

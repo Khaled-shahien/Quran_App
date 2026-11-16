@@ -43,8 +43,7 @@ class MediaErrorView extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
-              style: TextStyle(
-                fontSize: 15,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurface,
               ),
             ),
@@ -87,8 +86,7 @@ class MediaEmptyView extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
-              style: TextStyle(
-                fontSize: 15,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),

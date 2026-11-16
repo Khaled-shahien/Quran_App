@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/features/duas/presentation/screens/azkar_screen.dart';
 
 void main() {
@@ -98,17 +99,17 @@ void main() {
       expect(find.byType(CustomScrollView), findsOneWidget);
     });
 
-    testWidgets('AzkarScreen AppBar is transparent with no elevation', (
+    testWidgets('AzkarScreen uses the collapsing hero header', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
         const MaterialApp(home: Scaffold(body: AzkarScreen())),
       );
 
-      final appBarWidget =
-          find.byType(AppBar).evaluate().first.widget as AppBar;
-      expect(appBarWidget.elevation, 0);
-      expect(appBarWidget.backgroundColor, Colors.transparent);
+      expect(find.byType(SakinaHeroAppBar), findsOneWidget);
+      final bar = tester.widget<SliverAppBar>(find.byType(SliverAppBar));
+      expect(bar.pinned, isTrue, reason: 'collapses to a slim bar');
+      expect(bar.elevation, 0);
     });
   });
 }

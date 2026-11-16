@@ -1,3 +1,11 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
+import 'package:sakina_app/core/theme/app_motion.dart';
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/core/theme/app_typography.dart';
+import 'package:sakina_app/core/widgets/geometric_pattern.dart';
+import 'package:sakina_app/core/widgets/section_header.dart';
+import 'package:sakina_app/core/widgets/status_view.dart';
+import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -76,108 +84,73 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          l10n.prayerTitle,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.primary,
+    return SakinaHeroScaffold(
+      title: l10n.prayerTitle,
+      actions: [
+        IconButton(
+          tooltip: l10nOf(context).prayerTimesScreenMessage1,
+          icon: const Icon(Icons.edit_location_alt_outlined),
+          onPressed: () => showPrayerLocationDialog(
+            context,
+            context.read<PrayerTimesProvider>(),
           ),
         ),
-        actions: [
-          IconButton(
-            tooltip: l10nOf(context).prayerTimesScreenMessage1,
-            icon: const Icon(Icons.edit_location_alt),
-            onPressed: () => showPrayerLocationDialog(
-              context,
-              context.read<PrayerTimesProvider>(),
-            ),
-          ),
-          IconButton(
-            tooltip: l10nOf(context).prayerTimesScreenMessage2,
-            icon: const Icon(Icons.my_location),
-            onPressed: () async {
-              final provider = context.read<PrayerTimesProvider>();
-              await provider.useDeviceLocation();
-              if (provider.hasData && context.mounted) {
-                await promptForNotificationPermissionOnce(context);
-              }
-            },
-          ),
-        ],
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: Consumer<PrayerTimesProvider>(
+        IconButton(
+          tooltip: l10nOf(context).prayerTimesScreenMessage2,
+          icon: const Icon(Icons.my_location_rounded),
+          onPressed: () async {
+            final provider = context.read<PrayerTimesProvider>();
+            await provider.useDeviceLocation();
+            if (provider.hasData && context.mounted) {
+              await promptForNotificationPermissionOnce(context);
+            }
+          },
+        ),
+      ],
+      slivers: [
+        Consumer<PrayerTimesProvider>(
           builder: (context, provider, child) {
             if (provider.isLoading) {
-              return const Center(child: PulseLoader(lines: 6));
+              return const SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(child: PulseLoader(lines: 6)),
+              );
             }
 
             if (provider.hasError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: 64,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      l10n.prayerLoadError,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      l10nOf(context).prayerTimesWidgetMessage1,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
+              return SliverFillRemaining(
+                hasScrollBody: false,
+                child: StatusView.error(
+                  message: l10n.prayerLoadError,
+                  detail: l10nOf(context).prayerTimesWidgetMessage1,
+                  footnote:
                       provider.errorMessage ??
-                          l10nOf(context).prayerTimesWidgetMessage3,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    Semantics(
-                      button: true,
-                      label: l10nOf(context).prayerTimesScreenMessage3,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          provider.fetchTodayForCurrentLocation();
-                        },
-                        child: Text(l10n.retry, style: const TextStyle()),
-                      ),
-                    ),
-                  ],
+                      l10nOf(context).prayerTimesWidgetMessage3,
+                  actionLabel: l10n.retry,
+                  actionSemanticLabel: l10nOf(
+                    context,
+                  ).prayerTimesScreenMessage3,
+                  onAction: provider.fetchTodayForCurrentLocation,
                 ),
               );
             }
 
             if (provider.hasData) {
-              return _buildPrayerTimesContent(provider);
+              return SliverToBoxAdapter(
+                child: _buildPrayerTimesContent(provider),
+              );
             }
 
-            return Center(child: Text(l10n.choosePrayerLocation));
+            return SliverFillRemaining(
+              hasScrollBody: false,
+              child: StatusView(
+                icon: Icons.location_on_outlined,
+                message: l10n.choosePrayerLocation,
+              ),
+            );
           },
         ),
-      ),
+      ],
     );
   }
 
@@ -185,87 +158,81 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
     final prayerTimes = provider.getMainPrayerTimes();
     final now = context.read<PrayerTimesProvider>().locationNow;
     final formattedDate = '${now.day}/${now.month}/${now.year}';
+    final text = Theme.of(context).textTheme;
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Text(
-                  '${provider.locationLabel} • ${PrayerCalculationPolicy.methods[provider.selectedMethod]}',
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  '${provider.prayerTimes?.timezone ?? ""} • ${provider.selectedCoordinates?.latitude.toStringAsFixed(4)}, ${provider.selectedCoordinates?.longitude.toStringAsFixed(4)}',
-                  textDirection: TextDirection.ltr,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
+    // Scrolls with the page, under the collapsing header.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.page,
+            AppSpacing.sm,
+            AppSpacing.page,
+            AppSpacing.xs,
           ),
-          if (provider.prayerTimes?.isCached == true)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                appL10n.prayerTimesScreenMessage6(
-                  (provider.prayerTimes!.isStale
-                          ? appL10n.prayerTimesScreenMessage5
-                          : appL10n.prayerTimesScreenMessage4)
-                      .toString(),
-                  (provider.prayerTimes!.fetchedAt).toString(),
-                ),
+          child: Column(
+            children: [
+              Text(
+                '${provider.locationLabel} • ${PrayerCalculationPolicy.methods[provider.selectedMethod]}',
                 textAlign: TextAlign.center,
+                style: text.titleSmall,
               ),
-            ),
-          TextButton(
-            onPressed: provider.refresh,
-            child: Text(appL10n.prayerTimesScreenMessage7),
+              Text(
+                '${provider.prayerTimes?.timezone ?? ""} • ${provider.selectedCoordinates?.latitude.toStringAsFixed(4)}, ${provider.selectedCoordinates?.longitude.toStringAsFixed(4)}',
+                textDirection: TextDirection.ltr,
+                textAlign: TextAlign.center,
+                style: text.bodySmall,
+              ),
+            ],
           ),
-          // Next Prayer Card
-          _buildNextPrayerCard(prayerTimes),
-          const SizedBox(height: 24),
-          // All Prayer Times
+        ),
+        if (provider.prayerTimes?.isCached == true)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.todayPrayerTimes,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  formattedDate,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  appL10n.notificationServiceMessage5,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _buildPrayerTimesList(prayerTimes),
-              ],
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            child: Text(
+              appL10n.prayerTimesScreenMessage6(
+                (provider.prayerTimes!.isStale
+                        ? appL10n.prayerTimesScreenMessage5
+                        : appL10n.prayerTimesScreenMessage4)
+                    .toString(),
+                (provider.prayerTimes!.fetchedAt).toString(),
+              ),
+              textAlign: TextAlign.center,
+              style: text.bodySmall,
             ),
           ),
-          const SizedBox(height: 24),
-        ],
-      ),
+        Center(
+          child: TextButton.icon(
+            onPressed: provider.refresh,
+            icon: const Icon(Icons.refresh_rounded, size: 18),
+            label: Text(appL10n.prayerTimesScreenMessage7),
+          ),
+        ),
+        // Next Prayer Card
+        _buildNextPrayerCard(prayerTimes),
+        SectionHeader(
+          title: l10n.todayPrayerTimes,
+          trailing: Text(context.digits(formattedDate), style: text.bodySmall),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.page),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                appL10n.notificationServiceMessage5,
+                style: text.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.ms),
+              _buildPrayerTimesList(prayerTimes),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+      ],
     );
   }
 
@@ -275,95 +242,91 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
     final nextPrayerTime = context.digits(nextPrayerInfo['time'] as String);
     final timeRemaining = context.digits(nextPrayerInfo['remaining'] as String);
 
-    return Container(
-      margin: const EdgeInsets.all(16),
-      constraints: const BoxConstraints(minHeight: 280),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.brown.shade800,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: SakinaDecor.of(context).heroColors,
+    final decor = SakinaDecor.of(context);
+    final text = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.page),
+      child: ClipRRect(
+        borderRadius: AppRadius.hero,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: AlignmentDirectional.topStart,
+              end: AlignmentDirectional.bottomEnd,
+              colors: decor.heroColors,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Stack(
             children: [
-              // Next Prayer Label
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  appL10n.prayerTimesWidgetMessage6,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white70,
-                    letterSpacing: 1,
-                  ),
+              Positioned.fill(
+                child: GeometricPattern(
+                  pattern: decor.pattern,
+                  color: decor.onFeature.withValues(alpha: 0.07),
                 ),
               ),
-              // Prayer Name and Time
-              Column(
-                children: [
-                  Text(
-                    appL10n.prayerTimesScreenMessage8(
-                      (nextPrayerName).toString(),
-                    ),
-                    style: const TextStyle(
-                      fontSize: 56,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      height: 1.1,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Text(
-                        nextPrayerTime,
-                        style: const TextStyle(
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                child: Column(
+                  children: [
+                    // Next Prayer Label
+                    Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        appL10n.prayerTimesWidgetMessage6,
+                        style: text.labelLarge?.copyWith(
+                          color: decor.onFeatureMuted,
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            appL10n.prayerTimesWidgetMessage7,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white70,
-                            ),
-                          ),
-                          Text(
-                            timeRemaining,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    // Prayer Name and Time
+                    Text(
+                      appL10n.prayerTimesScreenMessage8(
+                        (nextPrayerName).toString(),
                       ),
-                    ],
-                  ),
-                ],
+                      textAlign: TextAlign.center,
+                      style: text.displayMedium?.copyWith(
+                        color: decor.onFeature,
+                        fontWeight: FontWeight.w800,
+                        height: 1.15,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.ms),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: AppSpacing.md,
+                      children: [
+                        Text(
+                          nextPrayerTime,
+                          style: AppTypography.numeral.copyWith(
+                            color: decor.onFeature,
+                          ),
+                        ),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              appL10n.prayerTimesWidgetMessage7,
+                              style: text.labelMedium?.copyWith(
+                                color: decor.onFeatureMuted,
+                              ),
+                            ),
+                            Text(
+                              timeRemaining,
+                              style: text.titleMedium?.copyWith(
+                                color: decor.onFeature,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                  ],
+                ),
               ),
-              const SizedBox(height: 12),
             ],
           ),
         ),
@@ -407,58 +370,65 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
     required String prayerTime,
     required bool isNext,
   }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: isNext
-            ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
-            : Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isNext
-              ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
-              : Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-          width: isNext ? 2 : 1,
+    final scheme = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+    return Semantics(
+      selected: isNext,
+      child: AnimatedContainer(
+        duration: AppMotion.of(context, AppMotion.base),
+        curve: AppMotion.standard,
+        margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.ms,
         ),
-      ),
-      // Wraps the time under the name instead of overflowing at large text.
-      child: Wrap(
-        alignment: WrapAlignment.spaceBetween,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 8,
-        runSpacing: 8,
-        children: [
-          Text(
-            prayerName,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: isNext ? FontWeight.bold : FontWeight.w500,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+        decoration: BoxDecoration(
+          color: isNext ? scheme.secondary : SakinaDecor.of(context).card,
+          borderRadius: AppRadius.controls,
+          border: Border.all(
+            color: isNext ? scheme.primary : scheme.outlineVariant,
+            width: isNext ? 1.5 : 1,
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: isNext
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(
-                      context,
-                    ).colorScheme.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
+        ),
+        // Wraps the time under the name instead of overflowing at large text.
+        child: Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // The next prayer is marked by a dot as well as by colour.
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: isNext ? scheme.primary : Colors.transparent,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.ms),
+                Text(
+                  prayerName,
+                  style: text.titleMedium?.copyWith(
+                    color: isNext ? scheme.onSecondary : scheme.onSurface,
+                    fontWeight: isNext ? FontWeight.w700 : FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
-            child: Text(
+            Text(
               prayerTime,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: isNext
-                    ? Theme.of(context).colorScheme.onPrimary
-                    : Theme.of(context).colorScheme.primary,
+              style: text.titleMedium?.copyWith(
+                color: isNext ? scheme.primary : scheme.onSurfaceVariant,
+                fontWeight: FontWeight.w700,
+                fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

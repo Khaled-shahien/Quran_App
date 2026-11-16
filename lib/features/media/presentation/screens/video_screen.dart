@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 
@@ -32,62 +33,66 @@ class _VideoScreenState extends State<VideoScreen> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            l10nOf(context).videoScreenMessage1,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        body: SafeArea(
-          child: Consumer<VideoProvider>(
+      child: SakinaHeroScaffold(
+        title: l10nOf(context).videoScreenMessage1,
+        onRefresh: context.read<VideoProvider>().loadVideos,
+        slivers: [
+          Consumer<VideoProvider>(
             builder: (context, provider, child) {
-              if (provider.isLoading) return const MediaLoadingView();
-
-              if (provider.hasError) {
-                return MediaErrorView(
-                  message: provider.errorMessage!,
-                  onRetry: provider.loadVideos,
+              if (provider.isLoading) {
+                return const SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: MediaLoadingView(),
                 );
               }
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _CategoryChips(provider: provider),
+              if (provider.hasError) {
+                return SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: MediaErrorView(
+                    message: provider.errorMessage!,
+                    onRetry: provider.loadVideos,
+                  ),
+                );
+              }
+
+              return SliverMainAxisGroup(
+                slivers: [
+                  SliverToBoxAdapter(child: _CategoryChips(provider: provider)),
                   if (provider.fallbackMessage != null)
-                    Padding(
+                    SliverPadding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.md,
                         vertical: AppSpacing.sm,
                       ),
-                      child: Text(
-                        provider.fallbackMessage!,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w700,
+                      sliver: SliverToBoxAdapter(
+                        child: Text(
+                          provider.fallbackMessage!,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ),
-                  Expanded(
-                    child: provider.channels.isNotEmpty
-                        ? _FallbackChannels(provider: provider)
-                        : provider.videos.isEmpty
-                        ? MediaEmptyView(
-                            message: l10nOf(context).videoScreenMessage2,
-                            icon: Icons.video_library_outlined,
-                          )
-                        : _VideoResults(provider: provider),
-                  ),
+                  if (provider.channels.isNotEmpty)
+                    _FallbackChannels(provider: provider)
+                  else if (provider.videos.isEmpty)
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: MediaEmptyView(
+                        message: l10nOf(context).videoScreenMessage2,
+                        icon: Icons.video_library_outlined,
+                      ),
+                    )
+                  else
+                    _VideoResults(provider: provider),
                 ],
               );
             },
           ),
-        ),
+        ],
       ),
     );
   }
@@ -137,21 +142,22 @@ class _VideoResults extends StatelessWidget {
 
   final VideoProvider provider;
 
+  static const EdgeInsets _padding = EdgeInsets.fromLTRB(
+    AppSpacing.md,
+    AppSpacing.sm,
+    AppSpacing.md,
+    AppSpacing.lg,
+  );
+
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
+    return SliverLayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth < 640) {
-          return RefreshIndicator(
-            onRefresh: provider.loadVideos,
-            child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.md,
-                AppSpacing.sm,
-                AppSpacing.md,
-                AppSpacing.lg,
-              ),
+        // One column on phones, a grid on wider screens.
+        if (constraints.crossAxisExtent < 640) {
+          return SliverPadding(
+            padding: _padding,
+            sliver: SliverList.builder(
               itemCount: provider.videos.length,
               itemBuilder: (context, index) {
                 return Padding(
@@ -163,16 +169,9 @@ class _VideoResults extends StatelessWidget {
           );
         }
 
-        return RefreshIndicator(
-          onRefresh: provider.loadVideos,
-          child: GridView.builder(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.md,
-              AppSpacing.sm,
-              AppSpacing.md,
-              AppSpacing.lg,
-            ),
+        return SliverPadding(
+          padding: _padding,
+          sliver: SliverGrid.builder(
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 360,
               mainAxisSpacing: AppSpacing.md,
@@ -197,11 +196,9 @@ class _FallbackChannels extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: provider.loadVideos,
-      child: ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+    return SliverPadding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+      sliver: SliverList.builder(
         itemCount: provider.channels.length,
         itemBuilder: (context, index) {
           return VideoChannelCard(channel: provider.channels[index]);

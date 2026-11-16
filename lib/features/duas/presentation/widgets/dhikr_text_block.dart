@@ -1,3 +1,5 @@
+import 'package:sakina_app/core/theme/app_spacing.dart';
+import 'package:sakina_app/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/models/azkar_model.dart';
@@ -27,13 +29,13 @@ class DhikrTextBlock extends StatelessWidget {
             style: guidance,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
         ],
         Text(
           item.text,
           key: const Key('dhikr-text'),
           style: TextStyle(
-            fontFamily: 'Amiri',
+            fontFamily: AppTypography.scriptFontFamily,
             fontSize: 22,
             height: 2.0,
             color: scheme.onSurface,
@@ -41,7 +43,7 @@ class DhikrTextBlock extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         if (item.instructionAfter.isNotEmpty) ...[
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             item.instructionAfter,
             key: const Key('dhikr-instruction-after'),

@@ -2,7 +2,14 @@ import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:math';
+import '../../../../core/feedback/feedback_service.dart';
+import '../../../../core/theme/app_motion.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/geometric_pattern.dart';
+import '../../../../core/widgets/section_header.dart';
+import '../../../quran/domain/daily_verses.dart';
 import '../providers/favorites_provider.dart';
 
 class DailyVerseSectionWidget extends StatefulWidget {
@@ -14,149 +21,138 @@ class DailyVerseSectionWidget extends StatefulWidget {
 }
 
 class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
-  final List<Map<String, String>> _dailyVerses = [
-    {
-      'surah': 'سورة الفاتحة',
-      'arabic':
-          'الْحَمْدُ لِلَّهِ '
-          'رَبِّ الْعَالَمِينَ',
-      'english': 'All praise and thanks be to the Lord of the worlds.',
-    },
-    {
-      'surah': 'سورة البقرة',
-      'arabic':
-          'لَا يُكَلِّفُ اللَّهُ '
-          'نَفْسًا إِلَّا وُسْعَهَا',
-      'english': 'Allah does not burden a soul beyond that it can bear.',
-    },
-    {
-      'surah': 'سورة غافر',
-      'arabic':
-          'وَقَالَ رَبُّكُمُ '
-          'ادْعُونِي أَسْتَجِبْ لَكُمْ',
-      'english': 'And your Lord says, "Call upon Me; I will respond to you."',
-    },
-    {
-      'surah': 'سورة الشرح',
-      'arabic': 'فَإِنَّ مَعَ الْعُسْرِ يُسْرًا',
-      'english': 'For indeed, with hardship [will be] ease.',
-    },
-    {
-      'surah': 'سورة الرعد',
-      'arabic':
-          'أَلَا بِذِكْرِ اللَّهِ '
-          'تَطْمَئِنِّ الْقُلُوبُ',
-      'english':
-          'Unquestionably, by the remembrance of Allah hearts are assured.',
-    },
-    {
-      'surah': 'سورة طه',
-      'arabic':
-          'قَالَ لَا تَخَافَا ۖ '
-          'إِنَّنِي مَعَكُمَا '
-          'أَسْمَعُ وَأَرَىٰ',
-      'english':
-          'He said, "Fear not. Indeed, I am with you both; I hear and I see."',
-    },
-  ];
-
   late Map<String, String> _selectedVerse;
 
   @override
   void initState() {
     super.initState();
-    _selectedVerse = _dailyVerses[Random().nextInt(_dailyVerses.length)];
+    // One verse per calendar day, so it does not change on every visit.
+    _selectedVerse = dailyVerses[dailyVerseIndex(DateTime.now())];
   }
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final SakinaDecor decor = SakinaDecor.of(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          // Wraps the surah name under the heading at large text sizes.
-          child: Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 8,
-            runSpacing: 4,
-            children: [
-              Text(
-                l10nOf(context).dailyVerseSectionWidgetMessage1,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                _selectedVerse['surah']!,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: SakinaDecor.of(context).featureCard,
-            borderRadius: BorderRadius.circular(20),
-            border: Border(
-              right: BorderSide(
-                color: SakinaDecor.of(context).accent,
-                width: 6,
-              ),
+        SectionHeader(
+          title: l10nOf(context).dailyVerseSectionWidgetMessage1,
+          trailing: Text(
+            _selectedVerse['surah']!,
+            textAlign: TextAlign.end,
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: theme.colorScheme.primary,
             ),
           ),
-          child: Consumer<FavoritesProvider>(
-            builder: (context, favoritesProvider, child) {
-              final isFav = favoritesProvider.isFavorite(_selectedVerse);
-              return Column(
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.page),
+          child: ClipRRect(
+            borderRadius: AppRadius.hero,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: AlignmentDirectional.topStart,
+                  end: AlignmentDirectional.bottomEnd,
+                  colors: decor.heroColors,
+                ),
+              ),
+              child: Stack(
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      tooltip: isFav
-                          ? l10nOf(context).homeScreenMessage60
-                          : l10nOf(context).addVerseToFavorites,
-                      icon: Icon(
-                        isFav ? Icons.favorite : Icons.favorite_outline,
-                        color: isFav
-                            ? Theme.of(context).colorScheme.error
-                            : Colors.white70,
-                      ),
-                      onPressed: () {
-                        favoritesProvider.toggleFavorite(_selectedVerse);
+                  Positioned.fill(
+                    child: GeometricPattern(
+                      pattern: decor.pattern,
+                      color: decor.onFeature.withValues(alpha: 0.07),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      AppSpacing.lg,
+                      AppSpacing.sm,
+                      AppSpacing.sm,
+                      AppSpacing.lg,
+                    ),
+                    child: Consumer<FavoritesProvider>(
+                      builder: (context, favoritesProvider, child) {
+                        final isFav = favoritesProvider.isFavorite(
+                          _selectedVerse,
+                        );
+                        return Column(
+                          children: [
+                            Align(
+                              alignment: AlignmentDirectional.centerEnd,
+                              child: IconButton(
+                                tooltip: isFav
+                                    ? l10nOf(context).homeScreenMessage60
+                                    : l10nOf(context).addVerseToFavorites,
+                                onPressed: () {
+                                  playFeedback(context, FeedbackEvent.favorite);
+                                  favoritesProvider.toggleFavorite(
+                                    _selectedVerse,
+                                  );
+                                },
+                                // The heart pops when its state changes.
+                                icon: AnimatedSwitcher(
+                                  duration: AppMotion.of(
+                                    context,
+                                    AppMotion.base,
+                                  ),
+                                  switchInCurve: Curves.easeOutBack,
+                                  transitionBuilder: (child, animation) =>
+                                      ScaleTransition(
+                                        scale: animation,
+                                        child: child,
+                                      ),
+                                  child: Icon(
+                                    isFav
+                                        ? Icons.favorite_rounded
+                                        : Icons.favorite_outline_rounded,
+                                    key: ValueKey<bool>(isFav),
+                                    color: isFav
+                                        ? decor.accent
+                                        : decor.onFeatureMuted,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                end: AppSpacing.md,
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    _selectedVerse['arabic']!,
+                                    textAlign: TextAlign.center,
+                                    style: AppTypography.script.copyWith(
+                                      fontSize: 26,
+                                      color: decor.onFeature,
+                                    ),
+                                  ),
+                                  const SizedBox(height: AppSpacing.ms),
+                                  Text(
+                                    _selectedVerse['english']!,
+                                    textDirection: TextDirection.ltr,
+                                    textAlign: TextAlign.center,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: decor.onFeatureMuted,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
                       },
                     ),
                   ),
-                  Text(
-                    _selectedVerse['arabic']!,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontFamily: 'Amiri',
-                      fontSize: 26,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    _selectedVerse['english']!,
-                    textDirection: TextDirection.ltr,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white70),
-                  ),
                 ],
-              );
-            },
+              ),
+            ),
           ),
         ),
-        const SizedBox(height: 15),
       ],
     );
   }

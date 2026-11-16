@@ -1,13 +1,16 @@
 import 'package:sakina_app/core/accessibility/digit_style.dart';
-import 'package:sakina_app/core/theme/app_design.dart';
 import 'dart:async';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/theme/app_colors.dart';
+import '../../../../core/feedback/feedback_service.dart';
+import '../../../../core/theme/app_motion.dart';
 import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_shadows.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/sakina_card.dart';
+import '../../../../core/widgets/section_header.dart';
 import '../../../khatma/domain/models/khatma_model.dart';
 import '../../../khatma/domain/models/wird_reading_position.dart';
 import '../../../khatma/domain/services/khatma_quran_locator.dart';
@@ -34,19 +37,12 @@ class CurrentWirdWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-    // Colors from the design
-    final Color cardBgColor = SakinaDecor.of(context).card;
-    final Color accentYellow = isDarkMode
-        ? AppColors.darkSecondary
-        : const Color(0xFFF9D030); // Yellow button
-    final Color finishedBtnText = isDarkMode ? Colors.white : Colors.black87;
-    final Color textDark = Theme.of(context).colorScheme.onSurface;
-    final Color dividerColor = isDarkMode
-        ? AppColors.darkGray
-        : const Color(0xFFE5E5E5);
-    final Color primaryColor = Theme.of(context).colorScheme.primary;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+    final TextTheme text = theme.textTheme;
+    final Color textDark = scheme.onSurface;
+    final Color dividerColor = scheme.outlineVariant;
+    final Color primaryColor = scheme.primary;
 
     return Consumer<KhatmaProvider>(
       builder: (context, khatmaProvider, child) {
@@ -56,255 +52,195 @@ class CurrentWirdWidget extends StatelessWidget {
             : khatmaProvider.savedWirdPositionFor(activeKhatma);
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.page),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Section Title
-              Text(
-                l10nOf(context).currentWirdWidgetMessage3,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: primaryColor,
+              SectionHeader(
+                title: l10nOf(context).currentWirdWidgetMessage3,
+                padding: const EdgeInsets.only(
+                  top: AppSpacing.lg,
+                  bottom: AppSpacing.ms,
                 ),
-                textAlign: TextAlign.right,
               ),
-              const SizedBox(height: 12),
 
               if (activeKhatma != null) ...[
                 // Main Card
-                Container(
-                  decoration: BoxDecoration(
-                    color: cardBgColor,
-                    borderRadius: AppRadius.card,
-                    boxShadow: AppShadows.card,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        // Top Row
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
+                SakinaCard(
+                  child: Column(
+                    children: [
+                      // Top Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
                               l10nOf(context).currentWirdWidgetMessage4,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: textDark,
-                              ),
+                              style: text.titleSmall,
                             ),
-                            Text(
+                          ),
+                          const SizedBox(width: AppSpacing.sm),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.ms,
+                              vertical: AppSpacing.xs,
+                            ),
+                            decoration: BoxDecoration(
+                              color: scheme.secondary,
+                              borderRadius: AppRadius.pill,
+                            ),
+                            child: Text(
                               l10nOf(context).khatmaLocationScreenMessage5(
                                 (activeKhatma.currentJuz).toString(),
                               ),
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor,
+                              style: text.labelMedium?.copyWith(
+                                color: scheme.onSecondary,
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Dynamic first ayah preview for current wird range.
-                        _AnimatedWirdAyahPreview(
-                          cacheKey:
-                              '${activeKhatma.id}_'
-                              '${activeKhatma.todayFromUnit}_'
-                              '${activeKhatma.todayToUnit}',
-                          textColor: textDark,
-                          loader: () => _loadCurrentWirdPreview(
-                            context: context,
-                            khatma: activeKhatma,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Details Row 1 (Start)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              l10nOf(context).currentWirdWidgetMessage5(
-                                (activeKhatma.startMode).toString(),
-                              ),
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor,
-                              ),
-                            ),
-                            Text(
-                              l10nOf(context).currentWirdWidgetMessage6(
-                                (activeKhatma.amountValue).toString(),
-                              ),
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          l10nOf(context).currentWirdWidgetMessage7(
-                            (activeKhatma.todayFromUnit).toString(),
-                            (activeKhatma.todayToUnit).toString(),
-                            (activeKhatma.amountType).toString(),
-                          ),
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: textDark.withValues(alpha: 0.8),
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                        if (savedPosition != null) ...[
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  l10nOf(context).currentWirdWidgetMessage8,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                    color: primaryColor,
-                                  ),
-                                  textAlign: TextAlign.right,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              Icon(
-                                Icons.bookmark,
-                                size: 16,
-                                color: primaryColor,
-                              ),
-                            ],
                           ),
                         ],
-                        const SizedBox(height: 24),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
 
-                        // Action Buttons
+                      // Dynamic first ayah preview for current wird range.
+                      _AnimatedWirdAyahPreview(
+                        cacheKey:
+                            '${activeKhatma.id}_'
+                            '${activeKhatma.todayFromUnit}_'
+                            '${activeKhatma.todayToUnit}',
+                        textColor: textDark,
+                        loader: () => _loadCurrentWirdPreview(
+                          context: context,
+                          khatma: activeKhatma,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+
+                      // Details Row 1 (Start)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            l10nOf(context).currentWirdWidgetMessage5(
+                              (activeKhatma.startMode).toString(),
+                            ),
+                            style: text.labelLarge?.copyWith(
+                              color: primaryColor,
+                            ),
+                          ),
+                          Text(
+                            l10nOf(context).currentWirdWidgetMessage6(
+                              (activeKhatma.amountValue).toString(),
+                            ),
+                            style: text.labelLarge?.copyWith(
+                              color: primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        l10nOf(context).currentWirdWidgetMessage7(
+                          (activeKhatma.todayFromUnit).toString(),
+                          (activeKhatma.todayToUnit).toString(),
+                          (activeKhatma.amountType).toString(),
+                        ),
+                        style: text.bodySmall,
+                        textAlign: TextAlign.start,
+                      ),
+                      if (savedPosition != null) ...[
+                        const SizedBox(height: AppSpacing.sm),
                         Row(
                           children: [
-                            // Finished Button (Yellow)
-                            Expanded(
-                              flex: 1,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  await khatmaProvider
-                                      .markCurrentWirdAsFinished();
-                                  if (!context.mounted) return;
-
-                                  final nextKhatma =
-                                      khatmaProvider.activeKhatma;
-                                  final bool stillActive =
-                                      nextKhatma != null &&
-                                      !nextKhatma.isCompleted;
-
-                                  final String message = stillActive
-                                      ? _completedWirdMessage
-                                      : _completedKhatmaMessage;
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        message,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      backgroundColor: Theme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                      behavior: SnackBarBehavior.floating,
-                                      duration: const Duration(seconds: 3),
-                                    ),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: accentYellow,
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  elevation: 0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.chevron_right,
-                                      color: finishedBtnText,
-                                      size: 20,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      l10nOf(context).currentWirdWidgetMessage9,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: finishedBtnText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            Icon(
+                              Icons.bookmark_rounded,
+                              size: 16,
+                              color: primaryColor,
                             ),
-                            const SizedBox(width: 12),
-
-                            // Read Button (Green)
-                            Expanded(
-                              flex: 1,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  await _openWirdAtStart(
-                                    context: context,
-                                    khatma: activeKhatma,
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: primaryColor,
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  elevation: 0,
+                            const SizedBox(width: AppSpacing.xs),
+                            Flexible(
+                              child: Text(
+                                l10nOf(context).currentWirdWidgetMessage8,
+                                style: text.labelMedium?.copyWith(
+                                  color: primaryColor,
                                 ),
-                                child: Text(
-                                  l10nOf(context).currentWirdWidgetMessage10,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onPrimary,
-                                  ),
-                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
                         ),
                       ],
-                    ),
+                      const SizedBox(height: AppSpacing.md),
+
+                      // Action Buttons
+                      Row(
+                        children: [
+                          // Finished: the quieter of the two actions.
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: () async {
+                                await khatmaProvider
+                                    .markCurrentWirdAsFinished();
+                                if (!context.mounted) return;
+                                playFeedback(context, FeedbackEvent.success);
+
+                                final nextKhatma = khatmaProvider.activeKhatma;
+                                final bool stillActive =
+                                    nextKhatma != null &&
+                                    !nextKhatma.isCompleted;
+
+                                final String message = stillActive
+                                    ? _completedWirdMessage
+                                    : _completedKhatmaMessage;
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(message),
+                                    duration: const Duration(seconds: 3),
+                                  ),
+                                );
+                              },
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.sm,
+                                  vertical: AppSpacing.ms,
+                                ),
+                              ),
+                              icon: const Icon(Icons.check_rounded, size: 20),
+                              label: Text(
+                                l10nOf(context).currentWirdWidgetMessage9,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.ms),
+
+                          // Read: the primary action.
+                          Expanded(
+                            child: FilledButton(
+                              onPressed: () async {
+                                await _openWirdAtStart(
+                                  context: context,
+                                  khatma: activeKhatma,
+                                );
+                              },
+                              style: FilledButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.sm,
+                                  vertical: AppSpacing.ms,
+                                ),
+                              ),
+                              child: Text(
+                                l10nOf(context).currentWirdWidgetMessage10,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
 
-                const SizedBox(height: 24),
-                Divider(color: dividerColor, thickness: 1),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.md),
 
                 // Khatma Details (Progress Section)
                 Row(
@@ -312,12 +248,7 @@ class CurrentWirdWidget extends StatelessWidget {
                   children: [
                     Text(
                       l10nOf(context).appRouterMessage1,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: textDark,
-                      ),
-                      textAlign: TextAlign.right,
+                      style: text.titleSmall,
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
@@ -325,7 +256,7 @@ class CurrentWirdWidget extends StatelessWidget {
                         IconButton(
                           tooltip: l10nOf(context).currentWirdWidgetMessage11,
                           icon: Icon(
-                            Icons.cancel,
+                            Icons.close_rounded,
                             color: Theme.of(context).colorScheme.error,
                           ),
                           onPressed: () {
@@ -375,7 +306,7 @@ class CurrentWirdWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.xs),
 
                 // Progress Bar
                 _KhatmaProgressBar(
@@ -383,7 +314,7 @@ class CurrentWirdWidget extends StatelessWidget {
                   fillColor: primaryColor,
                   trackColor: dividerColor,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.sm),
 
                 // Progress Stats
                 Row(
@@ -394,11 +325,7 @@ class CurrentWirdWidget extends StatelessWidget {
                         context.digits(activeKhatma.remainingUnits.ceil()),
                         (activeKhatma.amountType).toString(),
                       ),
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: textDark,
-                      ),
+                      style: text.labelMedium,
                     ),
                     Text(
                       l10nOf(context).currentWirdWidgetMessage16(
@@ -406,71 +333,54 @@ class CurrentWirdWidget extends StatelessWidget {
                           (activeKhatma.progress * 100).toStringAsFixed(1),
                         ),
                       ),
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: textDark,
-                      ),
+                      style: text.labelMedium,
                     ),
                   ],
                 ),
               ] else ...[
                 // Empty State (No Active Khatma)
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: cardBgColor,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: dividerColor),
-                  ),
+                SakinaCard(
+                  tone: SakinaCardTone.tinted,
+                  padding: const EdgeInsets.all(AppSpacing.lg),
                   child: Column(
                     children: [
-                      Icon(
-                        Icons.menu_book,
-                        size: 48,
-                        color: primaryColor.withValues(alpha: 0.5),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        l10nOf(context).homeScreenMessage8,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: textDark,
+                      Container(
+                        width: 64,
+                        height: 64,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: scheme.surface,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.menu_book_rounded,
+                          size: 30,
+                          color: primaryColor,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppSpacing.md),
+                      Text(
+                        l10nOf(context).homeScreenMessage8,
+                        textAlign: TextAlign.center,
+                        style: text.titleMedium?.copyWith(
+                          color: scheme.onSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.xs),
                       Text(
                         l10nOf(context).currentWirdWidgetMessage17,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: textDark.withValues(alpha: 0.7),
+                        style: text.bodyMedium?.copyWith(
+                          color: scheme.onSecondary.withValues(alpha: 0.78),
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
+                      const SizedBox(height: AppSpacing.md),
+                      FilledButton.icon(
                         onPressed: () {
                           context.push('/khatma/location');
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColor,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 32,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          l10nOf(context).currentWirdWidgetMessage18,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                        ),
+                        icon: const Icon(Icons.add_rounded, size: 20),
+                        label: Text(l10nOf(context).currentWirdWidgetMessage18),
                       ),
                     ],
                   ),
@@ -584,7 +494,7 @@ class _KhatmaProgressBar extends StatelessWidget {
         borderRadius: AppRadius.pill,
         child: LinearProgressIndicator(
           value: value,
-          minHeight: 10,
+          minHeight: 8,
           backgroundColor: trackColor,
           valueColor: AlwaysStoppedAnimation<Color>(fillColor),
         ),
@@ -597,8 +507,8 @@ class _KhatmaProgressBar extends StatelessWidget {
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: 0, end: safeProgress),
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeOutCubic,
+      duration: AppMotion.slow,
+      curve: AppMotion.enter,
       builder: (context, value, child) => buildBar(value),
     );
   }
@@ -670,7 +580,7 @@ class _AnimatedWirdAyahPreviewState extends State<_AnimatedWirdAyahPreview> {
     return Column(
       children: [
         AnimatedSwitcher(
-          duration: const Duration(milliseconds: 320),
+          duration: AppMotion.medium,
           switchInCurve: Curves.easeOut,
           switchOutCurve: Curves.easeIn,
           transitionBuilder: (child, animation) {
@@ -690,24 +600,14 @@ class _AnimatedWirdAyahPreviewState extends State<_AnimatedWirdAyahPreview> {
             children: [
               Text(
                 display.ayahText,
-                style: TextStyle(
-                  fontFamily: 'Amiri',
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: widget.textColor,
-                  height: 1.5,
-                ),
+                style: AppTypography.script.copyWith(color: widget.textColor),
                 textAlign: TextAlign.center,
               ),
               if (display.reference.isNotEmpty) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Text(
                   display.reference,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: widget.textColor.withValues(alpha: 0.75),
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center,
                 ),
               ],

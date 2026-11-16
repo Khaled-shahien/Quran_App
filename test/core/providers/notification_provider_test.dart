@@ -84,6 +84,7 @@ class FakeLocalNotificationGateway implements LocalNotificationGateway {
     required bool isEveningEnabled,
     required bool isMulkEnabled,
     required bool isBaqarahEnabled,
+    required bool isDailyVerseEnabled,
   }) async {
     if (throwOnUpdateAll) {
       throw Exception('update alarms failed');
