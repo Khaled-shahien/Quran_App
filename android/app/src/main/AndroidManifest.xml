@@ -4,7 +4,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- City-level accuracy is enough for prayer times and the qibla
+         (LocationAccuracy.medium); precise location is never requested. -->
     <uses-feature android:name="android.hardware.sensor.compass" android:required="false" />
     
     <!-- Notification permissions for Android 13+ -->
@@ -37,7 +38,10 @@
     <application
         android:label="سكينة"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules">
         
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
         <activity
@@ -97,6 +101,9 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <!-- Travel or a manual change: reminders follow the new local time. -->
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+                <action android:name="android.intent.action.TIME_SET"/>
             </intent-filter>
         </receiver>
         

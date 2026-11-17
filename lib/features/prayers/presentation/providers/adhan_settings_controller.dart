@@ -45,9 +45,19 @@ class AdhanSettingsController extends ChangeNotifier {
   /// Null where exact timing needs no permission.
   bool? get exactAllowed => _exactAllowed;
 
+  /// Re-reads whether exact alarms are allowed. When that changed since the
+  /// last check (the user granted or revoked it in system settings), the
+  /// alerts are re-planned: Android cancels pending exact alarms on revoke,
+  /// and a grant makes exact timing available again (audit NOTIF-06).
   Future<void> refreshExactStatus() async {
+    final bool? previous = _exactAllowed;
     _exactAllowed = await _platform.canScheduleExact();
     _notify();
+    if (previous != null &&
+        _exactAllowed != null &&
+        previous != _exactAllowed) {
+      await _platform.reschedule();
+    }
   }
 
   Future<void> setMode(DailyPrayer prayer, PrayerAlertMode mode) =>

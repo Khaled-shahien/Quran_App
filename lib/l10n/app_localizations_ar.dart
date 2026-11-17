@@ -2306,4 +2306,49 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dailyVerseReminderSubtitle => 'آية كل يوم في الوقت الذي تختاره';
+
+  @override
+  String get routeNotFoundMessage => 'تعذر فتح هذه الصفحة.';
+
+  @override
+  String get routeBackHome => 'العودة إلى الرئيسية';
+
+  @override
+  String get diagnosticsTitle => 'سجل التشخيص';
+
+  @override
+  String get diagnosticsSubtitle =>
+      'أخطاء محفوظة على جهازك فقط، تساعد على إصلاح التنبيهات';
+
+  @override
+  String diagnosticsLastBackgroundOk(String time) {
+    return 'آخر تحديث ناجح للتنبيهات في الخلفية: $time';
+  }
+
+  @override
+  String diagnosticsLastBackgroundError(String time, String type) {
+    return 'آخر خطأ في تحديث التنبيهات: $time ($type)';
+  }
+
+  @override
+  String get diagnosticsNever => 'لم يحدث بعد';
+
+  @override
+  String get diagnosticsEmpty => 'لا توجد أخطاء مسجلة.';
+
+  @override
+  String get diagnosticsCopy => 'نسخ';
+
+  @override
+  String get diagnosticsCopied => 'نُسخ السجل';
+
+  @override
+  String get diagnosticsClear => 'مسح السجل';
+
+  @override
+  String get prayerWindowEndingTitle => 'افتح سكينة لتستمر تنبيهات الصلاة';
+
+  @override
+  String get prayerWindowEndingBody =>
+      'تنبيهات الصلاة مجهّزة حتى نهاية اليوم. افتح التطبيق لتجهيز الأيام التالية.';
 }

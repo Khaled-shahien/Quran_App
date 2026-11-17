@@ -22,6 +22,7 @@ import 'package:sakina_app/features/quran/domain/repositories/tasbih_repository.
 import 'package:sakina_app/features/quran/presentation/providers/tasbih_controller.dart';
 import 'package:sakina_app/core/audio/recitation_audio_engine.dart';
 import 'package:sakina_app/core/utils/surah_names.dart';
+import 'package:sakina_app/core/services/diagnostics_log.dart';
 import 'package:sakina_app/core/services/notification_service.dart';
 import 'package:sakina_app/features/prayers/data/repositories/adhan_settings_store.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/adhan_settings_controller.dart';
@@ -31,7 +32,6 @@ import 'package:sakina_app/core/accessibility/app_text_scale.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/features/settings/presentation/providers/digit_style_controller.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_arrival_watcher.dart';
-import 'package:sakina_app/features/prayers/presentation/widgets/adhan_preferences.dart';
 import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
 import 'package:sakina_app/features/recitation/domain/repositories/recitation_repository.dart';
 import 'package:sakina_app/features/recitation/presentation/providers/recitation_controller.dart';
@@ -118,13 +118,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
   /// play over the adhan) and offer the adhan adhkar and to resume.
   Future<void> _onPrayerArrived(NextPrayer prayer) async {
     final settings = AdhanSettingsStore(_prefs).read();
-    final daily = DailyPrayer.values.where(
-      (p) => appL10n.prayerName(p) == prayer.name,
-    );
-    if (daily.isNotEmpty &&
-        settings.modeFor(daily.first) == PrayerAlertMode.silent) {
-      return;
-    }
+    if (settings.modeFor(prayer.prayer) == PrayerAlertMode.silent) return;
     final navContext = appNavigatorKey.currentContext;
     if (navContext == null) return;
     final recitation = Provider.of<RecitationController?>(
@@ -178,10 +172,44 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       // A new day can change the Khatma range the reminder names.
       unawaited(_khatmaProvider.refreshReminder());
+      unawaited(_followTimezoneChange());
+      unawaited(_refreshExactAlarmStatus());
     }
     if (state == AppLifecycleState.resumed &&
         _prayerTimesProvider.selectedCoordinates != null) {
       _prayerTimesProvider.refreshIfNeeded();
+    }
+  }
+
+  /// The exact-alarm permission can be revoked or granted while the app is
+  /// in the background; the controller re-plans alerts when it changed.
+  Future<void> _refreshExactAlarmStatus() async {
+    final navContext = appNavigatorKey.currentContext;
+    if (navContext == null) return;
+    try {
+      await Provider.of<AdhanSettingsController?>(
+        navContext,
+        listen: false,
+      )?.refreshExactStatus();
+    } catch (error) {
+      unawaited(DiagnosticsLog.record(error, source: 'exact_alarm'));
+    }
+  }
+
+  /// After travel or a manual timezone change, reminders and prayer times
+  /// follow the new zone (audit NOTIF-02).
+  Future<void> _followTimezoneChange() async {
+    try {
+      if (!await NotificationService.instance.refreshTimezoneIfChanged()) {
+        return;
+      }
+      if (!mounted) return;
+      await _settingsProvider.resyncAlarms();
+      if (_prayerTimesProvider.selectedCoordinates != null) {
+        await _prayerTimesProvider.refresh();
+      }
+    } catch (error) {
+      unawaited(DiagnosticsLog.record(error, source: 'timezone'));
     }
   }
 

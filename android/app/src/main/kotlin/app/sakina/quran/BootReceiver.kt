@@ -19,6 +19,8 @@ import java.util.concurrent.TimeUnit
  * - BOOT_COMPLETED: Device has finished booting
  * - QUICKBOOT_POWERON: Fast boot (some devices)
  * - MY_PACKAGE_REPLACED: App was updated
+ * - TIMEZONE_CHANGED / TIME_SET: zone or clock changed (travel, manual
+ *   change), so repeating reminders move to the new local wall time
  * 
  * When triggered, it initializes WorkManager to reschedule all alarms
  */
@@ -36,15 +38,20 @@ class BootReceiver : BroadcastReceiver() {
         when (action) {
             Intent.ACTION_BOOT_COMPLETED -> {
                 Log.i(TAG, "Device boot completed - rescheduling alarms")
-                handleBootCompleted(context)
+                handleBootCompleted(context, "boot_receiver")
             }
             "android.intent.action.QUICKBOOT_POWERON" -> {
                 Log.i(TAG, "Quick boot detected - rescheduling alarms")
-                handleBootCompleted(context)
+                handleBootCompleted(context, "boot_receiver")
             }
             Intent.ACTION_MY_PACKAGE_REPLACED -> {
                 Log.i(TAG, "Package replaced - rescheduling alarms")
-                handleBootCompleted(context)
+                handleBootCompleted(context, "boot_receiver")
+            }
+            Intent.ACTION_TIMEZONE_CHANGED, Intent.ACTION_TIME_CHANGED -> {
+                Log.i(TAG, "Timezone or clock changed - rescheduling alarms")
+                // Must match the unthrottled source in workmanager_service.dart.
+                handleBootCompleted(context, "time_change")
             }
         }
     }
@@ -53,12 +60,12 @@ class BootReceiver : BroadcastReceiver() {
      * Handle boot completed event
      * This schedules a WorkManager task to reschedule all alarms
      */
-    private fun handleBootCompleted(context: Context) {
+    private fun handleBootCompleted(context: Context, source: String) {
         try {
             val inputData = Data.Builder()
                 // Plugin constants make a future key rename a compile error.
                 .putString(BackgroundWorker.DART_TASK_KEY, "reschedule_alarms")
-                .putString("${PAYLOAD_PREFIX}source", "boot_receiver")
+                .putString("${PAYLOAD_PREFIX}source", source)
                 .build()
 
             val request = OneTimeWorkRequestBuilder<BackgroundWorker>()

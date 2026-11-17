@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class FakePrayerNotificationGateway implements PrayerNotificationGateway {
   int scheduleCalls = 0;
   int cancelCalls = 0;
-  Map<String, DateTime>? scheduledPrayerTimes;
+  Map<DailyPrayer, DateTime>? scheduledPrayerTimes;
   AdhanSettings? scheduledSettings;
 
   @override
@@ -17,12 +17,12 @@ class FakePrayerNotificationGateway implements PrayerNotificationGateway {
 
   @override
   Future<void> scheduleAllPrayersForDate({
-    required Map<String, DateTime> prayerTimes,
+    required Map<DailyPrayer, DateTime> prayerTimes,
     required AdhanSettings settings,
   }) async {
     scheduleCalls++;
     scheduledSettings = settings;
-    scheduledPrayerTimes = Map<String, DateTime>.from(prayerTimes);
+    scheduledPrayerTimes = Map<DailyPrayer, DateTime>.from(prayerTimes);
   }
 }
 
@@ -42,7 +42,7 @@ void main() {
         prayerTimes: PrayerTimesEntity(fajr: '05:00', timezone: 'Asia/Riyadh'),
       );
       expect(
-        gateway.scheduledPrayerTimes!['الفجر']!.toUtc(),
+        gateway.scheduledPrayerTimes![DailyPrayer.fajr]!.toUtc(),
         DateTime.utc(2026, 1, 1, 2),
       );
     },
@@ -72,16 +72,13 @@ void main() {
     expect(gateway.scheduleCalls, 1);
     expect(gateway.cancelCalls, 0);
     expect(gateway.scheduledPrayerTimes, isNotNull);
-    expect(gateway.scheduledPrayerTimes!.keys, <String>[
-      'الفجر',
-      'الظهر',
-      'العصر',
-      'المغرب',
-      'العشاء',
-    ]);
-    expect(gateway.scheduledPrayerTimes!['الفجر'], DateTime(2026, 3, 23, 5));
+    expect(gateway.scheduledPrayerTimes!.keys, DailyPrayer.values);
     expect(
-      gateway.scheduledPrayerTimes!['العشاء'],
+      gateway.scheduledPrayerTimes![DailyPrayer.fajr],
+      DateTime(2026, 3, 23, 5),
+    );
+    expect(
+      gateway.scheduledPrayerTimes![DailyPrayer.isha],
       DateTime(2026, 3, 23, 19, 45),
     );
   });

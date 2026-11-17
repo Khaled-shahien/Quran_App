@@ -1,32 +1,17 @@
-import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'package:flutter/services.dart';
 import '../../../../core/errors/api_exception.dart';
 import '../models/ayah_model.dart';
+import 'quran_master_asset.dart';
 
 /// Local Quran Data Source
 ///
 /// Handles reading and parsing Quran verses from local assets
 class LocalQuranDataSource {
-  static const String _assetPath = 'assets/quran_master.json';
+  static const String _assetPath = QuranMasterAsset.path;
 
-  List<Map<String, dynamic>>? _cachedSurahData;
-
-  Future<List<Map<String, dynamic>>> _loadMasterData() async {
-    if (_cachedSurahData != null) {
-      return _cachedSurahData!;
-    }
-
-    final String jsonString = await rootBundle.loadString(_assetPath);
-    final List<dynamic> jsonData = jsonDecode(jsonString) as List<dynamic>;
-
-    _cachedSurahData = jsonData
-        .map((item) => Map<String, dynamic>.from(item as Map))
-        .toList();
-
-    return _cachedSurahData!;
-  }
+  Future<List<Map<String, dynamic>>> _loadMasterData() =>
+      QuranMasterAsset.load();
 
   /// Reads the Quran verses for a specific Surah from the assets folder
   ///

@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-import 'package:sakina_app/l10n/app_localizations.dart';
 import 'package:sakina_app/l10n/localization.dart';
 
 import '../../../recitation/presentation/providers/recitation_controller.dart';
@@ -11,24 +10,10 @@ import '../../domain/adhan_voices.dart';
 import '../../domain/entities/adhan_settings.dart';
 import '../adhan_preview_player.dart';
 import '../adhan_voice_labels.dart';
+import '../prayer_labels.dart';
 import '../providers/adhan_settings_controller.dart';
 
-extension AdhanLabels on AppLocalizations {
-  String prayerName(DailyPrayer p) => switch (p) {
-    DailyPrayer.fajr => prayerTimesWidgetMessage8,
-    DailyPrayer.dhuhr => prayerTimesWidgetMessage9,
-    DailyPrayer.asr => prayerTimesWidgetMessage10,
-    DailyPrayer.maghrib => prayerTimesWidgetMessage11,
-    DailyPrayer.isha => prayerTimesWidgetMessage12,
-  };
-
-  String alertMode(PrayerAlertMode m) => switch (m) {
-    PrayerAlertMode.adhan => prayerAlertModeAdhan,
-    PrayerAlertMode.sound => prayerAlertModeSound,
-    PrayerAlertMode.notificationOnly => prayerAlertModeNotification,
-    PrayerAlertMode.silent => prayerAlertModeSilent,
-  };
-}
+export '../prayer_labels.dart';
 
 /// Alert type per prayer, reminder before prayer, exact timing, battery
 /// guidance and a test button, in plain Arabic.

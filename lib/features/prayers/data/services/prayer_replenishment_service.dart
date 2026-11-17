@@ -1,5 +1,7 @@
 import 'dart:developer' as developer;
 
+import 'package:flutter/foundation.dart';
+
 import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/core/services/scheduling_generation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +11,8 @@ import '../../domain/prayer_time_zone.dart';
 import '../../domain/repositories/prayer_times_repository.dart';
 import '../../domain/services/prayer_notification_scheduler.dart';
 
+import '../../domain/prayer_window.dart';
+import '../repositories/adhan_settings_store.dart';
 import 'local_prayer_notification_scheduler.dart';
 
 /// After the UI isolate schedules today, schedules the following days of the
@@ -19,9 +23,10 @@ Future<void> scheduleRestOfPrayerWindow({
   required SharedPreferences preferences,
   required PrayerTimesRepository repository,
   required PrayerNotificationGateway gateway,
+  Future<void> Function(DateTime lastDay)? onWindowScheduled,
 }) async {
   try {
-    await PrayerReplenishmentService(
+    final lastDay = await PrayerReplenishmentService(
       preferences: preferences,
       repository: repository,
       scheduler: LocalPrayerNotificationScheduler(
@@ -31,6 +36,7 @@ Future<void> scheduleRestOfPrayerWindow({
       firstDay: 1,
       cancelWhenUnconfigured: false,
     ).replenish();
+    if (lastDay != null) await onWindowScheduled?.call(lastDay);
   } catch (error) {
     developer.log(
       'Scheduling the following prayer days failed',
@@ -50,11 +56,12 @@ class PrayerReplenishmentService {
     required this.repository,
     required this.scheduler,
     DateTime Function()? now,
-    this.days = 3,
+    int? days,
     this.firstDay = 0,
     this.cancelWhenUnconfigured = true,
     this.expectedGeneration,
-  }) : _now = now ?? DateTime.now;
+  }) : _now = now ?? DateTime.now,
+       _days = days;
 
   final SharedPreferences preferences;
   final PrayerTimesRepository repository;
@@ -62,7 +69,15 @@ class PrayerReplenishmentService {
   final DateTime Function() _now;
 
   /// The schedule window: days `0 .. days - 1`, where day 0 is today.
-  final int days;
+  /// By default it depends on the platform and alert settings
+  /// ([prayerWindowDays]).
+  int get days =>
+      _days ??
+      prayerWindowDays(
+        AdhanSettingsStore(preferences).read(),
+        ios: !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS,
+      );
+  final int? _days;
 
   /// The first day of the window to schedule. The UI isolate schedules
   /// today itself and then passes 1 to fill the rest of the window.
@@ -81,12 +96,14 @@ class PrayerReplenishmentService {
       expectedGeneration != null &&
       SchedulingGeneration.read(preferences) != expectedGeneration;
 
-  Future<void> replenish() async {
+  /// Returns the last day it scheduled, or null when it scheduled nothing
+  /// (disabled, unconfigured, superseded or settings changed meanwhile).
+  Future<DateTime?> replenish() async {
     await preferences.reload();
-    if (_superseded) return;
+    if (_superseded) return null;
     if (!(preferences.getBool('prayer_notifications_enabled') ?? true)) {
       if (cancelWhenUnconfigured) await scheduler.cancelPrayerNotifications();
-      return;
+      return null;
     }
     final latitude = preferences.getDouble('prayer_latitude');
     final longitude = preferences.getDouble('prayer_longitude');
@@ -105,14 +122,16 @@ class PrayerReplenishmentService {
         longitude.abs() > 180 ||
         !PrayerCalculationPolicy.methods.containsKey(method)) {
       if (cancelWhenUnconfigured) await scheduler.cancelPrayerNotifications();
-      return;
+      return null;
     }
 
     // "Today" is the calendar day at the prayer location, which can differ
     // from the device's day after travel or a manually chosen city.
     final wall = prayerWallTime(_now(), storedZone);
     final today = DateTime(wall.year, wall.month, wall.day);
-    for (var offset = firstDay; offset < days; offset++) {
+    DateTime? lastDay;
+    final int windowDays = days;
+    for (var offset = firstDay; offset < windowDays; offset++) {
       final target = DateTime(today.year, today.month, today.day + offset);
       final result = await repository.getPrayerTimes(
         target,
@@ -147,12 +166,14 @@ class PrayerReplenishmentService {
           AsrMadhab.fromStorage(preferences.get(AsrMadhab.preferenceKey)) !=
               madhab) {
         // The foreground selection owns cancellation/replacement of old alarms.
-        return;
+        return null;
       }
       await scheduler.schedulePrayerNotifications(
         prayerTimes: timings,
         date: target,
       );
+      lastDay = target;
     }
+    return lastDay;
   }
 }

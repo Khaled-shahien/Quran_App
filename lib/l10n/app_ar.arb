@@ -2762,5 +2762,70 @@
       }
     }
   },
-  "dailyVerseReminderSubtitle": "آية كل يوم في الوقت الذي تختاره"
+  "dailyVerseReminderSubtitle": "آية كل يوم في الوقت الذي تختاره",
+  "routeNotFoundMessage": "تعذر فتح هذه الصفحة.",
+  "@routeNotFoundMessage": {
+    "description": "Shown when a link or notification points to a page that does not exist."
+  },
+  "routeBackHome": "العودة إلى الرئيسية",
+  "@routeBackHome": {
+    "description": "Button on the missing-page screen that returns to the home screen."
+  },
+  "diagnosticsTitle": "سجل التشخيص",
+  "@diagnosticsTitle": {
+    "description": "Settings row that opens the on-device diagnostics log."
+  },
+  "diagnosticsSubtitle": "أخطاء محفوظة على جهازك فقط، تساعد على إصلاح التنبيهات",
+  "@diagnosticsSubtitle": {
+    "description": "Subtitle of the diagnostics row."
+  },
+  "diagnosticsLastBackgroundOk": "آخر تحديث ناجح للتنبيهات في الخلفية: {time}",
+  "@diagnosticsLastBackgroundOk": {
+    "description": "When background rescheduling last succeeded.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "diagnosticsLastBackgroundError": "آخر خطأ في تحديث التنبيهات: {time} ({type})",
+  "@diagnosticsLastBackgroundError": {
+    "description": "When background rescheduling last failed, and the error type.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "diagnosticsNever": "لم يحدث بعد",
+  "@diagnosticsNever": {
+    "description": "Shown instead of a time when something has not happened yet."
+  },
+  "diagnosticsEmpty": "لا توجد أخطاء مسجلة.",
+  "@diagnosticsEmpty": {
+    "description": "Diagnostics log has no entries."
+  },
+  "diagnosticsCopy": "نسخ",
+  "@diagnosticsCopy": {
+    "description": "Copies the diagnostics log to the clipboard."
+  },
+  "diagnosticsCopied": "نُسخ السجل",
+  "@diagnosticsCopied": {
+    "description": "Confirmation after copying the diagnostics log."
+  },
+  "diagnosticsClear": "مسح السجل",
+  "@diagnosticsClear": {
+    "description": "Deletes the diagnostics log."
+  },
+  "prayerWindowEndingTitle": "افتح سكينة لتستمر تنبيهات الصلاة",
+  "@prayerWindowEndingTitle": {
+    "description": "iOS notice on the last day of scheduled prayer alerts."
+  },
+  "prayerWindowEndingBody": "تنبيهات الصلاة مجهّزة حتى نهاية اليوم. افتح التطبيق لتجهيز الأيام التالية.",
+  "@prayerWindowEndingBody": {
+    "description": "Body of the iOS notice that scheduled prayer alerts are about to run out."
+  }
 }

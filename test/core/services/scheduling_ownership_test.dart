@@ -25,7 +25,7 @@ class _Gateway implements PrayerNotificationGateway {
 
   @override
   Future<void> scheduleAllPrayersForDate({
-    required Map<String, DateTime> prayerTimes,
+    required Map<DailyPrayer, DateTime> prayerTimes,
     required AdhanSettings settings,
   }) async {
     final first = prayerTimes.values.first;
@@ -179,6 +179,21 @@ void main() {
         );
       },
     );
+
+    test('reports the last scheduled day for the iOS notice', () async {
+      SharedPreferences.setMockInitialValues(_configured);
+      final prefs = await SharedPreferences.getInstance();
+      final gateway = _Gateway();
+      DateTime? lastDay;
+      await scheduleRestOfPrayerWindow(
+        preferences: prefs,
+        repository: _Repository(),
+        gateway: gateway,
+        onWindowScheduled: (day) async => lastDay = day,
+      );
+      expect(lastDay, isNotNull);
+      expect(lastDay, gateway.days.last);
+    });
 
     test('a failing follow-up keeps today and does not throw', () async {
       SharedPreferences.setMockInitialValues(_configured);

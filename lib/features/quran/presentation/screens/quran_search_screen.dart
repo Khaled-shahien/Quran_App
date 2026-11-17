@@ -5,10 +5,9 @@ import 'package:sakina_app/l10n/localization.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../l10n/app_localizations_ar.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/di/service_locator.dart';
+import '../../data/data_sources/quran_master_asset.dart';
 import '../../domain/entities/ayah_entity.dart';
 import '../../domain/repositories/ayah_repository.dart';
 import '../../domain/services/quran_search.dart';
@@ -54,16 +53,7 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
 
   Future<void> _loadSurahNames() async {
     try {
-      final decoded = jsonDecode(
-        await rootBundle.loadString('assets/quran_master.json'),
-      );
-      if (decoded is! List) {
-        throw const FormatException('Quran metadata must be a list');
-      }
-
-      final data = decoded
-          .whereType<Map>()
-          .map((item) => Map<String, dynamic>.from(item))
+      final data = (await QuranMasterAsset.load())
           .where(
             (surah) =>
                 surah['number'] != null &&

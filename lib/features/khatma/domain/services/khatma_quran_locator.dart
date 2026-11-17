@@ -1,8 +1,6 @@
 import 'package:sakina_app/core/utils/arabic_text.dart';
-import 'dart:convert';
 
-import 'package:flutter/services.dart';
-
+import '../../../quran/data/data_sources/quran_master_asset.dart';
 import '../models/khatma_model.dart';
 
 class KhatmaAyahPosition {
@@ -22,8 +20,6 @@ class KhatmaAyahPosition {
 }
 
 class KhatmaQuranLocator {
-  static List<Map<String, dynamic>>? _cachedQuran;
-
   Future<KhatmaAyahPosition> resolveStartPosition({
     required KhatmaTrackingUnit trackingUnit,
     required int unitIndex,
@@ -244,19 +240,5 @@ class KhatmaQuranLocator {
     );
   }
 
-  Future<List<Map<String, dynamic>>> _loadQuran() async {
-    if (_cachedQuran != null) {
-      return _cachedQuran!;
-    }
-
-    final String jsonString = await rootBundle.loadString(
-      'assets/quran_master.json',
-    );
-    final List<dynamic> jsonData = jsonDecode(jsonString) as List<dynamic>;
-
-    _cachedQuran = jsonData
-        .map((item) => Map<String, dynamic>.from(item as Map))
-        .toList();
-    return _cachedQuran!;
-  }
+  Future<List<Map<String, dynamic>>> _loadQuran() => QuranMasterAsset.load();
 }

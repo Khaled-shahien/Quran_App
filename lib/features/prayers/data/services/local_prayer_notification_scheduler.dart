@@ -1,4 +1,3 @@
-import 'package:sakina_app/l10n/localization.dart';
 import '../../domain/prayer_time_zone.dart';
 import 'dart:developer' as developer;
 
@@ -13,7 +12,7 @@ import '../repositories/adhan_settings_store.dart';
 
 abstract class PrayerNotificationGateway {
   Future<void> scheduleAllPrayersForDate({
-    required Map<String, DateTime> prayerTimes,
+    required Map<DailyPrayer, DateTime> prayerTimes,
     required AdhanSettings settings,
   });
 
@@ -36,7 +35,7 @@ class NotificationServicePrayerNotificationGateway
 
   @override
   Future<void> scheduleAllPrayersForDate({
-    required Map<String, DateTime> prayerTimes,
+    required Map<DailyPrayer, DateTime> prayerTimes,
     required AdhanSettings settings,
   }) {
     return _notificationService.scheduleAllPrayersForDate(
@@ -99,7 +98,7 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
       return;
     }
 
-    final Map<String, DateTime> schedule = buildPrayerSchedule(
+    final Map<DailyPrayer, DateTime> schedule = buildPrayerSchedule(
       prayerTimes: prayerTimes,
       date: date,
     );
@@ -123,13 +122,13 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
   }
 
   /// Parses a day's API timings without mutating pending notifications.
-  static Map<String, DateTime> buildPrayerSchedule({
+  static Map<DailyPrayer, DateTime> buildPrayerSchedule({
     required PrayerTimesEntity prayerTimes,
     required DateTime date,
   }) {
-    final Map<String, DateTime> schedule = <String, DateTime>{};
+    final Map<DailyPrayer, DateTime> schedule = <DailyPrayer, DateTime>{};
 
-    void addPrayer(String arabicName, String? rawTime) {
+    void addPrayer(DailyPrayer prayer, String? rawTime) {
       final DateTime? parsed = _parsePrayerTime(
         rawTime,
         date,
@@ -137,20 +136,20 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
       );
       if (parsed == null) {
         developer.log(
-          'Unable to parse prayer time for $arabicName: $rawTime',
+          'Unable to parse prayer time for ${prayer.name}: $rawTime',
           name: 'sakina_app.prayer_notifications',
           level: 900,
         );
         return;
       }
-      schedule[arabicName] = parsed;
+      schedule[prayer] = parsed;
     }
 
-    addPrayer(appL10n.prayerTimesWidgetMessage8, prayerTimes.fajr);
-    addPrayer(appL10n.prayerTimesWidgetMessage9, prayerTimes.dhuhr);
-    addPrayer(appL10n.prayerTimesWidgetMessage10, prayerTimes.asr);
-    addPrayer(appL10n.prayerTimesWidgetMessage11, prayerTimes.maghrib);
-    addPrayer(appL10n.prayerTimesWidgetMessage12, prayerTimes.isha);
+    addPrayer(DailyPrayer.fajr, prayerTimes.fajr);
+    addPrayer(DailyPrayer.dhuhr, prayerTimes.dhuhr);
+    addPrayer(DailyPrayer.asr, prayerTimes.asr);
+    addPrayer(DailyPrayer.maghrib, prayerTimes.maghrib);
+    addPrayer(DailyPrayer.isha, prayerTimes.isha);
 
     return schedule;
   }

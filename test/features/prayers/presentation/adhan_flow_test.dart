@@ -14,7 +14,13 @@ import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_
 import 'package:sakina_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-NextPrayer next(String name, DateTime at, DateTime now) => NextPrayer(
+NextPrayer next(
+  String name,
+  DateTime at,
+  DateTime now, {
+  DailyPrayer prayer = DailyPrayer.fajr,
+}) => NextPrayer(
+  prayer: prayer,
   name: name,
   at: at,
   wallTime: at,
@@ -101,6 +107,25 @@ void main() {
         await c.requestExactAlarms();
         expect(c.exactAllowed, isTrue);
         expect(reschedules, 1);
+      },
+    );
+
+    test(
+      'a permission changed in system settings re-plans the alerts',
+      () async {
+        final c = await build();
+        exact = true;
+        await c.refreshExactStatus();
+        expect(reschedules, 0, reason: 'the first check only records');
+        await c.refreshExactStatus();
+        expect(reschedules, 0, reason: 'unchanged');
+        exact = false; // revoked: Android dropped the exact alarms
+        await c.refreshExactStatus();
+        expect(c.exactAllowed, isFalse);
+        expect(reschedules, 1);
+        exact = true; // granted again
+        await c.refreshExactStatus();
+        expect(reschedules, 2);
       },
     );
 

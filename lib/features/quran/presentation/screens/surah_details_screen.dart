@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/utils/arabic_text.dart';
 import 'package:sakina_app/l10n/localization.dart';
-import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/data_sources/quran_master_asset.dart';
 import '../../domain/entities/surah_entity.dart';
 import '../../domain/services/basmala.dart';
 import '../../domain/services/reader_layout.dart';
@@ -539,14 +539,7 @@ class _SurahDetailsScreenState extends State<_SurahReaderBody> {
     });
 
     try {
-      final String jsonString = await rootBundle.loadString(
-        'assets/quran_master.json',
-      );
-      final List<dynamic> jsonData = jsonDecode(jsonString) as List<dynamic>;
-
-      final List<Map<String, dynamic>> quran = jsonData
-          .map((item) => Map<String, dynamic>.from(item as Map))
-          .toList();
+      final List<Map<String, dynamic>> quran = await QuranMasterAsset.load();
 
       final Map<String, dynamic> surahData = quran.firstWhere(
         (item) => item['number'] == widget.surahNumber,

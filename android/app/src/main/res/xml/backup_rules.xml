@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and older: same rules as data_extraction_rules.xml. -->
+<full-backup-content>
+    <!-- Rebuilt from settings on first launch; a stale copy would restore
+         alerts for an old location or time zone. -->
+    <exclude domain="sharedpref" path="scheduled_notifications.xml" />
+    <exclude domain="sharedpref" path="notification_plugin_cache.xml" />
+    <!-- Downloaded recitations: large, re-downloadable, and over the 25 MB
+         auto-backup limit they would make the whole backup fail. -->
+    <exclude domain="file" path="recitation/" />
+</full-backup-content>

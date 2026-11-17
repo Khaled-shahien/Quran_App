@@ -154,6 +154,10 @@ class SettingsProvider extends ChangeNotifier {
   /// Update all alarms based on current settings
   Future<void> _updateAllAlarms() => _syncAlarmsFromSettings();
 
+  /// Reschedules every enabled reminder from the saved settings, e.g. after
+  /// the device timezone changed.
+  Future<void> resyncAlarms() => _syncAlarmsFromSettings();
+
   Future<void> toggleMorningAlarm(bool value) async {
     _isMorningAlarmEnabled = value;
     await prefs.setBool(_morningAlarmKey, value);

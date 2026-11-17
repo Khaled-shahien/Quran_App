@@ -11,12 +11,12 @@ A modern Islamic Flutter application for Quran reading, prayer times, adhkar/dua
 ## 🌟 Features
 
 - 🔹 **Quran Reading** - Browse surahs and read verses with an Arabic-first experience.
-- 🔹 **Prayer Times** - Fetch and display prayer times with caching and performance provider support.
+- 🔹 **Prayer Times** - Calculated on the device with `adhan_dart` (no network), for a bundled city, typed coordinates or the device location.
 - 🔹 **Duas & Adhkar** - Dedicated sections for daily azkar and supplications.
 - 🔹 **Hadith Section** - Read hadith collections from local assets.
 - 🔹 **Tasbih Counter** - Digital tasbih with simple interaction flow.
 - 🔹 **Khatma Tracking** - Track recitation progress and reminders.
-- 🔹 **Notifications** - Local scheduled reminders.
+- 🔹 **Notifications** - Local prayer alerts (sound, silent, or a chosen adhan recording on Android), adhkar and reading reminders, rescheduled after reboot and timezone changes.
 - 🔹 **Dark/Light Theme** - Theme switching with persisted settings.
 
 ## 🛠️ Technologies & Packages
@@ -45,7 +45,6 @@ The project follows a scalable and maintainable architecture:
 ```text
 lib/
 ├── core/
-│   ├── api/               # Shared API helpers and network utilities
 │   ├── constants/         # App-wide constants
 │   ├── errors/            # Error models and handlers
 │   ├── navigation/        # Router and notification routing
@@ -78,8 +77,8 @@ lib/
 
 ```mermaid
 graph TD
-      A[App Start] --> B[Initialize Firebase]
-      B --> C[Load SharedPreferences]
+      A[App Start] --> B[Initialize Firebase if monitoring is configured]
+      B --> C[Load SharedPreferences, DI, notifications, WorkManager]
       C --> D[RunApp]
       D --> E[Onboarding Screen]
       E --> F[Home Screen]
@@ -89,20 +88,12 @@ graph TD
 
 ## 🎨 UI/UX Design
 
-### 🎨 Color Palette
+### 🎨 Colours and typography
 
-- Primary: `#795547`
-- Secondary: `#F0E6D2`
-- Background: `#FEFBF4`
-- Surface: `#FFFBF9`
-- Error: `#E57373`
-
-### ✍️ Typography
-
-- Headline: Cairo
-- Title: Cairo
-- Body: Cairo
-- Caption: Cairo
+Colours, designs (light, dark and dark-only themes) and type scales are
+defined in `lib/core/theme/` and documented in
+[SAKINA_DESIGN_SYSTEM.md](SAKINA_DESIGN_SYSTEM.md). UI text uses Cairo; the
+Quran uses Amiri Quran.
 
 ### 🧭 Navigation
 
@@ -114,7 +105,7 @@ graph TD
 
 ### 📌 Prerequisites
 
-- Flutter SDK `>=3.44.0` (CI currently pins `3.48.0-0.5.pre` on the beta channel)
+- Flutter SDK `>=3.44.0` (CI pins `3.47.9` on the stable channel; see `.github/workflows/flutter-quality.yml`)
 - Dart SDK bundled with that Flutter version (`pubspec.lock` requires `>=3.13.0`)
 - Android Studio or VS Code
 
@@ -180,11 +171,12 @@ Each feature is isolated and modular:
 
 - 🔑 Authentication -> Not enabled yet; the app is intentionally local-first and non-authenticated
 - ☁️ Database -> Local assets + SharedPreferences cache (Firestore not used currently)
-- 🌐 APIs -> Prayer times and Quran metadata integrations via http services
+- 🌐 APIs -> Quran recitation (api.quran.com), article RSS feeds and YouTube search (optional key); prayer times and the Quran text are offline
 - 🔔 Messaging -> Local notification scheduling; remote push is not supported
 
 ## 📘 Product and Release Documentation
 
+- [docs/audit/EXECUTIVE_SUMMARY.md](docs/audit/EXECUTIVE_SUMMARY.md) - the current audit, findings and the implementation roadmap (source of truth for planned work).
 - [docs/DEVELOPMENT_PLAN_AUDIT.md](docs/DEVELOPMENT_PLAN_AUDIT.md) - current evidence-based status of all 28 development-plan tasks.
 - [docs/ARCHITECTURE_BOUNDARIES.md](docs/ARCHITECTURE_BOUNDARIES.md) - current ownership rules for providers, repositories, and shared services.
 - [docs/LIFECYCLE_ASSUMPTIONS.md](docs/LIFECYCLE_ASSUMPTIONS.md) - expected behavior across resume, restart, migration, and background scheduling.
@@ -220,7 +212,7 @@ flutter analyze
 
 - Unit Tests
 - Widget Tests
-- Integration Tests (`integration_test/`; run on a device, not in CI)
+- Integration Tests (`integration_test/`; run on a device, and in CI on an Android emulator)
 
 ## 🤝 Contributing
 

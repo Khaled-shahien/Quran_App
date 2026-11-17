@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
@@ -126,6 +127,7 @@ void nextPrayerTests() {
     test('is the next prayer later today', () {
       final next = provider.nextPrayer!;
       expect(next.isTomorrow, isFalse);
+      expect(next.prayer, DailyPrayer.asr);
       expect(next.wallTime.hour, 15); // Asr at 15:00 in the fake times
       expect(next.remaining, const Duration(hours: 3));
     });
@@ -134,6 +136,10 @@ void nextPrayerTests() {
       clock.value = DateTime.utc(2026, 11, 5, 20); // 22:00 in Cairo
       final next = provider.nextPrayer!;
       expect(next.isTomorrow, isTrue);
+      // Its display name differs from today's Fajr ("الفجر غداً"), so the
+      // settings lookup must use the prayer itself (audit ARCH-02).
+      expect(next.prayer, DailyPrayer.fajr);
+      expect(next.name, isNot(next.prayer.name));
       expect(next.wallTime.day, 6);
       expect(next.wallTime.hour, 5);
       expect(next.remaining, const Duration(hours: 7));

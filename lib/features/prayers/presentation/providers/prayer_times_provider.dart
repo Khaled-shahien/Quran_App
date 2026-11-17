@@ -1,5 +1,7 @@
 import 'package:sakina_app/l10n/localization.dart';
+import '../../domain/entities/adhan_settings.dart';
 import '../../domain/prayer_time_zone.dart';
+import '../prayer_labels.dart';
 import 'package:sakina_app/core/result/result.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -561,19 +563,20 @@ class PrayerTimesProvider extends ChangeNotifier {
     final date = loadedDate;
     if (today == null || date == null) return null;
     final instantNow = _clock.now();
-    final names = <String, String>{
-      'Fajr': appL10n.prayerTimesWidgetMessage8,
-      'Dhuhr': appL10n.prayerTimesWidgetMessage9,
-      'Asr': appL10n.prayerTimesWidgetMessage10,
-      'Maghrib': appL10n.prayerTimesWidgetMessage11,
-      'Isha': appL10n.prayerTimesWidgetMessage12,
+    const keys = <DailyPrayer, String>{
+      DailyPrayer.fajr: 'Fajr',
+      DailyPrayer.dhuhr: 'Dhuhr',
+      DailyPrayer.asr: 'Asr',
+      DailyPrayer.maghrib: 'Maghrib',
+      DailyPrayer.isha: 'Isha',
     };
     final raw = today.getMainPrayerTimes();
-    for (final entry in names.entries) {
-      final at = _instantFor(date, raw[entry.key], today.timezone);
+    for (final entry in keys.entries) {
+      final at = _instantFor(date, raw[entry.value], today.timezone);
       if (at != null && at.isAfter(instantNow)) {
         return NextPrayer(
-          name: entry.value,
+          prayer: entry.key,
+          name: appL10n.prayerName(entry.key),
           at: at,
           wallTime: prayerWallTime(at, today.timezone),
           isTomorrow: false,
@@ -586,6 +589,7 @@ class PrayerTimesProvider extends ChangeNotifier {
     final at = _instantFor(next, tomorrow?.fajr, tomorrow?.timezone);
     if (tomorrow == null || at == null) return null;
     return NextPrayer(
+      prayer: DailyPrayer.fajr,
       name: appL10n.prayerTimesWidgetMessage13,
       at: at,
       wallTime: prayerWallTime(at, tomorrow.timezone),
@@ -609,6 +613,7 @@ class PrayerTimesProvider extends ChangeNotifier {
 /// The upcoming prayer, computed in one place for every screen.
 class NextPrayer {
   const NextPrayer({
+    required this.prayer,
     required this.name,
     required this.at,
     required this.wallTime,
@@ -616,6 +621,10 @@ class NextPrayer {
     required this.remaining,
   });
 
+  /// Which prayer; use this, not [name], to look up settings.
+  final DailyPrayer prayer;
+
+  /// Display name only, e.g. "الفجر غداً" for tomorrow's Fajr.
   final String name;
 
   /// The instant the prayer begins.

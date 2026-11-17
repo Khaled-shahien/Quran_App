@@ -4207,6 +4207,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'آية كل يوم في الوقت الذي تختاره'**
   String get dailyVerseReminderSubtitle;
+
+  /// Shown when a link or notification points to a page that does not exist.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح هذه الصفحة.'**
+  String get routeNotFoundMessage;
+
+  /// Button on the missing-page screen that returns to the home screen.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة إلى الرئيسية'**
+  String get routeBackHome;
+
+  /// Settings row that opens the on-device diagnostics log.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل التشخيص'**
+  String get diagnosticsTitle;
+
+  /// Subtitle of the diagnostics row.
+  ///
+  /// In ar, this message translates to:
+  /// **'أخطاء محفوظة على جهازك فقط، تساعد على إصلاح التنبيهات'**
+  String get diagnosticsSubtitle;
+
+  /// When background rescheduling last succeeded.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر تحديث ناجح للتنبيهات في الخلفية: {time}'**
+  String diagnosticsLastBackgroundOk(String time);
+
+  /// When background rescheduling last failed, and the error type.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر خطأ في تحديث التنبيهات: {time} ({type})'**
+  String diagnosticsLastBackgroundError(String time, String type);
+
+  /// Shown instead of a time when something has not happened yet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يحدث بعد'**
+  String get diagnosticsNever;
+
+  /// Diagnostics log has no entries.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أخطاء مسجلة.'**
+  String get diagnosticsEmpty;
+
+  /// Copies the diagnostics log to the clipboard.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخ'**
+  String get diagnosticsCopy;
+
+  /// Confirmation after copying the diagnostics log.
+  ///
+  /// In ar, this message translates to:
+  /// **'نُسخ السجل'**
+  String get diagnosticsCopied;
+
+  /// Deletes the diagnostics log.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح السجل'**
+  String get diagnosticsClear;
+
+  /// iOS notice on the last day of scheduled prayer alerts.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح سكينة لتستمر تنبيهات الصلاة'**
+  String get prayerWindowEndingTitle;
+
+  /// Body of the iOS notice that scheduled prayer alerts are about to run out.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات الصلاة مجهّزة حتى نهاية اليوم. افتح التطبيق لتجهيز الأيام التالية.'**
+  String get prayerWindowEndingBody;
 }
 
 class _AppLocalizationsDelegate

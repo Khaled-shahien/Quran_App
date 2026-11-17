@@ -20,6 +20,7 @@ import '../../features/prayers/domain/adhan_voices.dart';
 import '../../features/prayers/domain/entities/adhan_settings.dart';
 import '../../features/prayers/domain/prayer_notification_ids.dart';
 import '../../features/prayers/domain/services/prayer_alert_planner.dart';
+import '../../features/prayers/presentation/prayer_labels.dart';
 
 /// Notification Service for managing alarms and notifications.
 ///
@@ -44,11 +45,6 @@ class NotificationService {
   static const int _eveningAdhkarNotificationId = 1002;
   static const int _mulkNotificationId = 1003;
   static const int _baqarahNotificationId = 1004;
-  static const int _fajrPrayerNotificationId = 2001;
-  static const int _dhuhrPrayerNotificationId = 2002;
-  static const int _asrPrayerNotificationId = 2003;
-  static const int _maghribPrayerNotificationId = 2004;
-  static const int _ishaPrayerNotificationId = 2005;
   static const List<int> _managedNotificationIds = <int>[
     _morningAdhkarNotificationId,
     _eveningAdhkarNotificationId,
@@ -68,13 +64,6 @@ class NotificationService {
   /// can never replace a real reminder.
   static int debugNotificationId(DateTime now) =>
       90000 + now.millisecondsSinceEpoch.remainder(10000);
-  static const Map<String, int> _prayerNotificationIdsByName = <String, int>{
-    'الفجر': _fajrPrayerNotificationId,
-    'الظهر': _dhuhrPrayerNotificationId,
-    'العصر': _asrPrayerNotificationId,
-    'المغرب': _maghribPrayerNotificationId,
-    'العشاء': _ishaPrayerNotificationId,
-  };
 
   // Alarm time keys
   static const String _morningAlarmHourKey = 'morning_alarm_hour';
@@ -173,9 +162,19 @@ class NotificationService {
     }
   }
 
-  Future<void> _configureLocalTimezone() async {
+  Future<void> _configureLocalTimezone() => applyDeviceTimezone();
+
+  /// Sets `tz.local` to the device's timezone ([lookup] defaults to the
+  /// platform) and returns whether it changed. Falls back to a fixed zone
+  /// for the current UTC offset when the name cannot be resolved.
+  @visibleForTesting
+  static Future<bool> applyDeviceTimezone({
+    Future<String> Function()? lookup,
+  }) async {
+    final String before = tz.local.name;
     try {
-      final String timezoneName = await FlutterTimezone.getLocalTimezone();
+      final String timezoneName =
+          await (lookup ?? FlutterTimezone.getLocalTimezone)();
       tz.setLocalLocation(tz.getLocation(timezoneName));
     } catch (e) {
       tz.setLocalLocation(
@@ -192,6 +191,18 @@ class NotificationService {
       'Notification timezone configured. Final selected timezone: ${tz.local.name}',
       name: 'sakina_app.notifications',
     );
+    return tz.local.name != before;
+  }
+
+  /// Called on resume: after travel or a manual change in system settings
+  /// the device zone can differ from the one this process started with.
+  /// When it does, `tz.local` follows and the next [updateAllAlarms] runs
+  /// in full, so daily reminders move to the new local wall time.
+  Future<bool> refreshTimezoneIfChanged() async {
+    await initialize(requestPermissions: false);
+    final bool changed = await applyDeviceTimezone();
+    if (changed) _lastAppliedAlarmStateSignature = null;
+    return changed;
   }
 
   Future<void> _createAndroidNotificationChannels() async {
@@ -816,37 +827,27 @@ class NotificationService {
   }
 
   /// Replace only the supplied calendar day's slot, preserving other days.
+  /// Prayers are keyed by [DailyPrayer]; display names are derived here and
+  /// only shown.
   Future<void> scheduleAllPrayersForDate({
-    required Map<String, DateTime> prayerTimes,
+    required Map<DailyPrayer, DateTime> prayerTimes,
     AdhanSettings settings = const AdhanSettings(),
   }) async {
     if (prayerTimes.isEmpty) return;
     final date = prayerTimes.values.first;
-    for (final legacyId in _prayerNotificationIdsByName.values) {
+    for (final prayer in DailyPrayer.values) {
+      final legacyId = prayerBaseId(prayer);
       await cancelNotification(legacyId);
       await cancelNotification(prayerNotificationId(legacyId, date));
       await cancelNotification(prayerReminderNotificationId(legacyId, date));
     }
 
-    final times = <DailyPrayer, DateTime>{};
-    final names = <DailyPrayer, String>{};
-    for (final MapEntry<String, DateTime> entry in prayerTimes.entries) {
-      final int? id = _prayerNotificationIdsByName[entry.key];
-      if (id == null) {
-        developer.log(
-          'Skipping unknown prayer notification key: ${entry.key}',
-          name: 'sakina_app.notifications',
-          level: 900,
-        );
-        continue;
-      }
-      final prayer = DailyPrayer.values[id - 2001];
-      times[prayer] = entry.value;
-      names[prayer] = entry.key;
-    }
+    final names = <DailyPrayer, String>{
+      for (final prayer in prayerTimes.keys) prayer: appL10n.prayerName(prayer),
+    };
 
     for (final alert in planPrayerAlerts(
-      times: times,
+      times: prayerTimes,
       names: names,
       settings: settings,
       now: DateTime.now(),
@@ -869,7 +870,7 @@ class NotificationService {
     final mode = settings.modeFor(DailyPrayer.fajr);
     await schedulePrayerNotification(
       id: _testPrayerAlertId,
-      prayerName: _prayerNotificationIdsByName.keys.first,
+      prayerName: appL10n.prayerName(DailyPrayer.fajr),
       prayerTime: DateTime.now().add(const Duration(seconds: 10)),
       mode: mode == PrayerAlertMode.silent ? PrayerAlertMode.sound : mode,
       adhanVoice: settings.voiceFor(DailyPrayer.fajr),
@@ -916,12 +917,35 @@ class NotificationService {
     for (final int id in allPrayerNotificationIds()) {
       await flutterLocalNotificationsPlugin.cancel(id);
     }
+    await flutterLocalNotificationsPlugin.cancel(
+      prayerWindowEndingNotificationId,
+    );
 
     developer.log(
       'Cancelled all prayer notifications',
       name: 'sakina_app.notifications',
     );
   }
+
+  /// iOS: the notice on the last scheduled day that prayer alerts need the
+  /// app opened to continue. Each schedule moves it to the new last day.
+  static const int prayerWindowEndingNotificationId = 1206;
+
+  /// When the window-ending notice for [lastDay] is shown: noon that day,
+  /// before the day's later prayers and well before alerts run out.
+  @visibleForTesting
+  static DateTime prayerWindowEndingAt(DateTime lastDay) =>
+      DateTime(lastDay.year, lastDay.month, lastDay.day, 12);
+
+  Future<void> schedulePrayerWindowEndingNotice(DateTime lastDay) =>
+      scheduleOneTimeNotification(
+        id: prayerWindowEndingNotificationId,
+        title: appL10n.prayerWindowEndingTitle,
+        body: appL10n.prayerWindowEndingBody,
+        scheduledAt: prayerWindowEndingAt(lastDay),
+        payload: 'prayer_time',
+        payloadData: const {'reminder': true},
+      );
 
   /// Cancel and reschedule only app-managed reminder notifications.
   Future<void> _cancelManagedReminderNotifications() async {

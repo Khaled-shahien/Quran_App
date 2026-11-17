@@ -214,6 +214,11 @@ Future<void> setupServiceLocator() async {
           preferences: getIt<SharedPreferences>(),
           repository: getIt<PrayerTimesRepository>(),
           gateway: gateway,
+          // iOS cannot replenish reliably in the background: say before
+          // the alerts run out that the app needs opening (audit NOTIF-03).
+          onWindowScheduled: Platform.isIOS
+              ? getIt<NotificationService>().schedulePrayerWindowEndingNotice
+              : null,
         ),
       );
     });

@@ -10,6 +10,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../onboarding/presentation/widgets/alarms/alarm_menu_item.dart';
 import '../../../../core/widgets/section_header.dart';
+import '../widgets/diagnostics_tile.dart';
 import '../widgets/reading_preferences.dart';
 import '../widgets/settings_controls.dart';
 
@@ -132,6 +133,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     trailing: const Icon(Icons.chevron_right_rounded),
                     onTap: () => context.push('/settings/data-sources'),
                   ),
+                  const DiagnosticsTile(),
                   const AboutAppTile(),
                 ],
               ),

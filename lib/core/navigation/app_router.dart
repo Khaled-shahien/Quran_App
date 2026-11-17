@@ -75,6 +75,10 @@ int? _routeInt(Map<String, dynamic>? extra, String key) {
 final GoRouter appRouter = GoRouter(
   navigatorKey: appNavigatorKey,
   initialLocation: '/splash',
+  // A stale notification payload or link must not end on GoRouter's
+  // default English error page.
+  errorPageBuilder: (context, state) =>
+      _fadePage(state, const RouteNotFoundScreen()),
   routes: <RouteBase>[
     ShellRoute(
       builder: (context, state, child) =>
@@ -366,6 +370,36 @@ class _RouteDataErrorScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),
           child: Text(message, textAlign: TextAlign.center),
+        ),
+      ),
+    );
+  }
+}
+
+/// Shown for a location no route matches; offers the way back home.
+class RouteNotFoundScreen extends StatelessWidget {
+  const RouteNotFoundScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.appRouterMessage5)),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.routeNotFoundMessage, textAlign: TextAlign.center),
+              const SizedBox(height: AppSpacing.lg),
+              FilledButton.icon(
+                onPressed: () => context.go('/home'),
+                icon: const Icon(Icons.home_rounded),
+                label: Text(l10n.routeBackHome),
+              ),
+            ],
+          ),
         ),
       ),
     );
