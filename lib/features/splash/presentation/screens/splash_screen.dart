@@ -59,10 +59,10 @@ class _SplashScreenState extends State<SplashScreen>
     if (!mounted) return;
     final prefs = ready.first! as SharedPreferences;
 
-    final completed = hasCompletedOnboarding(prefs);
-    context.go(completed ? '/home' : '/onboarding');
+    final destination = firstRunDestination(prefs);
+    context.go(destination);
     // A tap that launched the app opens over home, never over first-run setup.
-    NotificationRouter.release(dropPending: !completed);
+    NotificationRouter.release(dropPending: destination != '/home');
   }
 
   @override

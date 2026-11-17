@@ -1588,7 +1588,7 @@
   "@prayerLocationDialogMessage4": {
     "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
   },
-  "prayerLocationDialogMessage5": "تُرسل الإحداثيات إلى Aladhan لحساب المواقيت. أدخل موقعاً يدوياً أو استخدم موقع الجهاز.",
+  "prayerLocationDialogMessage5": "تُحسب المواقيت على جهازك، ولا تُرسل الإحداثيات إلى أي خادم.",
   "@prayerLocationDialogMessage5": {
     "description": "Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart."
   },
@@ -2679,9 +2679,9 @@
   "khatmaDecreaseDays": "تقليل عدد الأيام",
   "khatmaIncreaseDaily": "زيادة الورد اليومي",
   "khatmaDecreaseDaily": "تقليل الورد اليومي",
-  "onboardingNoPermissionsNow": "لن نطلب منك أي إذن الآن.",
-  "onboardingLocationNote": "الموقع: نطلبه فقط إذا اخترت تحديد موقعك لحساب مواقيت الصلاة أو اتجاه القبلة، ويمكنك بدلًا منه اختيار مدينتك يدويًا.",
-  "onboardingNotificationsNote": "الإشعارات: نطلبها فقط عندما تفعّل تذكيرًا أو الأذان، ويمكنك إيقافها من الإعدادات في أي وقت.",
+  "onboardingNoPermissionsNow": "بعد هذه الصفحة نعرض عليك إذنين اختياريين، ولا نطلب أيًّا منهما قبل أن نشرح فائدته.",
+  "onboardingLocationNote": "الموقع: لحساب مواقيت الصلاة واتجاه القبلة لمكانك، ويمكنك بدلًا منه اختيار مدينتك يدويًا.",
+  "onboardingNotificationsNote": "الإشعارات: لتنبيهك بأوقات الصلاة والتذكيرات التي تختارها، ويمكنك إيقافها من الإعدادات في أي وقت.",
   "digitStyle": "شكل الأرقام",
   "digitStyleWestern": "أرقام غربية (123)",
   "digitStyleArabic": "أرقام عربية (١٢٣)",
@@ -2843,5 +2843,182 @@
   "exactAlarmLateWarning": "قد لا تصل تنبيهات الصلاة في وقتها والهاتف مقفل، فأندرويد يؤخرها حتى تفتح الشاشة. اسمح بإذن «المنبهات والتذكيرات» لتصل في وقتها.",
   "@exactAlarmLateWarning": {
     "description": "Warning card shown while the exact alarms permission is denied and prayer alerts are on."
+  },
+  "permissionIntroStepLabel": "الخطوة {current} من {total}",
+  "@permissionIntroStepLabel": {
+    "description": "Progress label of the first-run permission steps.",
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionIntroNotNow": "ليس الآن",
+  "@permissionIntroNotNow": {
+    "description": "Declines a first-run permission step without asking the system."
+  },
+  "permissionIntroContinue": "متابعة",
+  "@permissionIntroContinue": {
+    "description": "Moves on after a first-run permission step has an answer."
+  },
+  "permissionIntroOpenSettings": "فتح الإعدادات",
+  "@permissionIntroOpenSettings": {
+    "description": "Opens this app's page in system settings."
+  },
+  "permissionIntroOpenLocationSettings": "فتح إعدادات الموقع",
+  "@permissionIntroOpenLocationSettings": {
+    "description": "Opens the device location services settings."
+  },
+  "permissionIntroNotificationsTitle": "تنبيهات الصلاة في وقتها",
+  "@permissionIntroNotificationsTitle": {
+    "description": "Title of the first-run notifications step."
+  },
+  "permissionIntroNotificationsBody": "اسمح لسكينة بالإشعارات ليصلك تنبيه عند دخول وقت كل صلاة، وما تختاره من تذكيرات.",
+  "@permissionIntroNotificationsBody": {
+    "description": "Why notifications help, shown before the system dialog."
+  },
+  "permissionIntroNotificationsBenefit1": "تنبيه عند دخول وقت كل صلاة",
+  "@permissionIntroNotificationsBenefit1": {
+    "description": "Notifications benefit."
+  },
+  "permissionIntroNotificationsBenefit2": "الأذان مع التنبيه إذا فعّلته وكان جهازك يدعمه",
+  "@permissionIntroNotificationsBenefit2": {
+    "description": "Notifications benefit: adhan sound where supported and enabled."
+  },
+  "permissionIntroNotificationsBenefit3": "تذكيرات الأذكار والورد اليومي",
+  "@permissionIntroNotificationsBenefit3": {
+    "description": "Notifications benefit."
+  },
+  "permissionIntroNotificationsBenefit4": "تختار التنبيهات أو توقفها من الإعدادات متى شئت",
+  "@permissionIntroNotificationsBenefit4": {
+    "description": "Notifications can be managed later in settings."
+  },
+  "permissionIntroEnableNotifications": "تفعيل الإشعارات",
+  "@permissionIntroEnableNotifications": {
+    "description": "Asks the system for notification permission."
+  },
+  "permissionIntroNotificationsGranted": "الإشعارات مفعّلة، وستصلك التنبيهات التي تختارها.",
+  "@permissionIntroNotificationsGranted": {
+    "description": "Notifications were allowed."
+  },
+  "permissionIntroNotificationsDenied": "لم تُفعَّل الإشعارات، ويمكنك تفعيلها لاحقًا من الإعدادات.",
+  "@permissionIntroNotificationsDenied": {
+    "description": "Notifications were refused but can be asked again later."
+  },
+  "permissionIntroNotificationsSettings": "الإشعارات متوقفة لسكينة في إعدادات الجهاز. لتفعيلها افتح الإعدادات واسمح بالإشعارات.",
+  "@permissionIntroNotificationsSettings": {
+    "description": "Notifications can only be allowed from system settings."
+  },
+  "permissionIntroLocationTitle": "مواقيت دقيقة لمكانك",
+  "@permissionIntroLocationTitle": {
+    "description": "Title of the first-run location step."
+  },
+  "permissionIntroLocationBody": "يستخدم سكينة موقعك لحساب مواقيت الصلاة لمدينتك وتحديد اتجاه القبلة. يجري الحساب على جهازك، ولا يُرسل موقعك إلى أي خادم.",
+  "@permissionIntroLocationBody": {
+    "description": "Why location helps, shown before the system dialog."
+  },
+  "permissionIntroLocationBenefit1": "معرفة مدينتك الحالية",
+  "@permissionIntroLocationBenefit1": {
+    "description": "Location benefit."
+  },
+  "permissionIntroLocationBenefit2": "مواقيت صلاة دقيقة لمكانك",
+  "@permissionIntroLocationBenefit2": {
+    "description": "Location benefit."
+  },
+  "permissionIntroLocationBenefit3": "اتجاه القبلة من حيث أنت",
+  "@permissionIntroLocationBenefit3": {
+    "description": "Location benefit."
+  },
+  "permissionIntroLocationBenefit4": "تحديث المواقيت إذا انتقلت إلى مدينة أخرى",
+  "@permissionIntroLocationBenefit4": {
+    "description": "Location benefit."
+  },
+  "permissionIntroEnableLocation": "تفعيل الموقع",
+  "@permissionIntroEnableLocation": {
+    "description": "Asks the system for foreground location permission."
+  },
+  "permissionIntroChooseCity": "اختيار المدينة يدويًا",
+  "@permissionIntroChooseCity": {
+    "description": "Opens manual city selection instead of location access."
+  },
+  "permissionIntroLocating": "جارٍ تحديد موقعك…",
+  "@permissionIntroLocating": {
+    "description": "Shown while the device position is being read."
+  },
+  "permissionIntroLocationSet": "موقع الصلاة: {label}",
+  "@permissionIntroLocationSet": {
+    "description": "The prayer location that is now active.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionIntroLocationDenied": "لم يُسمح بالوصول إلى الموقع. يمكنك اختيار مدينتك يدويًا أو السماح به لاحقًا.",
+  "@permissionIntroLocationDenied": {
+    "description": "Location was refused but can be asked again later."
+  },
+  "permissionIntroLocationSettings": "الوصول إلى الموقع متوقف لسكينة. افتح الإعدادات واسمح به أثناء استخدام التطبيق، أو اختر مدينتك يدويًا.",
+  "@permissionIntroLocationSettings": {
+    "description": "Location can only be allowed from system settings."
+  },
+  "permissionIntroLocationServicesOff": "خدمة الموقع متوقفة في جهازك. فعّلها من الإعدادات، أو اختر مدينتك يدويًا.",
+  "@permissionIntroLocationServicesOff": {
+    "description": "Device location services are off."
+  },
+  "locationTooInaccurateMessage": "لم يحدد الجهاز موقعك بدقة كافية. جرّب في مكان مفتوح أو اختر مدينتك يدويًا.",
+  "@locationTooInaccurateMessage": {
+    "description": "The device fix was too imprecise to use."
+  },
+  "nearCityLabel": "بالقرب من {city}",
+  "@nearCityLabel": {
+    "description": "Label of a device location close to, but outside, a listed city.",
+    "placeholders": {
+      "city": {
+        "type": "String"
+      }
+    }
+  },
+  "staleLocationNotice": "تعذّر تحديد موقعك الآن، فاستُخدم آخر موقع معروف للجهاز. أعد المحاولة لاحقًا لتحديثه.",
+  "@staleLocationNotice": {
+    "description": "A last-known position was used because no new fix was available."
+  },
+  "locationSourceDevice": "المصدر: موقع الجهاز، ويتحدّث عند فتح التطبيق إذا انتقلت إلى مكان آخر.",
+  "@locationSourceDevice": {
+    "description": "The active prayer location follows the device."
+  },
+  "locationSourceManual": "المصدر: موقع اخترته يدويًا، ولا يتغير تلقائيًا.",
+  "@locationSourceManual": {
+    "description": "The active prayer location was chosen by hand."
+  },
+  "locationAccuracyApproximate": "موقع تقريبي في حدود {distance}، وهي دقة كافية لحساب المواقيت.",
+  "@locationAccuracyApproximate": {
+    "description": "Reported accuracy of an approximate device location.",
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "distanceKilometers": "{value} كم",
+  "@distanceKilometers": {
+    "description": "A distance in kilometres.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "distanceMeters": "{value} م",
+  "@distanceMeters": {
+    "description": "A distance in metres.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
   }
 }

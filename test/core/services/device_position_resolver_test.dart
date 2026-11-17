@@ -3,14 +3,20 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sakina_app/core/services/device_position_resolver.dart';
+import 'package:sakina_app/core/services/location_fix.dart';
 
 final _now = DateTime(2026, 11, 3, 12);
 
-Position _position(double latitude, DateTime timestamp) => Position(
+Position _position(
+  double latitude,
+  DateTime timestamp, {
+  double longitude = 31.2357,
+  double accuracy = 50,
+}) => Position(
   latitude: latitude,
-  longitude: 31.2357,
+  longitude: longitude,
   timestamp: timestamp,
-  accuracy: 50,
+  accuracy: accuracy,
   altitude: 20,
   altitudeAccuracy: 5,
   heading: 0,
@@ -76,6 +82,124 @@ void main() {
       );
 
       await expectLater(resolver.resolve(), throwsA(isA<TimeoutException>()));
+    });
+
+    test(
+      'a cached fix older than a few minutes is not used as current',
+      () async {
+        var currentCalls = 0;
+        final resolver = DevicePositionResolver(
+          lastKnown: () async =>
+              _position(1, _now.subtract(const Duration(minutes: 20))),
+          current: (_) async {
+            currentCalls++;
+            return _position(2, _now);
+          },
+          now: () => _now,
+        );
+
+        final fix = await resolver.resolveFix();
+        expect(fix.latitude, 2);
+        expect(fix.source, LocationFixSource.fresh);
+        expect(currentCalls, 1);
+      },
+    );
+
+    test('the fallback cache is marked stale, never as current', () async {
+      final resolver = DevicePositionResolver(
+        lastKnown: () async =>
+            _position(1, _now.subtract(const Duration(hours: 3))),
+        current: (_) async => throw TimeoutException('no fix'),
+        now: () => _now,
+      );
+
+      final fix = await resolver.resolveFix();
+      expect(fix.source, LocationFixSource.staleCache);
+      expect(fix.isStale, isTrue);
+    });
+
+    test('a cached fix older than a day is never used', () async {
+      final resolver = DevicePositionResolver(
+        lastKnown: () async =>
+            _position(1, _now.subtract(const Duration(days: 2))),
+        current: (_) async => throw TimeoutException('no fix'),
+        now: () => _now,
+      );
+
+      await expectLater(
+        resolver.resolveFix(),
+        throwsA(isA<TimeoutException>()),
+      );
+    });
+
+    test('a recent but vague cached fix is not used as current', () async {
+      var currentCalls = 0;
+      final resolver = DevicePositionResolver(
+        lastKnown: () async => _position(
+          1,
+          _now.subtract(const Duration(minutes: 2)),
+          accuracy: 50000,
+        ),
+        current: (_) async {
+          currentCalls++;
+          return _position(2, _now, accuracy: 900);
+        },
+        now: () => _now,
+      );
+
+      expect((await resolver.resolveFix()).latitude, 2);
+      expect(currentCalls, 1);
+    });
+
+    test('an unset (0, 0) current fix is refused', () async {
+      final resolver = DevicePositionResolver(
+        lastKnown: () async => null,
+        current: (_) async => _position(0, _now, longitude: 0),
+        now: () => _now,
+      );
+
+      await expectLater(
+        resolver.resolveFix(),
+        throwsA(
+          isA<LocationFixException>().having(
+            (e) => e.problem,
+            'problem',
+            LocationFixProblem.nullIsland,
+          ),
+        ),
+      );
+    });
+
+    test('a vague current fix falls back to a usable cached one', () async {
+      final resolver = DevicePositionResolver(
+        lastKnown: () async =>
+            _position(1, _now.subtract(const Duration(hours: 1))),
+        current: (_) async => _position(2, _now, accuracy: 80000),
+        now: () => _now,
+      );
+
+      final fix = await resolver.resolveFix();
+      expect(fix.latitude, 1);
+      expect(fix.isStale, isTrue);
+    });
+
+    test('a vague current fix with no cache reports the reason', () async {
+      final resolver = DevicePositionResolver(
+        lastKnown: () async => null,
+        current: (_) async => _position(2, _now, accuracy: 80000),
+        now: () => _now,
+      );
+
+      await expectLater(
+        resolver.resolveFix(),
+        throwsA(
+          isA<LocationFixException>().having(
+            (e) => e.problem,
+            'problem',
+            LocationFixProblem.tooInaccurate,
+          ),
+        ),
+      );
     });
   });
 }

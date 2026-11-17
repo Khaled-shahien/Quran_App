@@ -33,6 +33,10 @@ void main() {
           path: '/home',
           builder: (_, _) => const Scaffold(body: Text('Home destination')),
         ),
+        GoRoute(
+          path: '/onboarding/permissions',
+          builder: (_, _) => const Scaffold(body: Text('Permission steps')),
+        ),
       ],
     );
     addTearDown(router.dispose);
@@ -82,35 +86,48 @@ void main() {
     expect(find.bySemanticsLabel('الصفحة 1 من 4'), findsOneWidget);
   });
 
-  testWidgets('All four pages lead to home from the final start button', (
-    tester,
-  ) async {
-    await pumpOnboarding(tester);
-    for (var index = 0; index < 3; index++) {
-      await tester.tap(find.text('التالي'));
+  testWidgets(
+    'All four pages lead to the permission steps from the final start button',
+    (tester) async {
+      await pumpOnboarding(tester);
+      for (var index = 0; index < 3; index++) {
+        await tester.tap(find.text('التالي'));
+        await tester.pumpAndSettle();
+      }
+      expect(find.text('تخطي').hitTestable(), findsNothing);
+      expect(find.bySemanticsLabel('الصفحة 4 من 4'), findsOneWidget);
+      expect(
+        find.text(onboardingPages.last.title).hitTestable(),
+        findsOneWidget,
+      );
+      // The last page says, gently, that two optional permissions follow and
+      // that neither is asked for before it is explained.
+      expect(
+        find.byKey(const Key('onboarding-permission-notes')),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'بعد هذه الصفحة نعرض عليك إذنين اختياريين، ولا نطلب أيًّا منهما قبل أن نشرح فائدته.',
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(find.text('ابدأ الآن'));
       await tester.pumpAndSettle();
-    }
-    expect(find.text('تخطي').hitTestable(), findsNothing);
-    expect(find.bySemanticsLabel('الصفحة 4 من 4'), findsOneWidget);
-    expect(find.text(onboardingPages.last.title).hitTestable(), findsOneWidget);
-    // The last page explains, gently, that nothing is asked for up front.
-    expect(
-      find.byKey(const Key('onboarding-permission-notes')),
-      findsOneWidget,
-    );
-    expect(find.text('لن نطلب منك أي إذن الآن.'), findsOneWidget);
-    await tester.tap(find.text('ابدأ الآن'));
-    await tester.pumpAndSettle();
-    expect(find.text('Home destination'), findsOneWidget);
-  });
+      expect(find.text('Permission steps'), findsOneWidget);
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getBool('onboarding_complete'), isTrue);
+      expect(prefs.getBool('permission_intro_pending'), isTrue);
+    },
+  );
 
-  testWidgets('Skip enters home when notification prompt was already seen', (
+  testWidgets('Skip leads to the permission steps without any dialog', (
     tester,
   ) async {
     await pumpOnboarding(tester);
     await tester.tap(find.text('تخطي'));
     await tester.pumpAndSettle();
-    expect(find.text('Home destination'), findsOneWidget);
+    expect(find.text('Permission steps'), findsOneWidget);
     expect(find.byType(NotificationPermissionDialog), findsNothing);
   });
 
@@ -128,7 +145,7 @@ void main() {
     expect(find.byType(NotificationPermissionDialog), findsNothing);
 
     await tester.pumpAndSettle();
-    expect(find.text('Home destination'), findsOneWidget);
+    expect(find.text('Permission steps'), findsOneWidget);
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getBool('onboarding_complete'), isTrue);
   });

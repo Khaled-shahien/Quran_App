@@ -1169,7 +1169,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get prayerLocationDialogMessage5 =>
-      'تُرسل الإحداثيات إلى Aladhan لحساب المواقيت. أدخل موقعاً يدوياً أو استخدم موقع الجهاز.';
+      'تُحسب المواقيت على جهازك، ولا تُرسل الإحداثيات إلى أي خادم.';
 
   @override
   String get prayerLocationDialogMessage6 => 'اسم المكان';
@@ -2154,15 +2154,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get khatmaDecreaseDaily => 'تقليل الورد اليومي';
 
   @override
-  String get onboardingNoPermissionsNow => 'لن نطلب منك أي إذن الآن.';
+  String get onboardingNoPermissionsNow =>
+      'بعد هذه الصفحة نعرض عليك إذنين اختياريين، ولا نطلب أيًّا منهما قبل أن نشرح فائدته.';
 
   @override
   String get onboardingLocationNote =>
-      'الموقع: نطلبه فقط إذا اخترت تحديد موقعك لحساب مواقيت الصلاة أو اتجاه القبلة، ويمكنك بدلًا منه اختيار مدينتك يدويًا.';
+      'الموقع: لحساب مواقيت الصلاة واتجاه القبلة لمكانك، ويمكنك بدلًا منه اختيار مدينتك يدويًا.';
 
   @override
   String get onboardingNotificationsNote =>
-      'الإشعارات: نطلبها فقط عندما تفعّل تذكيرًا أو الأذان، ويمكنك إيقافها من الإعدادات في أي وقت.';
+      'الإشعارات: لتنبيهك بأوقات الصلاة والتذكيرات التي تختارها، ويمكنك إيقافها من الإعدادات في أي وقت.';
 
   @override
   String get digitStyle => 'شكل الأرقام';
@@ -2366,4 +2367,141 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get exactAlarmLateWarning =>
       'قد لا تصل تنبيهات الصلاة في وقتها والهاتف مقفل، فأندرويد يؤخرها حتى تفتح الشاشة. اسمح بإذن «المنبهات والتذكيرات» لتصل في وقتها.';
+
+  @override
+  String permissionIntroStepLabel(String current, String total) {
+    return 'الخطوة $current من $total';
+  }
+
+  @override
+  String get permissionIntroNotNow => 'ليس الآن';
+
+  @override
+  String get permissionIntroContinue => 'متابعة';
+
+  @override
+  String get permissionIntroOpenSettings => 'فتح الإعدادات';
+
+  @override
+  String get permissionIntroOpenLocationSettings => 'فتح إعدادات الموقع';
+
+  @override
+  String get permissionIntroNotificationsTitle => 'تنبيهات الصلاة في وقتها';
+
+  @override
+  String get permissionIntroNotificationsBody =>
+      'اسمح لسكينة بالإشعارات ليصلك تنبيه عند دخول وقت كل صلاة، وما تختاره من تذكيرات.';
+
+  @override
+  String get permissionIntroNotificationsBenefit1 =>
+      'تنبيه عند دخول وقت كل صلاة';
+
+  @override
+  String get permissionIntroNotificationsBenefit2 =>
+      'الأذان مع التنبيه إذا فعّلته وكان جهازك يدعمه';
+
+  @override
+  String get permissionIntroNotificationsBenefit3 =>
+      'تذكيرات الأذكار والورد اليومي';
+
+  @override
+  String get permissionIntroNotificationsBenefit4 =>
+      'تختار التنبيهات أو توقفها من الإعدادات متى شئت';
+
+  @override
+  String get permissionIntroEnableNotifications => 'تفعيل الإشعارات';
+
+  @override
+  String get permissionIntroNotificationsGranted =>
+      'الإشعارات مفعّلة، وستصلك التنبيهات التي تختارها.';
+
+  @override
+  String get permissionIntroNotificationsDenied =>
+      'لم تُفعَّل الإشعارات، ويمكنك تفعيلها لاحقًا من الإعدادات.';
+
+  @override
+  String get permissionIntroNotificationsSettings =>
+      'الإشعارات متوقفة لسكينة في إعدادات الجهاز. لتفعيلها افتح الإعدادات واسمح بالإشعارات.';
+
+  @override
+  String get permissionIntroLocationTitle => 'مواقيت دقيقة لمكانك';
+
+  @override
+  String get permissionIntroLocationBody =>
+      'يستخدم سكينة موقعك لحساب مواقيت الصلاة لمدينتك وتحديد اتجاه القبلة. يجري الحساب على جهازك، ولا يُرسل موقعك إلى أي خادم.';
+
+  @override
+  String get permissionIntroLocationBenefit1 => 'معرفة مدينتك الحالية';
+
+  @override
+  String get permissionIntroLocationBenefit2 => 'مواقيت صلاة دقيقة لمكانك';
+
+  @override
+  String get permissionIntroLocationBenefit3 => 'اتجاه القبلة من حيث أنت';
+
+  @override
+  String get permissionIntroLocationBenefit4 =>
+      'تحديث المواقيت إذا انتقلت إلى مدينة أخرى';
+
+  @override
+  String get permissionIntroEnableLocation => 'تفعيل الموقع';
+
+  @override
+  String get permissionIntroChooseCity => 'اختيار المدينة يدويًا';
+
+  @override
+  String get permissionIntroLocating => 'جارٍ تحديد موقعك…';
+
+  @override
+  String permissionIntroLocationSet(String label) {
+    return 'موقع الصلاة: $label';
+  }
+
+  @override
+  String get permissionIntroLocationDenied =>
+      'لم يُسمح بالوصول إلى الموقع. يمكنك اختيار مدينتك يدويًا أو السماح به لاحقًا.';
+
+  @override
+  String get permissionIntroLocationSettings =>
+      'الوصول إلى الموقع متوقف لسكينة. افتح الإعدادات واسمح به أثناء استخدام التطبيق، أو اختر مدينتك يدويًا.';
+
+  @override
+  String get permissionIntroLocationServicesOff =>
+      'خدمة الموقع متوقفة في جهازك. فعّلها من الإعدادات، أو اختر مدينتك يدويًا.';
+
+  @override
+  String get locationTooInaccurateMessage =>
+      'لم يحدد الجهاز موقعك بدقة كافية. جرّب في مكان مفتوح أو اختر مدينتك يدويًا.';
+
+  @override
+  String nearCityLabel(String city) {
+    return 'بالقرب من $city';
+  }
+
+  @override
+  String get staleLocationNotice =>
+      'تعذّر تحديد موقعك الآن، فاستُخدم آخر موقع معروف للجهاز. أعد المحاولة لاحقًا لتحديثه.';
+
+  @override
+  String get locationSourceDevice =>
+      'المصدر: موقع الجهاز، ويتحدّث عند فتح التطبيق إذا انتقلت إلى مكان آخر.';
+
+  @override
+  String get locationSourceManual =>
+      'المصدر: موقع اخترته يدويًا، ولا يتغير تلقائيًا.';
+
+  @override
+  String locationAccuracyApproximate(String distance) {
+    return 'موقع تقريبي في حدود $distance، وهي دقة كافية لحساب المواقيت.';
+  }
+
+  @override
+  String distanceKilometers(String value) {
+    return '$value كم';
+  }
+
+  @override
+  String distanceMeters(String value) {
+    return '$value م';
+  }
 }

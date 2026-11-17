@@ -15,6 +15,10 @@ void main() {
         GoRoute(path: '/splash', builder: (_, _) => const SplashScreen()),
         GoRoute(path: '/home', builder: (_, _) => const Text('home')),
         GoRoute(path: '/onboarding', builder: (_, _) => const Text('intro')),
+        GoRoute(
+          path: '/onboarding/permissions',
+          builder: (_, _) => const Text('permission steps'),
+        ),
       ],
     );
     addTearDown(router.dispose);
@@ -51,6 +55,23 @@ void main() {
     SharedPreferences.setMockInitialValues({'onboarding_complete': true});
     await pumpSplash(tester);
     expect(find.text('home'), findsOneWidget);
+  });
+
+  testWidgets('permission steps closed half way resume on the next launch', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      'onboarding_complete': true,
+      'permission_intro_pending': true,
+    });
+    final routes = <String>[];
+    NotificationRouter.hold();
+    NotificationRouter.setNavigationCallback((route, _) => routes.add(route));
+    NotificationRouter.handleNotification(type: 'prayer_time');
+    await pumpSplash(tester);
+    expect(find.text('permission steps'), findsOneWidget);
+    // A launch tap never opens over first-run setup.
+    expect(routes, isEmpty);
   });
 
   testWidgets('an older install with only the prompt flag goes home', (

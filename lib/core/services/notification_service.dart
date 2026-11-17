@@ -89,6 +89,10 @@ class NotificationService {
   static const int _defaultVerseHour = 9;
   static const int _defaultVerseMinute = 0;
 
+  /// Same key as NotificationPermissionService.requestedKey.
+  static const String _permissionRequestedKey =
+      'notification_permission_requested';
+
   bool _isInitialized = false;
   bool _isPluginAvailable = true;
   String? _lastAppliedAlarmStateSignature;
@@ -236,6 +240,14 @@ class NotificationService {
   Future<bool> requestPermissions() async {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable || kIsWeb) return true;
+    // Lets the permission state tell "never asked" from "refused"
+    // (NotificationPermissionService.requestedKey).
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_permissionRequestedKey, true);
+    } catch (_) {
+      // The request itself does not depend on this record.
+    }
 
     final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
         flutterLocalNotificationsPlugin

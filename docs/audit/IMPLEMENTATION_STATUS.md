@@ -1,6 +1,6 @@
 # Sakina – Implementation Status
 
-Progress against [IMPLEMENTATION_TASKS.md](IMPLEMENTATION_TASKS.md) (same task IDs). Updated 2026-11-17. Nothing listed here is committed yet; it is in the working tree on top of the uncommitted adhan-voice work (P0-04).
+Progress against [IMPLEMENTATION_TASKS.md](IMPLEMENTATION_TASKS.md) (same task IDs). Updated 2026-11-18. P0-05 and the adhan-voice work were committed in `8e2f0f1`; P1-10 is in the working tree, not committed.
 
 Status: **Done** (code + tests in the tree), **Partial** (part done; rest noted), **Blocked** (needs an owner decision, credentials or devices — see [EXTERNAL_BLOCKERS.md](EXTERNAL_BLOCKERS.md)), **Not started**, **Skipped** (reason given).
 
@@ -9,7 +9,7 @@ Status: **Done** (code + tests in the tree), **Partial** (part done; rest noted)
 | P0-01 Content approval | Blocked | B-05 |
 | P0-02 Adhan rights | Blocked | B-06 |
 | P0-03 Release identity / Firebase | Blocked | B-01, B-02, B-04, B-14 |
-| P0-04 Commit pending work | Not started | Owner asked to hold commits |
+| P0-04 Commit pending work | Done | Committed by the owner in `8e2f0f1` (adhan voices, scheduling generation) |
 | P0-05 Single-owner scheduling | Done | `SchedulingGeneration`; UI isolate fills the whole window; no parallel background enqueue. Device check §9.6 pending |
 | P1-01 Shared Quran store | Done | `QuranMasterAsset`: one decode per process, off the UI isolate (inline under `flutter test`) |
 | P1-02 Remove metadata fallback | Done | ~1,000 hard-coded lines removed from `local_surah_data_source.dart` |
@@ -20,6 +20,7 @@ Status: **Done** (code + tests in the tree), **Partial** (part done; rest noted)
 | P1-07 Split notification service | Not started | Large refactor; do after commits land |
 | P1-08 Atomic bookmark | Done | Single `bookmark_v2` value, legacy migration, range checks. An older app version installed over this one would not see the migrated bookmark |
 | P1-09 Versioned blobs, backup rules | Partial | Backup/data-extraction rules added (exclude plugin caches and downloaded recitations). Versioned blobs and the 1.0.0+3 fixture not done |
+| P1-10 Permission onboarding, location accuracy | Done (device check pending) | First-run notification and location steps; system-backed permission states with settings recovery; validated, staleness-aware device fixes; offline city naming; device/manual location source with throttled refresh through the P0-05 boundary. Release APK checked on the Android 16 emulator (first-run path; see task notes). Integration tests on the emulator: `prayer_times_flow` fails identically on unmodified `HEAD` (two "05:00" texts since the redesign), `quran_flow` (Basmala finder) and `production_flow` unconfirmed because the emulator ran out of storage; physical Android/iOS checks pending (B-03). City list expansion needs an owner decision |
 | P2-01 iOS durability | Done (unverified) | iOS window up to 7 days within the 64-notification limit; "open Sakina" notice at noon on the last day. Needs an iOS device (B-03) |
 | P2-02 iOS one-off tasks | Done | Skipped on iOS |
 | P2-03 Adhan audio stream | Blocked | B-09 decision |

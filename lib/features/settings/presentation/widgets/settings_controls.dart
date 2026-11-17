@@ -11,6 +11,8 @@ import 'package:sakina_app/l10n/localization.dart';
 import '../../../../core/providers/settings_provider.dart';
 import '../../../../core/theme/theme_provider.dart';
 import '../../../../core/services/notification_service.dart';
+import '../../../../core/services/notification_permission_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/services/monitoring_service.dart';
 import '../../../prayers/domain/prayer_calculation_policy.dart';
 import '../../../prayers/presentation/providers/prayer_times_provider.dart';
@@ -28,6 +30,14 @@ Future<void> requestNotificationPermissionWithFeedback(
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(l10nOf(context).notificationPermissionDeniedMessage),
+      // After a refusal the system may not ask again; settings always can.
+      action: SnackBarAction(
+        label: l10nOf(context).permissionIntroOpenSettings,
+        onPressed: () async {
+          final prefs = await SharedPreferences.getInstance();
+          await NotificationPermissionService(prefs: prefs).openSettings();
+        },
+      ),
     ),
   );
 }

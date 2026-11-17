@@ -5,20 +5,38 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/providers/notification_provider.dart';
+import 'package:sakina_app/core/services/notification_permission_service.dart';
 import '../../../prayers/presentation/widgets/exact_alarm_prompt.dart';
 import '../../domain/first_run_state.dart';
 
 /// Explains reminders once, when a saved prayer location first makes them
-/// useful, instead of asking for permission during onboarding.
+/// useful, for users who passed the first-run notification step without
+/// answering it (or installed before it existed).
+///
+/// Nothing is shown when the system already allows notifications, or when
+/// only system settings could allow them (asking again would be nagging).
 ///
 /// Then, on Android 14+ where it is denied by default, explains and asks for
 /// exact alarms: without them alerts wait until the phone is unlocked.
-Future<void> promptForNotificationPermissionOnce(BuildContext context) async {
+Future<void> promptForNotificationPermissionOnce(
+  BuildContext context, {
+  NotificationPermissionService? permissions,
+}) async {
   final prefs = await SharedPreferences.getInstance();
   if (!(prefs.getBool('prayer_notifications_enabled') ?? true) ||
       !context.mounted) {
     return;
   }
+  if (!(prefs.getBool(notificationPromptSeenKey) ?? false)) {
+    final status =
+        await (permissions ?? NotificationPermissionService(prefs: prefs))
+            .status();
+    if (status == NotificationPermissionStatus.granted ||
+        status == NotificationPermissionStatus.permanentlyDenied) {
+      await prefs.setBool(notificationPromptSeenKey, true);
+    }
+  }
+  if (!context.mounted) return;
   if (!(prefs.getBool(notificationPromptSeenKey) ?? false)) {
     await showDialog<void>(
       context: context,

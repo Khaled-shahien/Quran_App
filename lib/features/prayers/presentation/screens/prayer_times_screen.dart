@@ -110,7 +110,9 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
           onPressed: () async {
             final provider = context.read<PrayerTimesProvider>();
             await provider.useDeviceLocation();
-            if (provider.hasData && context.mounted) {
+            if (!context.mounted) return;
+            showDeviceLocationOutcome(context, provider);
+            if (provider.hasData && provider.lastLocationError == null) {
               await promptForNotificationPermissionOnce(context);
             }
           },

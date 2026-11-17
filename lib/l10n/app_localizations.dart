@@ -2183,7 +2183,7 @@ abstract class AppLocalizations {
   /// Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart.
   ///
   /// In ar, this message translates to:
-  /// **'تُرسل الإحداثيات إلى Aladhan لحساب المواقيت. أدخل موقعاً يدوياً أو استخدم موقع الجهاز.'**
+  /// **'تُحسب المواقيت على جهازك، ولا تُرسل الإحداثيات إلى أي خادم.'**
   String get prayerLocationDialogMessage5;
 
   /// Display text used in lib/features/prayers/presentation/screens/prayer_location_dialog.dart.
@@ -3935,19 +3935,19 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingNoPermissionsNow.
   ///
   /// In ar, this message translates to:
-  /// **'لن نطلب منك أي إذن الآن.'**
+  /// **'بعد هذه الصفحة نعرض عليك إذنين اختياريين، ولا نطلب أيًّا منهما قبل أن نشرح فائدته.'**
   String get onboardingNoPermissionsNow;
 
   /// No description provided for @onboardingLocationNote.
   ///
   /// In ar, this message translates to:
-  /// **'الموقع: نطلبه فقط إذا اخترت تحديد موقعك لحساب مواقيت الصلاة أو اتجاه القبلة، ويمكنك بدلًا منه اختيار مدينتك يدويًا.'**
+  /// **'الموقع: لحساب مواقيت الصلاة واتجاه القبلة لمكانك، ويمكنك بدلًا منه اختيار مدينتك يدويًا.'**
   String get onboardingLocationNote;
 
   /// No description provided for @onboardingNotificationsNote.
   ///
   /// In ar, this message translates to:
-  /// **'الإشعارات: نطلبها فقط عندما تفعّل تذكيرًا أو الأذان، ويمكنك إيقافها من الإعدادات في أي وقت.'**
+  /// **'الإشعارات: لتنبيهك بأوقات الصلاة والتذكيرات التي تختارها، ويمكنك إيقافها من الإعدادات في أي وقت.'**
   String get onboardingNotificationsNote;
 
   /// No description provided for @digitStyle.
@@ -4309,6 +4309,222 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'قد لا تصل تنبيهات الصلاة في وقتها والهاتف مقفل، فأندرويد يؤخرها حتى تفتح الشاشة. اسمح بإذن «المنبهات والتذكيرات» لتصل في وقتها.'**
   String get exactAlarmLateWarning;
+
+  /// Progress label of the first-run permission steps.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخطوة {current} من {total}'**
+  String permissionIntroStepLabel(String current, String total);
+
+  /// Declines a first-run permission step without asking the system.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليس الآن'**
+  String get permissionIntroNotNow;
+
+  /// Moves on after a first-run permission step has an answer.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة'**
+  String get permissionIntroContinue;
+
+  /// Opens this app's page in system settings.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح الإعدادات'**
+  String get permissionIntroOpenSettings;
+
+  /// Opens the device location services settings.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح إعدادات الموقع'**
+  String get permissionIntroOpenLocationSettings;
+
+  /// Title of the first-run notifications step.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات الصلاة في وقتها'**
+  String get permissionIntroNotificationsTitle;
+
+  /// Why notifications help, shown before the system dialog.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسمح لسكينة بالإشعارات ليصلك تنبيه عند دخول وقت كل صلاة، وما تختاره من تذكيرات.'**
+  String get permissionIntroNotificationsBody;
+
+  /// Notifications benefit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه عند دخول وقت كل صلاة'**
+  String get permissionIntroNotificationsBenefit1;
+
+  /// Notifications benefit: adhan sound where supported and enabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأذان مع التنبيه إذا فعّلته وكان جهازك يدعمه'**
+  String get permissionIntroNotificationsBenefit2;
+
+  /// Notifications benefit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكيرات الأذكار والورد اليومي'**
+  String get permissionIntroNotificationsBenefit3;
+
+  /// Notifications can be managed later in settings.
+  ///
+  /// In ar, this message translates to:
+  /// **'تختار التنبيهات أو توقفها من الإعدادات متى شئت'**
+  String get permissionIntroNotificationsBenefit4;
+
+  /// Asks the system for notification permission.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل الإشعارات'**
+  String get permissionIntroEnableNotifications;
+
+  /// Notifications were allowed.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات مفعّلة، وستصلك التنبيهات التي تختارها.'**
+  String get permissionIntroNotificationsGranted;
+
+  /// Notifications were refused but can be asked again later.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُفعَّل الإشعارات، ويمكنك تفعيلها لاحقًا من الإعدادات.'**
+  String get permissionIntroNotificationsDenied;
+
+  /// Notifications can only be allowed from system settings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات متوقفة لسكينة في إعدادات الجهاز. لتفعيلها افتح الإعدادات واسمح بالإشعارات.'**
+  String get permissionIntroNotificationsSettings;
+
+  /// Title of the first-run location step.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواقيت دقيقة لمكانك'**
+  String get permissionIntroLocationTitle;
+
+  /// Why location helps, shown before the system dialog.
+  ///
+  /// In ar, this message translates to:
+  /// **'يستخدم سكينة موقعك لحساب مواقيت الصلاة لمدينتك وتحديد اتجاه القبلة. يجري الحساب على جهازك، ولا يُرسل موقعك إلى أي خادم.'**
+  String get permissionIntroLocationBody;
+
+  /// Location benefit.
+  ///
+  /// In ar, this message translates to:
+  /// **'معرفة مدينتك الحالية'**
+  String get permissionIntroLocationBenefit1;
+
+  /// Location benefit.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواقيت صلاة دقيقة لمكانك'**
+  String get permissionIntroLocationBenefit2;
+
+  /// Location benefit.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتجاه القبلة من حيث أنت'**
+  String get permissionIntroLocationBenefit3;
+
+  /// Location benefit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث المواقيت إذا انتقلت إلى مدينة أخرى'**
+  String get permissionIntroLocationBenefit4;
+
+  /// Asks the system for foreground location permission.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل الموقع'**
+  String get permissionIntroEnableLocation;
+
+  /// Opens manual city selection instead of location access.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار المدينة يدويًا'**
+  String get permissionIntroChooseCity;
+
+  /// Shown while the device position is being read.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحديد موقعك…'**
+  String get permissionIntroLocating;
+
+  /// The prayer location that is now active.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقع الصلاة: {label}'**
+  String permissionIntroLocationSet(String label);
+
+  /// Location was refused but can be asked again later.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُسمح بالوصول إلى الموقع. يمكنك اختيار مدينتك يدويًا أو السماح به لاحقًا.'**
+  String get permissionIntroLocationDenied;
+
+  /// Location can only be allowed from system settings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصول إلى الموقع متوقف لسكينة. افتح الإعدادات واسمح به أثناء استخدام التطبيق، أو اختر مدينتك يدويًا.'**
+  String get permissionIntroLocationSettings;
+
+  /// Device location services are off.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة الموقع متوقفة في جهازك. فعّلها من الإعدادات، أو اختر مدينتك يدويًا.'**
+  String get permissionIntroLocationServicesOff;
+
+  /// The device fix was too imprecise to use.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يحدد الجهاز موقعك بدقة كافية. جرّب في مكان مفتوح أو اختر مدينتك يدويًا.'**
+  String get locationTooInaccurateMessage;
+
+  /// Label of a device location close to, but outside, a listed city.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالقرب من {city}'**
+  String nearCityLabel(String city);
+
+  /// A last-known position was used because no new fix was available.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تحديد موقعك الآن، فاستُخدم آخر موقع معروف للجهاز. أعد المحاولة لاحقًا لتحديثه.'**
+  String get staleLocationNotice;
+
+  /// The active prayer location follows the device.
+  ///
+  /// In ar, this message translates to:
+  /// **'المصدر: موقع الجهاز، ويتحدّث عند فتح التطبيق إذا انتقلت إلى مكان آخر.'**
+  String get locationSourceDevice;
+
+  /// The active prayer location was chosen by hand.
+  ///
+  /// In ar, this message translates to:
+  /// **'المصدر: موقع اخترته يدويًا، ولا يتغير تلقائيًا.'**
+  String get locationSourceManual;
+
+  /// Reported accuracy of an approximate device location.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقع تقريبي في حدود {distance}، وهي دقة كافية لحساب المواقيت.'**
+  String locationAccuracyApproximate(String distance);
+
+  /// A distance in kilometres.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} كم'**
+  String distanceKilometers(String value);
+
+  /// A distance in metres.
+  ///
+  /// In ar, this message translates to:
+  /// **'{value} م'**
+  String distanceMeters(String value);
 }
 
 class _AppLocalizationsDelegate

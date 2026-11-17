@@ -24,6 +24,7 @@ import 'package:sakina_app/core/audio/recitation_audio_engine.dart';
 import 'package:sakina_app/core/utils/surah_names.dart';
 import 'package:sakina_app/core/services/diagnostics_log.dart';
 import 'package:sakina_app/core/services/notification_service.dart';
+import 'package:sakina_app/core/services/notification_permission_service.dart';
 import 'package:sakina_app/features/prayers/data/repositories/adhan_settings_store.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/adhan_settings_controller.dart';
 import 'package:sakina_app/features/settings/presentation/providers/reading_mode_controller.dart';
@@ -91,9 +92,11 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
     _initializeProviders();
     WidgetsBinding.instance.addObserver(this);
     // After the first frame, so startup is not slowed by scheduling.
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => unawaited(_khatmaProvider.refreshReminder()),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_khatmaProvider.refreshReminder());
+      unawaited(_followDeviceLocation());
+      unawaited(_recheckNotificationPermission());
+    });
     _prayerClockTimer = Timer.periodic(
       const Duration(minutes: 1),
       (_) => _onClockTick(),
@@ -169,15 +172,74 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     _lifecycle = state;
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden) {
+      _leftAppSinceCheck = true;
+    }
     if (state == AppLifecycleState.resumed) {
       // A new day can change the Khatma range the reminder names.
       unawaited(_khatmaProvider.refreshReminder());
       unawaited(_followTimezoneChange());
       unawaited(_refreshExactAlarmStatus());
+      unawaited(
+        _recheckNotificationPermission(afterLeaving: _leftAppSinceCheck),
+      );
+      _leftAppSinceCheck = false;
     }
     if (state == AppLifecycleState.resumed &&
         _prayerTimesProvider.selectedCoordinates != null) {
-      _prayerTimesProvider.refreshIfNeeded();
+      unawaited(
+        _prayerTimesProvider.refreshIfNeeded().then(
+          (_) => _followDeviceLocation(),
+        ),
+      );
+    }
+  }
+
+  /// A device prayer location follows the phone: at most every few hours,
+  /// only in the foreground, only with access already granted, and it
+  /// reschedules only after a real move (PrayerTimesProvider decides).
+  Future<void> _followDeviceLocation() async {
+    try {
+      await _prayerTimesProvider.refreshDeviceLocationIfStale();
+    } catch (error) {
+      unawaited(DiagnosticsLog.record(error, source: 'device_location'));
+    }
+  }
+
+  late final NotificationPermissionService _notificationPermissions =
+      NotificationPermissionService(prefs: _prefs);
+  NotificationPermissionStatus? _notificationStatus;
+
+  /// The app went to the background (e.g. to system settings) since the
+  /// last check. The system permission dialog only makes it inactive.
+  bool _leftAppSinceCheck = false;
+
+  /// Notifications can be allowed or blocked in system settings while the
+  /// app is away. When they become allowed there, reminders and prayer
+  /// alerts are rescheduled once through the usual paths, so nothing waits
+  /// for the next background run. A grant from an in-app request is left to
+  /// the screen that asked, which schedules itself.
+  Future<void> _recheckNotificationPermission({
+    bool afterLeaving = false,
+  }) async {
+    try {
+      final previous = _notificationStatus;
+      final current = await _notificationPermissions.status();
+      _notificationStatus = current;
+      if (!afterLeaving ||
+          previous == null ||
+          previous == current ||
+          current != NotificationPermissionStatus.granted ||
+          !mounted) {
+        return;
+      }
+      await _settingsProvider.resyncAlarms();
+      if (_prayerTimesProvider.selectedCoordinates != null) {
+        await _prayerTimesProvider.refresh();
+      }
+    } catch (error) {
+      unawaited(DiagnosticsLog.record(error, source: 'notification_access'));
     }
   }
 

@@ -39,6 +39,7 @@ import '../../features/media/presentation/screens/video_screen.dart';
 import '../../features/onboarding/presentation/screens/home_screen.dart';
 import '../../features/onboarding/presentation/screens/media_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/onboarding/presentation/screens/permission_onboarding_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 import '../../features/qibla/presentation/screens/qibla_screen.dart';
 import '../../features/prayers/presentation/screens/prayer_times_screen.dart';
@@ -138,6 +139,11 @@ final GoRouter appRouter = GoRouter(
       path: '/onboarding',
       pageBuilder: (context, state) =>
           _fadePage(state, const OnboardingScreen()),
+    ),
+    GoRoute(
+      path: '/onboarding/permissions',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const PermissionOnboardingScreen()),
     ),
 
     GoRoute(

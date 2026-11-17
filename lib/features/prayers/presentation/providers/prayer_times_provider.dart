@@ -3,9 +3,12 @@ import '../../domain/entities/adhan_settings.dart';
 import '../../domain/prayer_time_zone.dart';
 import '../prayer_labels.dart';
 import 'package:sakina_app/core/result/result.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sakina_app/core/services/device_position_resolver.dart';
+import 'package:sakina_app/core/services/location_access_service.dart';
+import 'package:sakina_app/core/services/location_fix.dart';
+import 'package:sakina_app/features/prayers/data/prayer_city_catalog.dart';
+import 'package:sakina_app/features/prayers/domain/prayer_city.dart';
+import 'package:sakina_app/features/prayers/domain/prayer_location_source.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sakina_app/features/prayers/domain/entities/'
@@ -31,29 +34,59 @@ abstract class PrayerLocationService {
 }
 
 class PrayerLocationException implements Exception {
-  const PrayerLocationException(this.message);
+  const PrayerLocationException(this.message, {this.access});
   final String message;
+
+  /// The access problem behind it, when there was one; screens use it to
+  /// offer the right settings page.
+  final LocationAccessStatus? access;
+
+  /// Whether only a settings page can fix it (permission refused for good,
+  /// or location services switched off).
+  bool get needsSettings =>
+      access == LocationAccessStatus.permanentlyDenied ||
+      access == LocationAccessStatus.servicesDisabled;
 }
 
-class DevicePrayerLocationService implements PrayerLocationService {
-  const DevicePrayerLocationService();
+/// A device location service that reports how good its fix is.
+abstract class DeviceFixLocationService implements PrayerLocationService {
+  /// With [requestAccess] false no system dialog is ever shown: the lookup
+  /// fails unless access is already granted.
+  Future<DeviceLocationFix> currentFix({bool requestAccess = true});
+}
+
+class DevicePrayerLocationService implements DeviceFixLocationService {
+  DevicePrayerLocationService({LocationAccessService? access})
+    : _access = access ?? LocationAccessService();
+
+  final LocationAccessService _access;
+
   @override
   Future<Coordinates> getCurrentCoordinates() async {
-    if (!await Geolocator.isLocationServiceEnabled()) {
-      throw PrayerLocationException(appL10n.prayerTimesProviderMessage1);
+    final fix = await currentFix();
+    return (latitude: fix.latitude, longitude: fix.longitude);
+  }
+
+  @override
+  Future<DeviceLocationFix> currentFix({bool requestAccess = true}) async {
+    try {
+      return await _access.currentFix(requestAccess: requestAccess);
+    } on LocationAccessException catch (error) {
+      throw PrayerLocationException(switch (error.status) {
+        LocationAccessStatus.servicesDisabled =>
+          appL10n.prayerTimesProviderMessage1,
+        LocationAccessStatus.permanentlyDenied =>
+          appL10n.prayerTimesProviderMessage2,
+        LocationAccessStatus.unsupported => appL10n.prayerTimesProviderMessage9,
+        _ => appL10n.prayerTimesProviderMessage3,
+      }, access: error.status);
+    } on LocationFixException catch (error) {
+      throw PrayerLocationException(
+        error.problem == LocationFixProblem.tooInaccurate
+            ? appL10n.locationTooInaccurateMessage
+            : appL10n.prayerTimesProviderMessage9,
+      );
     }
-    var permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
-    if (permission == LocationPermission.deniedForever) {
-      throw PrayerLocationException(appL10n.prayerTimesProviderMessage2);
-    }
-    if (permission == LocationPermission.denied) {
-      throw PrayerLocationException(appL10n.prayerTimesProviderMessage3);
-    }
-    final position = await DevicePositionResolver().resolve();
-    return (latitude: position.latitude, longitude: position.longitude);
   }
 }
 
@@ -95,12 +128,30 @@ class PrayerTimesProvider extends ChangeNotifier {
   final PrayerLocationService _locationService;
   final PrayerLocationService _deviceLocationService;
   final PrayerNotificationScheduler _notificationScheduler;
+  final Future<CityMatch?> Function(double latitude, double longitude)
+  _nearestCity;
 
   final SharedPreferences? _preferences;
   Coordinates? _selectedCoordinates;
   String locationLabel = appL10n.prayerTimesProviderMessage4;
   int selectedMethod = PrayerCalculationPolicy.defaultMethod;
   AsrMadhab asrMadhab = AsrMadhab.standard;
+
+  /// Which kind of location is active; see [PrayerLocationSource].
+  PrayerLocationSource locationSource = PrayerLocationSource.manual;
+
+  /// For a device location: when its fix was measured and how precise the
+  /// platform said it was (metres, null when unknown).
+  DateTime? locationFixedAt;
+  double? locationAccuracyMeters;
+
+  /// The last device lookup could not get a new fix and used the phone's
+  /// last known position instead. Screens say so; it is never persisted.
+  bool lastFixWasStale = false;
+
+  /// Why the last device lookup failed, while earlier prayer times stay on
+  /// screen. Cleared by the next successful lookup or selection.
+  PrayerLocationException? lastLocationError;
 
   /// IANA zone of the chosen place; null means "use the device zone"
   /// (device location or manually typed coordinates).
@@ -143,15 +194,20 @@ class PrayerTimesProvider extends ChangeNotifier {
     PrayerLocationService? locationService,
     PrayerLocationService? deviceLocationService,
     PrayerNotificationScheduler? notificationScheduler,
+    Future<CityMatch?> Function(double latitude, double longitude)? nearestCity,
   }) : _preferences = preferences,
        _repository = repository,
        _clock = clock ?? SystemPrayerTimesClock(),
        _locationService =
            locationService ?? const UnconfiguredPrayerLocationService(),
        _deviceLocationService =
-           deviceLocationService ?? const DevicePrayerLocationService(),
+           deviceLocationService ??
+           DevicePrayerLocationService(
+             access: LocationAccessService(prefs: preferences),
+           ),
        _notificationScheduler =
-           notificationScheduler ?? const NoopPrayerNotificationScheduler() {
+           notificationScheduler ?? const NoopPrayerNotificationScheduler(),
+       _nearestCity = nearestCity ?? PrayerCityCatalog.bundled.nearest {
     // This runs while the root widget builds, so wrongly typed stored values
     // must read as "not configured" rather than throw.
     final lat = preferences?.get('prayer_latitude');
@@ -167,6 +223,21 @@ class PrayerTimesProvider extends ChangeNotifier {
       locationLabel = label is String
           ? label
           : appL10n.prayerTimesProviderMessage5;
+      locationSource = PrayerLocationSource.fromStorage(
+        preferences?.get(PrayerLocationSource.preferenceKey),
+        legacyDeviceLabel: label == appL10n.prayerTimesProviderMessage8,
+      );
+      final fixedAt = preferences?.get(PrayerLocationSource.fixedAtKey);
+      if (locationSource == PrayerLocationSource.device && fixedAt is int) {
+        locationFixedAt = DateTime.fromMillisecondsSinceEpoch(fixedAt);
+      }
+      final accuracy = preferences?.get(PrayerLocationSource.accuracyKey);
+      if (locationSource == PrayerLocationSource.device &&
+          accuracy is double &&
+          accuracy.isFinite &&
+          accuracy > 0) {
+        locationAccuracyMeters = accuracy;
+      }
     }
     final method = preferences?.get('prayer_method');
     if (method is int && PrayerCalculationPolicy.methods.containsKey(method)) {
@@ -190,28 +261,66 @@ class PrayerTimesProvider extends ChangeNotifier {
     if (_selectedCoordinates != null) await refresh();
   }
 
+  /// Makes this the active prayer location, then recalculates and
+  /// reschedules through the single scheduling boundary (cancel, save,
+  /// schedule). [source] records whether it is the device's position or a
+  /// place chosen by hand; [fix] describes a device position.
   Future<void> selectLocation(
     double latitude,
     double longitude,
     String label,
     int method, {
     String? timeZone,
+    PrayerLocationSource source = PrayerLocationSource.manual,
+    DeviceLocationFix? fix,
   }) async {
-    if (!latitude.isFinite ||
-        !longitude.isFinite ||
-        latitude.abs() > 90 ||
-        longitude.abs() > 180 ||
+    if (!isValidCoordinate(latitude, longitude) ||
         !PrayerCalculationPolicy.methods.containsKey(method)) {
       throw ArgumentError('Invalid prayer configuration');
     }
     if (_disposed) return;
+    _selectionsInFlight++;
+    try {
+      await _applyLocation(
+        latitude,
+        longitude,
+        label,
+        method,
+        timeZone: timeZone,
+        source: source,
+        fix: fix,
+      );
+    } finally {
+      _selectionsInFlight--;
+    }
+  }
+
+  /// Selections not yet saved; an automatic refresh never races them.
+  int _selectionsInFlight = 0;
+
+  Future<void> _applyLocation(
+    double latitude,
+    double longitude,
+    String label,
+    int method, {
+    required String? timeZone,
+    required PrayerLocationSource source,
+    required DeviceLocationFix? fix,
+  }) async {
     final requestId = ++_requestId;
     final nextLabel = label.trim().isEmpty
         ? appL10n.prayerTimesProviderMessage6
         : label.trim();
+    final DateTime? fixedAt = source == PrayerLocationSource.device
+        ? (fix?.timestamp ?? _clock.now())
+        : null;
+    final double? accuracy = source == PrayerLocationSource.device
+        ? fix?.accuracyMeters
+        : null;
     final previousValues = <String, Object?>{};
     _isLoading = true;
     _errorMessage = null;
+    lastLocationError = null;
     notifyListeners();
     try {
       await _notificationScheduler.cancelPrayerNotifications();
@@ -224,6 +333,9 @@ class PrayerTimesProvider extends ChangeNotifier {
           'prayer_location_label',
           'prayer_method',
           timeZonePreferenceKey,
+          PrayerLocationSource.preferenceKey,
+          PrayerLocationSource.fixedAtKey,
+          PrayerLocationSource.accuracyKey,
         ]) {
           previousValues[key] = preferences.get(key);
         }
@@ -235,6 +347,22 @@ class PrayerTimesProvider extends ChangeNotifier {
           () => timeZone == null
               ? preferences.remove(timeZonePreferenceKey)
               : preferences.setString(timeZonePreferenceKey, timeZone),
+          () => preferences.setString(
+            PrayerLocationSource.preferenceKey,
+            source.name,
+          ),
+          () => fixedAt == null
+              ? preferences.remove(PrayerLocationSource.fixedAtKey)
+              : preferences.setInt(
+                  PrayerLocationSource.fixedAtKey,
+                  fixedAt.millisecondsSinceEpoch,
+                ),
+          () => accuracy == null
+              ? preferences.remove(PrayerLocationSource.accuracyKey)
+              : preferences.setDouble(
+                  PrayerLocationSource.accuracyKey,
+                  accuracy,
+                ),
         ];
         for (final write in writes) {
           final saved = await write();
@@ -272,7 +400,45 @@ class PrayerTimesProvider extends ChangeNotifier {
     locationLabel = nextLabel;
     selectedMethod = method;
     selectedTimeZone = timeZone;
+    locationSource = source;
+    locationFixedAt = fixedAt;
+    locationAccuracyMeters = accuracy;
     await fetchTodayForCurrentLocation(calculationMethod: method);
+  }
+
+  /// Name for a device position from the bundled city list (offline):
+  /// "Cairo, Egypt" inside a listed city, "near Cairo" close to one, and a
+  /// neutral "device location" elsewhere, so a neighbouring city is never
+  /// named as the user's own.
+  Future<String> _deviceLabel(DeviceLocationFix fix) async {
+    CityMatch? match;
+    try {
+      match = await _nearestCity(fix.latitude, fix.longitude);
+    } catch (_) {
+      match = null;
+    }
+    if (match == null) return appL10n.prayerTimesProviderMessage8;
+    return match.proximity == CityProximity.inCity
+        ? appL10n.prayerLocationDialogMessage2(
+            match.city.name,
+            match.city.country,
+          )
+        : appL10n.nearCityLabel(match.city.name);
+  }
+
+  Future<DeviceLocationFix> _deviceFix({required bool requestAccess}) async {
+    final service = _deviceLocationService;
+    if (service is DeviceFixLocationService) {
+      return service.currentFix(requestAccess: requestAccess);
+    }
+    // Plain services (tests, fixed locations) report coordinates only.
+    final coordinates = await service.getCurrentCoordinates();
+    return DeviceLocationFix(
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude,
+      timestamp: _clock.now(),
+      source: LocationFixSource.fresh,
+    );
   }
 
   /// The location permission dialog pauses and resumes the app. Resume
@@ -288,25 +454,121 @@ class PrayerTimesProvider extends ChangeNotifier {
     final requestId = ++_requestId;
     _isLoading = true;
     _errorMessage = null;
+    lastLocationError = null;
     notifyListeners();
     try {
-      final position = await _deviceLocationService.getCurrentCoordinates();
+      final fix = await _deviceFix(requestAccess: true);
       if (_disposed || requestId != _requestId) return;
+      if (!isValidCoordinate(fix.latitude, fix.longitude)) {
+        throw PrayerLocationException(appL10n.prayerTimesProviderMessage9);
+      }
+      final label = await _deviceLabel(fix);
+      if (_disposed || requestId != _requestId) return;
+      lastFixWasStale = fix.isStale;
       await selectLocation(
-        position.latitude,
-        position.longitude,
-        appL10n.prayerTimesProviderMessage8,
+        fix.latitude,
+        fix.longitude,
+        label,
         selectedMethod,
+        source: PrayerLocationSource.device,
+        fix: fix,
       );
     } catch (error) {
       if (_disposed || requestId != _requestId) return;
+      final failure = error is PrayerLocationException
+          ? error
+          : PrayerLocationException(appL10n.prayerTimesProviderMessage9);
       _isLoading = false;
-      _errorMessage = error is PrayerLocationException
-          ? error.message
-          : appL10n.prayerTimesProviderMessage9;
+      lastLocationError = failure;
+      // A failed lookup must not hide the times of the location already
+      // saved, which stays active and unchanged.
+      _errorMessage = _prayerTimes == null ? failure.message : null;
       notifyListeners();
     }
   }
+
+  Future<bool>? _automaticRefresh;
+
+  /// For a device location: when its fix is older than
+  /// [LocationQuality.deviceLocationRefreshAge], takes a new fix without
+  /// any dialog (access must already be granted) and, only if the phone
+  /// moved at least [LocationQuality.significantMoveMeters], makes it the
+  /// active location, which recalculates and reschedules once.
+  ///
+  /// Returns true when the location changed. Failures keep the saved
+  /// location. A manual location is never touched.
+  Future<bool> refreshDeviceLocationIfStale() =>
+      _automaticRefresh ??= _refreshDeviceLocationIfStale().whenComplete(
+        () => _automaticRefresh = null,
+      );
+
+  Future<bool> _refreshDeviceLocationIfStale() async {
+    final saved = _selectedCoordinates;
+    if (_disposed ||
+        saved == null ||
+        locationSource != PrayerLocationSource.device ||
+        _deviceLocationRequest != null ||
+        _selectionsInFlight > 0) {
+      return false;
+    }
+    final fixedAt = locationFixedAt;
+    if (fixedAt != null &&
+        _clock.now().difference(fixedAt) <
+            LocationQuality.deviceLocationRefreshAge) {
+      return false;
+    }
+    final DeviceLocationFix fix;
+    try {
+      fix = await _deviceFix(requestAccess: false);
+    } catch (_) {
+      return false;
+    }
+    // A last-known position is no better than the saved one.
+    if (fix.isStale || !isValidCoordinate(fix.latitude, fix.longitude)) {
+      return false;
+    }
+    // The user chose something else meanwhile.
+    if (_userChoseMeanwhile(saved)) {
+      return false;
+    }
+    final moved = NearestCity.distanceMeters(
+      saved.latitude,
+      saved.longitude,
+      fix.latitude,
+      fix.longitude,
+    );
+    if (moved < LocationQuality.significantMoveMeters) {
+      // Same place: remember the check, without recalculating.
+      locationFixedAt = fix.timestamp;
+      await _preferences?.setInt(
+        PrayerLocationSource.fixedAtKey,
+        fix.timestamp.millisecondsSinceEpoch,
+      );
+      return false;
+    }
+    final label = await _deviceLabel(fix);
+    if (_userChoseMeanwhile(saved)) return false;
+    lastFixWasStale = false;
+    await selectLocation(
+      fix.latitude,
+      fix.longitude,
+      label,
+      selectedMethod,
+      // A device location follows the device's own timezone.
+      source: PrayerLocationSource.device,
+      fix: fix,
+    );
+    return true;
+  }
+
+  /// A selection or device lookup started (or finished) while an automatic
+  /// refresh was waiting for its fix; the user's choice wins.
+  bool _userChoseMeanwhile(Coordinates saved) =>
+      _disposed ||
+      _selectionsInFlight > 0 ||
+      _deviceLocationRequest != null ||
+      locationSource != PrayerLocationSource.device ||
+      _selectedCoordinates != saved;
 
   /// Get current prayer times
   PrayerTimesEntity? get prayerTimes => _prayerTimes;

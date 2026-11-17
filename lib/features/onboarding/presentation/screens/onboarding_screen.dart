@@ -56,8 +56,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       if (!mounted) return;
+      // Pending first, so a crash between the two writes still shows the
+      // permission steps on the next launch.
+      await prefs.setBool(permissionIntroPendingKey, true);
       await prefs.setBool(onboardingCompleteKey, true);
-      if (mounted) context.go('/home');
+      if (mounted) context.go('/onboarding/permissions');
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
