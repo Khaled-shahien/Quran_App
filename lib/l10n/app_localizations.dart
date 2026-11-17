@@ -3731,7 +3731,7 @@ abstract class AppLocalizations {
   /// No description provided for @exactAlarmNotAllowed.
   ///
   /// In ar, this message translates to:
-  /// **'غير مفعّل، وقد يتأخر التنبيه قليلاً'**
+  /// **'غير مفعّل: قد يتأخر التنبيه حتى تفتح الهاتف'**
   String get exactAlarmNotAllowed;
 
   /// No description provided for @exactAlarmAllow.
@@ -4285,6 +4285,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تنبيهات الصلاة مجهّزة حتى نهاية اليوم. افتح التطبيق لتجهيز الأيام التالية.'**
   String get prayerWindowEndingBody;
+
+  /// Title of the dialog asking for the exact alarms permission.
+  ///
+  /// In ar, this message translates to:
+  /// **'لتصل تنبيهات الصلاة في وقتها'**
+  String get exactAlarmPromptTitle;
+
+  /// Why the exact alarms permission is needed: without it Android holds alerts until the screen is turned on.
+  ///
+  /// In ar, this message translates to:
+  /// **'عندما يكون الهاتف مقفلاً، يؤخر أندرويد التنبيهات العادية حتى تفتح الشاشة. اسمح لسكينة بإذن «المنبهات والتذكيرات» ليصلك تنبيه الصلاة والأذان في وقتهما. سنفتح لك صفحة الإعدادات.'**
+  String get exactAlarmPromptBody;
+
+  /// Dismisses the exact alarms dialog for now.
+  ///
+  /// In ar, this message translates to:
+  /// **'لاحقاً'**
+  String get exactAlarmLater;
+
+  /// Warning card shown while the exact alarms permission is denied and prayer alerts are on.
+  ///
+  /// In ar, this message translates to:
+  /// **'قد لا تصل تنبيهات الصلاة في وقتها والهاتف مقفل، فأندرويد يؤخرها حتى تفتح الشاشة. اسمح بإذن «المنبهات والتذكيرات» لتصل في وقتها.'**
+  String get exactAlarmLateWarning;
 }
 
 class _AppLocalizationsDelegate

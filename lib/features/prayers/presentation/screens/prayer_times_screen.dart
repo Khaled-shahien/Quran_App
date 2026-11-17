@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 import 'dart:async';
 import '../../../../core/widgets/pulse_loader.dart';
 import '../providers/prayer_times_provider.dart';
+import '../widgets/exact_alarm_prompt.dart';
 
 /// Prayer Times Screen
 ///
@@ -46,7 +47,15 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
         context,
         listen: false,
       );
-      prayerProvider.fetchTodayForCurrentLocation();
+      unawaited(
+        prayerProvider.fetchTodayForCurrentLocation().then((_) async {
+          // Existing users who passed the notification prompt before the
+          // exact-alarm request existed are asked here, once.
+          if (mounted && prayerProvider.hasData) {
+            await promptForExactAlarmsOnce(context);
+          }
+        }),
+      );
     });
 
     // Update countdown every second
@@ -108,6 +117,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
         ),
       ],
       slivers: [
+        // While Android would hold alerts until the screen is turned on.
+        const SliverToBoxAdapter(child: ExactAlarmWarningCard()),
         Consumer<PrayerTimesProvider>(
           builder: (context, provider, child) {
             if (provider.isLoading) {

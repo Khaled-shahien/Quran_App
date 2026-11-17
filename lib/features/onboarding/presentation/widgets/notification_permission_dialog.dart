@@ -5,24 +5,30 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/providers/notification_provider.dart';
+import '../../../prayers/presentation/widgets/exact_alarm_prompt.dart';
 import '../../domain/first_run_state.dart';
 
 /// Explains reminders once, when a saved prayer location first makes them
 /// useful, instead of asking for permission during onboarding.
+///
+/// Then, on Android 14+ where it is denied by default, explains and asks for
+/// exact alarms: without them alerts wait until the phone is unlocked.
 Future<void> promptForNotificationPermissionOnce(BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
-  if ((prefs.getBool(notificationPromptSeenKey) ?? false) ||
-      !(prefs.getBool('prayer_notifications_enabled') ?? true) ||
+  if (!(prefs.getBool('prayer_notifications_enabled') ?? true) ||
       !context.mounted) {
     return;
   }
-  await showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (dialogContext) => NotificationPermissionDialog(
-      onFinish: () => Navigator.of(dialogContext).pop(),
-    ),
-  );
+  if (!(prefs.getBool(notificationPromptSeenKey) ?? false)) {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => NotificationPermissionDialog(
+        onFinish: () => Navigator.of(dialogContext).pop(),
+      ),
+    );
+  }
+  if (context.mounted) await promptForExactAlarmsOnce(context);
 }
 
 class NotificationPermissionDialog extends StatelessWidget {

@@ -2581,7 +2581,7 @@
   "exactAlarmTitle": "التنبيه في الوقت بالضبط",
   "exactAlarmExplain": "حتى يصلك تنبيه الصلاة في وقتها تماماً، يحتاج التطبيق إذن «المنبهات والتذكيرات». سنفتح لك صفحة الإعدادات لتفعيله.",
   "exactAlarmAllowed": "مفعّل",
-  "exactAlarmNotAllowed": "غير مفعّل، وقد يتأخر التنبيه قليلاً",
+  "exactAlarmNotAllowed": "غير مفعّل: قد يتأخر التنبيه حتى تفتح الهاتف",
   "exactAlarmAllow": "تفعيل",
   "batteryTitle": "توفير البطارية",
   "batteryExplain": "بعض الأجهزة توقف تنبيهات التطبيقات لتوفير البطارية. إن تأخرت التنبيهات، افتح إعدادات التطبيق واختر «بدون قيود» في إعدادات البطارية.",
@@ -2827,5 +2827,21 @@
   "prayerWindowEndingBody": "تنبيهات الصلاة مجهّزة حتى نهاية اليوم. افتح التطبيق لتجهيز الأيام التالية.",
   "@prayerWindowEndingBody": {
     "description": "Body of the iOS notice that scheduled prayer alerts are about to run out."
+  },
+  "exactAlarmPromptTitle": "لتصل تنبيهات الصلاة في وقتها",
+  "@exactAlarmPromptTitle": {
+    "description": "Title of the dialog asking for the exact alarms permission."
+  },
+  "exactAlarmPromptBody": "عندما يكون الهاتف مقفلاً، يؤخر أندرويد التنبيهات العادية حتى تفتح الشاشة. اسمح لسكينة بإذن «المنبهات والتذكيرات» ليصلك تنبيه الصلاة والأذان في وقتهما. سنفتح لك صفحة الإعدادات.",
+  "@exactAlarmPromptBody": {
+    "description": "Why the exact alarms permission is needed: without it Android holds alerts until the screen is turned on."
+  },
+  "exactAlarmLater": "لاحقاً",
+  "@exactAlarmLater": {
+    "description": "Dismisses the exact alarms dialog for now."
+  },
+  "exactAlarmLateWarning": "قد لا تصل تنبيهات الصلاة في وقتها والهاتف مقفل، فأندرويد يؤخرها حتى تفتح الشاشة. اسمح بإذن «المنبهات والتذكيرات» لتصل في وقتها.",
+  "@exactAlarmLateWarning": {
+    "description": "Warning card shown while the exact alarms permission is denied and prayer alerts are on."
   }
 }

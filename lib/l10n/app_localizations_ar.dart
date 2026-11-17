@@ -2035,7 +2035,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exactAlarmAllowed => 'مفعّل';
 
   @override
-  String get exactAlarmNotAllowed => 'غير مفعّل، وقد يتأخر التنبيه قليلاً';
+  String get exactAlarmNotAllowed =>
+      'غير مفعّل: قد يتأخر التنبيه حتى تفتح الهاتف';
 
   @override
   String get exactAlarmAllow => 'تفعيل';
@@ -2351,4 +2352,18 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get prayerWindowEndingBody =>
       'تنبيهات الصلاة مجهّزة حتى نهاية اليوم. افتح التطبيق لتجهيز الأيام التالية.';
+
+  @override
+  String get exactAlarmPromptTitle => 'لتصل تنبيهات الصلاة في وقتها';
+
+  @override
+  String get exactAlarmPromptBody =>
+      'عندما يكون الهاتف مقفلاً، يؤخر أندرويد التنبيهات العادية حتى تفتح الشاشة. اسمح لسكينة بإذن «المنبهات والتذكيرات» ليصلك تنبيه الصلاة والأذان في وقتهما. سنفتح لك صفحة الإعدادات.';
+
+  @override
+  String get exactAlarmLater => 'لاحقاً';
+
+  @override
+  String get exactAlarmLateWarning =>
+      'قد لا تصل تنبيهات الصلاة في وقتها والهاتف مقفل، فأندرويد يؤخرها حتى تفتح الشاشة. اسمح بإذن «المنبهات والتذكيرات» لتصل في وقتها.';
 }
