@@ -17,6 +17,16 @@
   same API) so prayer times are calculated offline in the city's local time.
   It is not an exhaustive city database. No user search requests
   are sent to this geocoding service at runtime.
+- `assets/images/الانبياء.png`, `صفة_الصلاة.png`, `اركان_الدين.png`: home
+  category icons generated on 2026-11-16 with Canva's image generator from the
+  owner's Canva account, using the app's Duas icon as a style reference, then
+  background removed in Canva. Use is subject to Canva's terms for generated
+  content.
+- `android/app/src/main/res/raw/adhan_*.mp3`: four adhan recordings supplied
+  directly by the app owner as MP3 files and bundled unchanged (byte-identical
+  copies). Source: user-provided. Licence and redistribution rights: **pending
+  verification**; no licence is claimed for them. Original filenames and
+  details in `ADHAN_AUDIO_LIBRARY.md`.
 
 These licenses and attributions do not certify the religious content. Its separate
 manifest retains pending review status until the source owner supplies evidence.

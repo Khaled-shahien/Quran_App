@@ -6,7 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:sakina_app/l10n/app_localizations.dart';
 import 'package:sakina_app/l10n/localization.dart';
 
+import '../../../recitation/presentation/providers/recitation_controller.dart';
+import '../../domain/adhan_voices.dart';
 import '../../domain/entities/adhan_settings.dart';
+import '../adhan_preview_player.dart';
+import '../adhan_voice_labels.dart';
 import '../providers/adhan_settings_controller.dart';
 
 extension AdhanLabels on AppLocalizations {
@@ -29,13 +33,51 @@ extension AdhanLabels on AppLocalizations {
 /// Alert type per prayer, reminder before prayer, exact timing, battery
 /// guidance and a test button, in plain Arabic.
 class AdhanPreferences extends StatefulWidget {
-  const AdhanPreferences({super.key});
+  const AdhanPreferences({super.key, this.previewPlayer});
+
+  /// Replaces the audio player, for tests. The widget owns the default one.
+  final AdhanPreviewPlayer? previewPlayer;
 
   @override
   State<AdhanPreferences> createState() => _AdhanPreferencesState();
 }
 
 class _AdhanPreferencesState extends State<AdhanPreferences> {
+  late final AdhanPreviewPlayer _preview =
+      widget.previewPlayer ?? JustAudioAdhanPreviewPlayer();
+
+  /// Full adhan recordings play through Android notification channels.
+  /// iOS notification sounds are limited to 30 seconds, so there the adhan
+  /// option keeps the alert sound and says so.
+  static bool get _adhanSupported =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
+  @override
+  void dispose() {
+    if (widget.previewPlayer == null) {
+      _preview.dispose();
+    } else {
+      _preview.stop();
+    }
+    super.dispose();
+  }
+
+  Future<void> _togglePreview(AdhanVoice voice) async {
+    if (_preview.playing.value == voice.id) {
+      await _preview.stop();
+      return;
+    }
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    final failed = l10nOf(context).adhanPreviewFailed;
+    // Never play over recitation.
+    await context.read<RecitationController?>()?.pauseForInterruption();
+    try {
+      await _preview.play(voice);
+    } catch (_) {
+      messenger?.showSnackBar(SnackBar(content: Text(failed)));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -62,7 +104,7 @@ class _AdhanPreferencesState extends State<AdhanPreferences> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ListTile(title: Text(l10n.prayerAlertsTitle)),
-        for (final prayer in DailyPrayer.values)
+        for (final prayer in DailyPrayer.values) ...[
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(
               AppSpacing.md,
@@ -95,6 +137,10 @@ class _AdhanPreferencesState extends State<AdhanPreferences> {
               ],
             ),
           ),
+          if (_adhanSupported &&
+              settings.modeFor(prayer) == PrayerAlertMode.adhan)
+            _voiceRow(context, c, prayer),
+        ],
         if (usesAdhan)
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(
@@ -104,7 +150,7 @@ class _AdhanPreferencesState extends State<AdhanPreferences> {
               AppSpacing.sm,
             ),
             child: Text(
-              l10n.adhanRecordingsPending,
+              _adhanSupported ? l10n.adhanStopHint : l10n.adhanNotSupported,
               style: theme.textTheme.bodySmall,
             ),
           ),
@@ -176,14 +222,94 @@ class _AdhanPreferencesState extends State<AdhanPreferences> {
             label: Text(l10n.testAdhanButton),
             onPressed: () async {
               final messenger = ScaffoldMessenger.of(context);
-              await c.scheduleTest();
+              final scheduled = await c.scheduleTest();
               messenger.showSnackBar(
-                SnackBar(content: Text(l10n.testAdhanScheduled)),
+                SnackBar(
+                  content: Text(
+                    scheduled
+                        ? l10n.testAdhanScheduled
+                        : l10n.notificationPermissionDeniedMessage,
+                  ),
+                ),
               );
             },
           ),
         ),
       ],
+    );
+  }
+
+  /// The recording [prayer] plays, with a button to listen to it.
+  Widget _voiceRow(
+    BuildContext context,
+    AdhanSettingsController c,
+    DailyPrayer prayer,
+  ) {
+    final l10n = l10nOf(context);
+    const options = AdhanVoices.all;
+    final selected = c.settings.voiceFor(prayer);
+    return Padding(
+      padding: const EdgeInsetsDirectional.fromSTEB(
+        AppSpacing.md,
+        0,
+        AppSpacing.md,
+        AppSpacing.sm,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: options.length > 1
+                ? DropdownButtonFormField<String>(
+                    key: Key('adhan-voice-${prayer.name}'),
+                    initialValue: selected.id,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      labelText: l10n.adhanVoiceTitle,
+                      border: const OutlineInputBorder(),
+                    ),
+                    items: [
+                      for (final v in options)
+                        DropdownMenuItem(
+                          value: v.id,
+                          child: Text(l10n.adhanVoiceName(v)),
+                        ),
+                    ],
+                    onChanged: (id) {
+                      if (id == null) return;
+                      _preview.stop();
+                      c.setVoice(prayer, id);
+                    },
+                  )
+                : InputDecorator(
+                    key: Key('adhan-voice-${prayer.name}'),
+                    decoration: InputDecoration(
+                      labelText: l10n.adhanVoiceTitle,
+                      border: const OutlineInputBorder(),
+                    ),
+                    child: Text(l10n.adhanVoiceName(selected)),
+                  ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          ValueListenableBuilder<String?>(
+            valueListenable: _preview.playing,
+            builder: (context, playing, _) {
+              final isPlaying = playing == selected.id;
+              return IconButton(
+                key: Key('adhan-preview-${prayer.name}'),
+                tooltip: isPlaying
+                    ? l10n.adhanPreviewStop
+                    : l10n.adhanPreviewPlay,
+                icon: Icon(
+                  isPlaying
+                      ? Icons.stop_circle_rounded
+                      : Icons.play_circle_rounded,
+                ),
+                onPressed: () => _togglePreview(selected),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 

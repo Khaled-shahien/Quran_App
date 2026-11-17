@@ -63,6 +63,16 @@ void main() {
     }
   });
 
+  test('debug test ids stay clear of every scheduled id', () {
+    final start = DateTime(2026, 11, 16, 9);
+    for (var ms = 0; ms < 20000; ms += 7) {
+      final id = NotificationService.debugNotificationId(
+        start.add(Duration(milliseconds: ms)),
+      );
+      expect(id, inInclusiveRange(90000, 99999));
+    }
+  });
+
   group('daily verse', () {
     test('a week of days never shares an id, and avoids other ranges', () {
       final start = DateTime(2026, 11, 16);

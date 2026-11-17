@@ -222,6 +222,7 @@ class KhatmaProvider extends ChangeNotifier {
     );
     _logFailure(await repository.saveKhatma(updatedKhatma));
     _logFailure(await repository.clearWirdPosition());
+    _scheduledReminder = null;
     await _reminderService.cancelReminder(_khatmaReminderNotificationId);
     _activeKhatma = updatedKhatma;
     _savedWirdPosition = null;
@@ -343,6 +344,7 @@ class KhatmaProvider extends ChangeNotifier {
   }
 
   Future<void> cancelKhatma() async {
+    _scheduledReminder = null;
     await _reminderService.cancelReminder(_khatmaReminderNotificationId);
     _logFailure(await repository.deleteActiveKhatma());
     _logFailure(await repository.clearWirdPosition());
@@ -351,10 +353,35 @@ class KhatmaProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Text and time of the reminder this provider last scheduled.
+  String? _scheduledReminder;
+
+  /// Reschedules the reminder when today's range or its time has changed
+  /// since it was last scheduled. A plan with an end date moves its daily
+  /// range with the calendar, so a reminder scheduled yesterday can name a
+  /// range that is no longer today's. Call on startup and on resume.
+  Future<void> refreshReminder() async {
+    final KhatmaModel? khatma = _activeKhatma;
+    if (khatma == null || khatma.isCompleted) return;
+    if (_scheduledReminder == _reminderSignature(khatma)) return;
+    await _scheduleKhatmaReminder(khatma);
+  }
+
+  String _reminderBody(KhatmaModel khatma) => appL10n.khatmaProviderMessage2(
+    khatma.amountValue,
+    khatma.todayFromUnit.toString(),
+    khatma.todayToUnit.toString(),
+  );
+
+  String _reminderSignature(KhatmaModel khatma) =>
+      '${khatma.id}|${khatma.reminderHour}:${khatma.reminderMinute}|'
+      '${_reminderBody(khatma)}';
+
   /// A saved plan stays valid when its reminder cannot be scheduled.
   Future<void> _scheduleKhatmaReminder(KhatmaModel khatma) async {
     try {
       if (khatma.isCompleted) {
+        _scheduledReminder = null;
         await _reminderService.cancelReminder(_khatmaReminderNotificationId);
         return;
       }
@@ -362,11 +389,7 @@ class KhatmaProvider extends ChangeNotifier {
       await _reminderService.scheduleDailyReminder(
         notificationId: _khatmaReminderNotificationId,
         title: appL10n.khatmaProviderMessage1,
-        body: appL10n.khatmaProviderMessage2(
-          (khatma.amountValue).toString(),
-          (khatma.todayFromUnit).toString(),
-          (khatma.todayToUnit).toString(),
-        ),
+        body: _reminderBody(khatma),
         hour: khatma.reminderHour,
         minute: khatma.reminderMinute,
         payload: 'khatma',
@@ -375,6 +398,7 @@ class KhatmaProvider extends ChangeNotifier {
           'khatmaId': khatma.id,
         },
       );
+      _scheduledReminder = _reminderSignature(khatma);
     } catch (error) {
       developer.log(
         'Khatma reminder scheduling failed',

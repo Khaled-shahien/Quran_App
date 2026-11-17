@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Notification icons are referenced by name from Dart only, so release
-     resource shrinking would delete them and every schedule call would fail
-     with "invalid_icon". -->
+<!-- Notification icons and adhan sounds are referenced by name from Dart
+     only, so release resource shrinking would delete them: icons would fail
+     with "invalid_icon" and adhan alerts with "invalid_sound". -->
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@drawable/ic_notification,@drawable/ic_notification_large,@mipmap/ic_launcher" />
+    tools:keep="@drawable/ic_notification,@drawable/ic_notification_large,@mipmap/ic_launcher,@raw/adhan_*" />

@@ -94,10 +94,11 @@ the stack instead of stacking screens.
 
 ## 3.1 Resolution (after phases 3–6)
 
-G1–G7 and G11 are addressed. G8 is fixed. G9 and G10 are unchanged on
-purpose: G9 involves religious text that needs owner review; G10 would
-need the Khatma reminder rebuilt daily and is listed as a follow-up. See
-`SAKINA_NOTIFICATION_IMPLEMENTATION_PLAN.md` for details.
+G1–G7 and G11 are addressed. G8 is fixed. G9 is unchanged on purpose:
+it involves religious text that needs owner review. G10 was fixed in the
+second pass: the Khatma reminder is refreshed on startup and on return to
+the app when its range has changed. See
+`SAKINA_NOTIFICATION_IMPLEMENTATION_PLAN.md` ("Second pass") for details.
 
 ## 4. Constraints carried into the plan
 

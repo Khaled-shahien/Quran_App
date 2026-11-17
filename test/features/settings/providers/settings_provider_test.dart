@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sakina_app/core/services/alarm_reschedule_task_service.dart';
+import 'package:sakina_app/core/services/scheduling_generation.dart';
 import 'package:sakina_app/core/services/alarm_scheduler.dart';
 import 'package:sakina_app/core/providers/settings_provider.dart';
 
@@ -95,8 +96,8 @@ void main() {
     expect(provider.isMorningAlarmEnabled, isTrue);
     expect(prefs.getBool('morning_alarm_enabled'), isTrue);
     expect(fakeAlarmScheduler.updateAllCalls, greaterThanOrEqualTo(1));
-    expect(fakeRescheduleTaskService.calls, greaterThanOrEqualTo(1));
-    expect(fakeRescheduleTaskService.lastSource, 'toggle_morning');
+    // Rescheduled in the app only, never also in a background run.
+    expect(fakeRescheduleTaskService.calls, 0);
   });
 
   test(
@@ -120,7 +121,9 @@ void main() {
       expect(fakeAlarmScheduler.saveTimeCalls, 1);
       expect(fakeAlarmScheduler.rescheduleSingleCalls, 1);
       expect(fakeAlarmScheduler.lastRescheduledType, 'evening');
-      expect(fakeRescheduleTaskService.lastSource, 'set_alarm_time_evening');
+      // The app reschedules itself; no background run is started as well.
+      expect(fakeRescheduleTaskService.calls, 0);
+      expect(SchedulingGeneration.read(prefs), greaterThan(0));
     },
   );
 
@@ -172,7 +175,7 @@ void main() {
 
     expect(prefs.getBool('daily_verse_alarm_enabled'), isTrue);
     expect(scheduler.lastDailyVerseEnabled, isTrue);
-    expect(reschedule.lastSource, 'toggle_verse');
+    expect(reschedule.calls, 0);
 
     await provider.setAlarmTime(type: 'verse', hour: 6, minute: 30);
     expect(scheduler.lastRescheduledType, 'verse');

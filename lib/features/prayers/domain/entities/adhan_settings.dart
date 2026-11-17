@@ -3,8 +3,8 @@ enum DailyPrayer { fajr, dhuhr, asr, maghrib, isha }
 
 /// How the user wants to be told a prayer time has come.
 enum PrayerAlertMode {
-  /// The adhan recording (falls back to the alert sound until recordings
-  /// are installed).
+  /// The adhan recording chosen for that prayer (Android). Where the
+  /// platform cannot play a full adhan in a notification, the alert sound.
   adhan,
 
   /// The normal notification sound.
@@ -18,15 +18,13 @@ enum PrayerAlertMode {
 }
 
 /// Per-prayer alert choices, the optional reminder before each prayer, and
-/// the chosen muezzin.
+/// the adhan recording chosen for each prayer.
 class AdhanSettings {
   const AdhanSettings({
     this.modes = const {},
     this.reminderMinutes = 0,
-    this.muezzinId = defaultMuezzin,
+    this.voices = const {},
   });
-
-  static const String defaultMuezzin = 'makkah';
 
   /// Allowed reminder offsets; 0 means no reminder.
   static const List<int> reminderOptions = [0, 5, 10, 15, 20, 30];
@@ -36,7 +34,10 @@ class AdhanSettings {
 
   final Map<DailyPrayer, PrayerAlertMode> modes;
   final int reminderMinutes;
-  final String muezzinId;
+
+  /// Chosen recording id per prayer; see `AdhanVoices.resolve` for the
+  /// recording actually used when an id is missing or not valid.
+  final Map<DailyPrayer, String> voices;
 
   PrayerAlertMode modeFor(DailyPrayer prayer) => modes[prayer] ?? defaultMode;
 
@@ -45,13 +46,16 @@ class AdhanSettings {
   AdhanSettings copyWith({
     Map<DailyPrayer, PrayerAlertMode>? modes,
     int? reminderMinutes,
-    String? muezzinId,
+    Map<DailyPrayer, String>? voices,
   }) => AdhanSettings(
     modes: modes ?? this.modes,
     reminderMinutes: reminderMinutes ?? this.reminderMinutes,
-    muezzinId: muezzinId ?? this.muezzinId,
+    voices: voices ?? this.voices,
   );
 
   AdhanSettings withMode(DailyPrayer prayer, PrayerAlertMode mode) =>
       copyWith(modes: {...modes, prayer: mode});
+
+  AdhanSettings withVoice(DailyPrayer prayer, String voiceId) =>
+      copyWith(voices: {...voices, prayer: voiceId});
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,7 @@ import 'local_timezone_fallback.dart';
 import 'notification_channels.dart';
 import 'notification_style.dart';
 import '../../features/quran/data/daily_verse_source.dart';
+import '../../features/prayers/domain/adhan_voices.dart';
 import '../../features/prayers/domain/entities/adhan_settings.dart';
 import '../../features/prayers/domain/prayer_notification_ids.dart';
 import '../../features/prayers/domain/services/prayer_alert_planner.dart';
@@ -60,6 +62,12 @@ class NotificationService {
   static int dailyVerseNotificationId(DateTime date) => 4000 + date.weekday;
 
   static const int _dailyVerseDaysAhead = 7;
+
+  /// An id for a notification sent from the debug test screen. Kept in
+  /// 90000–99999, above every id the app schedules (1001–4007), so a test
+  /// can never replace a real reminder.
+  static int debugNotificationId(DateTime now) =>
+      90000 + now.millisecondsSinceEpoch.remainder(10000);
   static const Map<String, int> _prayerNotificationIdsByName = <String, int>{
     'الفجر': _fajrPrayerNotificationId,
     'الظهر': _dhuhrPrayerNotificationId,
@@ -199,6 +207,11 @@ class NotificationService {
 
     for (final channel in NotificationChannels.all()) {
       await androidImplementation.createNotificationChannel(channel);
+    }
+    // Channels of removed recordings would point at a sound that no longer
+    // exists. Deleting a channel that was never created is a no-op.
+    for (final id in AdhanVoices.retiredChannelIds) {
+      await androidImplementation.deleteNotificationChannel(id);
     }
 
     developer.log(
@@ -652,8 +665,8 @@ class NotificationService {
 
   /// Schedule a one-time notification for a prayer time.
   ///
-  /// [mode] picks the channel: the alert sound (also used for "adhan" until
-  /// licensed recordings are bundled) or a silent notification.
+  /// [mode] picks the channel: the alert sound, a silent notification, or
+  /// in adhan mode the channel of [adhanVoice], whose sound is the recording.
   Future<void> schedulePrayerNotification({
     required int id,
     required String prayerName,
@@ -661,6 +674,7 @@ class NotificationService {
     PrayerAlertMode mode = PrayerAlertMode.sound,
     bool isReminder = false,
     int reminderMinutes = 0,
+    AdhanVoice? adhanVoice,
   }) async {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
@@ -688,15 +702,20 @@ class NotificationService {
       digits: await _digitStyle(),
     );
     final Duration lead = Duration(minutes: isReminder ? reminderMinutes : 0);
-    final NotificationDetails notificationDetails = buildNotificationDetails(
-      content.kind,
-      title: content.title,
-      body: content.body,
-      summary: content.summary,
-      when: prayerTime.add(lead),
-      // The reminder leaves the tray when the prayer alert itself is due.
-      timeoutAfter: lead > Duration.zero ? lead : null,
-    );
+    NotificationDetails details({AdhanVoice? voice}) =>
+        buildNotificationDetails(
+          content.kind,
+          title: content.title,
+          body: content.body,
+          summary: content.summary,
+          when: prayerTime.add(lead),
+          // The reminder leaves the tray when the prayer alert itself is due.
+          timeoutAfter: lead > Duration.zero ? lead : null,
+          adhanVoice: voice,
+        );
+    final AdhanVoice? voice = mode == PrayerAlertMode.adhan && !isReminder
+        ? adhanVoice
+        : null;
 
     final String serializedPayload = jsonEncode({
       'type': 'prayer_time',
@@ -707,17 +726,34 @@ class NotificationService {
       },
     });
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      content.title,
-      content.body,
-      scheduledDate,
-      notificationDetails,
-      androidScheduleMode: await _androidScheduleMode(),
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      payload: serializedPayload,
-    );
+    final AndroidScheduleMode scheduleMode = await _androidScheduleMode();
+    Future<void> schedule(NotificationDetails d) =>
+        flutterLocalNotificationsPlugin.zonedSchedule(
+          id,
+          content.title,
+          content.body,
+          scheduledDate,
+          d,
+          androidScheduleMode: scheduleMode,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          payload: serializedPayload,
+        );
+
+    try {
+      await schedule(details(voice: voice));
+    } on PlatformException catch (error) {
+      // A missing recording must not cost the user the prayer alert: fall
+      // back to the alert sound and record why.
+      if (voice == null || error.code != 'invalid_sound') rethrow;
+      developer.log(
+        'Adhan recording ${voice.resource} unavailable; using alert sound',
+        name: 'sakina_app.notifications',
+        level: 900,
+        error: error,
+      );
+      await schedule(details());
+    }
 
     developer.log(
       'Prayer notification $id scheduled for $prayerName at $scheduledDate',
@@ -822,6 +858,7 @@ class NotificationService {
         mode: alert.mode,
         isReminder: alert.kind == PlannedAlertKind.reminder,
         reminderMinutes: settings.reminderMinutes,
+        adhanVoice: alert.voice,
       );
     }
   }
@@ -835,6 +872,7 @@ class NotificationService {
       prayerName: _prayerNotificationIdsByName.keys.first,
       prayerTime: DateTime.now().add(const Duration(seconds: 10)),
       mode: mode == PrayerAlertMode.silent ? PrayerAlertMode.sound : mode,
+      adhanVoice: settings.voiceFor(DailyPrayer.fajr),
     );
   }
 

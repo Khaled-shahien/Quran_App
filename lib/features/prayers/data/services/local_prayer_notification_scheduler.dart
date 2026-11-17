@@ -3,6 +3,7 @@ import '../../domain/prayer_time_zone.dart';
 import 'dart:developer' as developer;
 
 import 'package:sakina_app/core/services/notification_service.dart';
+import 'package:sakina_app/core/services/scheduling_generation.dart';
 import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,8 +51,10 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
     required SharedPreferences prefs,
     PrayerNotificationGateway? notificationGateway,
     Future<void> Function()? onScheduled,
+    bool claimsSchedule = false,
   }) : _prefs = prefs,
        _onScheduled = onScheduled,
+       _claimsSchedule = claimsSchedule,
        _notificationGateway =
            notificationGateway ??
            NotificationServicePrayerNotificationGateway();
@@ -63,15 +66,27 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
   final PrayerNotificationGateway _notificationGateway;
   final Future<void> Function()? _onScheduled;
 
+  /// True for the UI isolate's scheduler: each change first advances the
+  /// [SchedulingGeneration], so a background reschedule already running
+  /// stops before it overwrites this one.
+  final bool _claimsSchedule;
+
+  Future<void> _claim() async {
+    if (_claimsSchedule) await SchedulingGeneration.bump(_prefs);
+  }
+
   @override
-  Future<void> cancelPrayerNotifications() =>
-      _notificationGateway.cancelAllPrayerNotifications();
+  Future<void> cancelPrayerNotifications() async {
+    await _claim();
+    await _notificationGateway.cancelAllPrayerNotifications();
+  }
 
   @override
   Future<void> schedulePrayerNotifications({
     required PrayerTimesEntity prayerTimes,
     required DateTime date,
   }) async {
+    await _claim();
     final bool notificationsEnabled =
         _prefs.getBool(prayerNotificationsEnabledPreferenceKey) ?? true;
 

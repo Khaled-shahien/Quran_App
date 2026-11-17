@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class _RecordingReminders implements KhatmaReminderService {
   _RecordingReminders({this.fail = false});
-  final bool fail;
+  bool fail;
   final bodies = <String>[];
   int cancels = 0;
 
@@ -64,6 +64,56 @@ void main() {
     expect(reminders.bodies, hasLength(2));
     expect(reminders.bodies.last, isNot(reminders.bodies.first));
     expect(reminders.cancels, 0);
+  });
+
+  test('refresh schedules a stored plan once, then only on change', () async {
+    final repo = await repository();
+    await repo.saveKhatma(_khatma());
+    final reminders = _RecordingReminders();
+    final provider = KhatmaProvider(
+      repository: repo,
+      reminderService: reminders,
+    );
+
+    await provider.refreshReminder();
+    await provider.refreshReminder();
+
+    expect(reminders.bodies, hasLength(1));
+
+    await provider.markCurrentWirdAsFinished();
+    await provider.refreshReminder();
+
+    expect(reminders.bodies, hasLength(2));
+  });
+
+  test('refresh does nothing without an active plan', () async {
+    final reminders = _RecordingReminders();
+    final provider = KhatmaProvider(
+      repository: await repository(),
+      reminderService: reminders,
+    );
+
+    await provider.refreshReminder();
+
+    expect(reminders.bodies, isEmpty);
+    expect(reminders.cancels, 0);
+  });
+
+  test('refresh schedules again after a failed attempt', () async {
+    final repo = await repository();
+    await repo.saveKhatma(_khatma());
+    final reminders = _RecordingReminders(fail: true);
+    final provider = KhatmaProvider(
+      repository: repo,
+      reminderService: reminders,
+    );
+    await provider.refreshReminder();
+    expect(reminders.bodies, isEmpty);
+
+    reminders.fail = false;
+    await provider.refreshReminder();
+
+    expect(reminders.bodies, hasLength(1));
   });
 
   test('a plan is kept when its reminder cannot be scheduled', () async {

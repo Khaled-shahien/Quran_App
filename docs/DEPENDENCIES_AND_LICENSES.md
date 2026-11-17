@@ -45,4 +45,4 @@ files are bundled for it.
 - KFGQPC Uthmanic Hafs font: written approval needed; Amiri Quran is used meanwhile.
 - quran.com recitation API: production approval (developers@quran.com).
 - Hisn al-Muslim text: site permission.
-- Adhan recordings: licensed files to be supplied.
+- Adhan recordings: four owner-supplied MP3s are bundled; redistribution rights are pending verification (`ADHAN_AUDIO_LIBRARY.md`).

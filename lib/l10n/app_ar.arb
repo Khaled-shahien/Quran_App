@@ -2534,7 +2534,24 @@
   "prayerAlertModeSound": "صوت تنبيه",
   "prayerAlertModeNotification": "إشعار بدون صوت",
   "prayerAlertModeSilent": "بدون تنبيه",
-  "adhanRecordingsPending": "تسجيلات الأذان لم تُضف بعد، وسيُستخدم صوت التنبيه حتى تتوفر.",
+  "adhanVoiceTitle": "صوت الأذان",
+  "adhanVoiceAliMulla": "علي أحمد ملا",
+  "adhanVoiceNasserAlqatami": "ناصر القطامي",
+  "adhanVoiceNaqshbandi": "النقشبندي",
+  "adhanVoiceIslamSobhi": "إسلام صبحي",
+  "adhanPreviewPlay": "استمع",
+  "adhanPreviewStop": "إيقاف الاستماع",
+  "adhanPreviewFailed": "تعذّر تشغيل التسجيل.",
+  "adhanStopHint": "لإيقاف الأذان اسحب الإشعار أو اضغط عليه.",
+  "adhanNotSupported": "الأذان الكامل غير متاح في إشعارات هذا الجهاز، وسيُستخدم صوت التنبيه.",
+  "adhanChannelName": "الأذان: {voice}",
+  "@adhanChannelName": {
+    "placeholders": {
+      "voice": {
+        "type": "String"
+      }
+    }
+  },
   "prayerReminderTitle": "تذكير قبل الصلاة",
   "prayerReminderOff": "بدون تذكير",
   "prayerReminderMinutes": "قبل {minutes} دقيقة",

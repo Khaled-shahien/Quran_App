@@ -1,3 +1,4 @@
+import '../adhan_voices.dart';
 import '../entities/adhan_settings.dart';
 import '../prayer_notification_ids.dart';
 
@@ -12,6 +13,7 @@ class PlannedAlert {
     required this.prayerName,
     required this.at,
     required this.mode,
+    this.voice,
   });
 
   final int id;
@@ -20,6 +22,9 @@ class PlannedAlert {
   final String prayerName;
   final DateTime at;
   final PrayerAlertMode mode;
+
+  /// The recording to play; set only for an adhan-mode prayer alert.
+  final AdhanVoice? voice;
 }
 
 /// Base notification IDs, 2001 (Fajr) .. 2005 (Isha).
@@ -53,6 +58,9 @@ List<PlannedAlert> planPrayerAlerts({
           prayerName: name,
           at: at,
           mode: mode,
+          voice: mode == PrayerAlertMode.adhan
+              ? settings.voiceFor(prayer)
+              : null,
         ),
       );
     }

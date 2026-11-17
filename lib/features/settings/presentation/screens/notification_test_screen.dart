@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/providers/notification_provider.dart';
+import '../../../../core/services/notification_service.dart';
 
 /// Diagnostic screen for verifying notification permissions and scheduling.
 class NotificationTestScreen extends StatefulWidget {
@@ -173,7 +174,7 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
   Future<void> _showImmediateNotification(NotificationProvider provider) async {
     try {
       await provider.scheduleTestNotification(
-        id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
+        id: NotificationService.debugNotificationId(DateTime.now()),
         title: appL10n.notificationTestScreenMessage24,
         body: appL10n.notificationTestScreenMessage25,
       );
@@ -192,7 +193,7 @@ class _NotificationTestScreenState extends State<NotificationTestScreen> {
   ) async {
     try {
       await provider.scheduleDelayedNotification(
-        id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
+        id: NotificationService.debugNotificationId(DateTime.now()),
         title: appL10n.notificationTestScreenMessage10,
         body: appL10n.notificationTestScreenMessage28,
       );

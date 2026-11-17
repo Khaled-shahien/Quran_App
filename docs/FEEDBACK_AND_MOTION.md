@@ -31,8 +31,8 @@ The source of truth is `feedbackMap`; a test fails if an event has no entry.
 
 No audio files are bundled for UI feedback. The click is the platform's own
 `SystemSoundType.click`, so it follows the device's touch-sound and silent-mode
-settings and needs no licence. Adhan recordings remain pending licensed files
-(see the content decisions in `PRIVACY_AND_CONTENT.md`).
+settings and needs no licence. The adhan recordings are owner-supplied files
+whose rights are pending verification (see `ADHAN_AUDIO_LIBRARY.md`).
 
 ## Motion
 

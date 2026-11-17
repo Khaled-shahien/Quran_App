@@ -32,17 +32,13 @@ class CategoryGridWidget extends StatelessWidget {
       _Tile(
         l10n.guideTileProphets,
         '/guide?section=prophets',
-        icon: Icons.auto_stories_rounded,
+        image: 'الانبياء',
       ),
-      _Tile(
-        l10n.guideTilePrayer,
-        '/guide?section=prayer',
-        icon: Icons.mosque_rounded,
-      ),
+      _Tile(l10n.guideTilePrayer, '/guide?section=prayer', image: 'صفة_الصلاة'),
       _Tile(
         l10n.guideTilePillars,
         '/guide?section=pillars',
-        icon: Icons.account_balance_rounded,
+        image: 'اركان_الدين',
       ),
     ];
 
@@ -71,14 +67,13 @@ class CategoryGridWidget extends StatelessWidget {
 }
 
 class _Tile {
-  const _Tile(this.title, this.route, {this.image, this.icon});
+  const _Tile(this.title, this.route, {required this.image});
 
   final String title;
   final String route;
 
   /// File name (without extension) under `assets/images/`.
-  final String? image;
-  final IconData? icon;
+  final String image;
 }
 
 class _CategoryTile extends StatelessWidget {
@@ -115,16 +110,14 @@ class _CategoryTile extends StatelessWidget {
                 color: scheme.surface,
                 borderRadius: AppRadius.card,
               ),
-              child: tile.image != null
-                  ? Image.asset(
-                      'assets/images/${tile.image}.png',
-                      width: _art,
-                      height: _art,
-                      fit: BoxFit.contain,
-                      // Decode at display size, not the source size.
-                      cacheWidth: (_art * pixelRatio).round(),
-                    )
-                  : Icon(tile.icon, size: _art - 4, color: scheme.primary),
+              child: Image.asset(
+                'assets/images/${tile.image}.png',
+                width: _art,
+                height: _art,
+                fit: BoxFit.contain,
+                // Decode at display size, not the source size.
+                cacheWidth: (_art * pixelRatio).round(),
+              ),
             ),
             const SizedBox(height: AppSpacing.sm),
             Flexible(

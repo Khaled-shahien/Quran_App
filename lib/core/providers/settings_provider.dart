@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../services/alarm_scheduler.dart';
 import '../services/alarm_reschedule_task_service.dart';
 import '../services/notification_scheduling_coordinator.dart';
+import '../services/scheduling_generation.dart';
 
 class SettingsProvider extends ChangeNotifier {
   final SharedPreferences prefs;
@@ -126,8 +127,13 @@ class SettingsProvider extends ChangeNotifier {
 
   /// These run unawaited, so failures must be handled here. The next launch
   /// or background reschedule retries from the saved settings.
+  ///
+  /// The app reschedules here itself and does not also start a background
+  /// run, which would rewrite the same reminders at the same time from
+  /// another isolate; claiming the schedule stops a run already going.
   Future<void> _syncAlarmsFromSettings() async {
     try {
+      await SchedulingGeneration.bump(prefs);
       await _schedulingCoordinator.syncFromSettings(
         isMorningEnabled: _isMorningAlarmEnabled,
         isEveningEnabled: _isEveningAlarmEnabled,
@@ -154,7 +160,6 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
 
     unawaited(_updateAllAlarms());
-    unawaited(_schedulingCoordinator.requestReschedule('toggle_morning'));
   }
 
   Future<void> toggleEveningAlarm(bool value) async {
@@ -163,7 +168,6 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
 
     unawaited(_updateAllAlarms());
-    unawaited(_schedulingCoordinator.requestReschedule('toggle_evening'));
   }
 
   Future<void> toggleMulkAlarm(bool value) async {
@@ -172,7 +176,6 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
 
     unawaited(_updateAllAlarms());
-    unawaited(_schedulingCoordinator.requestReschedule('toggle_mulk'));
   }
 
   Future<void> toggleBaqarahAlarm(bool value) async {
@@ -181,7 +184,6 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
 
     unawaited(_updateAllAlarms());
-    unawaited(_schedulingCoordinator.requestReschedule('toggle_baqarah'));
   }
 
   Future<void> toggleDailyVerseAlarm(bool value) async {
@@ -190,7 +192,6 @@ class SettingsProvider extends ChangeNotifier {
     notifyListeners();
 
     unawaited(_updateAllAlarms());
-    unawaited(_schedulingCoordinator.requestReschedule('toggle_verse'));
   }
 
   /// Set custom alarm time for a specific type
@@ -215,6 +216,7 @@ class SettingsProvider extends ChangeNotifier {
       _ => throw ArgumentError('Unknown alarm type: $type'),
     };
 
+    await SchedulingGeneration.bump(prefs);
     await _schedulingCoordinator.setAlarmTime(
       type: type,
       enabled: enabled,
@@ -226,7 +228,6 @@ class SettingsProvider extends ChangeNotifier {
       name: 'sakina_app.settings',
     );
 
-    // Keep the background schedule in sync after the selected alarm changes.
     switch (type) {
       case 'morning':
         developer.log(
@@ -247,8 +248,6 @@ class SettingsProvider extends ChangeNotifier {
         developer.log('Rescheduled baqarah alarm', name: 'sakina_app.settings');
         break;
     }
-
-    unawaited(_schedulingCoordinator.requestReschedule('set_alarm_time_$type'));
 
     notifyListeners();
     developer.log('Alarm time set completed', name: 'sakina_app.settings');

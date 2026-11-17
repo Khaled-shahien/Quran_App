@@ -20,6 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sakina_app/core/constants/api_keys.dart';
 import 'package:sakina_app/core/services/cached_api_service.dart';
 import 'package:sakina_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
+import 'package:sakina_app/features/prayers/data/services/prayer_replenishment_service.dart';
 
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
 import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
@@ -198,16 +199,24 @@ Future<void> setupServiceLocator() async {
       () => NotificationService(),
     );
 
-    getIt.registerLazySingleton<PrayerNotificationScheduler>(
-      () => LocalPrayerNotificationScheduler(
+    getIt.registerLazySingleton<PrayerNotificationScheduler>(() {
+      final gateway = NotificationServicePrayerNotificationGateway(
+        notificationService: getIt<NotificationService>(),
+      );
+      return LocalPrayerNotificationScheduler(
         prefs: getIt<SharedPreferences>(),
-        onScheduled: () =>
-            WorkManagerService().registerImmediateRescheduleTask(),
-        notificationGateway: NotificationServicePrayerNotificationGateway(
-          notificationService: getIt<NotificationService>(),
+        notificationGateway: gateway,
+        // The UI isolate owns every schedule it makes: it claims the
+        // schedule and fills the rest of the window itself, instead of
+        // starting a background run that would rewrite the same IDs.
+        claimsSchedule: true,
+        onScheduled: () => scheduleRestOfPrayerWindow(
+          preferences: getIt<SharedPreferences>(),
+          repository: getIt<PrayerTimesRepository>(),
+          gateway: gateway,
         ),
-      ),
-    );
+      );
+    });
 
     getIt.registerLazySingleton<WorkManagerService>(() => WorkManagerService());
 

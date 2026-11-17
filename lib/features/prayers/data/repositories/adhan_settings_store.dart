@@ -11,7 +11,7 @@ class AdhanSettingsStore {
 
   static String modeKey(DailyPrayer p) => 'adhan_mode_${p.name}';
   static const String reminderKey = 'adhan_reminder_minutes';
-  static const String muezzinKey = 'adhan_muezzin';
+  static String voiceKey(DailyPrayer p) => 'adhan_voice_${p.name}';
 
   /// Invalid stored values fall back to defaults instead of failing.
   AdhanSettings read() {
@@ -21,17 +21,19 @@ class AdhanSettingsStore {
       final mode = PrayerAlertMode.values.where((m) => m.name == stored);
       if (mode.isNotEmpty) modes[prayer] = mode.first;
     }
+    final voices = <DailyPrayer, String>{};
+    for (final prayer in DailyPrayer.values) {
+      final stored = _prefs.get(voiceKey(prayer));
+      if (stored is String && stored.isNotEmpty) voices[prayer] = stored;
+    }
     final reminder = _prefs.get(reminderKey);
-    final muezzin = _prefs.get(muezzinKey);
     return AdhanSettings(
       modes: modes,
       reminderMinutes:
           reminder is int && AdhanSettings.reminderOptions.contains(reminder)
           ? reminder
           : 0,
-      muezzinId: muezzin is String && muezzin.isNotEmpty
-          ? muezzin
-          : AdhanSettings.defaultMuezzin,
+      voices: voices,
     );
   }
 
@@ -40,6 +42,8 @@ class AdhanSettingsStore {
       await _prefs.setString(modeKey(prayer), settings.modeFor(prayer).name);
     }
     await _prefs.setInt(reminderKey, settings.reminderMinutes);
-    await _prefs.setString(muezzinKey, settings.muezzinId);
+    for (final MapEntry(key: prayer, value: id) in settings.voices.entries) {
+      await _prefs.setString(voiceKey(prayer), id);
+    }
   }
 }

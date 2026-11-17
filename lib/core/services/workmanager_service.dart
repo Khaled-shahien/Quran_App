@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 import 'notification_service.dart';
+import 'scheduling_generation.dart';
 
 import '../../features/prayers/data/repositories/prayer_times_repository_impl.dart';
 import '../../features/prayers/data/services/local_prayer_notification_scheduler.dart';
@@ -80,8 +81,21 @@ Future<void> _handleRescheduleAlarms({Map<String, dynamic>? inputData}) async {
       return;
     }
 
+    // The UI isolate advances this whenever it reschedules; if it does so
+    // while this run is going, this run stops instead of overwriting it.
+    final int generation = SchedulingGeneration.read(prefs);
+
     final NotificationService notificationService = NotificationService();
     await notificationService.initialize(requestPermissions: false);
+
+    await prefs.reload();
+    if (SchedulingGeneration.read(prefs) != generation) {
+      developer.log(
+        'Background reschedule superseded by the app',
+        name: 'sakina_app.workmanager',
+      );
+      return;
+    }
 
     // Reschedule only the alarms enabled in persisted settings.
     await notificationService.updateAllAlarms(
@@ -96,6 +110,7 @@ Future<void> _handleRescheduleAlarms({Map<String, dynamic>? inputData}) async {
       preferences: prefs,
       repository: PrayerTimesRepositoryImpl(),
       scheduler: LocalPrayerNotificationScheduler(prefs: prefs),
+      expectedGeneration: generation,
     ).replenish();
     // A failed fetch/schedule must remain retryable by WorkManager.
     await prefs.setInt(_kLastBackgroundRescheduleAtMsKey, nowMs);

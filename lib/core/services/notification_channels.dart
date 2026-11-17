@@ -1,6 +1,9 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sakina_app/l10n/localization.dart';
 
+import '../../features/prayers/domain/adhan_voices.dart';
+import '../../features/prayers/presentation/adhan_voice_labels.dart';
+
 /// Android notification channels used by `NotificationService`.
 ///
 /// Android fixes a channel's sound when the channel is first created, so each
@@ -19,7 +22,6 @@ abstract final class NotificationChannels {
   static final String prayerName = appL10n.notificationServiceMessage5;
   static final String prayerDescription = appL10n.notificationServiceMessage6;
 
-  // Adhan channels will be named per muezzin.
   static const String prayerSilentId = 'prayer_times_silent_v1';
   static const String prayerReminderId = 'prayer_reminders_v1';
 
@@ -32,6 +34,19 @@ abstract final class NotificationChannels {
   static final String dailyVerseName = appL10n.notificationCategoryVerse;
   static final String dailyVerseDescription =
       appL10n.dailyVerseReminderSubtitle;
+
+  /// A prayer alert in adhan mode: the recording is the channel's sound,
+  /// so each recording has its own channel ([AdhanVoice.channelId]).
+  static AndroidNotificationChannel adhan(AdhanVoice voice) =>
+      AndroidNotificationChannel(
+        voice.channelId,
+        appL10n.adhanChannelName(appL10n.adhanVoiceName(voice)),
+        description: prayerDescription,
+        importance: Importance.max,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound(voice.resource),
+        enableVibration: true,
+      );
 
   /// Every channel the app creates on Android, in creation order.
   static List<AndroidNotificationChannel> all() => <AndroidNotificationChannel>[
@@ -80,5 +95,6 @@ abstract final class NotificationChannels {
       description: dailyVerseDescription,
       importance: Importance.defaultImportance,
     ),
+    for (final voice in AdhanVoices.all) adhan(voice),
   ];
 }

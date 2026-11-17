@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sakina_app/l10n/localization.dart';
 
+import '../../features/prayers/domain/adhan_voices.dart';
 import '../accessibility/digit_style.dart';
 import '../theme/app_colors.dart';
 import 'notification_channels.dart';
@@ -31,6 +32,10 @@ abstract final class NotificationActionIds {
 /// small icon, the app icon as large icon, the category or [summary] in the
 /// header, text that expands instead of being cut to one line, and the
 /// buttons and channel that belong to the [kind].
+///
+/// [adhanVoice] turns a [SakinaNotificationKind.prayer] alert into the adhan:
+/// on Android it goes to that recording's channel, whose sound is the
+/// recording. iOS keeps the alert sound (see `ADHAN_AUDIO_LIBRARY.md`).
 NotificationDetails buildNotificationDetails(
   SakinaNotificationKind kind, {
   String? title,
@@ -38,8 +43,14 @@ NotificationDetails buildNotificationDetails(
   String? summary,
   DateTime? when,
   Duration? timeoutAfter,
+  AdhanVoice? adhanVoice,
 }) {
-  final _Channel channel = _channelFor(kind);
+  final AdhanVoice? adhan = kind == SakinaNotificationKind.prayer
+      ? adhanVoice
+      : null;
+  final _Channel channel = adhan == null
+      ? _channelFor(kind)
+      : _adhanChannel(adhan);
   final String? category = notificationCategoryLabel(kind);
   return NotificationDetails(
     android: AndroidNotificationDetails(
@@ -52,6 +63,10 @@ NotificationDetails buildNotificationDetails(
       largeIcon: const DrawableResourceAndroidBitmap(notificationLargeIcon),
       color: AppColors.lightPrimary,
       playSound: channel.playSound,
+      // Android 8+ takes the sound from the channel; older versions from here.
+      sound: adhan == null
+          ? null
+          : RawResourceAndroidNotificationSound(adhan.resource),
       enableVibration: true,
       category: channel.category,
       // The header line: the detail when there is one (where the verse is,
@@ -208,6 +223,18 @@ typedef _Channel = ({
   bool playSound,
   AndroidNotificationCategory? category,
 });
+
+_Channel _adhanChannel(AdhanVoice voice) {
+  final channel = NotificationChannels.adhan(voice);
+  return (
+    id: channel.id,
+    name: channel.name,
+    description: channel.description,
+    importance: channel.importance,
+    playSound: true,
+    category: AndroidNotificationCategory.alarm,
+  );
+}
 
 /// Channel settings exactly as each kind used before the shared style.
 _Channel _channelFor(SakinaNotificationKind kind) => switch (kind) {

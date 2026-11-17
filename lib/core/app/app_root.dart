@@ -90,6 +90,10 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
     super.initState();
     _initializeProviders();
     WidgetsBinding.instance.addObserver(this);
+    // After the first frame, so startup is not slowed by scheduling.
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => unawaited(_khatmaProvider.refreshReminder()),
+    );
     _prayerClockTimer = Timer.periodic(
       const Duration(minutes: 1),
       (_) => _onClockTick(),
@@ -171,6 +175,10 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     _lifecycle = state;
+    if (state == AppLifecycleState.resumed) {
+      // A new day can change the Khatma range the reminder names.
+      unawaited(_khatmaProvider.refreshReminder());
+    }
     if (state == AppLifecycleState.resumed &&
         _prayerTimesProvider.selectedCoordinates != null) {
       _prayerTimesProvider.refreshIfNeeded();
@@ -322,6 +330,8 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
                   NotificationService.instance.requestExactAlarmPermission,
               scheduleTest:
                   NotificationService.instance.scheduleTestPrayerAlert,
+              requestNotifications:
+                  NotificationService.instance.requestPermissions,
             ),
           ),
         ),

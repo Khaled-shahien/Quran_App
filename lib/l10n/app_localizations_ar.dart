@@ -1958,8 +1958,40 @@ class AppLocalizationsAr extends AppLocalizations {
   String get prayerAlertModeSilent => 'بدون تنبيه';
 
   @override
-  String get adhanRecordingsPending =>
-      'تسجيلات الأذان لم تُضف بعد، وسيُستخدم صوت التنبيه حتى تتوفر.';
+  String get adhanVoiceTitle => 'صوت الأذان';
+
+  @override
+  String get adhanVoiceAliMulla => 'علي أحمد ملا';
+
+  @override
+  String get adhanVoiceNasserAlqatami => 'ناصر القطامي';
+
+  @override
+  String get adhanVoiceNaqshbandi => 'النقشبندي';
+
+  @override
+  String get adhanVoiceIslamSobhi => 'إسلام صبحي';
+
+  @override
+  String get adhanPreviewPlay => 'استمع';
+
+  @override
+  String get adhanPreviewStop => 'إيقاف الاستماع';
+
+  @override
+  String get adhanPreviewFailed => 'تعذّر تشغيل التسجيل.';
+
+  @override
+  String get adhanStopHint => 'لإيقاف الأذان اسحب الإشعار أو اضغط عليه.';
+
+  @override
+  String get adhanNotSupported =>
+      'الأذان الكامل غير متاح في إشعارات هذا الجهاز، وسيُستخدم صوت التنبيه.';
+
+  @override
+  String adhanChannelName(String voice) {
+    return 'الأذان: $voice';
+  }
 
   @override
   String get prayerReminderTitle => 'تذكير قبل الصلاة';

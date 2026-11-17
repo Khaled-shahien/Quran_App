@@ -3590,11 +3590,71 @@ abstract class AppLocalizations {
   /// **'بدون تنبيه'**
   String get prayerAlertModeSilent;
 
-  /// No description provided for @adhanRecordingsPending.
+  /// No description provided for @adhanVoiceTitle.
   ///
   /// In ar, this message translates to:
-  /// **'تسجيلات الأذان لم تُضف بعد، وسيُستخدم صوت التنبيه حتى تتوفر.'**
-  String get adhanRecordingsPending;
+  /// **'صوت الأذان'**
+  String get adhanVoiceTitle;
+
+  /// No description provided for @adhanVoiceAliMulla.
+  ///
+  /// In ar, this message translates to:
+  /// **'علي أحمد ملا'**
+  String get adhanVoiceAliMulla;
+
+  /// No description provided for @adhanVoiceNasserAlqatami.
+  ///
+  /// In ar, this message translates to:
+  /// **'ناصر القطامي'**
+  String get adhanVoiceNasserAlqatami;
+
+  /// No description provided for @adhanVoiceNaqshbandi.
+  ///
+  /// In ar, this message translates to:
+  /// **'النقشبندي'**
+  String get adhanVoiceNaqshbandi;
+
+  /// No description provided for @adhanVoiceIslamSobhi.
+  ///
+  /// In ar, this message translates to:
+  /// **'إسلام صبحي'**
+  String get adhanVoiceIslamSobhi;
+
+  /// No description provided for @adhanPreviewPlay.
+  ///
+  /// In ar, this message translates to:
+  /// **'استمع'**
+  String get adhanPreviewPlay;
+
+  /// No description provided for @adhanPreviewStop.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف الاستماع'**
+  String get adhanPreviewStop;
+
+  /// No description provided for @adhanPreviewFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تشغيل التسجيل.'**
+  String get adhanPreviewFailed;
+
+  /// No description provided for @adhanStopHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لإيقاف الأذان اسحب الإشعار أو اضغط عليه.'**
+  String get adhanStopHint;
+
+  /// No description provided for @adhanNotSupported.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأذان الكامل غير متاح في إشعارات هذا الجهاز، وسيُستخدم صوت التنبيه.'**
+  String get adhanNotSupported;
+
+  /// No description provided for @adhanChannelName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأذان: {voice}'**
+  String adhanChannelName(String voice);
 
   /// No description provided for @prayerReminderTitle.
   ///

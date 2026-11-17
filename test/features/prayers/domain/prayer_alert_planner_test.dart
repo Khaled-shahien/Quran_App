@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sakina_app/features/prayers/data/repositories/adhan_settings_store.dart';
+import 'package:sakina_app/features/prayers/domain/adhan_voices.dart';
 import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_notification_ids.dart';
 import 'package:sakina_app/features/prayers/domain/services/prayer_alert_planner.dart';
@@ -52,6 +53,29 @@ void main() {
     expect(alerts.last.mode, PrayerAlertMode.notificationOnly);
   });
 
+  test('an adhan alert carries the recording chosen for that prayer', () {
+    final alerts = plan(
+      const AdhanSettings(reminderMinutes: 10)
+          .withMode(DailyPrayer.fajr, PrayerAlertMode.adhan)
+          .withMode(DailyPrayer.maghrib, PrayerAlertMode.adhan)
+          .withVoice(DailyPrayer.fajr, 'ali_mulla')
+          .withVoice(DailyPrayer.maghrib, 'naqshbandi'),
+    );
+    PlannedAlert alertFor(DailyPrayer p) => alerts.firstWhere(
+      (a) => a.prayer == p && a.kind == PlannedAlertKind.prayer,
+    );
+    expect(alertFor(DailyPrayer.fajr).voice?.id, 'ali_mulla');
+    expect(alertFor(DailyPrayer.maghrib).voice?.id, 'naqshbandi');
+    expect(alertFor(DailyPrayer.isha).voice, isNull); // alert sound mode
+    // Reminders before a prayer never play the adhan.
+    expect(
+      alerts.where(
+        (a) => a.kind == PlannedAlertKind.reminder && a.voice != null,
+      ),
+      isEmpty,
+    );
+  });
+
   test('reminders come X minutes before, with their own IDs', () {
     final alerts = plan(const AdhanSettings(reminderMinutes: 15));
     final reminder = alerts.firstWhere(
@@ -100,30 +124,43 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       final store = AdhanSettingsStore(await SharedPreferences.getInstance());
       await store.write(
-        const AdhanSettings(reminderMinutes: 10, muezzinId: 'madinah')
+        const AdhanSettings(reminderMinutes: 10)
             .withMode(DailyPrayer.fajr, PrayerAlertMode.adhan)
-            .withMode(DailyPrayer.asr, PrayerAlertMode.silent),
+            .withMode(DailyPrayer.asr, PrayerAlertMode.silent)
+            .withVoice(DailyPrayer.fajr, 'nasser_alqatami')
+            .withVoice(DailyPrayer.dhuhr, 'islam_sobhi')
+            .withVoice(DailyPrayer.isha, 'naqshbandi'),
       );
       final read = store.read();
       expect(read.modeFor(DailyPrayer.fajr), PrayerAlertMode.adhan);
       expect(read.modeFor(DailyPrayer.asr), PrayerAlertMode.silent);
       expect(read.modeFor(DailyPrayer.isha), PrayerAlertMode.sound);
       expect(read.reminderMinutes, 10);
-      expect(read.muezzinId, 'madinah');
+      expect(read.voiceFor(DailyPrayer.fajr).id, 'nasser_alqatami');
+      expect(read.voiceFor(DailyPrayer.dhuhr).id, 'islam_sobhi');
+      expect(read.voiceFor(DailyPrayer.isha).id, 'naqshbandi');
+      expect(read.voiceFor(DailyPrayer.asr), AdhanVoices.all.first);
     });
 
     test('invalid stored values fall back to defaults', () async {
       SharedPreferences.setMockInitialValues({
         'adhan_mode_fajr': 'loud',
         'adhan_reminder_minutes': 7,
-        'adhan_muezzin': 3,
+        'adhan_voice_dhuhr': 3,
+        'adhan_voice_asr': 'removed_voice',
+        'adhan_voice_fajr': 'nigeria',
+        'adhan_muezzin': 'makkah',
       });
       final read = AdhanSettingsStore(
         await SharedPreferences.getInstance(),
       ).read();
       expect(read.modeFor(DailyPrayer.fajr), AdhanSettings.defaultMode);
       expect(read.reminderMinutes, 0);
-      expect(read.muezzinId, AdhanSettings.defaultMuezzin);
+      final first = AdhanVoices.all.first;
+      expect(read.voiceFor(DailyPrayer.dhuhr), first);
+      expect(read.voiceFor(DailyPrayer.asr), first);
+      // The id of a removed recording falls back too.
+      expect(read.voiceFor(DailyPrayer.fajr), first);
     });
   });
 }

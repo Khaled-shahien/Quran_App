@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../data/repositories/adhan_settings_store.dart';
+import '../../domain/adhan_voices.dart';
 import '../../domain/entities/adhan_settings.dart';
 
 /// Platform hooks the adhan settings need, kept behind functions so the
@@ -11,6 +12,7 @@ class AdhanPlatform {
     required this.canScheduleExact,
     required this.requestExact,
     required this.scheduleTest,
+    this.requestNotifications,
   });
 
   /// Re-plans today's alerts with the new settings.
@@ -18,6 +20,10 @@ class AdhanPlatform {
   final Future<bool?> Function() canScheduleExact;
   final Future<bool?> Function() requestExact;
   final Future<void> Function(AdhanSettings settings) scheduleTest;
+
+  /// Asks for permission to show notifications; false when refused. Null
+  /// where no permission is needed.
+  final Future<bool> Function()? requestNotifications;
 }
 
 class AdhanSettingsController extends ChangeNotifier {
@@ -47,6 +53,14 @@ class AdhanSettingsController extends ChangeNotifier {
   Future<void> setMode(DailyPrayer prayer, PrayerAlertMode mode) =>
       _update(_settings.withMode(prayer, mode));
 
+  /// Ignores ids that are not a bundled recording.
+  Future<void> setVoice(DailyPrayer prayer, String voiceId) {
+    if (AdhanVoices.byId(voiceId) == null) {
+      return Future.value();
+    }
+    return _update(_settings.withVoice(prayer, voiceId));
+  }
+
   Future<void> setReminderMinutes(int minutes) {
     if (!AdhanSettings.reminderOptions.contains(minutes)) {
       return Future.value();
@@ -62,7 +76,15 @@ class AdhanSettingsController extends ChangeNotifier {
     if (_exactAllowed == true) await _platform.reschedule();
   }
 
-  Future<void> scheduleTest() => _platform.scheduleTest(_settings);
+  /// Schedules the test alert. Returns false, scheduling nothing, when
+  /// notifications are not allowed: the system would drop the alert
+  /// silently and the user would wait for something that never comes.
+  Future<bool> scheduleTest() async {
+    final allowed = await _platform.requestNotifications?.call() ?? true;
+    if (!allowed) return false;
+    await _platform.scheduleTest(_settings);
+    return true;
+  }
 
   Future<void> _update(AdhanSettings next) async {
     _settings = next;

@@ -100,6 +100,7 @@ and `docs/MANUAL_QA_CHECKLIST_AR.md` (device checks).
 | 5 Taps / actions | done |
 | 6 Tests | done: 743 tests pass, `flutter analyze` clean |
 | 7 Docs | done |
+| Second pass (R1, R2) | done: 747 tests pass, `flutter analyze` clean |
 
 ### Changes from the plan made during implementation
 
@@ -137,6 +138,41 @@ Not seen on a device: iOS (no Mac/iPhone here), the "prayer is near"
 reminder, Mulk/Baqarah/Khatma reminders (same code path as adhkar with a
 different label), and a tap while the app was fully terminated (covered by
 the existing launch-routing tests).
+
+## Second pass (16 Nov 2026)
+
+A second request restated the same brief (hybrid design, per-category
+looks, actions, deep links, tests). The code from the first pass was
+checked against each of its sections; it already meets them, so the
+architecture, channels, ids and payloads stay as they are. Two
+remaining gaps were found and fixed:
+
+| # | Gap | Fix |
+| --- | --- | --- |
+| R1 | Khatma reminder text (audit G10): it named today's range only when it was scheduled. A plan with an end date (`byDate`) changes its daily range with the calendar, so after a day without reading the reminder showed an old range. | `KhatmaProvider.refreshReminder()` reschedules the reminder when its text or time differs from what was last scheduled. `AppRoot` calls it after startup and whenever the app comes back to the foreground. Same id (1205), same channel and payload. |
+| R2 | The debug test screen used `now % 100000` as an id, which could land on a real reminder id (1001–4007) and replace it. | `NotificationService.debugNotificationId()` keeps test ids in 90000–99999, clear of every managed range. |
+
+Checked and left unchanged on purpose:
+
+- Notification taps arrive through one function for every app state
+  (`routeNotificationResponse` for running and background,
+  `routeLaunchDetails` for a terminated app), with a 2 s duplicate guard
+  and a hold until the splash screen has routed.
+- Old or invalid payloads are handled: an unknown type or malformed JSON
+  opens home, an invalid surah opens the Quran index, an ayah number that is
+  not in the surah opens the surah at its first page, and the after-adhan
+  screen only shows the prayer name as a heading, so an unexpected value
+  cannot break it. An old prayer alert tapped hours later still opens the
+  dua after the adhan, which is not tied to the time.
+- Not device-checked in this pass: R1 needs a plan with an end date and a
+  day without reading (item added to `docs/MANUAL_QA_CHECKLIST_AR.md`).
+- In-app presentation: while the app is open at prayer time, a
+  Sakina-styled banner is shown in the app (`AppRoot._onPrayerArrived`).
+  This is the place for custom cards. System notifications keep the native
+  styles.
+- Dark mode: Android and iOS draw the notification surface themselves.
+  The accent colour and monochrome small icon read on both light and dark
+  surfaces, and there is nothing for the app to switch.
 
 ## Known limits (stated up front)
 
