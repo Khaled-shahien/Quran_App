@@ -232,6 +232,8 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
             ),
           ],
         ),
+        if (provider.suggestedMethod case final int suggested?)
+          _MethodSuggestionCard(provider: provider, suggested: suggested),
         // Next Prayer Card
         _buildNextPrayerCard(prayerTimes),
         SectionHeader(
@@ -489,5 +491,68 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
     final hours = time.hour.toString().padLeft(2, '0');
     final minutes = time.minute.toString().padLeft(2, '0');
     return '$hours:$minutes';
+  }
+}
+
+/// Offers the method usually used in the user's country; nothing changes
+/// unless they accept, and declining hides it for that country.
+class _MethodSuggestionCard extends StatelessWidget {
+  const _MethodSuggestionCard({
+    required this.provider,
+    required this.suggested,
+  });
+
+  final PrayerTimesProvider provider;
+  final int suggested;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+    final ThemeData theme = Theme.of(context);
+    final String current =
+        PrayerCalculationPolicy.methods[provider.selectedMethod] ?? '';
+    final String method = PrayerCalculationPolicy.methods[suggested] ?? '';
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.page,
+        AppSpacing.xs,
+        AppSpacing.page,
+        AppSpacing.sm,
+      ),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                l10n.methodSuggestionTitle(provider.locationCountryName ?? ''),
+                style: theme.textTheme.titleSmall,
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                l10n.methodSuggestionBody(current, method),
+                style: theme.textTheme.bodySmall,
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              Wrap(
+                alignment: WrapAlignment.end,
+                spacing: AppSpacing.sm,
+                children: [
+                  TextButton(
+                    onPressed: provider.dismissMethodSuggestion,
+                    child: Text(l10n.methodSuggestionDismiss),
+                  ),
+                  FilledButton(
+                    onPressed: provider.acceptMethodSuggestion,
+                    child: Text(l10n.methodSuggestionAccept(method)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

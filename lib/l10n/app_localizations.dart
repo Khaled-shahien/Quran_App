@@ -4855,6 +4855,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'، '**
   String get listSeparator;
+
+  /// Card title: the method usually used in this country.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الحساب المعتادة في {country}'**
+  String methodSuggestionTitle(String country);
+
+  /// Explains the suggested method versus the current one.
+  ///
+  /// In ar, this message translates to:
+  /// **'تستخدم الآن «{current}». الطريقة المعتادة هنا «{suggested}»، وقد تطابق مواقيت المساجد أكثر.'**
+  String methodSuggestionBody(String current, String suggested);
+
+  /// Accepts the suggested calculation method.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدام «{method}»'**
+  String methodSuggestionAccept(String method);
+
+  /// Keeps the current method and hides the suggestion for this country.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإبقاء على طريقتي'**
+  String get methodSuggestionDismiss;
+
+  /// Hint of the offline city search field.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسم المدينة بالعربية أو بالإنجليزية'**
+  String get prayerCitySearchHint;
+
+  /// Attribution for the bundled GeoNames city list.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمة المدن ومناطقها الزمنية من GeoNames ‏(www.geonames.org)، بترخيص المشاع الإبداعي CC BY 4.0. أُخذت الأسماء العربية من الأسماء البديلة الموسومة بالعربية في GeoNames، وتظهر المدن التي لا اسم عربيًّا لها باسمها اللاتيني.'**
+  String get dataSourcesCities;
 }
 
 class _AppLocalizationsDelegate

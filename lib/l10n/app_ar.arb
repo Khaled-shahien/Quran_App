@@ -3289,5 +3289,47 @@
   "listSeparator": "، ",
   "@listSeparator": {
     "description": "Separator between items of an inline list."
+  },
+  "methodSuggestionTitle": "طريقة الحساب المعتادة في {country}",
+  "@methodSuggestionTitle": {
+    "description": "Card title: the method usually used in this country.",
+    "placeholders": {
+      "country": {
+        "type": "String"
+      }
+    }
+  },
+  "methodSuggestionBody": "تستخدم الآن «{current}». الطريقة المعتادة هنا «{suggested}»، وقد تطابق مواقيت المساجد أكثر.",
+  "@methodSuggestionBody": {
+    "description": "Explains the suggested method versus the current one.",
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "suggested": {
+        "type": "String"
+      }
+    }
+  },
+  "methodSuggestionAccept": "استخدام «{method}»",
+  "@methodSuggestionAccept": {
+    "description": "Accepts the suggested calculation method.",
+    "placeholders": {
+      "method": {
+        "type": "String"
+      }
+    }
+  },
+  "methodSuggestionDismiss": "الإبقاء على طريقتي",
+  "@methodSuggestionDismiss": {
+    "description": "Keeps the current method and hides the suggestion for this country."
+  },
+  "prayerCitySearchHint": "اكتب اسم المدينة بالعربية أو بالإنجليزية",
+  "@prayerCitySearchHint": {
+    "description": "Hint of the offline city search field."
+  },
+  "dataSourcesCities": "قائمة المدن ومناطقها الزمنية من GeoNames ‏(www.geonames.org)، بترخيص المشاع الإبداعي CC BY 4.0. أُخذت الأسماء العربية من الأسماء البديلة الموسومة بالعربية في GeoNames، وتظهر المدن التي لا اسم عربيًّا لها باسمها اللاتيني.",
+  "@dataSourcesCities": {
+    "description": "Attribution for the bundled GeoNames city list."
   }
 }

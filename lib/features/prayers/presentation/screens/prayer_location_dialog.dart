@@ -1,14 +1,13 @@
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
 import '../../../../core/services/location_access_service.dart';
 import '../../../../core/services/location_fix.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../quran/domain/services/quran_search.dart';
 import '../../../onboarding/presentation/widgets/notification_permission_dialog.dart';
+import '../../data/prayer_city_catalog.dart';
 import '../../domain/prayer_calculation_policy.dart';
+import '../../domain/prayer_city.dart';
 import '../../domain/prayer_location_source.dart';
 import '../providers/prayer_times_provider.dart';
 
@@ -22,15 +21,9 @@ Future<void> showPrayerLocationDialog(
   PrayerTimesProvider provider, {
   bool promptForReminders = true,
 }) async {
-  List<Map<String, dynamic>> cities = [];
-  try {
-    cities =
-        (jsonDecode(await rootBundle.loadString('assets/prayer_cities.json'))
-                as List)
-            .cast<Map<String, dynamic>>();
-  } catch (_) {
-    /* Manual coordinates remain available if the catalog fails. */
-  }
+  // Manual coordinates remain available if the catalog fails to load.
+  final PrayerCityCatalog catalog = PrayerCityCatalog.bundled;
+  await catalog.cities();
   if (!context.mounted) return;
   final name = TextEditingController(
     text: provider.selectedCoordinates == null ? '' : provider.locationLabel,
@@ -70,21 +63,13 @@ Future<void> showPrayerLocationDialog(
                   _ActiveLocationSummary(provider: provider),
                   const SizedBox(height: AppSpacing.ms),
                 ],
-                Autocomplete<Map<String, dynamic>>(
-                  displayStringForOption: (city) =>
-                      l10nOf(context).prayerLocationDialogMessage2(
-                        (city['name']).toString(),
-                        (city['country']).toString(),
-                      ),
-                  optionsBuilder: (value) {
-                    final query = normalizeArabicSearch(value.text.trim());
-                    if (query.isEmpty) return cities;
-                    return cities.where(
-                      (city) => normalizeArabicSearch(
-                        '${city['name']} ${city['englishName']} ${city['country']}',
-                      ).contains(query),
-                    );
-                  },
+                Autocomplete<PrayerCity>(
+                  displayStringForOption: (city) => l10nOf(
+                    context,
+                  ).prayerLocationDialogMessage2(city.name, city.country),
+                  optionsBuilder: (value) => catalog.search(value.text),
+                  optionsViewBuilder: (context, onSelected, options) =>
+                      _CityOptions(options: options, onSelected: onSelected),
                   fieldViewBuilder: (context, controller, focus, submit) =>
                       TextFormField(
                         controller: controller,
@@ -93,18 +78,18 @@ Future<void> showPrayerLocationDialog(
                           labelText: l10nOf(
                             context,
                           ).prayerLocationDialogMessage3,
+                          hintText: l10nOf(context).prayerCitySearchHint,
                           prefixIcon: const Icon(Icons.search),
                         ),
                       ),
                   onSelected: (city) {
-                    name.text = l10nOf(context).prayerLocationDialogMessage2(
-                      (city['name']).toString(),
-                      (city['country']).toString(),
-                    );
-                    latitude.text = city['latitude'].toString();
-                    longitude.text = city['longitude'].toString();
-                    final zone = city['timezone'];
-                    zoneSource = zone is String
+                    name.text = l10nOf(
+                      context,
+                    ).prayerLocationDialogMessage2(city.name, city.country);
+                    latitude.text = city.latitude.toString();
+                    longitude.text = city.longitude.toString();
+                    final zone = city.timeZone;
+                    zoneSource = zone != null
                         ? (lat: latitude.text, lon: longitude.text, zone: zone)
                         : null;
                   },
@@ -332,4 +317,54 @@ String? _coordinateError(String? input, double max) {
   return value == null || !value.isFinite || value.abs() > max
       ? appL10n.prayerLocationDialogMessage10
       : null;
+}
+
+/// Search results: the Arabic name with its country, and the Latin name
+/// underneath so a name taken from GeoNames can be recognised.
+class _CityOptions extends StatelessWidget {
+  const _CityOptions({required this.options, required this.onSelected});
+
+  final Iterable<PrayerCity> options;
+  final AutocompleteOnSelected<PrayerCity> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<PrayerCity> cities = options.toList();
+    return Align(
+      alignment: AlignmentDirectional.topStart,
+      child: Material(
+        elevation: 4,
+        borderRadius: BorderRadius.circular(12),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 280, maxWidth: 360),
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            itemCount: cities.length,
+            itemBuilder: (context, index) {
+              final PrayerCity city = cities[index];
+              final bool showLatin =
+                  city.englishName.isNotEmpty && city.englishName != city.name;
+              return ListTile(
+                dense: true,
+                title: Text(
+                  l10nOf(
+                    context,
+                  ).prayerLocationDialogMessage2(city.name, city.country),
+                ),
+                subtitle: showLatin
+                    ? Text(
+                        city.englishName,
+                        textDirection: TextDirection.ltr,
+                        textAlign: TextAlign.end,
+                      )
+                    : null,
+                onTap: () => onSelected(city),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
 }

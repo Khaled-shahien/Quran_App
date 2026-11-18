@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import '../../domain/entities/adhan_settings.dart';
@@ -279,6 +280,66 @@ class PrayerTimesProvider extends ChangeNotifier {
     if (_selectedCoordinates != null) await refresh();
   }
 
+  /// Country (ISO code) of the active place, from the nearest listed city
+  /// within [NearestCity.nearCityMeters]; null elsewhere or until known.
+  String? locationCountryCode;
+
+  /// Arabic name of the country of [locationCountryCode].
+  String? locationCountryName;
+
+  static const String methodSuggestionDismissedKey =
+      'prayer_method_suggestion_dismissed';
+
+  /// The method usually used in [locationCountryCode], when it differs
+  /// from the selected one and the user has not declined it for that
+  /// country. Only a suggestion: nothing changes until they accept.
+  int? get suggestedMethod {
+    final String? country = locationCountryCode;
+    final int? recommended = PrayerCalculationPolicy.recommendedFor(country);
+    if (country == null ||
+        recommended == null ||
+        recommended == selectedMethod ||
+        _selectedCoordinates == null) {
+      return null;
+    }
+    final Object? dismissed = _preferences?.get(methodSuggestionDismissedKey);
+    return dismissed == '$country:$recommended' ? null : recommended;
+  }
+
+  Future<void> acceptMethodSuggestion() async {
+    final int? method = suggestedMethod;
+    if (method != null) await setCalculationMethod(method);
+  }
+
+  Future<void> dismissMethodSuggestion() async {
+    final int? method = suggestedMethod;
+    if (method == null) return;
+    await _preferences?.setString(
+      methodSuggestionDismissedKey,
+      '$locationCountryCode:$method',
+    );
+    notifyListeners();
+  }
+
+  /// Looks up the country of the active place offline (also started
+  /// after each successful fetch).
+  Future<void> updateLocationCountry() async {
+    final coordinates = _selectedCoordinates;
+    if (coordinates == null) return;
+    CityMatch? match;
+    try {
+      match = await _nearestCity(coordinates.latitude, coordinates.longitude);
+    } catch (_) {
+      match = null;
+    }
+    if (_disposed || _selectedCoordinates != coordinates) return;
+    final String? code = match?.city.countryCode;
+    if (code == locationCountryCode) return;
+    locationCountryCode = code;
+    locationCountryName = match?.city.country;
+    notifyListeners();
+  }
+
   /// Changes the calculation method for the current place, then
   /// recalculates and reschedules.
   Future<void> setCalculationMethod(int method) async {
@@ -435,6 +496,8 @@ class PrayerTimesProvider extends ChangeNotifier {
     locationSource = source;
     locationFixedAt = fixedAt;
     locationAccuracyMeters = accuracy;
+    locationCountryCode = null;
+    locationCountryName = null;
     await fetchTodayForCurrentLocation(calculationMethod: method);
   }
 
@@ -732,6 +795,10 @@ class PrayerTimesProvider extends ChangeNotifier {
           calculationMethod: selectedMethod,
         );
       }
+      // The country (for the method suggestion) once the place is known.
+      // Not awaited: the times are ready without it, and the city list
+      // must not hold up the first screen.
+      if (locationCountryCode == null) unawaited(updateLocationCountry());
     } on PrayerLocationNotConfiguredException {
       if (_disposed || requestId != _requestId) return;
       _isLoading = false;

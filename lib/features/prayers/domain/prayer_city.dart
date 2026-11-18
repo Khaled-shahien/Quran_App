@@ -11,6 +11,8 @@ class PrayerCity {
     required this.latitude,
     required this.longitude,
     this.timeZone,
+    this.countryCode,
+    this.population = 0,
   });
 
   final String name;
@@ -21,6 +23,56 @@ class PrayerCity {
 
   /// IANA zone, e.g. Africa/Cairo.
   final String? timeZone;
+
+  /// ISO 3166-1 alpha-2 code (EG, SA, ...), when the list provides one.
+  final String? countryCode;
+
+  /// For ordering search results; 0 when unknown.
+  final int population;
+
+  /// One row of the compact list (schema 2): name, Latin name, country
+  /// code, latitude, longitude, zone index, population. Null for a row
+  /// that does not validate.
+  static PrayerCity? fromRow(
+    List<dynamic> row,
+    Map<String, dynamic> countries,
+    List<dynamic> zones,
+  ) {
+    if (row.length < 7) return null;
+    final [
+      Object? name,
+      Object? latin,
+      Object? code,
+      Object? latitude,
+      Object? longitude,
+      Object? zone,
+      Object? population,
+      ...,
+    ] = row;
+    if (name is! String ||
+        name.trim().isEmpty ||
+        code is! String ||
+        countries[code] is! String ||
+        latitude is! num ||
+        longitude is! num ||
+        zone is! int ||
+        zone < 0 ||
+        zone >= zones.length ||
+        zones[zone] is! String ||
+        !isValidCoordinate(latitude.toDouble(), longitude.toDouble())) {
+      return null;
+    }
+    return PrayerCity(
+      name: name.trim(),
+      country: countries[code] as String,
+      englishName: latin is String && latin.isNotEmpty ? latin : name.trim(),
+      latitude: latitude.toDouble(),
+      longitude: longitude.toDouble(),
+      timeZone: zones[zone] as String,
+      countryCode: code,
+      population: population is int && population > 0 ? population : 0,
+    );
+  }
 
   /// Null for an entry that is missing a field or has invalid coordinates,
   /// so one bad row cannot break the list.

@@ -43,6 +43,8 @@ class DataSourcesScreen extends StatelessWidget {
                 const SizedBox(height: AppSpacing.lg),
                 Text(l10nOf(context).dataSourcesScreenMessage8),
                 const SizedBox(height: AppSpacing.lg),
+                Text(l10nOf(context).dataSourcesCities),
+                const SizedBox(height: AppSpacing.lg),
                 const ContentProvenanceView(),
               ],
             ),

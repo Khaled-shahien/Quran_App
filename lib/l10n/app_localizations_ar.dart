@@ -2690,4 +2690,29 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get listSeparator => '، ';
+
+  @override
+  String methodSuggestionTitle(String country) {
+    return 'طريقة الحساب المعتادة في $country';
+  }
+
+  @override
+  String methodSuggestionBody(String current, String suggested) {
+    return 'تستخدم الآن «$current». الطريقة المعتادة هنا «$suggested»، وقد تطابق مواقيت المساجد أكثر.';
+  }
+
+  @override
+  String methodSuggestionAccept(String method) {
+    return 'استخدام «$method»';
+  }
+
+  @override
+  String get methodSuggestionDismiss => 'الإبقاء على طريقتي';
+
+  @override
+  String get prayerCitySearchHint => 'اكتب اسم المدينة بالعربية أو بالإنجليزية';
+
+  @override
+  String get dataSourcesCities =>
+      'قائمة المدن ومناطقها الزمنية من GeoNames ‏(www.geonames.org)، بترخيص المشاع الإبداعي CC BY 4.0. أُخذت الأسماء العربية من الأسماء البديلة الموسومة بالعربية في GeoNames، وتظهر المدن التي لا اسم عربيًّا لها باسمها اللاتيني.';
 }
