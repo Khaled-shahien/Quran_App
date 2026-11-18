@@ -2504,4 +2504,46 @@ class AppLocalizationsAr extends AppLocalizations {
   String distanceMeters(String value) {
     return '$value م';
   }
+
+  @override
+  String get quranIndexSurahs => 'السور';
+
+  @override
+  String get quranIndexJuz => 'الأجزاء';
+
+  @override
+  String get quranIndexHizb => 'الأحزاب';
+
+  @override
+  String quranJuzTitle(String number) {
+    return 'الجزء $number';
+  }
+
+  @override
+  String quranHizbTitle(String number) {
+    return 'الحزب $number';
+  }
+
+  @override
+  String quranDivisionStart(String surah, String ayah, String page) {
+    return 'يبدأ من $surah، الآية $ayah • الصفحة $page';
+  }
+
+  @override
+  String get quranGoTo => 'انتقال إلى صفحة أو آية';
+
+  @override
+  String get quranGoToLabel => 'رقم الصفحة أو السورة:الآية';
+
+  @override
+  String get quranGoToHint => 'مثال: ٢٠٥ أو ٢:٢٥٥';
+
+  @override
+  String get quranGoToInvalid => 'لا توجد صفحة أو آية بهذا الرقم';
+
+  @override
+  String get quranGoToAction => 'انتقال';
+
+  @override
+  String get quranIndexLoadFailed => 'تعذّر تحميل فهرس الأجزاء والأحزاب.';
 }

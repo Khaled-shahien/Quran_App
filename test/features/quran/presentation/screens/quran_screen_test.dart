@@ -256,4 +256,99 @@ void main() {
 
     expect(find.text('open'), findsOneWidget);
   });
+
+  group('juz, hizb and go to', () {
+    Future<void> waitFor(WidgetTester tester, Finder finder) async {
+      for (var i = 0; i < 50 && finder.evaluate().isEmpty; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 100)),
+        );
+        await tester.pump();
+      }
+      await tester.pumpAndSettle();
+    }
+
+    late Map<String, Object?> opened;
+
+    Widget app() => buildQuranTestApp(
+      repository: FakeSurahRepository(),
+      routes: <RouteBase>[
+        GoRoute(
+          path: '/quran/surah/:number',
+          builder: (context, state) {
+            opened = <String, Object?>{
+              'path': state.pathParameters['number'],
+              ...?(state.extra as Map<String, dynamic>?),
+            };
+            return const Scaffold(body: Text('reader'));
+          },
+        ),
+      ],
+    );
+
+    testWidgets('the juz view lists 30 juz and opens one at its start', (
+      tester,
+    ) async {
+      await tester.pumpWidget(app());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('الأجزاء'));
+      await waitFor(tester, find.text('الجزء 1'));
+
+      expect(find.text('الجزء 1'), findsOneWidget);
+      expect(find.text('الجزء 2'), findsOneWidget);
+      await tester.tap(find.text('الجزء 2'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('reader'), findsOneWidget);
+      expect(opened['path'], '2');
+      expect(opened['initialAyahNumber'], 142);
+    });
+
+    testWidgets('the hizb view lists hizb starts', (tester) async {
+      await tester.pumpWidget(app());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('الأحزاب'));
+      await waitFor(tester, find.text('الحزب 2'));
+
+      await tester.tap(find.text('الحزب 2'));
+      await tester.pumpAndSettle();
+      expect(opened['initialAyahNumber'], 75);
+    });
+
+    testWidgets('go to rejects a missing verse and opens a valid one', (
+      tester,
+    ) async {
+      await tester.pumpWidget(app());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('انتقال إلى صفحة أو آية'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), '1:8');
+      await tester.tap(find.text('انتقال'));
+      await tester.pumpAndSettle();
+      expect(find.text('لا توجد صفحة أو آية بهذا الرقم'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), '٢:٢٥٥');
+      await tester.tap(find.text('انتقال'));
+      await tester.pumpAndSettle();
+      expect(opened['path'], '2');
+      expect(opened['initialAyahNumber'], 255);
+    });
+
+    testWidgets('go to a page opens the first verse on it', (tester) async {
+      await tester.pumpWidget(app());
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('انتقال إلى صفحة أو آية'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), '2');
+      await tester.tap(find.text('انتقال'));
+      await waitFor(tester, find.text('reader'));
+
+      expect(opened['path'], '2');
+      expect(opened['initialAyahNumber'], 1);
+    });
+  });
 }

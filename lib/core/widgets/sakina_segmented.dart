@@ -115,7 +115,7 @@ class _Segment extends StatelessWidget {
         borderRadius: AppRadius.controls,
         onTap: onTap,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 44),
+          constraints: const BoxConstraints(minHeight: 48),
           child: Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(

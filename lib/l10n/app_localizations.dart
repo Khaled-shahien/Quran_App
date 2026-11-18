@@ -4525,6 +4525,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{value} م'**
   String distanceMeters(String value);
+
+  /// Quran index view: list of surahs.
+  ///
+  /// In ar, this message translates to:
+  /// **'السور'**
+  String get quranIndexSurahs;
+
+  /// Quran index view: the 30 juz.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأجزاء'**
+  String get quranIndexJuz;
+
+  /// Quran index view: the 60 hizb.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحزاب'**
+  String get quranIndexHizb;
+
+  /// Title of one juz in the index.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجزء {number}'**
+  String quranJuzTitle(String number);
+
+  /// Title of one hizb in the index.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحزب {number}'**
+  String quranHizbTitle(String number);
+
+  /// Where a juz or hizb begins.
+  ///
+  /// In ar, this message translates to:
+  /// **'يبدأ من {surah}، الآية {ayah} • الصفحة {page}'**
+  String quranDivisionStart(String surah, String ayah, String page);
+
+  /// Button and dialog title: jump to a mushaf page or a verse.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتقال إلى صفحة أو آية'**
+  String get quranGoTo;
+
+  /// Label of the go-to field.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الصفحة أو السورة:الآية'**
+  String get quranGoToLabel;
+
+  /// Example input for the go-to field: a page, or surah:ayah.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: ٢٠٥ أو ٢:٢٥٥'**
+  String get quranGoToHint;
+
+  /// Go-to input does not match a page (1-604) or an existing verse.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد صفحة أو آية بهذا الرقم'**
+  String get quranGoToInvalid;
+
+  /// Confirms the go-to dialog.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتقال'**
+  String get quranGoToAction;
+
+  /// The juz/hizb index could not be built from the bundled Quran.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تحميل فهرس الأجزاء والأحزاب.'**
+  String get quranIndexLoadFailed;
 }
 
 class _AppLocalizationsDelegate
