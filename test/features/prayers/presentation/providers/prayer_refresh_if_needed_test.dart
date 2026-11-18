@@ -61,6 +61,14 @@ class _CountingScheduler extends NoopPrayerNotificationScheduler {
   }
 }
 
+/// Noon UTC: the same calendar day on the device and in Cairo. Near
+/// midnight UTC the first fetch (device day, no zone chosen yet) would be
+/// corrected to Cairo's next day, which is right but doubles the calls.
+class _NoonClock implements PrayerTimesClock {
+  @override
+  DateTime now() => DateTime.utc(2026, 11, 18, 12);
+}
+
 void main() {
   late _CountingRepository repository;
   late _CountingScheduler scheduler;
@@ -72,6 +80,7 @@ void main() {
     provider = PrayerTimesProvider(
       repository: repository,
       notificationScheduler: scheduler,
+      clock: _NoonClock(),
       locationService: const FixedPrayerLocationService(
         latitude: 30,
         longitude: 31,
