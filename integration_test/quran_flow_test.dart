@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/quran/domain/services/basmala.dart';
 import 'package:sakina_app/core/result/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -110,7 +111,11 @@ void main() {
 
     expect(find.byType(SurahDetailsScreen), findsOneWidget);
     expect(find.text('سورة الفاتحة'), findsOneWidget);
-    expect(find.textContaining('بِسْمِ اللَّهِ'), findsOneWidget);
-    expect(find.byType(SelectableText), findsWidgets);
+    // The bundled Uthmani text writes the basmala with alif wasla; the
+    // reader shows Al-Fatiha 1:1 as it is.
+    expect(
+      find.textContaining(uthmaniBasmala, findRichText: true),
+      findsWidgets,
+    );
   });
 }

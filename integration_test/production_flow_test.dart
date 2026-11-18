@@ -18,12 +18,19 @@ void main() {
       await prefs.setBool('has_seen_notification_permission', true);
       await AppInitializer.initialize();
       await tester.pumpWidget(const AppRoot());
+      // Let the splash screen hand over first; it moves to Home on a timer
+      // and would otherwise replace the route set below.
+      await tester.pumpAndSettle(const Duration(seconds: 1));
       appRouter.go('/settings');
       await tester.pumpAndSettle();
       expect(find.text('المظهر والقراءة'), findsOneWidget);
-      await tester.tap(find.byType(DropdownButtonFormField<ThemeMode>));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('داكن').last);
+      // The theme is a segmented choice: system, light, dark.
+      await tester.tap(
+        find.descendant(
+          of: find.byType(SegmentedButton<ThemeMode>),
+          matching: find.text('داكن'),
+        ),
+      );
       await tester.pumpAndSettle();
       expect(prefs.getString('theme_mode'), 'dark');
       unawaited(appRouter.push('/quran/search'));

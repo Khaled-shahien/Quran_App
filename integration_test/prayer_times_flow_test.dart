@@ -98,6 +98,8 @@ void main() {
     expect(find.text('العشاء'), findsOneWidget);
     expect(find.textContaining('05:00'), findsOneWidget);
     expect(find.textContaining('07:20'), findsOneWidget);
-    expect(repository.calls, 2);
+    // The failed load, then today and tomorrow (the next prayer after
+    // Isha is tomorrow's Fajr).
+    expect(repository.calls, 3);
   });
 }
