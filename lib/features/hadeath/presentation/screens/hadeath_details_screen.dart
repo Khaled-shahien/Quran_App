@@ -68,8 +68,95 @@ class HadeathDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              if (hadeath.study case final study?)
+                HadeathStudyView(study: study),
             ],
           ),
+        ),
+      ],
+    );
+  }
+}
+
+/// What the source says about the hadith, each part under its heading.
+class HadeathStudyView extends StatelessWidget {
+  const HadeathStudyView({super.key, required this.study});
+
+  final HadeathStudy study;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+    final theme = Theme.of(context);
+    Widget section(String title, Widget body) => Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        0,
+        AppSpacing.lg,
+        AppSpacing.lg,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Semantics(
+            header: true,
+            child: Text(title, style: theme.textTheme.titleMedium),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          body,
+        ],
+      ),
+    );
+    final bodyStyle = theme.textTheme.bodyLarge?.copyWith(height: 1.8);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        section(l10n.hadithGrade, Text(study.grade, style: bodyStyle)),
+        section(
+          l10n.hadithAttribution,
+          Text(study.attribution, style: bodyStyle),
+        ),
+        section(
+          l10n.hadithExplanation,
+          Text(
+            study.explanation,
+            textAlign: TextAlign.justify,
+            style: bodyStyle,
+          ),
+        ),
+        if (study.hints.isNotEmpty)
+          section(
+            l10n.hadithLessons,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (final hint in study.hints)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.xs),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsetsDirectional.only(
+                            top: 10,
+                            end: AppSpacing.sm,
+                          ),
+                          child: Icon(Icons.circle, size: 6),
+                        ),
+                        Expanded(child: Text(hint, style: bodyStyle)),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        section(
+          l10n.hadithReferences,
+          Text(study.reference, style: theme.textTheme.bodyMedium),
+        ),
+        section(
+          l10n.hadithSourceTitle,
+          Text(l10n.hadithSource, style: theme.textTheme.bodySmall),
         ),
       ],
     );

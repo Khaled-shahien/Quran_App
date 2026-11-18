@@ -14,7 +14,7 @@ REQUIRED_COLLECTIONS = {
     'assets/prayers_data.json', 'assets/hadeath/ahadeth.txt',
     'assets/islamic_guide.json', 'assets/adhan_adhkar.json',
     'assets/tafsir/ar.muyassar.txt', 'assets/hisn_almuslim.json',
-    'assets/islamic_occasions.json',
+    'assets/islamic_occasions.json', 'assets/hadeath/hadeethenc_nawawi.json',
 }
 
 root = Path(__file__).resolve().parents[1]

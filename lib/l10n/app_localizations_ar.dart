@@ -3486,4 +3486,29 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get verseShareFailed => 'تعذّرت المشاركة. حاول مرة أخرى.';
+
+  @override
+  String get hadithGrade => 'درجة الحديث';
+
+  @override
+  String get hadithAttribution => 'مَن رواه';
+
+  @override
+  String get hadithExplanation => 'الشرح';
+
+  @override
+  String get hadithLessons => 'من فوائد الحديث';
+
+  @override
+  String get hadithReferences => 'المراجع';
+
+  @override
+  String get hadithSourceTitle => 'المصدر';
+
+  @override
+  String get hadithSource =>
+      'نص الأحاديث وتخريجها ودرجتها وشرحها وفوائدها من «موسوعة الأحاديث النبوية» ‏(hadeethenc.com)، منقولة كما نُشرت.';
+
+  @override
+  String get hadithSearch => 'ابحث في الأحاديث وشروحها';
 }

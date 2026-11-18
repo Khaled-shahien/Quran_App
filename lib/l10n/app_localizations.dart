@@ -6197,6 +6197,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّرت المشاركة. حاول مرة أخرى.'**
   String get verseShareFailed;
+
+  /// No description provided for @hadithGrade.
+  ///
+  /// In ar, this message translates to:
+  /// **'درجة الحديث'**
+  String get hadithGrade;
+
+  /// No description provided for @hadithAttribution.
+  ///
+  /// In ar, this message translates to:
+  /// **'مَن رواه'**
+  String get hadithAttribution;
+
+  /// No description provided for @hadithExplanation.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشرح'**
+  String get hadithExplanation;
+
+  /// No description provided for @hadithLessons.
+  ///
+  /// In ar, this message translates to:
+  /// **'من فوائد الحديث'**
+  String get hadithLessons;
+
+  /// No description provided for @hadithReferences.
+  ///
+  /// In ar, this message translates to:
+  /// **'المراجع'**
+  String get hadithReferences;
+
+  /// No description provided for @hadithSourceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المصدر'**
+  String get hadithSourceTitle;
+
+  /// No description provided for @hadithSource.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص الأحاديث وتخريجها ودرجتها وشرحها وفوائدها من «موسوعة الأحاديث النبوية» ‏(hadeethenc.com)، منقولة كما نُشرت.'**
+  String get hadithSource;
+
+  /// No description provided for @hadithSearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث في الأحاديث وشروحها'**
+  String get hadithSearch;
 }
 
 class _AppLocalizationsDelegate

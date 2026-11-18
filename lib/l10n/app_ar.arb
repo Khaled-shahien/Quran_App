@@ -4179,5 +4179,13 @@
       }
     }
   },
-  "verseShareFailed": "تعذّرت المشاركة. حاول مرة أخرى."
+  "verseShareFailed": "تعذّرت المشاركة. حاول مرة أخرى.",
+  "hadithGrade": "درجة الحديث",
+  "hadithAttribution": "مَن رواه",
+  "hadithExplanation": "الشرح",
+  "hadithLessons": "من فوائد الحديث",
+  "hadithReferences": "المراجع",
+  "hadithSourceTitle": "المصدر",
+  "hadithSource": "نص الأحاديث وتخريجها ودرجتها وشرحها وفوائدها من «موسوعة الأحاديث النبوية» ‏(hadeethenc.com)، منقولة كما نُشرت.",
+  "hadithSearch": "ابحث في الأحاديث وشروحها"
 }

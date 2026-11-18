@@ -71,12 +71,27 @@ class _HadeathScreenState extends State<HadeathScreen> {
               );
             }
 
+            final visible = provider.visible;
             return SliverPadding(
               padding: const EdgeInsets.all(AppSpacing.md),
               sliver: SliverList.builder(
-                itemCount: provider.ahadethList.length,
-                itemBuilder: (context, index) {
-                  final hadeath = provider.ahadethList[index];
+                itemCount: visible.length + 1,
+                itemBuilder: (context, row) {
+                  if (row == 0) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                      child: TextField(
+                        key: const Key('hadith-search'),
+                        decoration: InputDecoration(
+                          labelText: l10nOf(context).hadithSearch,
+                          prefixIcon: const Icon(Icons.search),
+                        ),
+                        onChanged: provider.search,
+                      ),
+                    );
+                  }
+                  final index = visible[row - 1].number - 1;
+                  final hadeath = visible[row - 1].hadeath;
                   return Padding(
                     padding: const EdgeInsets.only(bottom: AppSpacing.ms),
                     child: HadeathCard(

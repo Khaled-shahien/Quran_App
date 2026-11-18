@@ -1,7 +1,11 @@
 import '../../domain/entities/hadeath_entity.dart';
 
 class HadeathModel extends HadeathEntity {
-  const HadeathModel({required super.title, required super.content});
+  const HadeathModel({
+    required super.title,
+    required super.content,
+    super.study,
+  });
 
   /// Factory method to create a HadeathModel from raw text
   factory HadeathModel.fromString(String rawHadeath) {

@@ -127,6 +127,20 @@
       "proposedEdition": "schemaVersion 1, 10 yearly occasions and the white days",
       "proposedLicense": "Original app content",
       "proposalNotes": "Contested occasions (Mawlid, 27 Rajab, 15 Sha‘ban) are deliberately absent; the fasting notes for Ashura, Arafah and the white days need a scholar’s review."
+    },
+    {
+      "path": "assets/hadeath/hadeethenc_nawawi.json",
+      "sha256": "e393d26a83842a5668e73216b09c7bce18cd5fc2d5a4ed03ba8950dfd08eadc7",
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null,
+      "proposedSource": "HadeethEnc.com - Encyclopedia of Translated Prophetic Hadiths, Arabic (https://hadeethenc.com), via its public API",
+      "proposedEdition": "API answers downloaded 2026-11-18 for the 50 hadith of the app (ids in tool/hadith_hadeethenc_ids.json); built by tool/build_hadith_hadeethenc.py without editing the text",
+      "proposedLicense": "Pending: confirm HadeethEnc terms of reuse (attribution and offline redistribution) before release.",
+      "proposalNotes": "Each hadith was matched to its HadeethEnc entry by text similarity; check the pairing (e.g. 2 = Jibril, 25 = \"ذهب أهل الدثور\") and that grades, explanations and references are wanted as published."
     }
   ],
   "proposalStatus": "sources_proposed_2026-11-09_awaiting_owner_review"
