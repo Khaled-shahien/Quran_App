@@ -5616,6 +5616,179 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'منبّه الفجر'**
   String get fajrWakeChannel;
+
+  /// No description provided for @practiceLogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجلّ العبادة'**
+  String get practiceLogTitle;
+
+  /// No description provided for @practiceLogOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجلّ الصلاة والصيام'**
+  String get practiceLogOpen;
+
+  /// No description provided for @practiceLogPrivacy.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا السجلّ لك وحدك: يبقى على هاتفك ولا يُرسَل إلى أي مكان، ولا يدخل في ملف التصدير إلا إن صدّرت بياناتك.'**
+  String get practiceLogPrivacy;
+
+  /// No description provided for @practiceLogPreviousDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم السابق'**
+  String get practiceLogPreviousDay;
+
+  /// No description provided for @practiceLogNextDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم التالي'**
+  String get practiceLogNextDay;
+
+  /// No description provided for @practiceLogToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get practiceLogToday;
+
+  /// No description provided for @prayerLogOnTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'في وقتها'**
+  String get prayerLogOnTime;
+
+  /// No description provided for @prayerLogLate.
+  ///
+  /// In ar, this message translates to:
+  /// **'متأخرة'**
+  String get prayerLogLate;
+
+  /// No description provided for @prayerLogMissed.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاتتني'**
+  String get prayerLogMissed;
+
+  /// No description provided for @prayerLogExcused.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعذر'**
+  String get prayerLogExcused;
+
+  /// No description provided for @prayerLogNotLogged.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُسجَّل'**
+  String get prayerLogNotLogged;
+
+  /// No description provided for @prayerLogClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح التسجيل'**
+  String get prayerLogClear;
+
+  /// No description provided for @practiceExcusedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وضع العذر'**
+  String get practiceExcusedTitle;
+
+  /// No description provided for @practiceExcusedHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'للأيام التي لا تجب فيها الصلاة. ما تسجّله فيها بعذر لا يُعدّ فائتًا.'**
+  String get practiceExcusedHelp;
+
+  /// No description provided for @practiceMarkDayExcused.
+  ///
+  /// In ar, this message translates to:
+  /// **'علّم صلوات هذا اليوم بعذر'**
+  String get practiceMarkDayExcused;
+
+  /// No description provided for @practiceWeekTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر سبعة أيام'**
+  String get practiceWeekTitle;
+
+  /// No description provided for @practiceWeekSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'{onTime} في وقتها، {late} متأخرة، {missed} فاتت، {excused} بعذر'**
+  String practiceWeekSummary(
+    String onTime,
+    String late,
+    String missed,
+    String excused,
+  );
+
+  /// No description provided for @practiceDaySemantics.
+  ///
+  /// In ar, this message translates to:
+  /// **'{day}: {summary}'**
+  String practiceDaySemantics(String day, String summary);
+
+  /// No description provided for @fastingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصيام'**
+  String get fastingTitle;
+
+  /// No description provided for @fastFasted.
+  ///
+  /// In ar, this message translates to:
+  /// **'صُمت'**
+  String get fastFasted;
+
+  /// No description provided for @fastQada.
+  ///
+  /// In ar, this message translates to:
+  /// **'قضاء'**
+  String get fastQada;
+
+  /// No description provided for @fastExcused.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعذر'**
+  String get fastExcused;
+
+  /// No description provided for @fastMissed.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم أصم'**
+  String get fastMissed;
+
+  /// No description provided for @qadaLeftTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام القضاء الباقية: {count}'**
+  String qadaLeftTitle(String count);
+
+  /// No description provided for @qadaHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُضاف أيام رمضان التي سجّلتها بعذر أو بلا صيام، وينقص منها كل يوم قضاء تسجّله.'**
+  String get qadaHelp;
+
+  /// No description provided for @qadaBaseLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام عليّ من قبل: {count}'**
+  String qadaBaseLabel(String count);
+
+  /// No description provided for @qadaBaseIncrease.
+  ///
+  /// In ar, this message translates to:
+  /// **'زيادة يوم'**
+  String get qadaBaseIncrease;
+
+  /// No description provided for @qadaBaseDecrease.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنقاص يوم'**
+  String get qadaBaseDecrease;
 }
 
 class _AppLocalizationsDelegate

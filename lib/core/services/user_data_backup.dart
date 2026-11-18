@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/database/user_data_tables.dart';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,9 +41,10 @@ class UserDataBackup {
   UserDataBackup({
     required SharedPreferences prefs,
     required VerseLibraryRepository library,
+    List<UserDataTables> otherTables = const [],
     DateTime Function()? clock,
   }) : _prefs = prefs,
-       _library = library,
+       _tables = [library, ...otherTables],
        _clock = clock ?? DateTime.now;
 
   static const String format = 'sakina-backup';
@@ -74,6 +76,8 @@ class UserDataBackup {
     'daily_verse_alarm_enabled', 'verse_alarm_hour', 'verse_alarm_minute',
     'morning_alarm_anchor_minutes', 'evening_alarm_anchor_minutes',
     'adhan_quiet_minutes', 'fajr_wake_enabled', 'fajr_wake_snooze_minutes',
+    // Prayer and fasting log
+    'practice_excused_mode', 'fasting_qada_base',
   };
 
   /// Families of keys with a variable suffix.
@@ -84,11 +88,19 @@ class UserDataBackup {
     'reading_last_ayah_', // per surah
   ];
 
+  /// Tables read from a backup file; any other entry is ignored.
+  static const List<String> tableNames = [
+    'saved_verses',
+    'verse_notes',
+    'prayer_log',
+    'fasting_log',
+  ];
+
   static bool isUserKey(String key) =>
       keys.contains(key) || prefixes.any(key.startsWith);
 
   final SharedPreferences _prefs;
-  final VerseLibraryRepository _library;
+  final List<UserDataTables> _tables;
   final DateTime Function() _clock;
 
   Future<String> export() async {
@@ -97,7 +109,9 @@ class UserDataBackup {
           in _prefs.getKeys().where(isUserKey).toList()..sort())
         key: _prefs.get(key),
     };
-    final rows = await _library.exportRows();
+    final rows = <String, List<Map<String, Object?>>>{
+      for (final tables in _tables) ...await tables.exportRows(),
+    };
     return const JsonEncoder.withIndent(' ').convert({
       'format': format,
       'version': version,
@@ -140,7 +154,9 @@ class UserDataBackup {
           await _prefs.setStringList(key, v);
       }
     }
-    await _library.replaceAll(parsed.rows);
+    for (final tables in _tables) {
+      await tables.replaceAll(parsed.rows);
+    }
   }
 
   /// Removes the user's data (the listed keys and every saved verse and
@@ -150,7 +166,9 @@ class UserDataBackup {
     for (final String key in _prefs.getKeys().where(isUserKey).toList()) {
       await _prefs.remove(key);
     }
-    await _library.clear();
+    for (final tables in _tables) {
+      await tables.clear();
+    }
   }
 
   _Parsed _parse(String raw) {
@@ -190,7 +208,7 @@ class UserDataBackup {
     final Map<String, List<Map<String, Object?>>> rows = {};
     final Object? database = decoded['database'];
     if (database is Map<String, dynamic>) {
-      for (final String table in const ['saved_verses', 'verse_notes']) {
+      for (final String table in tableNames) {
         final Object? list = database[table];
         if (list is List) {
           rows[table] = [

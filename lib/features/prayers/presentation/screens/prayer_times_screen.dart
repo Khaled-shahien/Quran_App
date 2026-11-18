@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:sakina_app/features/prayers/presentation/widgets/prayer_calculation_sheets.dart';
 import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/core/theme/app_motion.dart';
@@ -97,6 +98,11 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
     return SakinaHeroScaffold(
       title: l10n.prayerTitle,
       actions: [
+        IconButton(
+          tooltip: l10nOf(context).practiceLogOpen,
+          icon: const Icon(Icons.fact_check_outlined),
+          onPressed: () => context.push('/prayers/log'),
+        ),
         IconButton(
           tooltip: l10nOf(context).prayerTimesScreenMessage1,
           icon: const Icon(Icons.edit_location_alt_outlined),

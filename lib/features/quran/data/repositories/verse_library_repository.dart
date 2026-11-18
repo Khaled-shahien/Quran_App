@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 import '../../../../core/database/app_database.dart';
+import '../../../../core/database/user_data_tables.dart';
 
 /// A verse the user kept, with one of [colorCount] colours and an
 /// optional short label.
@@ -82,7 +83,7 @@ bool _validVerse(int surah, int ayah) =>
     surah >= 1 && surah <= 114 && ayah >= 1 && ayah <= 286;
 
 /// Saved verses and notes in the local database.
-class VerseLibraryRepository {
+class VerseLibraryRepository implements UserDataTables {
   VerseLibraryRepository(this._database, {DateTime Function()? clock})
     : _clock = clock ?? DateTime.now;
 
@@ -187,6 +188,7 @@ class VerseLibraryRepository {
   }
 
   /// Every row of both tables, for export.
+  @override
   Future<Map<String, List<Map<String, Object?>>>> exportRows() async {
     final Database db = await _db;
     return {
@@ -197,6 +199,7 @@ class VerseLibraryRepository {
 
   /// Replaces both tables in one transaction (import). Invalid rows are
   /// skipped; the count of rows kept is returned.
+  @override
   Future<int> replaceAll(Map<String, List<Map<String, Object?>>> rows) async {
     final Database db = await _db;
     int kept = 0;
@@ -243,6 +246,7 @@ class VerseLibraryRepository {
     return kept;
   }
 
+  @override
   Future<void> clear() async {
     final Database db = await _db;
     await db.transaction((txn) async {

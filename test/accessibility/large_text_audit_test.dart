@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sakina_app/features/practice_log/data/practice_log_repository.dart';
+import 'package:sakina_app/features/practice_log/presentation/practice_log_screen.dart';
+import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
 import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/features/settings/presentation/providers/digit_style_controller.dart';
 import 'package:sakina_app/features/settings/presentation/providers/text_size_controller.dart';
@@ -340,6 +343,21 @@ void main() {
       await expectAccessible(tester);
       semantics.dispose();
     });
+    testWidgets('prayer and fasting log (${look.$1})', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await pumpAudited(
+        tester,
+        PracticeLogScreen(repository: _MemoryLog()),
+        theme: look.$2,
+        textScale: look.$3,
+        providers: [Provider<SharedPreferences>.value(value: prefs)],
+      );
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      await expectAccessible(tester);
+      semantics.dispose();
+    });
+
     testWidgets('khatma duration (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       await pumpAudited(
@@ -371,4 +389,18 @@ class _AdhkarRepo implements AzkarRepository {
   Future<Result<List<AzkarCategoryModel>>> getAllAzkar() async => Success([
     AzkarCategoryModel(id: 1, category: 'أذكار الصباح', items: adhkar.items),
   ]);
+}
+
+/// An empty log without a database.
+class _MemoryLog extends PracticeLogRepository {
+  _MemoryLog() : super(() => throw UnimplementedError());
+
+  @override
+  Future<Map<String, Map<DailyPrayer, PrayerLogStatus>>> prayers(
+    DateTime from,
+    DateTime to,
+  ) async => {};
+
+  @override
+  Future<Map<String, FastLogStatus>> allFasts() async => {};
 }

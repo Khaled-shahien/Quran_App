@@ -3135,4 +3135,104 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get fajrWakeChannel => 'منبّه الفجر';
+
+  @override
+  String get practiceLogTitle => 'سجلّ العبادة';
+
+  @override
+  String get practiceLogOpen => 'سجلّ الصلاة والصيام';
+
+  @override
+  String get practiceLogPrivacy =>
+      'هذا السجلّ لك وحدك: يبقى على هاتفك ولا يُرسَل إلى أي مكان، ولا يدخل في ملف التصدير إلا إن صدّرت بياناتك.';
+
+  @override
+  String get practiceLogPreviousDay => 'اليوم السابق';
+
+  @override
+  String get practiceLogNextDay => 'اليوم التالي';
+
+  @override
+  String get practiceLogToday => 'اليوم';
+
+  @override
+  String get prayerLogOnTime => 'في وقتها';
+
+  @override
+  String get prayerLogLate => 'متأخرة';
+
+  @override
+  String get prayerLogMissed => 'فاتتني';
+
+  @override
+  String get prayerLogExcused => 'بعذر';
+
+  @override
+  String get prayerLogNotLogged => 'لم تُسجَّل';
+
+  @override
+  String get prayerLogClear => 'مسح التسجيل';
+
+  @override
+  String get practiceExcusedTitle => 'وضع العذر';
+
+  @override
+  String get practiceExcusedHelp =>
+      'للأيام التي لا تجب فيها الصلاة. ما تسجّله فيها بعذر لا يُعدّ فائتًا.';
+
+  @override
+  String get practiceMarkDayExcused => 'علّم صلوات هذا اليوم بعذر';
+
+  @override
+  String get practiceWeekTitle => 'آخر سبعة أيام';
+
+  @override
+  String practiceWeekSummary(
+    String onTime,
+    String late,
+    String missed,
+    String excused,
+  ) {
+    return '$onTime في وقتها، $late متأخرة، $missed فاتت، $excused بعذر';
+  }
+
+  @override
+  String practiceDaySemantics(String day, String summary) {
+    return '$day: $summary';
+  }
+
+  @override
+  String get fastingTitle => 'الصيام';
+
+  @override
+  String get fastFasted => 'صُمت';
+
+  @override
+  String get fastQada => 'قضاء';
+
+  @override
+  String get fastExcused => 'بعذر';
+
+  @override
+  String get fastMissed => 'لم أصم';
+
+  @override
+  String qadaLeftTitle(String count) {
+    return 'أيام القضاء الباقية: $count';
+  }
+
+  @override
+  String get qadaHelp =>
+      'تُضاف أيام رمضان التي سجّلتها بعذر أو بلا صيام، وينقص منها كل يوم قضاء تسجّله.';
+
+  @override
+  String qadaBaseLabel(String count) {
+    return 'أيام عليّ من قبل: $count';
+  }
+
+  @override
+  String get qadaBaseIncrease => 'زيادة يوم';
+
+  @override
+  String get qadaBaseDecrease => 'إنقاص يوم';
 }

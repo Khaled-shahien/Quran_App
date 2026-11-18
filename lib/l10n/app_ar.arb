@@ -3872,5 +3872,73 @@
     "description": "%s is replaced natively with the minutes left; keep it"
   },
   "fajrWakeSunriseReached": "أشرقت الشمس",
-  "fajrWakeChannel": "منبّه الفجر"
+  "fajrWakeChannel": "منبّه الفجر",
+  "practiceLogTitle": "سجلّ العبادة",
+  "practiceLogOpen": "سجلّ الصلاة والصيام",
+  "practiceLogPrivacy": "هذا السجلّ لك وحدك: يبقى على هاتفك ولا يُرسَل إلى أي مكان، ولا يدخل في ملف التصدير إلا إن صدّرت بياناتك.",
+  "practiceLogPreviousDay": "اليوم السابق",
+  "practiceLogNextDay": "اليوم التالي",
+  "practiceLogToday": "اليوم",
+  "prayerLogOnTime": "في وقتها",
+  "prayerLogLate": "متأخرة",
+  "prayerLogMissed": "فاتتني",
+  "prayerLogExcused": "بعذر",
+  "prayerLogNotLogged": "لم تُسجَّل",
+  "prayerLogClear": "مسح التسجيل",
+  "practiceExcusedTitle": "وضع العذر",
+  "practiceExcusedHelp": "للأيام التي لا تجب فيها الصلاة. ما تسجّله فيها بعذر لا يُعدّ فائتًا.",
+  "practiceMarkDayExcused": "علّم صلوات هذا اليوم بعذر",
+  "practiceWeekTitle": "آخر سبعة أيام",
+  "practiceWeekSummary": "{onTime} في وقتها، {late} متأخرة، {missed} فاتت، {excused} بعذر",
+  "@practiceWeekSummary": {
+    "placeholders": {
+      "onTime": {
+        "type": "String"
+      },
+      "late": {
+        "type": "String"
+      },
+      "missed": {
+        "type": "String"
+      },
+      "excused": {
+        "type": "String"
+      }
+    }
+  },
+  "practiceDaySemantics": "{day}: {summary}",
+  "@practiceDaySemantics": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
+  "fastingTitle": "الصيام",
+  "fastFasted": "صُمت",
+  "fastQada": "قضاء",
+  "fastExcused": "بعذر",
+  "fastMissed": "لم أصم",
+  "qadaLeftTitle": "أيام القضاء الباقية: {count}",
+  "@qadaLeftTitle": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "qadaHelp": "تُضاف أيام رمضان التي سجّلتها بعذر أو بلا صيام، وينقص منها كل يوم قضاء تسجّله.",
+  "qadaBaseLabel": "أيام عليّ من قبل: {count}",
+  "@qadaBaseLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "qadaBaseIncrease": "زيادة يوم",
+  "qadaBaseDecrease": "إنقاص يوم"
 }

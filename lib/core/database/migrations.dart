@@ -32,4 +32,26 @@ const List<List<String>> databaseMigrations = <List<String>>[
     'CREATE INDEX saved_verses_by_time ON saved_verses (updated_at)',
     'CREATE INDEX verse_notes_by_time ON verse_notes (updated_at)',
   ],
+  // 1 → 2: the private prayer and fasting log.
+  <String>[
+    '''
+    CREATE TABLE prayer_log (
+      day TEXT NOT NULL CHECK (length(day) = 10),
+      prayer TEXT NOT NULL
+        CHECK (prayer IN ('fajr', 'dhuhr', 'asr', 'maghrib', 'isha')),
+      status TEXT NOT NULL
+        CHECK (status IN ('onTime', 'late', 'missed', 'excused')),
+      updated_at INTEGER NOT NULL,
+      PRIMARY KEY (day, prayer)
+    )
+    ''',
+    '''
+    CREATE TABLE fasting_log (
+      day TEXT NOT NULL PRIMARY KEY CHECK (length(day) = 10),
+      status TEXT NOT NULL
+        CHECK (status IN ('fasted', 'qada', 'excused', 'missed')),
+      updated_at INTEGER NOT NULL
+    )
+    ''',
+  ],
 ];

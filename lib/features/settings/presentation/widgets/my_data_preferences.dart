@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/practice_log/data/practice_log_repository.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -60,6 +61,9 @@ class MyDataPreferences extends StatelessWidget {
       UserDataBackup(
         prefs: GetIt.instance<SharedPreferences>(),
         library: VerseLibraryRepository(GetIt.instance.getAsync<AppDatabase>),
+        otherTables: [
+          PracticeLogRepository(GetIt.instance.getAsync<AppDatabase>),
+        ],
       );
 
   void _snack(BuildContext context, String text) => ScaffoldMessenger.maybeOf(
