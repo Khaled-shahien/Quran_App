@@ -1,3 +1,4 @@
+import '../../domain/services/quran_divisions.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -199,13 +200,7 @@ class _HifzScreenState extends State<HifzScreen> {
 }
 
 /// Reads digits typed in Western or Arabic-Indic form.
-int? _readNumber(String text) {
-  final western = text.trim().replaceAllMapped(
-    RegExp('[٠-٩]'),
-    (m) => '${m[0]!.codeUnitAt(0) - 0x0660}',
-  );
-  return int.tryParse(western);
-}
+int? _readNumber(String text) => int.tryParse(westernDigits(text).trim());
 
 class _AddPagesDialog extends StatefulWidget {
   const _AddPagesDialog();
