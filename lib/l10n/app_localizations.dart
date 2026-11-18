@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_ar.dart';
+import 'app_localizations_en.dart';
 
 // ignore_for_file: type=lint
 
@@ -92,7 +93,10 @@ abstract class AppLocalizations {
       ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('ar')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('ar'),
+    Locale('en'),
+  ];
 
   /// No description provided for @prayerTitle.
   ///
@@ -6767,6 +6771,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'كل أحاديث هذا الباب ({count})'**
   String hadithLibraryAllIn(String count);
+
+  /// No description provided for @appLanguageTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لغة التطبيق'**
+  String get appLanguageTitle;
+
+  /// No description provided for @appLanguageHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'تتغير نصوص الواجهة فقط؛ تبقى نصوص القرآن والأذكار والأحاديث بالعربية.'**
+  String get appLanguageHelp;
+
+  /// No description provided for @languageArabic.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربية'**
+  String get languageArabic;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In ar, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
 }
 
 class _AppLocalizationsDelegate
@@ -6780,7 +6808,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['ar'].contains(locale.languageCode);
+      <String>['ar', 'en'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -6791,6 +6819,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'ar':
       return AppLocalizationsAr();
+    case 'en':
+      return AppLocalizationsEn();
   }
 
   throw FlutterError(

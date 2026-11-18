@@ -4390,5 +4390,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "appLanguageTitle": "لغة التطبيق",
+  "appLanguageHelp": "تتغير نصوص الواجهة فقط؛ تبقى نصوص القرآن والأذكار والأحاديث بالعربية.",
+  "languageArabic": "العربية",
+  "languageEnglish": "English"
 }

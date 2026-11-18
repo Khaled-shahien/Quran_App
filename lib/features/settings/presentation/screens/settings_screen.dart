@@ -38,6 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   const DesignPreference(),
                   const ThemePreference(),
+                  const LanguagePreference(),
                   const TextSizePreference(),
                   const SimpleModePreference(),
                   const WeeklyReflectionPreference(),

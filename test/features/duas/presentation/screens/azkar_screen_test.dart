@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sakina_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/features/duas/presentation/screens/azkar_screen.dart';
@@ -69,11 +70,16 @@ void main() {
       expect(find.byIcon(Icons.arrow_back_ios), findsOneWidget);
     });
 
-    testWidgets('AzkarScreen has RTL Directionality widget', (
+    testWidgets('AzkarScreen is laid out RTL in Arabic', (
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(home: Scaffold(body: AzkarScreen())),
+        const MaterialApp(
+          locale: Locale('ar'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: AzkarScreen()),
+        ),
       );
 
       // Find all Directionality widgets

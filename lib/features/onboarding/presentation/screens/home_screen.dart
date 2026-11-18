@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       endDrawer: _buildNavigationDrawer(),
       body: Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection: Directionality.of(context),
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
       width: (MediaQuery.sizeOf(context).width * 0.85).clamp(0.0, 380.0),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection: Directionality.of(context),
         child: Column(
           children: [
             _DrawerHeader(onClose: () => Navigator.pop(context)),

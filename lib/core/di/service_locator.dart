@@ -74,6 +74,7 @@ Future<void> setupServiceLocator() async {
     // Core / External Utilities
     // ==========================================
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    AppLanguage.load(prefs);
     getIt.registerSingleton<SharedPreferences>(prefs);
     getIt.registerSingleton<FeedbackService>(
       FeedbackService(preferences: prefs),

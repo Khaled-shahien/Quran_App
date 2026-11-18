@@ -13,12 +13,9 @@ class MediaScreen extends StatelessWidget {
     return SakinaHeroScaffold(
       title: l10nOf(context).homeScreenMessage28,
       slivers: const [
-        Directionality(
-          textDirection: TextDirection.rtl,
-          child: SliverPadding(
-            padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
-            sliver: MediaTilesWidget(),
-          ),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
+          sliver: MediaTilesWidget(),
         ),
       ],
     );

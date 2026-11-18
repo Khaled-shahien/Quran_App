@@ -18,7 +18,7 @@ class DuasScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection: Directionality.of(context),
         child: Consumer<DuasProvider>(
           builder: (context, provider, child) {
             // The header shrinks away as the supplications scroll up.

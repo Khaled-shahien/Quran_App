@@ -76,7 +76,7 @@ class _QiblaScreenState extends State<QiblaScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) => Directionality(
-    textDirection: TextDirection.rtl,
+    textDirection: Directionality.of(context),
     child: AnimatedBuilder(
       animation: controller,
       builder: (context, _) => SakinaHeroScaffold(
@@ -413,6 +413,7 @@ class _CompassPainter extends CustomPainter {
           text: entry.value,
           style: AppTypography.labelMedium.copyWith(color: textColor),
         ),
+        // Single compass letters: the direction does not matter.
         textDirection: TextDirection.rtl,
       )..layout();
       final point =

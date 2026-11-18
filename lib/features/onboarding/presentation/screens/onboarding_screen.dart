@@ -79,7 +79,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final animationDuration = AppMotion.of(context, AppMotion.base);
 
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: Directionality.of(context),
       child: Scaffold(
         backgroundColor: colors.surface,
         body: SafeArea(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sakina_app/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,6 +44,10 @@ void main() {
     await tester.pumpWidget(
       MaterialApp.router(
         routerConfig: router,
+        // The app's default language; the layout follows it (RTL).
+        locale: const Locale('ar'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(
           brightness: brightness,
           colorScheme: ColorScheme.fromSeed(

@@ -1,3 +1,5 @@
+import 'package:sakina_app/features/settings/presentation/providers/language_controller.dart';
+import 'package:sakina_app/core/app/app_restart.dart';
 import 'package:sakina_app/features/settings/presentation/providers/simple_mode_controller.dart';
 import 'package:sakina_alarms/sakina_alarms.dart';
 import 'package:sakina_app/features/prayers/domain/after_adhan.dart';
@@ -425,6 +427,13 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
         ChangeNotifierProvider<SimpleModeController>(
           create: (_) => SimpleModeController(_prefs),
         ),
+        ChangeNotifierProvider<LanguageController>(
+          create: (_) => LanguageController(
+            _prefs,
+            // Scheduled alerts and reminders take the new language.
+            onChanged: restartAfterDataChange,
+          ),
+        ),
         ChangeNotifierProvider<AdhanSettingsController>(
           create: (_) => AdhanSettingsController(
             store: AdhanSettingsStore(_prefs),
@@ -464,7 +473,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
             theme: AppTheme.light(themeProvider.design),
             darkTheme: AppTheme.dark(themeProvider.design),
             themeMode: themeProvider.effectiveThemeMode,
-            locale: const Locale('ar'),
+            locale: context.watch<LanguageController>().locale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             routerConfig: appRouter,

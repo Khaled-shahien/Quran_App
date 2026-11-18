@@ -119,7 +119,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 const SizedBox(height: 30),
 
                 Directionality(
-                  textDirection: TextDirection.rtl,
+                  textDirection: Directionality.of(context),
                   child: Row(
                     children: [
                       Expanded(
@@ -158,7 +158,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
                 const SizedBox(height: 20),
 
                 Directionality(
-                  textDirection: TextDirection.rtl,
+                  textDirection: Directionality.of(context),
                   child: LabeledRow(
                     children: [
                       Text(
@@ -445,7 +445,7 @@ class _KhatmaDurationScreenState extends State<KhatmaDurationScreen> {
     final ThemeData theme = Theme.of(context);
     final ColorScheme scheme = theme.colorScheme;
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: Directionality.of(context),
       child: LabeledRow(
         children: [
           Text(
@@ -556,7 +556,7 @@ class _StepperRow extends StatelessWidget {
     }
 
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: Directionality.of(context),
       child: LabeledRow(
         children: [
           Text(

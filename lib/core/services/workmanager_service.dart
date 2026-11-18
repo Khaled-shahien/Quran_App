@@ -1,3 +1,4 @@
+import 'package:sakina_app/l10n/localization.dart';
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
@@ -123,6 +124,8 @@ Future<void> handleRescheduleAlarms({
     final SharedPreferences prefs = loaded =
         await (preferences ?? SharedPreferences.getInstance)();
     await prefs.reload();
+    // Notifications are worded in the user's language here too.
+    AppLanguage.load(prefs);
     final int nowMs = (now ?? DateTime.now)().millisecondsSinceEpoch;
     final int lastRunMs = prefs.getInt(kLastBackgroundRescheduleAtMsKey) ?? 0;
 

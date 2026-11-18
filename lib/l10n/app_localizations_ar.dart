@@ -3808,4 +3808,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String hadithLibraryAllIn(String count) {
     return 'كل أحاديث هذا الباب ($count)';
   }
+
+  @override
+  String get appLanguageTitle => 'لغة التطبيق';
+
+  @override
+  String get appLanguageHelp =>
+      'تتغير نصوص الواجهة فقط؛ تبقى نصوص القرآن والأذكار والأحاديث بالعربية.';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
 }

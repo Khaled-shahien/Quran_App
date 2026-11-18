@@ -160,7 +160,7 @@ class _QuranScreenState extends State<_QuranScreenContent> {
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection: Directionality.of(context),
         child: CustomScrollView(
           physics: const BouncingScrollPhysics(),
           slivers: [

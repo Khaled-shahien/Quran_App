@@ -132,23 +132,6 @@ extension _HomeDrawerLists on _HomeScreenState {
           },
         ),
         _buildMoreMenuItem(
-          title: appL10n.homeScreenMessage49,
-          leadingIcon: Icon(Icons.language_rounded, color: iconColor),
-          onTap: () => showDialog<void>(
-            context: context,
-            builder: (dialogContext) => AlertDialog(
-              title: Text(appL10n.homeScreenMessage50),
-              content: Text(appL10n.homeScreenMessage51),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(dialogContext),
-                  child: Text(appL10n.appStringsMessage8),
-                ),
-              ],
-            ),
-          ),
-        ),
-        _buildMoreMenuItem(
           title: appL10n.homeScreenMessage52,
           leadingIcon: Icon(Icons.mail_outline_rounded, color: iconColor),
           onTap: showComingSoon,

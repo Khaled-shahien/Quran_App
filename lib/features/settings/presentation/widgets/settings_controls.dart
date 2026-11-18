@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/settings/presentation/providers/language_controller.dart';
 import 'package:sakina_app/features/practice_log/domain/weekly_reflection.dart';
 import 'package:sakina_app/features/settings/presentation/providers/simple_mode_controller.dart';
 import 'package:sakina_app/features/prayers/presentation/widgets/iqama_sheet.dart';
@@ -334,6 +335,41 @@ class TextSizePreference extends StatelessWidget {
         ],
         onChanged: (value) {
           if (value != null) controller.setSize(value);
+        },
+      ),
+    );
+  }
+}
+
+/// The interface language. Each language is named in itself.
+class LanguagePreference extends StatelessWidget {
+  const LanguagePreference({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = context.watch<LanguageController?>();
+    if (controller == null) return const SizedBox.shrink();
+    final l10n = l10nOf(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      child: DropdownButtonFormField<String>(
+        key: const Key('app-language'),
+        isExpanded: true,
+        initialValue: controller.code,
+        decoration: InputDecoration(
+          labelText: l10n.appLanguageTitle,
+          helperText: l10n.appLanguageHelp,
+          helperMaxLines: 2,
+        ),
+        items: [
+          DropdownMenuItem(value: 'ar', child: Text(l10n.languageArabic)),
+          DropdownMenuItem(value: 'en', child: Text(l10n.languageEnglish)),
+        ],
+        onChanged: (code) {
+          if (code != null) controller.setLanguage(code);
         },
       ),
     );

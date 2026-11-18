@@ -33,7 +33,7 @@ class AzkarScreen extends StatelessWidget {
       slivers: [
         // The screen reads right-to-left wherever it is shown.
         Directionality(
-          textDirection: TextDirection.rtl,
+          textDirection: Directionality.of(context),
           child: SliverMainAxisGroup(
             slivers: [
               SliverPadding(
