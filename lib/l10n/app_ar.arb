@@ -4099,5 +4099,57 @@
   "hifzRevealAll": "أظهر الصفحة كلها",
   "hifzRemembered": "تذكّرتها",
   "hifzStumbled": "تعثّرت",
-  "hifzOpenInMushaf": "افتح في المصحف"
+  "hifzOpenInMushaf": "افتح في المصحف",
+  "recitationListeningTitle": "خيارات الاستماع",
+  "recitationAutoNext": "انتقل إلى السورة التالية تلقائيًا",
+  "recitationAyahRepeat": "كرّر كل آية",
+  "recitationAyahRepeatOnce": "مرة واحدة",
+  "recitationAyahRepeatTimes": "{times} مرات",
+  "@recitationAyahRepeatTimes": {
+    "placeholders": {
+      "times": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationSleepTitle": "إيقاف بعد",
+  "recitationSleepMinutes": "{minutes} دقيقة",
+  "@recitationSleepMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationSleepSurahEnd": "نهاية السورة",
+  "recitationSleepAt": "يتوقف الساعة {time}",
+  "@recitationSleepAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "recitationSleepAtSurahEnd": "يتوقف عند نهاية السورة",
+  "recitationSleepCancel": "إلغاء المؤقت",
+  "listenModeTitle": "وضع الاستماع الميسّر",
+  "listenModeHelp": "اسحب يمينًا أو يسارًا للآية التالية أو السابقة. مع قارئ الشاشة: اسحب لأعلى أو لأسفل على منطقة الآية.",
+  "listenModeChooseSurah": "اختر السورة",
+  "listenModeNowPlaying": "{surah}، الآية {ayah}",
+  "@listenModeNowPlaying": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "String"
+      }
+    }
+  },
+  "listenModeNothing": "لم يبدأ الاستماع بعد",
+  "listenModePrevious": "الآية السابقة",
+  "listenModeNext": "الآية التالية",
+  "listenModePlay": "تشغيل",
+  "listenModePause": "إيقاف مؤقت",
+  "listenModeLoading": "جارٍ التحميل…"
 }

@@ -6023,6 +6023,132 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'افتح في المصحف'**
   String get hifzOpenInMushaf;
+
+  /// No description provided for @recitationListeningTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات الاستماع'**
+  String get recitationListeningTitle;
+
+  /// No description provided for @recitationAutoNext.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتقل إلى السورة التالية تلقائيًا'**
+  String get recitationAutoNext;
+
+  /// No description provided for @recitationAyahRepeat.
+  ///
+  /// In ar, this message translates to:
+  /// **'كرّر كل آية'**
+  String get recitationAyahRepeat;
+
+  /// No description provided for @recitationAyahRepeatOnce.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرة واحدة'**
+  String get recitationAyahRepeatOnce;
+
+  /// No description provided for @recitationAyahRepeatTimes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{times} مرات'**
+  String recitationAyahRepeatTimes(String times);
+
+  /// No description provided for @recitationSleepTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف بعد'**
+  String get recitationSleepTitle;
+
+  /// No description provided for @recitationSleepMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{minutes} دقيقة'**
+  String recitationSleepMinutes(String minutes);
+
+  /// No description provided for @recitationSleepSurahEnd.
+  ///
+  /// In ar, this message translates to:
+  /// **'نهاية السورة'**
+  String get recitationSleepSurahEnd;
+
+  /// No description provided for @recitationSleepAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتوقف الساعة {time}'**
+  String recitationSleepAt(String time);
+
+  /// No description provided for @recitationSleepAtSurahEnd.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتوقف عند نهاية السورة'**
+  String get recitationSleepAtSurahEnd;
+
+  /// No description provided for @recitationSleepCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء المؤقت'**
+  String get recitationSleepCancel;
+
+  /// No description provided for @listenModeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وضع الاستماع الميسّر'**
+  String get listenModeTitle;
+
+  /// No description provided for @listenModeHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسحب يمينًا أو يسارًا للآية التالية أو السابقة. مع قارئ الشاشة: اسحب لأعلى أو لأسفل على منطقة الآية.'**
+  String get listenModeHelp;
+
+  /// No description provided for @listenModeChooseSurah.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر السورة'**
+  String get listenModeChooseSurah;
+
+  /// No description provided for @listenModeNowPlaying.
+  ///
+  /// In ar, this message translates to:
+  /// **'{surah}، الآية {ayah}'**
+  String listenModeNowPlaying(String surah, String ayah);
+
+  /// No description provided for @listenModeNothing.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يبدأ الاستماع بعد'**
+  String get listenModeNothing;
+
+  /// No description provided for @listenModePrevious.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآية السابقة'**
+  String get listenModePrevious;
+
+  /// No description provided for @listenModeNext.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآية التالية'**
+  String get listenModeNext;
+
+  /// No description provided for @listenModePlay.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشغيل'**
+  String get listenModePlay;
+
+  /// No description provided for @listenModePause.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف مؤقت'**
+  String get listenModePause;
+
+  /// No description provided for @listenModeLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التحميل…'**
+  String get listenModeLoading;
 }
 
 class _AppLocalizationsDelegate

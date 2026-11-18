@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sakina_app/features/recitation/presentation/screens/recitation_listen_screen.dart';
 import 'package:sakina_app/features/quran/data/repositories/hifz_repository.dart';
 import 'package:sakina_app/features/quran/presentation/screens/hifz_screens.dart';
 import 'package:sakina_app/features/practice_log/data/practice_log_repository.dart';
@@ -204,6 +205,25 @@ void main() {
                 RecitationDownloadsController(repository: repository),
           ),
         ],
+      );
+      await expectAccessible(tester);
+      semantics.dispose();
+    });
+    testWidgets('listening mode (${look.$1})', (tester) async {
+      final semantics = tester.ensureSemantics();
+      final controller = RecitationController(
+        repository: FakeRepository(),
+        engine: FakeEngine(),
+        preferences: prefs,
+        surahName: (s) => 'سورة $s',
+      );
+      await controller.initialize();
+      await pumpAudited(
+        tester,
+        const RecitationListenScreen(),
+        theme: look.$2,
+        textScale: look.$3,
+        providers: [ChangeNotifierProvider.value(value: controller)],
       );
       await expectAccessible(tester);
       semantics.dispose();

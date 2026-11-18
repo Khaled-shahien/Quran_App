@@ -37,6 +37,11 @@ class _RecitationScreenState extends State<RecitationScreen> {
       title: l10n.recitationTitle,
       actions: [
         IconButton(
+          tooltip: l10n.listenModeTitle,
+          icon: const Icon(Icons.hearing_rounded),
+          onPressed: () => context.push('/recitation/listen'),
+        ),
+        IconButton(
           tooltip: l10n.recitationManageDownloads,
           icon: const Icon(Icons.download_done_rounded),
           onPressed: () => context.push('/recitation/downloads'),

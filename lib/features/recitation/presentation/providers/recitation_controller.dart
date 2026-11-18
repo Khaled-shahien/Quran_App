@@ -41,6 +41,11 @@ class RecitationController extends ChangeNotifier {
     ]);
     final speed = _prefs.getDouble(_speedKey);
     if (speed != null && speeds.contains(speed)) _speed = speed;
+    _autoNext = _prefs.getBool(_autoNextKey) ?? false;
+    final ayahRepeat = _prefs.getInt(_ayahRepeatKey);
+    if (ayahRepeat != null && ayahRepeatOptions.contains(ayahRepeat)) {
+      _ayahRepeat = ayahRepeat;
+    }
     final surah = _prefs.getInt(_surahKey);
     final ayah = _prefs.getInt(_ayahKey);
     if (surah != null && surah >= 1 && surah <= 114) {
@@ -55,6 +60,74 @@ class RecitationController extends ChangeNotifier {
   static const String _speedKey = 'recitation_speed';
   static const String _surahKey = 'recitation_last_surah';
   static const String _ayahKey = 'recitation_last_ayah';
+  static const String _autoNextKey = 'recitation_auto_next';
+  static const String _ayahRepeatKey = 'recitation_ayah_repeat';
+
+  /// Times each ayah is heard; 1 is no repetition.
+  static const List<int> ayahRepeatOptions = [1, 2, 3, 5, 7, 10];
+
+  /// Sleep timer lengths in minutes.
+  static const List<int> sleepOptions = [5, 10, 15, 30, 45, 60];
+
+  bool _autoNext = false;
+  int _ayahRepeat = 1;
+  int _ayahPassesDone = 0;
+  Timer? _sleepTimer;
+  DateTime? _sleepAt;
+  bool _sleepAtSurahEnd = false;
+
+  /// Plays the next surah when one ends.
+  bool get autoNext => _autoNext;
+  int get ayahRepeat => _ayahRepeat;
+
+  /// When the sleep timer pauses playback; null when not set.
+  DateTime? get sleepAt => _sleepAt;
+
+  /// Playback pauses when the current surah ends.
+  bool get sleepAtSurahEnd => _sleepAtSurahEnd;
+
+  /// The display name of [surah].
+  String surahName(int surah) => _surahName(surah);
+
+  Future<void> setAutoNext(bool on) async {
+    _autoNext = on;
+    await _prefs.setBool(_autoNextKey, on);
+    _notify();
+  }
+
+  Future<void> setAyahRepeat(int times) async {
+    if (!ayahRepeatOptions.contains(times)) return;
+    _ayahRepeat = times;
+    _ayahPassesDone = 0;
+    await _prefs.setInt(_ayahRepeatKey, times);
+    _notify();
+  }
+
+  /// Pauses after [minutes]; null cancels the timer (and the end-of-surah
+  /// stop).
+  void setSleepTimer(int? minutes) {
+    _sleepTimer?.cancel();
+    _sleepTimer = null;
+    _sleepAt = null;
+    _sleepAtSurahEnd = false;
+    if (minutes != null && minutes > 0) {
+      _sleepAt = DateTime.now().add(Duration(minutes: minutes));
+      _sleepTimer = Timer(Duration(minutes: minutes), () {
+        _sleepTimer = null;
+        _sleepAt = null;
+        unawaited(_engine.pause());
+        _notify();
+      });
+    }
+    _notify();
+  }
+
+  /// Pauses when the current surah ends, even with [autoNext] on.
+  void sleepAtEndOfSurah() {
+    setSleepTimer(null);
+    _sleepAtSurahEnd = true;
+    _notify();
+  }
 
   final RecitationRepository _repository;
   final RecitationAudioEngine _engine;
@@ -197,6 +270,7 @@ class RecitationController extends ChangeNotifier {
     final timing = _chapter?.timingOf(ayah);
     if (timing == null) return;
     _currentAyah = ayah;
+    _ayahPassesDone = 0;
     _notify();
     await _engine.seek(timing.from);
   }
@@ -287,6 +361,19 @@ class RecitationController extends ChangeNotifier {
     }
     final ayah = chapter.ayahAt(position);
     if (ayah != null && ayah != _currentAyah) {
+      final previous = _currentAyah;
+      // Each ayah heard [ayahRepeat] times before moving on.
+      if (repeat == null &&
+          _ayahRepeat > 1 &&
+          previous != null &&
+          ayah == previous + 1) {
+        if (_ayahPassesDone < _ayahRepeat - 1) {
+          _ayahPassesDone++;
+          unawaited(_engine.seek(chapter.timingOf(previous)!.from));
+          return;
+        }
+        _ayahPassesDone = 0;
+      }
       _currentAyah = ayah;
       _remember(chapter.surah, ayah);
       _notify();
@@ -325,9 +412,26 @@ class RecitationController extends ChangeNotifier {
             : RecitationStatus.paused;
         _notify();
       case EngineStatus.completed:
+        final chapter = _chapter;
+        final last = _currentAyah;
         if (_repeat != null) {
           _completeRepeatPass();
+        } else if (chapter != null &&
+            last != null &&
+            _ayahRepeat > 1 &&
+            _ayahPassesDone < _ayahRepeat - 1) {
+          // The last ayah's repetitions.
+          _ayahPassesDone++;
+          unawaited(_engine.seek(chapter.timingOf(last)!.from));
+          unawaited(_engine.play());
+        } else if (chapter != null &&
+            _autoNext &&
+            !_sleepAtSurahEnd &&
+            chapter.surah < 114) {
+          _ayahPassesDone = 0;
+          unawaited(playSurah(chapter.surah + 1));
         } else {
+          _sleepAtSurahEnd = false;
           _status = RecitationStatus.paused;
           _notify();
         }
@@ -393,6 +497,7 @@ class RecitationController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _sleepTimer?.cancel();
     _disposed = true;
     for (final s in _subscriptions) {
       unawaited(s.cancel());

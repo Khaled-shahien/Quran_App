@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/recitation/presentation/screens/recitation_listen_screen.dart';
 import 'package:sakina_app/features/quran/presentation/screens/hifz_screens.dart';
 import 'package:sakina_app/features/practice_log/presentation/practice_log_screen.dart';
 import 'package:sakina_app/features/calendar/presentation/hijri_calendar_screen.dart';
@@ -157,6 +158,11 @@ final GoRouter appRouter = GoRouter(
           ),
         );
       },
+    ),
+    GoRoute(
+      path: '/recitation/listen',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const RecitationListenScreen()),
     ),
     GoRoute(
       path: '/quran/hifz',

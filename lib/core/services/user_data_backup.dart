@@ -79,6 +79,7 @@ class UserDataBackup {
     // Prayer and fasting log
     'practice_excused_mode', 'fasting_qada_base',
     'wird_after_prayers', 'iqama_alert_minutes',
+    'recitation_auto_next', 'recitation_ayah_repeat',
   };
 
   /// Families of keys with a variable suffix.

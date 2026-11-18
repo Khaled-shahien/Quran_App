@@ -3386,4 +3386,76 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get hifzOpenInMushaf => 'افتح في المصحف';
+
+  @override
+  String get recitationListeningTitle => 'خيارات الاستماع';
+
+  @override
+  String get recitationAutoNext => 'انتقل إلى السورة التالية تلقائيًا';
+
+  @override
+  String get recitationAyahRepeat => 'كرّر كل آية';
+
+  @override
+  String get recitationAyahRepeatOnce => 'مرة واحدة';
+
+  @override
+  String recitationAyahRepeatTimes(String times) {
+    return '$times مرات';
+  }
+
+  @override
+  String get recitationSleepTitle => 'إيقاف بعد';
+
+  @override
+  String recitationSleepMinutes(String minutes) {
+    return '$minutes دقيقة';
+  }
+
+  @override
+  String get recitationSleepSurahEnd => 'نهاية السورة';
+
+  @override
+  String recitationSleepAt(String time) {
+    return 'يتوقف الساعة $time';
+  }
+
+  @override
+  String get recitationSleepAtSurahEnd => 'يتوقف عند نهاية السورة';
+
+  @override
+  String get recitationSleepCancel => 'إلغاء المؤقت';
+
+  @override
+  String get listenModeTitle => 'وضع الاستماع الميسّر';
+
+  @override
+  String get listenModeHelp =>
+      'اسحب يمينًا أو يسارًا للآية التالية أو السابقة. مع قارئ الشاشة: اسحب لأعلى أو لأسفل على منطقة الآية.';
+
+  @override
+  String get listenModeChooseSurah => 'اختر السورة';
+
+  @override
+  String listenModeNowPlaying(String surah, String ayah) {
+    return '$surah، الآية $ayah';
+  }
+
+  @override
+  String get listenModeNothing => 'لم يبدأ الاستماع بعد';
+
+  @override
+  String get listenModePrevious => 'الآية السابقة';
+
+  @override
+  String get listenModeNext => 'الآية التالية';
+
+  @override
+  String get listenModePlay => 'تشغيل';
+
+  @override
+  String get listenModePause => 'إيقاف مؤقت';
+
+  @override
+  String get listenModeLoading => 'جارٍ التحميل…';
 }

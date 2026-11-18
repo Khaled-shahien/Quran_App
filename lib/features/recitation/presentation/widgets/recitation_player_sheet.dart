@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/recitation/presentation/widgets/recitation_listening_options.dart';
 import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'package:sakina_app/core/theme/app_motion.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
@@ -163,6 +164,8 @@ class _RecitationPlayerSheetState extends State<RecitationPlayerSheet> {
                 ),
               ],
             ],
+            const SizedBox(height: AppSpacing.lg),
+            const RecitationListeningOptions(),
             const SizedBox(height: AppSpacing.md),
             Text(
               l10n.recitationSource,
