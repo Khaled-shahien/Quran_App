@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/quran/data/repositories/hifz_repository.dart';
 import 'package:sakina_app/features/practice_log/data/practice_log_repository.dart';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -63,6 +64,7 @@ class MyDataPreferences extends StatelessWidget {
         library: VerseLibraryRepository(GetIt.instance.getAsync<AppDatabase>),
         otherTables: [
           PracticeLogRepository(GetIt.instance.getAsync<AppDatabase>),
+          HifzRepository(GetIt.instance.getAsync<AppDatabase>),
         ],
       );
 

@@ -4037,5 +4037,67 @@
         "type": "String"
       }
     }
-  }
+  },
+  "hifzTitle": "مراجعة الحفظ",
+  "hifzSummary": "حفظتَ {pages} صفحة، وللمراجعة اليوم {due}",
+  "@hifzSummary": {
+    "placeholders": {
+      "pages": {
+        "type": "String"
+      },
+      "due": {
+        "type": "String"
+      }
+    }
+  },
+  "hifzExplain": "تُراجَع كل صفحة بعد يوم، ثم ثلاثة أيام، ثم أسبوع، ثم أسبوعين، ثم شهر. وإن تعثّرت فيها عادت إلى البداية.",
+  "hifzEmpty": "لم تُضِف صفحات بعد. أضف ما تحفظه لتظهر مراجعته هنا.",
+  "hifzAdd": "أضف صفحات حفظتها",
+  "hifzAddFrom": "من الصفحة",
+  "hifzAddTo": "إلى الصفحة (اختياري)",
+  "hifzAddInvalid": "أدخل صفحات بين ١ و٦٠٤",
+  "hifzAddConfirm": "أضف",
+  "hifzDueTitle": "للمراجعة اليوم",
+  "hifzNothingDue": "لا مراجعة اليوم.",
+  "hifzAllTitle": "كل ما حفظت",
+  "hifzPageLine": "الصفحة {page} · {surah}",
+  "@hifzPageLine": {
+    "placeholders": {
+      "page": {
+        "type": "String"
+      },
+      "surah": {
+        "type": "String"
+      }
+    }
+  },
+  "hifzNextReview": "المراجعة القادمة {date}",
+  "@hifzNextReview": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "hifzRemove": "إزالة من المحفوظ",
+  "hifzReviewTitle": "مراجعة الصفحة {page}",
+  "@hifzReviewTitle": {
+    "placeholders": {
+      "page": {
+        "type": "String"
+      }
+    }
+  },
+  "hifzRevealAyah": "اضغط لإظهار الآية {number}",
+  "@hifzRevealAyah": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "hifzRevealAll": "أظهر الصفحة كلها",
+  "hifzRemembered": "تذكّرتها",
+  "hifzStumbled": "تعثّرت",
+  "hifzOpenInMushaf": "افتح في المصحف"
 }

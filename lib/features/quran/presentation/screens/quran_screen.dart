@@ -173,6 +173,11 @@ class _QuranScreenState extends State<_QuranScreenContent> {
                   icon: const Icon(Icons.bookmarks_outlined),
                   onPressed: () => context.push('/quran/saved'),
                 ),
+                IconButton(
+                  tooltip: l10nOf(context).hifzTitle,
+                  icon: const Icon(Icons.psychology_alt_outlined),
+                  onPressed: () => context.push('/quran/hifz'),
+                ),
                 if (!_isLoading && _error == null)
                   IconButton(
                     tooltip: l10nOf(context).quranGoTo,

@@ -5897,6 +5897,132 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'صلاة {prayer} في مسجدك الساعة {time}'**
   String iqamaNotificationBody(String prayer, String time);
+
+  /// No description provided for @hifzTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة الحفظ'**
+  String get hifzTitle;
+
+  /// No description provided for @hifzSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظتَ {pages} صفحة، وللمراجعة اليوم {due}'**
+  String hifzSummary(String pages, String due);
+
+  /// No description provided for @hifzExplain.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُراجَع كل صفحة بعد يوم، ثم ثلاثة أيام، ثم أسبوع، ثم أسبوعين، ثم شهر. وإن تعثّرت فيها عادت إلى البداية.'**
+  String get hifzExplain;
+
+  /// No description provided for @hifzEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُضِف صفحات بعد. أضف ما تحفظه لتظهر مراجعته هنا.'**
+  String get hifzEmpty;
+
+  /// No description provided for @hifzAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف صفحات حفظتها'**
+  String get hifzAdd;
+
+  /// No description provided for @hifzAddFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من الصفحة'**
+  String get hifzAddFrom;
+
+  /// No description provided for @hifzAddTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى الصفحة (اختياري)'**
+  String get hifzAddTo;
+
+  /// No description provided for @hifzAddInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل صفحات بين ١ و٦٠٤'**
+  String get hifzAddInvalid;
+
+  /// No description provided for @hifzAddConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف'**
+  String get hifzAddConfirm;
+
+  /// No description provided for @hifzDueTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'للمراجعة اليوم'**
+  String get hifzDueTitle;
+
+  /// No description provided for @hifzNothingDue.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا مراجعة اليوم.'**
+  String get hifzNothingDue;
+
+  /// No description provided for @hifzAllTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل ما حفظت'**
+  String get hifzAllTitle;
+
+  /// No description provided for @hifzPageLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصفحة {page} · {surah}'**
+  String hifzPageLine(String page, String surah);
+
+  /// No description provided for @hifzNextReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'المراجعة القادمة {date}'**
+  String hifzNextReview(String date);
+
+  /// No description provided for @hifzRemove.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة من المحفوظ'**
+  String get hifzRemove;
+
+  /// No description provided for @hifzReviewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة الصفحة {page}'**
+  String hifzReviewTitle(String page);
+
+  /// No description provided for @hifzRevealAyah.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط لإظهار الآية {number}'**
+  String hifzRevealAyah(String number);
+
+  /// No description provided for @hifzRevealAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'أظهر الصفحة كلها'**
+  String get hifzRevealAll;
+
+  /// No description provided for @hifzRemembered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكّرتها'**
+  String get hifzRemembered;
+
+  /// No description provided for @hifzStumbled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعثّرت'**
+  String get hifzStumbled;
+
+  /// No description provided for @hifzOpenInMushaf.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح في المصحف'**
+  String get hifzOpenInMushaf;
 }
 
 class _AppLocalizationsDelegate

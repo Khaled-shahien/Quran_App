@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sakina_app/features/quran/data/repositories/hifz_repository.dart';
+import 'package:sakina_app/features/quran/presentation/screens/hifz_screens.dart';
 import 'package:sakina_app/features/practice_log/data/practice_log_repository.dart';
 import 'package:sakina_app/features/practice_log/presentation/practice_log_screen.dart';
 import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
@@ -358,6 +360,21 @@ void main() {
       semantics.dispose();
     });
 
+    testWidgets('hifz revision (${look.$1})', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await pumpAudited(
+        tester,
+        HifzScreen(repository: _MemoryHifz(), pages: const {}),
+        theme: look.$2,
+        textScale: look.$3,
+        providers: [Provider<SharedPreferences>.value(value: prefs)],
+      );
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      await expectAccessible(tester);
+      semantics.dispose();
+    });
+
     testWidgets('khatma duration (${look.$1})', (tester) async {
       final semantics = tester.ensureSemantics();
       await pumpAudited(
@@ -403,4 +420,12 @@ class _MemoryLog extends PracticeLogRepository {
 
   @override
   Future<Map<String, FastLogStatus>> allFasts() async => {};
+}
+
+/// Nothing memorised yet, without a database.
+class _MemoryHifz extends HifzRepository {
+  _MemoryHifz() : super(() => throw UnimplementedError());
+
+  @override
+  Future<List<HifzPage>> pages() async => const [];
 }

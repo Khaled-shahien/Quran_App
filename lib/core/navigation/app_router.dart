@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/quran/presentation/screens/hifz_screens.dart';
 import 'package:sakina_app/features/practice_log/presentation/practice_log_screen.dart';
 import 'package:sakina_app/features/calendar/presentation/hijri_calendar_screen.dart';
 import 'package:sakina_app/features/duas/presentation/screens/hisn_screens.dart';
@@ -156,6 +157,10 @@ final GoRouter appRouter = GoRouter(
           ),
         );
       },
+    ),
+    GoRoute(
+      path: '/quran/hifz',
+      pageBuilder: (context, state) => _fadePage(state, const HifzScreen()),
     ),
     GoRoute(
       path: '/prayers/log',

@@ -54,4 +54,18 @@ const List<List<String>> databaseMigrations = <List<String>>[
     )
     ''',
   ],
+  // 2 → 3: memorised pages and their review schedule (hifz).
+  <String>[
+    '''
+    CREATE TABLE hifz_pages (
+      page INTEGER NOT NULL PRIMARY KEY CHECK (page BETWEEN 1 AND 604),
+      step INTEGER NOT NULL DEFAULT 0 CHECK (step BETWEEN 0 AND 4),
+      due_day TEXT NOT NULL CHECK (length(due_day) = 10),
+      reviews INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL
+    )
+    ''',
+    'CREATE INDEX hifz_pages_by_due ON hifz_pages (due_day)',
+  ],
 ];

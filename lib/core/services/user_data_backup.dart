@@ -96,6 +96,7 @@ class UserDataBackup {
     'verse_notes',
     'prayer_log',
     'fasting_log',
+    'hifz_pages',
   ];
 
   static bool isUserKey(String key) =>

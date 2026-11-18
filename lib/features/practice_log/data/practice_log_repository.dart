@@ -2,6 +2,9 @@ import 'package:sqflite/sqflite.dart';
 
 import '../../../core/database/app_database.dart';
 import '../../../core/database/user_data_tables.dart';
+import '../../../core/utils/calendar_day.dart';
+
+export '../../../core/utils/calendar_day.dart';
 import '../../prayers/domain/entities/adhan_settings.dart';
 
 /// How a prayer went, as the user marks it. Nothing is inferred.
@@ -10,19 +13,6 @@ enum PrayerLogStatus { onTime, late, missed, excused }
 /// A day of fasting: kept (Ramadan or voluntary), a make-up fast, not
 /// fasted for a valid excuse, or not fasted.
 enum FastLogStatus { fasted, qada, excused, missed }
-
-/// The local calendar day of [date], as stored.
-String logDay(DateTime date) =>
-    '${date.year.toString().padLeft(4, '0')}-'
-    '${date.month.toString().padLeft(2, '0')}-'
-    '${date.day.toString().padLeft(2, '0')}';
-
-DateTime? parseLogDay(String day) {
-  final m = RegExp(r'^(\d{4})-(\d{2})-(\d{2})$').firstMatch(day);
-  if (m == null) return null;
-  final d = DateTime(int.parse(m[1]!), int.parse(m[2]!), int.parse(m[3]!));
-  return logDay(d) == day ? d : null;
-}
 
 T? _byName<T extends Enum>(List<T> values, Object? name) {
   for (final v in values) {

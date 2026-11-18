@@ -3312,4 +3312,78 @@ class AppLocalizationsAr extends AppLocalizations {
   String iqamaNotificationBody(String prayer, String time) {
     return 'صلاة $prayer في مسجدك الساعة $time';
   }
+
+  @override
+  String get hifzTitle => 'مراجعة الحفظ';
+
+  @override
+  String hifzSummary(String pages, String due) {
+    return 'حفظتَ $pages صفحة، وللمراجعة اليوم $due';
+  }
+
+  @override
+  String get hifzExplain =>
+      'تُراجَع كل صفحة بعد يوم، ثم ثلاثة أيام، ثم أسبوع، ثم أسبوعين، ثم شهر. وإن تعثّرت فيها عادت إلى البداية.';
+
+  @override
+  String get hifzEmpty => 'لم تُضِف صفحات بعد. أضف ما تحفظه لتظهر مراجعته هنا.';
+
+  @override
+  String get hifzAdd => 'أضف صفحات حفظتها';
+
+  @override
+  String get hifzAddFrom => 'من الصفحة';
+
+  @override
+  String get hifzAddTo => 'إلى الصفحة (اختياري)';
+
+  @override
+  String get hifzAddInvalid => 'أدخل صفحات بين ١ و٦٠٤';
+
+  @override
+  String get hifzAddConfirm => 'أضف';
+
+  @override
+  String get hifzDueTitle => 'للمراجعة اليوم';
+
+  @override
+  String get hifzNothingDue => 'لا مراجعة اليوم.';
+
+  @override
+  String get hifzAllTitle => 'كل ما حفظت';
+
+  @override
+  String hifzPageLine(String page, String surah) {
+    return 'الصفحة $page · $surah';
+  }
+
+  @override
+  String hifzNextReview(String date) {
+    return 'المراجعة القادمة $date';
+  }
+
+  @override
+  String get hifzRemove => 'إزالة من المحفوظ';
+
+  @override
+  String hifzReviewTitle(String page) {
+    return 'مراجعة الصفحة $page';
+  }
+
+  @override
+  String hifzRevealAyah(String number) {
+    return 'اضغط لإظهار الآية $number';
+  }
+
+  @override
+  String get hifzRevealAll => 'أظهر الصفحة كلها';
+
+  @override
+  String get hifzRemembered => 'تذكّرتها';
+
+  @override
+  String get hifzStumbled => 'تعثّرت';
+
+  @override
+  String get hifzOpenInMushaf => 'افتح في المصحف';
 }
