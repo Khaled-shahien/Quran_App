@@ -39,6 +39,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   const DesignPreference(),
                   const ThemePreference(),
                   const TextSizePreference(),
+                  const SimpleModePreference(),
                   const DigitStylePreference(),
                   const HijriAdjustmentPreference(),
                   ReadingPreferencesPanel(preferences: settings.prefs),

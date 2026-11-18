@@ -4187,5 +4187,23 @@
   "hadithReferences": "المراجع",
   "hadithSourceTitle": "المصدر",
   "hadithSource": "نص الأحاديث وتخريجها ودرجتها وشرحها وفوائدها من «موسوعة الأحاديث النبوية» ‏(hadeethenc.com)، منقولة كما نُشرت.",
-  "hadithSearch": "ابحث في الأحاديث وشروحها"
+  "hadithSearch": "ابحث في الأحاديث وشروحها",
+  "calmMinuteShow": "معنى الآية في دقيقة",
+  "calmMinuteHide": "إخفاء المعنى",
+  "travelNoticeTitle": "أنت الآن في {place}",
+  "@travelNoticeTitle": {
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "travelNoticeBody": "حُدّثت مواقيت الصلاة وتنبيهاتها للمكان الجديد.",
+  "travelNoticeDismiss": "حسنًا",
+  "simpleModeTitle": "الوضع المبسّط",
+  "simpleModeHelp": "شاشة رئيسية بأربع خانات كبيرة: القرآن والمواقيت والأذكار والقبلة، مع خط أكبر.",
+  "simpleHomeQuran": "القرآن",
+  "simpleHomePrayers": "مواقيت الصلاة",
+  "simpleHomeAdhkar": "الأذكار",
+  "simpleHomeQibla": "القبلة"
 }

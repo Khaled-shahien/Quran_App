@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/quran/data/data_sources/tafsir_asset.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
@@ -22,12 +23,33 @@ class DailyVerseSectionWidget extends StatefulWidget {
 
 class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
   late Map<String, String> _selectedVerse;
+  late ({int surah, int ayah}) _reference;
+
+  /// The day's verse explained in a few lines (al-Muyassar, offline).
+  String? _meaning;
+  bool _showMeaning = false;
+
+  Future<void> _toggleMeaning() async {
+    if (_showMeaning) {
+      setState(() => _showMeaning = false);
+      return;
+    }
+    final meaning =
+        _meaning ?? await TafsirAsset.of(_reference.surah, _reference.ayah);
+    if (!mounted) return;
+    setState(() {
+      _meaning = meaning;
+      _showMeaning = meaning != null;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     // One verse per calendar day, so it does not change on every visit.
-    _selectedVerse = dailyVerses[dailyVerseIndex(DateTime.now())];
+    final int index = dailyVerseIndex(DateTime.now());
+    _selectedVerse = dailyVerses[index];
+    _reference = dailyVerseReferences[index];
   }
 
   @override
@@ -140,6 +162,34 @@ class _DailyVerseSectionWidgetState extends State<DailyVerseSectionWidget> {
                                       color: decor.onFeatureMuted,
                                     ),
                                   ),
+                                  const SizedBox(height: AppSpacing.sm),
+                                  TextButton.icon(
+                                    key: const Key('daily-verse-meaning'),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: decor.onFeature,
+                                    ),
+                                    icon: Icon(
+                                      _showMeaning
+                                          ? Icons.expand_less_rounded
+                                          : Icons.lightbulb_outline_rounded,
+                                    ),
+                                    label: Text(
+                                      _showMeaning
+                                          ? l10nOf(context).calmMinuteHide
+                                          : l10nOf(context).calmMinuteShow,
+                                    ),
+                                    onPressed: _toggleMeaning,
+                                  ),
+                                  if (_showMeaning && _meaning != null)
+                                    Text(
+                                      _meaning!,
+                                      textAlign: TextAlign.center,
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                            color: decor.onFeature,
+                                            height: 1.8,
+                                          ),
+                                    ),
                                 ],
                               ),
                             ),

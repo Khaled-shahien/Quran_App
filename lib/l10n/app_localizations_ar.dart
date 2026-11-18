@@ -3511,4 +3511,41 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get hadithSearch => 'ابحث في الأحاديث وشروحها';
+
+  @override
+  String get calmMinuteShow => 'معنى الآية في دقيقة';
+
+  @override
+  String get calmMinuteHide => 'إخفاء المعنى';
+
+  @override
+  String travelNoticeTitle(String place) {
+    return 'أنت الآن في $place';
+  }
+
+  @override
+  String get travelNoticeBody =>
+      'حُدّثت مواقيت الصلاة وتنبيهاتها للمكان الجديد.';
+
+  @override
+  String get travelNoticeDismiss => 'حسنًا';
+
+  @override
+  String get simpleModeTitle => 'الوضع المبسّط';
+
+  @override
+  String get simpleModeHelp =>
+      'شاشة رئيسية بأربع خانات كبيرة: القرآن والمواقيت والأذكار والقبلة، مع خط أكبر.';
+
+  @override
+  String get simpleHomeQuran => 'القرآن';
+
+  @override
+  String get simpleHomePrayers => 'مواقيت الصلاة';
+
+  @override
+  String get simpleHomeAdhkar => 'الأذكار';
+
+  @override
+  String get simpleHomeQibla => 'القبلة';
 }

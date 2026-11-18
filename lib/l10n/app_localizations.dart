@@ -6245,6 +6245,72 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ابحث في الأحاديث وشروحها'**
   String get hadithSearch;
+
+  /// No description provided for @calmMinuteShow.
+  ///
+  /// In ar, this message translates to:
+  /// **'معنى الآية في دقيقة'**
+  String get calmMinuteShow;
+
+  /// No description provided for @calmMinuteHide.
+  ///
+  /// In ar, this message translates to:
+  /// **'إخفاء المعنى'**
+  String get calmMinuteHide;
+
+  /// No description provided for @travelNoticeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت الآن في {place}'**
+  String travelNoticeTitle(String place);
+
+  /// No description provided for @travelNoticeBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُدّثت مواقيت الصلاة وتنبيهاتها للمكان الجديد.'**
+  String get travelNoticeBody;
+
+  /// No description provided for @travelNoticeDismiss.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسنًا'**
+  String get travelNoticeDismiss;
+
+  /// No description provided for @simpleModeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوضع المبسّط'**
+  String get simpleModeTitle;
+
+  /// No description provided for @simpleModeHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'شاشة رئيسية بأربع خانات كبيرة: القرآن والمواقيت والأذكار والقبلة، مع خط أكبر.'**
+  String get simpleModeHelp;
+
+  /// No description provided for @simpleHomeQuran.
+  ///
+  /// In ar, this message translates to:
+  /// **'القرآن'**
+  String get simpleHomeQuran;
+
+  /// No description provided for @simpleHomePrayers.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواقيت الصلاة'**
+  String get simpleHomePrayers;
+
+  /// No description provided for @simpleHomeAdhkar.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأذكار'**
+  String get simpleHomeAdhkar;
+
+  /// No description provided for @simpleHomeQibla.
+  ///
+  /// In ar, this message translates to:
+  /// **'القبلة'**
+  String get simpleHomeQibla;
 }
 
 class _AppLocalizationsDelegate

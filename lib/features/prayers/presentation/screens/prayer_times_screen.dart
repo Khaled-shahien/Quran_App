@@ -131,6 +131,34 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
       slivers: [
         // While Android would hold alerts until the screen is turned on.
         const SliverToBoxAdapter(child: ExactAlarmWarningCard()),
+        SliverToBoxAdapter(
+          child: Consumer<PrayerTimesProvider>(
+            builder: (context, provider, _) {
+              final String? place = provider.travelNotice;
+              if (place == null) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  AppSpacing.sm,
+                  AppSpacing.md,
+                  0,
+                ),
+                child: Card(
+                  key: const Key('travel-notice'),
+                  child: ListTile(
+                    leading: const Icon(Icons.flight_land_rounded),
+                    title: Text(l10nOf(context).travelNoticeTitle(place)),
+                    subtitle: Text(l10nOf(context).travelNoticeBody),
+                    trailing: TextButton(
+                      onPressed: provider.dismissTravelNotice,
+                      child: Text(l10nOf(context).travelNoticeDismiss),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
         Consumer<PrayerTimesProvider>(
           builder: (context, provider, child) {
             if (provider.isLoading) {

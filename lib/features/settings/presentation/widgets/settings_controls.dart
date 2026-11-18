@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/settings/presentation/providers/simple_mode_controller.dart';
 import 'package:sakina_app/features/prayers/presentation/widgets/iqama_sheet.dart';
 import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
 import 'package:sakina_app/features/prayers/presentation/prayer_labels.dart';
@@ -334,6 +335,34 @@ class TextSizePreference extends StatelessWidget {
           if (value != null) controller.setSize(value);
         },
       ),
+    );
+  }
+}
+
+/// Simple mode, with larger text turned on the first time.
+class SimpleModePreference extends StatelessWidget {
+  const SimpleModePreference({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+    final simple = context.watch<SimpleModeController?>();
+    if (simple == null) return const SizedBox.shrink();
+    return SwitchListTile(
+      key: const Key('simple-mode'),
+      secondary: const Icon(Icons.grid_view_rounded),
+      title: Text(l10n.simpleModeTitle),
+      subtitle: Text(l10n.simpleModeHelp),
+      isThreeLine: true,
+      value: simple.enabled,
+      onChanged: (on) async {
+        playFeedback(context, FeedbackEvent.toggle);
+        final text = context.read<TextSizeController?>();
+        await simple.setEnabled(on);
+        if (on && text != null && text.size == AppTextSize.normal) {
+          await text.setSize(AppTextSize.large);
+        }
+      },
     );
   }
 }

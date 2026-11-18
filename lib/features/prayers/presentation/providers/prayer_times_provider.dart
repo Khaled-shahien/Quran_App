@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:sakina_app/features/prayers/domain/iqama.dart';
 import 'package:sakina_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
 import 'package:sakina_app/features/prayers/data/services/prayer_widget_data.dart';
@@ -276,6 +277,19 @@ class PrayerTimesProvider extends ChangeNotifier {
 
   /// Shifts calculated times by whole minutes, then recalculates and
   /// reschedules.
+  /// Moves of at least this far count as travel.
+  static const double travelThresholdKm = 50;
+
+  /// The new place after the device location moved by travel, until the
+  /// user dismisses the notice.
+  String? travelNotice;
+
+  void dismissTravelNotice() {
+    if (travelNotice == null) return;
+    travelNotice = null;
+    notifyListeners();
+  }
+
   /// Iqama minutes at the user's mosque (see [IqamaSettings]).
   IqamaSettings get iqama {
     final SharedPreferences? prefs = _preferences;
@@ -563,6 +577,19 @@ class PrayerTimesProvider extends ChangeNotifier {
       _errorMessage = appL10n.prayerTimesProviderMessage7;
       notifyListeners();
       return;
+    }
+    final previous = _selectedCoordinates;
+    if (source == PrayerLocationSource.device &&
+        previous != null &&
+        nextLabel != locationLabel &&
+        travelDistanceKm(
+              previous.latitude,
+              previous.longitude,
+              latitude,
+              longitude,
+            ) >=
+            travelThresholdKm) {
+      travelNotice = nextLabel;
     }
     _selectedCoordinates = (latitude: latitude, longitude: longitude);
     locationLabel = nextLabel;
@@ -1073,4 +1100,16 @@ class NextPrayer {
   final DateTime wallTime;
   final bool isTomorrow;
   final Duration remaining;
+}
+
+/// Great-circle distance in kilometres.
+double travelDistanceKm(double lat1, double lon1, double lat2, double lon2) {
+  const double r = 6371;
+  double rad(double d) => d * pi / 180;
+  final double dLat = rad(lat2 - lat1);
+  final double dLon = rad(lon2 - lon1);
+  final double a =
+      sin(dLat / 2) * sin(dLat / 2) +
+      cos(rad(lat1)) * cos(rad(lat2)) * sin(dLon / 2) * sin(dLon / 2);
+  return 2 * r * asin(min(1, sqrt(a)));
 }

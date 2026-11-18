@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/settings/presentation/providers/simple_mode_controller.dart';
 import 'package:sakina_alarms/sakina_alarms.dart';
 import 'package:sakina_app/features/prayers/domain/after_adhan.dart';
 import 'package:flutter/foundation.dart';
@@ -420,6 +421,9 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
         ),
         ChangeNotifierProvider<DigitStyleController>(
           create: (_) => DigitStyleController(_prefs),
+        ),
+        ChangeNotifierProvider<SimpleModeController>(
+          create: (_) => SimpleModeController(_prefs),
         ),
         ChangeNotifierProvider<AdhanSettingsController>(
           create: (_) => AdhanSettingsController(

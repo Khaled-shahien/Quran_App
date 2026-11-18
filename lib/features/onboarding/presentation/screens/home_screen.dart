@@ -1,3 +1,5 @@
+import 'package:sakina_app/features/settings/presentation/providers/simple_mode_controller.dart';
+import 'package:sakina_app/features/onboarding/presentation/widgets/simple_home.dart';
 import 'package:sakina_app/features/onboarding/presentation/widgets/ramadan_card.dart';
 import 'package:sakina_app/features/onboarding/presentation/widgets/now_card.dart';
 import 'package:sakina_app/core/widgets/empty_state.dart';
@@ -80,6 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool simple =
+        context.watch<SimpleModeController?>()?.enabled ?? false;
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: _buildNavigationDrawer(),
@@ -95,36 +99,40 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: DateCardWidget(),
               ),
             ),
-            const SliverToBoxAdapter(child: RamadanCard()),
-            const SliverToBoxAdapter(child: NowCard()),
-            const SliverToBoxAdapter(
-              child: AnimatedEntrance(
-                delay: Duration(milliseconds: 100),
-                child: CurrentWirdWidget(),
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: AnimatedEntrance(
-                delay: Duration(milliseconds: 180),
-                child: DailyVerseSectionWidget(),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: AnimatedEntrance(
-                delay: const Duration(milliseconds: 260),
-                child: TabSwitcherWidget(
-                  onTabChanged: (index) {
-                    setState(() {
-                      selectedTabIndex = index;
-                    });
-                  },
-                  selectedIndex: selectedTabIndex,
+            if (simple)
+              const SliverToBoxAdapter(child: SimpleHomeTiles())
+            else ...[
+              const SliverToBoxAdapter(child: RamadanCard()),
+              const SliverToBoxAdapter(child: NowCard()),
+              const SliverToBoxAdapter(
+                child: AnimatedEntrance(
+                  delay: Duration(milliseconds: 100),
+                  child: CurrentWirdWidget(),
                 ),
               ),
-            ),
+              const SliverToBoxAdapter(
+                child: AnimatedEntrance(
+                  delay: Duration(milliseconds: 180),
+                  child: DailyVerseSectionWidget(),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: AnimatedEntrance(
+                  delay: const Duration(milliseconds: 260),
+                  child: TabSwitcherWidget(
+                    onTabChanged: (index) {
+                      setState(() {
+                        selectedTabIndex = index;
+                      });
+                    },
+                    selectedIndex: selectedTabIndex,
+                  ),
+                ),
+              ),
 
-            // المحتوى المتغير
-            _buildDynamicContent(),
+              // المحتوى المتغير
+              _buildDynamicContent(),
+            ],
 
             const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xxl)),
           ],
