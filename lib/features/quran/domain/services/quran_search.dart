@@ -18,38 +18,122 @@ class QuranSearchResult {
   final int end;
 }
 
+/// Searches with a one-off index; screens keep a [QuranSearchIndex].
 List<QuranSearchResult> searchQuran(
   Map<int, List<AyahEntity>> source,
   String query,
-) {
-  final needle = normalizeArabicSearch(query).trim();
-  if (needle.isEmpty) return [];
-  final results = <QuranSearchResult>[];
-  for (final surah in source.entries) {
-    for (final ayah in surah.value) {
-      final normalized = normalizeArabicSearch(ayah.text);
-      final match = normalized.indexOf(needle);
-      if (match < 0) continue;
-      final offsets = <int>[];
-      for (var i = 0; i < ayah.text.length; i++) {
-        if (normalizeArabicSearch(ayah.text[i]).isNotEmpty) offsets.add(i);
-      }
-      final endIndex = match + needle.length;
-      results.add(
+) => QuranSearchIndex(source).search(query);
+
+/// How well an ayah matches: the whole word, the start of a word, or
+/// inside a word. Better matches are listed first.
+enum QuranMatchRank { word, wordStart, inside }
+
+/// Normalised text of every ayah, built once, with the position in the
+/// original text of each normalised character (for highlighting).
+class QuranSearchIndex {
+  QuranSearchIndex(Map<int, List<AyahEntity>> source)
+    : _entries = [
+        for (final surah in source.entries)
+          for (final ayah in surah.value) _IndexedAyah.of(surah.key, ayah),
+      ];
+
+  final List<_IndexedAyah> _entries;
+
+  int get length => _entries.length;
+
+  /// Ayahs containing [query] (marks, hamza forms and tatweel ignored),
+  /// whole-word matches first, then in mushaf order.
+  List<QuranSearchResult> search(String query) {
+    final needle = normalizeArabicSearch(query).trim();
+    if (needle.isEmpty) return [];
+    final ranked = <(QuranMatchRank, QuranSearchResult)>[];
+    for (final entry in _entries) {
+      final match = entry.bestMatch(needle);
+      if (match == null) continue;
+      final (rank, at) = match;
+      final end = at + needle.length;
+      ranked.add((
+        rank,
         QuranSearchResult(
-          surah.key,
-          ayah,
-          offsets[match],
-          endIndex < offsets.length ? offsets[endIndex] : ayah.text.length,
+          entry.surah,
+          entry.ayah,
+          entry.offsets[at],
+          end < entry.offsets.length
+              ? entry.offsets[end]
+              : entry.ayah.text.length,
         ),
-      );
+      ));
+    }
+    ranked.sort((a, b) {
+      final rank = a.$1.index.compareTo(b.$1.index);
+      if (rank != 0) return rank;
+      final surah = a.$2.surahNumber.compareTo(b.$2.surahNumber);
+      return surah != 0
+          ? surah
+          : a.$2.ayah.numberInSurah.compareTo(b.$2.ayah.numberInSurah);
+    });
+    return [for (final r in ranked) r.$2];
+  }
+
+  /// The normalised text of each ayah, for tests.
+  Iterable<String> get normalizedTexts => _entries.map((e) => e.normalized);
+}
+
+/// Same rules as [normalizeArabicSearch], one character at a time.
+int? _normalizeUnit(int c) {
+  if ((c >= 0x0610 && c <= 0x061A) ||
+      (c >= 0x064B && c <= 0x065F) ||
+      c == 0x0670 ||
+      (c >= 0x06D6 && c <= 0x06ED) ||
+      c == 0x0640) {
+    return null;
+  }
+  if (c == 0x0623 || c == 0x0625 || c == 0x0622 || c == 0x0671) return 0x0627;
+  if (c == 0x0649) return 0x064A;
+  if (c >= 0x41 && c <= 0x5A) return c + 32;
+  return c;
+}
+
+class _IndexedAyah {
+  _IndexedAyah(this.surah, this.ayah, this.normalized, this.offsets);
+
+  factory _IndexedAyah.of(int surah, AyahEntity ayah) {
+    final buffer = StringBuffer();
+    final offsets = <int>[];
+    final text = ayah.text;
+    for (var i = 0; i < text.length; i++) {
+      final mapped = _normalizeUnit(text.codeUnitAt(i));
+      if (mapped == null) continue;
+      buffer.writeCharCode(mapped);
+      offsets.add(i);
+    }
+    return _IndexedAyah(surah, ayah, buffer.toString(), offsets);
+  }
+
+  final int surah;
+  final AyahEntity ayah;
+  final String normalized;
+  final List<int> offsets;
+
+  static bool _isSpace(String text, int i) =>
+      i < 0 || i >= text.length || text.codeUnitAt(i) == 0x20;
+
+  (QuranMatchRank, int)? bestMatch(String needle) {
+    (QuranMatchRank, int)? best;
+    var from = 0;
+    while (true) {
+      final at = normalized.indexOf(needle, from);
+      if (at < 0) return best;
+      final startsWord = _isSpace(normalized, at - 1);
+      final endsWord = _isSpace(normalized, at + needle.length);
+      final rank = startsWord && endsWord
+          ? QuranMatchRank.word
+          : startsWord
+          ? QuranMatchRank.wordStart
+          : QuranMatchRank.inside;
+      if (best == null || rank.index < best.$1.index) best = (rank, at);
+      if (rank == QuranMatchRank.word) return best;
+      from = at + 1;
     }
   }
-  results.sort((a, b) {
-    final order = a.surahNumber.compareTo(b.surahNumber);
-    return order == 0
-        ? a.ayah.numberInSurah.compareTo(b.ayah.numberInSurah)
-        : order;
-  });
-  return results;
 }

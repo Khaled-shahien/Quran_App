@@ -441,6 +441,21 @@ extension _SurahReaderPage on _SurahDetailsScreenState {
                   unawaited(_copyVerse(verse));
                 },
               ),
+              ListTile(
+                leading: const Icon(Icons.share_outlined),
+                title: Text(l10n.readerVerseShare),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  unawaited(
+                    showShareVerseSheet(
+                      context,
+                      text: verse.text,
+                      surahName: verse.surahName,
+                      ayah: verse.verseNumber,
+                    ),
+                  );
+                },
+              ),
               const SizedBox(height: AppSpacing.sm),
             ],
           ),

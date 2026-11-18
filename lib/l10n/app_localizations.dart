@@ -6149,6 +6149,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'جارٍ التحميل…'**
   String get listenModeLoading;
+
+  /// No description provided for @searchGoToVerse.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتقل إلى {surah}، الآية {ayah}'**
+  String searchGoToVerse(String surah, String ayah);
+
+  /// No description provided for @readerVerseShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة'**
+  String get readerVerseShare;
+
+  /// No description provided for @verseShareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة الآية'**
+  String get verseShareTitle;
+
+  /// No description provided for @verseShareAsImage.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة كصورة'**
+  String get verseShareAsImage;
+
+  /// No description provided for @verseShareAsText.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة كنص'**
+  String get verseShareAsText;
+
+  /// No description provided for @verseShareShowAppName.
+  ///
+  /// In ar, this message translates to:
+  /// **'إظهار اسم التطبيق على الصورة'**
+  String get verseShareShowAppName;
+
+  /// No description provided for @verseShareReference.
+  ///
+  /// In ar, this message translates to:
+  /// **'{surah} · الآية {ayah}'**
+  String verseShareReference(String surah, String ayah);
+
+  /// No description provided for @verseShareFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّرت المشاركة. حاول مرة أخرى.'**
+  String get verseShareFailed;
 }
 
 class _AppLocalizationsDelegate

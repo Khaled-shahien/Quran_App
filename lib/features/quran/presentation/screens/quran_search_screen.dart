@@ -1,3 +1,4 @@
+import '../../domain/services/quran_divisions.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/result/result.dart';
@@ -21,6 +22,9 @@ class QuranSearchScreen extends StatefulWidget {
 
 class _QuranSearchScreenState extends State<QuranSearchScreen> {
   Map<int, List<AyahEntity>>? _source;
+
+  /// Built once when the text loads; every keystroke searches it.
+  QuranSearchIndex? _index;
   List<QuranSearchResult> _results = [];
   List<Map<String, dynamic>> _surahs = [];
   List<Map<String, dynamic>> get _matchingSurahs {
@@ -74,13 +78,47 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
     if (!mounted) return;
     switch (result) {
       case Success(:final value):
+        final index = QuranSearchIndex(value);
         setState(() {
           _source = value;
-          _results = searchQuran(value, _query);
+          _index = index;
+          _results = index.search(_query);
         });
       case Err():
         setState(() => _failed = true);
     }
+  }
+
+  /// "2:255" (or ٢:٢٥٥) typed as a verse reference.
+  QuranGoToVerse? get _verseReference {
+    if (_surahs.isEmpty) return null;
+    final goTo = parseQuranGoTo(_query, (surah) {
+      for (final s in _surahs) {
+        if (s['number'] == surah) {
+          final ayahs = s['ayahs'];
+          return ayahs is List ? ayahs.length : 0;
+        }
+      }
+      return 0;
+    });
+    return goTo is QuranGoToVerse ? goTo : null;
+  }
+
+  Widget _verseTile(BuildContext context, QuranGoToVerse verse) {
+    final name =
+        _surahs.firstWhere((s) => s['number'] == verse.surah)['name'] as String;
+    return ListTile(
+      key: const Key('search-go-to-verse'),
+      leading: const Icon(Icons.subdirectory_arrow_left_rounded),
+      title: Text(context.digits(l10n.searchGoToVerse(name, '${verse.ayah}'))),
+      onTap: () => context.push(
+        '/quran/surah/${verse.surah}',
+        extra: {
+          'initialSurahNumber': verse.surah,
+          'initialAyahNumber': verse.ayah,
+        },
+      ),
+    );
   }
 
   AppLocalizations get l10n =>
@@ -103,7 +141,7 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
               ),
               onChanged: (value) => setState(() {
                 _query = value;
-                _results = searchQuran(_source ?? {}, value);
+                _results = _index?.search(value) ?? const [];
               }),
             ),
           ),
@@ -119,11 +157,21 @@ class _QuranSearchScreenState extends State<QuranSearchScreen> {
                 ? const Center(child: CircularProgressIndicator())
                 : _query.trim().isEmpty
                 ? Center(child: Text(l10nOf(context).quranSearchScreenMessage3))
-                : _results.isEmpty && _matchingSurahs.isEmpty
+                : _results.isEmpty &&
+                      _matchingSurahs.isEmpty &&
+                      _verseReference == null
                 ? Center(child: Text(l10n.searchEmpty))
                 : ListView.builder(
-                    itemCount: _matchingSurahs.length + _results.length,
+                    itemCount:
+                        (_verseReference == null ? 0 : 1) +
+                        _matchingSurahs.length +
+                        _results.length,
                     itemBuilder: (context, index) {
+                      final verse = _verseReference;
+                      if (verse != null) {
+                        if (index == 0) return _verseTile(context, verse);
+                        index--;
+                      }
                       final surahs = _matchingSurahs;
                       if (index < surahs.length) {
                         final surah = surahs[index];

@@ -4151,5 +4151,33 @@
   "listenModeNext": "الآية التالية",
   "listenModePlay": "تشغيل",
   "listenModePause": "إيقاف مؤقت",
-  "listenModeLoading": "جارٍ التحميل…"
+  "listenModeLoading": "جارٍ التحميل…",
+  "searchGoToVerse": "انتقل إلى {surah}، الآية {ayah}",
+  "@searchGoToVerse": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "String"
+      }
+    }
+  },
+  "readerVerseShare": "مشاركة",
+  "verseShareTitle": "مشاركة الآية",
+  "verseShareAsImage": "مشاركة كصورة",
+  "verseShareAsText": "مشاركة كنص",
+  "verseShareShowAppName": "إظهار اسم التطبيق على الصورة",
+  "verseShareReference": "{surah} · الآية {ayah}",
+  "@verseShareReference": {
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "String"
+      }
+    }
+  },
+  "verseShareFailed": "تعذّرت المشاركة. حاول مرة أخرى."
 }

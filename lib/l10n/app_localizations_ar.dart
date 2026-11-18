@@ -3458,4 +3458,32 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get listenModeLoading => 'جارٍ التحميل…';
+
+  @override
+  String searchGoToVerse(String surah, String ayah) {
+    return 'انتقل إلى $surah، الآية $ayah';
+  }
+
+  @override
+  String get readerVerseShare => 'مشاركة';
+
+  @override
+  String get verseShareTitle => 'مشاركة الآية';
+
+  @override
+  String get verseShareAsImage => 'مشاركة كصورة';
+
+  @override
+  String get verseShareAsText => 'مشاركة كنص';
+
+  @override
+  String get verseShareShowAppName => 'إظهار اسم التطبيق على الصورة';
+
+  @override
+  String verseShareReference(String surah, String ayah) {
+    return '$surah · الآية $ayah';
+  }
+
+  @override
+  String get verseShareFailed => 'تعذّرت المشاركة. حاول مرة أخرى.';
 }
