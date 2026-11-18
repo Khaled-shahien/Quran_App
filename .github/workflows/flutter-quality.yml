@@ -100,7 +100,7 @@ jobs:
       # its size in check. Raise AAB_BUDGET_MB deliberately, never silently.
       - name: Build release App Bundle and check its size
         env:
-          AAB_BUDGET_MB: '85'
+          AAB_BUDGET_MB: '95'
         run: |
           flutter build appbundle --release
           size=$(stat -c%s build/app/outputs/bundle/release/app-release.aab)

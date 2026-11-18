@@ -110,5 +110,5 @@ Status: **Done** (code + tests in the tree), **Partial** (part done; rest noted)
 | Account-free sync | Research only | — | recommendation: scheduled encrypted export to a folder the user picks |
 | Wear OS tile (G21) | Not started | — | not approved this phase |
 
-Size after Phase 4: release APK 92.3 MB (was 83.4 MB), App Bundle 89.5 MB, over the CI budget of 85 MB (`AAB_BUDGET_MB` in `.github/workflows/flutter-quality.yml`). The hadith encyclopedia is 2.9 MB compressed; the rest is new code in each of the three ABIs. Raising the budget or trimming content is an owner decision; Play delivers per-ABI splits, so downloads are smaller than the bundle.
+Size after Phase 4: release APK 92.3 MB (was 83.4 MB), App Bundle 89.5 MB, over the old CI budget of 85 MB; the owner raised `AAB_BUDGET_MB` (`.github/workflows/flutter-quality.yml`) to 95 MB on 2026-11-18. The hadith encyclopedia is 2.9 MB compressed; the rest is new code in each of the three ABIs. Play delivers per-ABI splits, so downloads are smaller than the bundle.
 
