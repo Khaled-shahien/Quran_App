@@ -68,6 +68,9 @@ dependencies:
   sqflite: ^2.4.6
   path: ^1.9.1
   file_picker: ^13.4.0
+  # Native Android alarms: quiet period after the adhan, Fajr wake alarm.
+  sakina_alarms:
+    path: packages/sakina_alarms
 
 dev_dependencies:
   flutter_test:

@@ -8,6 +8,8 @@
              alerts for an old location or time zone. -->
         <exclude domain="sharedpref" path="scheduled_notifications.xml" />
         <exclude domain="sharedpref" path="notification_plugin_cache.xml" />
+        <!-- Quiet periods and Fajr wake alarms: rebuilt with the prayer alerts. -->
+        <exclude domain="sharedpref" path="sakina_alarms.xml" />
         <!-- Downloaded recitations: large, re-downloadable, and over the 25 MB
              auto-backup limit they would make the whole backup fail. -->
         <exclude domain="file" path="recitation/" />
@@ -17,6 +19,8 @@
              alerts for an old location or time zone. -->
         <exclude domain="sharedpref" path="scheduled_notifications.xml" />
         <exclude domain="sharedpref" path="notification_plugin_cache.xml" />
+        <!-- Quiet periods and Fajr wake alarms: rebuilt with the prayer alerts. -->
+        <exclude domain="sharedpref" path="sakina_alarms.xml" />
         <!-- Downloaded recitations: large, re-downloadable, and over the 25 MB
              auto-backup limit they would make the whole backup fail. -->
         <exclude domain="file" path="recitation/" />

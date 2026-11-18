@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../data/repositories/adhan_settings_store.dart';
 import '../../domain/adhan_voices.dart';
+import '../../domain/after_adhan.dart';
 import '../../domain/entities/adhan_settings.dart';
 
 /// Platform hooks the adhan settings need, kept behind functions so the
@@ -13,6 +14,10 @@ class AdhanPlatform {
     required this.requestExact,
     required this.scheduleTest,
     this.requestNotifications,
+    this.quietAccess,
+    this.openQuietAccess,
+    this.fullScreenAllowed,
+    this.openFullScreen,
   });
 
   /// Re-plans today's alerts with the new settings.
@@ -24,19 +29,80 @@ class AdhanPlatform {
   /// Asks for permission to show notifications; false when refused. Null
   /// where no permission is needed.
   final Future<bool> Function()? requestNotifications;
+
+  /// Do Not Disturb access, and opening the system page that grants it.
+  final Future<bool?> Function()? quietAccess;
+  final Future<void> Function()? openQuietAccess;
+
+  /// Full-screen alarms (Android 14+ lets the user withdraw them).
+  final Future<bool?> Function()? fullScreenAllowed;
+  final Future<void> Function()? openFullScreen;
 }
 
 class AdhanSettingsController extends ChangeNotifier {
   AdhanSettingsController({
     required AdhanSettingsStore store,
     required AdhanPlatform platform,
+    AfterAdhanSettingsStore? afterStore,
   }) : _store = store,
        _platform = platform,
-       _settings = store.read();
+       _afterStore = afterStore,
+       _settings = store.read(),
+       _after = afterStore?.read() ?? const AfterAdhanSettings();
 
   final AdhanSettingsStore _store;
   final AdhanPlatform _platform;
+  final AfterAdhanSettingsStore? _afterStore;
   AdhanSettings _settings;
+  AfterAdhanSettings _after;
+  bool? _quietAccess;
+  bool? _fullScreenAllowed;
+
+  /// The quiet period and Fajr wake alarm; null where not offered.
+  AfterAdhanSettings? get afterAdhan => _afterStore == null ? null : _after;
+
+  /// Null where unknown or not applicable.
+  bool? get quietAccess => _quietAccess;
+  bool? get fullScreenAllowed => _fullScreenAllowed;
+
+  /// Re-reads the two system permissions (on open and on return).
+  Future<void> refreshAfterAdhanAccess() async {
+    _quietAccess = await _platform.quietAccess?.call();
+    _fullScreenAllowed = await _platform.fullScreenAllowed?.call();
+    _notify();
+  }
+
+  Future<void> openQuietAccess() async => _platform.openQuietAccess?.call();
+
+  Future<void> openFullScreenSettings() async =>
+      _platform.openFullScreen?.call();
+
+  Future<void> setQuietMinutes(int minutes) {
+    if (!AfterAdhanSettings.quietOptions.contains(minutes)) {
+      return Future.value();
+    }
+    return _updateAfter(_after.copyWith(quietMinutes: minutes));
+  }
+
+  Future<void> setFajrWake(bool on) =>
+      _updateAfter(_after.copyWith(fajrWake: on));
+
+  Future<void> setSnoozeMinutes(int minutes) {
+    if (!AfterAdhanSettings.snoozeOptions.contains(minutes)) {
+      return Future.value();
+    }
+    return _updateAfter(_after.copyWith(snoozeMinutes: minutes));
+  }
+
+  Future<void> _updateAfter(AfterAdhanSettings next) async {
+    final store = _afterStore;
+    if (store == null) return;
+    _after = next;
+    _notify();
+    await store.write(next);
+    await _platform.reschedule();
+  }
+
   bool? _exactAllowed;
   bool _disposed = false;
 

@@ -19,6 +19,7 @@ class FakePrayerNotificationGateway implements PrayerNotificationGateway {
   Future<void> scheduleAllPrayersForDate({
     required Map<DailyPrayer, DateTime> prayerTimes,
     required AdhanSettings settings,
+    DateTime? sunrise,
   }) async {
     scheduleCalls++;
     scheduledSettings = settings;

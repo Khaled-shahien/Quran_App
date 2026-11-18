@@ -1982,7 +1982,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get adhanPreviewFailed => 'تعذّر تشغيل التسجيل.';
 
   @override
-  String get adhanStopHint => 'لإيقاف الأذان اسحب الإشعار أو اضغط عليه.';
+  String get adhanStopHint =>
+      'لإيقاف الأذان اضغط «إيقاف الأذان» في الإشعار، أو اسحب الإشعار.';
 
   @override
   String get adhanNotSupported =>
@@ -3072,4 +3073,66 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get ramadanImsakNote =>
       'الإمساك قبل الفجر بعشر دقائق احتياطًا، والصيام يبدأ من أذان الفجر.';
+
+  @override
+  String get notificationActionStopAdhan => 'إيقاف الأذان';
+
+  @override
+  String get afterAdhanQuietTitle => 'صمت الهاتف بعد الأذان';
+
+  @override
+  String get afterAdhanQuietHelp =>
+      'يُشغَّل وضع «عدم الإزعاج» بعد وقت الصلاة بخمس دقائق، ثم يعود الهاتف كما كان. لا يغيّر شيئًا إن كان الوضع مشغّلًا من قبل.';
+
+  @override
+  String get afterAdhanQuietOff => 'لا';
+
+  @override
+  String afterAdhanQuietMinutes(String minutes) {
+    return '$minutes دقيقة';
+  }
+
+  @override
+  String get afterAdhanQuietNeedsAccess =>
+      'يحتاج صمت الهاتف إلى إذن «عدم الإزعاج» من إعدادات النظام.';
+
+  @override
+  String get afterAdhanGrant => 'السماح';
+
+  @override
+  String get fajrWakeSettingTitle => 'منبّه الفجر';
+
+  @override
+  String get fajrWakeSettingHelp =>
+      'يرنّ على الشاشة كلها بصوت يبدأ خافتًا ثم يرتفع، ويحلّ محلّ إشعار الفجر. التأجيل متاح ما دام الشروق بعيدًا.';
+
+  @override
+  String get fajrWakeNeedsFullScreen =>
+      'اسمح لسكينة بعرض المنبّه على الشاشة كاملة حتى يظهر فوق شاشة القفل.';
+
+  @override
+  String get fajrWakeSnoozeTitle => 'مدة التأجيل';
+
+  @override
+  String fajrWakeSnooze(String minutes) {
+    return 'تأجيل $minutes دقائق';
+  }
+
+  @override
+  String get fajrWakeTitle => 'حان وقت صلاة الفجر';
+
+  @override
+  String get fajrWakeBody => 'قم للصلاة قبل شروق الشمس';
+
+  @override
+  String get fajrWakeStop => 'أوقف المنبّه';
+
+  @override
+  String get fajrWakeUntilSunrise => 'باقٍ على الشروق %s دقيقة';
+
+  @override
+  String get fajrWakeSunriseReached => 'أشرقت الشمس';
+
+  @override
+  String get fajrWakeChannel => 'منبّه الفجر';
 }

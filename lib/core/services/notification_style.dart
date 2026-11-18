@@ -26,6 +26,9 @@ abstract final class NotificationActionIds {
 
   /// Opens the prayer times screen.
   static const String prayerTimes = 'open_prayer_times';
+
+  /// Ends the adhan without opening the app.
+  static const String stopAdhan = 'stop_adhan';
 }
 
 /// The shared look of every Sakina notification: brand colour, the bell as
@@ -80,6 +83,13 @@ NotificationDetails buildNotificationDetails(
       showWhen: true,
       timeoutAfter: timeoutAfter?.inMilliseconds,
       actions: <AndroidNotificationAction>[
+        // Cancelling the notification is what stops its channel's sound.
+        if (adhan != null)
+          AndroidNotificationAction(
+            NotificationActionIds.stopAdhan,
+            appL10n.notificationActionStopAdhan,
+            cancelNotification: true,
+          ),
         for (final action in notificationActionsFor(kind))
           AndroidNotificationAction(
             action.id,

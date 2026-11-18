@@ -2542,7 +2542,7 @@
   "adhanPreviewPlay": "استمع",
   "adhanPreviewStop": "إيقاف الاستماع",
   "adhanPreviewFailed": "تعذّر تشغيل التسجيل.",
-  "adhanStopHint": "لإيقاف الأذان اسحب الإشعار أو اضغط عليه.",
+  "adhanStopHint": "لإيقاف الأذان اضغط «إيقاف الأذان» في الإشعار، أو اسحب الإشعار.",
   "adhanNotSupported": "الأذان الكامل غير متاح في إشعارات هذا الجهاز، وسيُستخدم صوت التنبيه.",
   "adhanChannelName": "الأذان: {voice}",
   "@adhanChannelName": {
@@ -3834,5 +3834,43 @@
   "ramadanImsakNote": "الإمساك قبل الفجر بعشر دقائق احتياطًا، والصيام يبدأ من أذان الفجر.",
   "@ramadanImsakNote": {
     "description": "Explains Imsak is a precaution before Fajr."
-  }
+  },
+  "notificationActionStopAdhan": "إيقاف الأذان",
+  "@notificationActionStopAdhan": {
+    "description": "Button on an adhan notification that stops the sound"
+  },
+  "afterAdhanQuietTitle": "صمت الهاتف بعد الأذان",
+  "afterAdhanQuietHelp": "يُشغَّل وضع «عدم الإزعاج» بعد وقت الصلاة بخمس دقائق، ثم يعود الهاتف كما كان. لا يغيّر شيئًا إن كان الوضع مشغّلًا من قبل.",
+  "afterAdhanQuietOff": "لا",
+  "afterAdhanQuietMinutes": "{minutes} دقيقة",
+  "@afterAdhanQuietMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "afterAdhanQuietNeedsAccess": "يحتاج صمت الهاتف إلى إذن «عدم الإزعاج» من إعدادات النظام.",
+  "afterAdhanGrant": "السماح",
+  "fajrWakeSettingTitle": "منبّه الفجر",
+  "fajrWakeSettingHelp": "يرنّ على الشاشة كلها بصوت يبدأ خافتًا ثم يرتفع، ويحلّ محلّ إشعار الفجر. التأجيل متاح ما دام الشروق بعيدًا.",
+  "fajrWakeNeedsFullScreen": "اسمح لسكينة بعرض المنبّه على الشاشة كاملة حتى يظهر فوق شاشة القفل.",
+  "fajrWakeSnoozeTitle": "مدة التأجيل",
+  "fajrWakeSnooze": "تأجيل {minutes} دقائق",
+  "@fajrWakeSnooze": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "fajrWakeTitle": "حان وقت صلاة الفجر",
+  "fajrWakeBody": "قم للصلاة قبل شروق الشمس",
+  "fajrWakeStop": "أوقف المنبّه",
+  "fajrWakeUntilSunrise": "باقٍ على الشروق %s دقيقة",
+  "@fajrWakeUntilSunrise": {
+    "description": "%s is replaced natively with the minutes left; keep it"
+  },
+  "fajrWakeSunriseReached": "أشرقت الشمس",
+  "fajrWakeChannel": "منبّه الفجر"
 }

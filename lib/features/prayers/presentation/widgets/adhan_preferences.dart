@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:sakina_app/l10n/localization.dart';
 
 import '../../../recitation/presentation/providers/recitation_controller.dart';
 import '../../domain/adhan_voices.dart';
+import '../../domain/after_adhan.dart';
 import '../../domain/entities/adhan_settings.dart';
 import '../adhan_preview_player.dart';
 import '../adhan_voice_labels.dart';
@@ -27,7 +29,8 @@ class AdhanPreferences extends StatefulWidget {
   State<AdhanPreferences> createState() => _AdhanPreferencesState();
 }
 
-class _AdhanPreferencesState extends State<AdhanPreferences> {
+class _AdhanPreferencesState extends State<AdhanPreferences>
+    with WidgetsBindingObserver {
   late final AdhanPreviewPlayer _preview =
       widget.previewPlayer ?? JustAudioAdhanPreviewPlayer();
 
@@ -38,7 +41,16 @@ class _AdhanPreferencesState extends State<AdhanPreferences> {
       !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Back from the system page that grants Do Not Disturb or full screen.
+    if (state == AppLifecycleState.resumed) {
+      context.read<AdhanSettingsController?>()?.refreshAfterAdhanAccess();
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     if (widget.previewPlayer == null) {
       _preview.dispose();
     } else {
@@ -66,11 +78,108 @@ class _AdhanPreferencesState extends State<AdhanPreferences> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        context.read<AdhanSettingsController?>()?.refreshExactStatus();
+        final c = context.read<AdhanSettingsController?>();
+        c?.refreshExactStatus();
+        c?.refreshAfterAdhanAccess();
       }
     });
+  }
+
+  /// The quiet period after the adhan and the Fajr wake alarm (Android).
+  List<Widget> _afterAdhan(
+    BuildContext context,
+    AdhanSettingsController c,
+    AfterAdhanSettings after,
+  ) {
+    final l10n = l10nOf(context);
+    Widget grant(String text, VoidCallback onPressed) => ListTile(
+      leading: const Icon(Icons.warning_amber_rounded),
+      title: Text(text),
+      trailing: TextButton(
+        onPressed: onPressed,
+        child: Text(l10n.afterAdhanGrant),
+      ),
+    );
+    return [
+      Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(
+          AppSpacing.md,
+          AppSpacing.sm,
+          AppSpacing.md,
+          AppSpacing.xs,
+        ),
+        child: DropdownButtonFormField<int>(
+          key: const Key('adhan-quiet'),
+          initialValue: after.quietMinutes,
+          isExpanded: true,
+          decoration: InputDecoration(
+            labelText: l10n.afterAdhanQuietTitle,
+            helperText: l10n.afterAdhanQuietHelp,
+            helperMaxLines: 3,
+            border: const OutlineInputBorder(),
+          ),
+          items: [
+            for (final m in AfterAdhanSettings.quietOptions)
+              DropdownMenuItem(
+                value: m,
+                child: Text(
+                  m == 0
+                      ? l10n.afterAdhanQuietOff
+                      : l10n.afterAdhanQuietMinutes(context.digits('$m')),
+                ),
+              ),
+          ],
+          onChanged: (m) {
+            if (m != null) c.setQuietMinutes(m);
+          },
+        ),
+      ),
+      if (after.hasQuiet && c.quietAccess == false)
+        grant(l10n.afterAdhanQuietNeedsAccess, c.openQuietAccess),
+      SwitchListTile(
+        key: const Key('fajr-wake'),
+        secondary: const Icon(Icons.alarm_rounded),
+        title: Text(l10n.fajrWakeSettingTitle),
+        subtitle: Text(l10n.fajrWakeSettingHelp),
+        isThreeLine: true,
+        value: after.fajrWake,
+        onChanged: c.setFajrWake,
+      ),
+      if (after.fajrWake) ...[
+        if (c.fullScreenAllowed == false)
+          grant(l10n.fajrWakeNeedsFullScreen, c.openFullScreenSettings),
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            AppSpacing.md,
+            0,
+            AppSpacing.md,
+            AppSpacing.sm,
+          ),
+          child: DropdownButtonFormField<int>(
+            key: const Key('fajr-wake-snooze'),
+            initialValue: after.snoozeMinutes,
+            isExpanded: true,
+            decoration: InputDecoration(
+              labelText: l10n.fajrWakeSnoozeTitle,
+              border: const OutlineInputBorder(),
+            ),
+            items: [
+              for (final m in AfterAdhanSettings.snoozeOptions)
+                DropdownMenuItem(
+                  value: m,
+                  child: Text(l10n.fajrWakeSnooze(context.digits('$m'))),
+                ),
+            ],
+            onChanged: (m) {
+              if (m != null) c.setSnoozeMinutes(m);
+            },
+          ),
+        ),
+      ],
+    ];
   }
 
   @override
@@ -170,6 +279,7 @@ class _AdhanPreferencesState extends State<AdhanPreferences> {
             },
           ),
         ),
+        if (c.afterAdhan != null) ..._afterAdhan(context, c, c.afterAdhan!),
         if (c.exactAllowed != null)
           ListTile(
             leading: Icon(

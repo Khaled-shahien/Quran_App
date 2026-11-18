@@ -1,0 +1,19 @@
+name: sakina_alarms
+description: Native Android alarms for Sakina, reachable from every engine (including the background rescheduler) - silence after the adhan and the Fajr wake alarm.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.38.1"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: app.sakina.alarms
+        pluginClass: SakinaAlarmsPlugin

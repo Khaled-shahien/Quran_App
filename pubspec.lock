@@ -996,6 +996,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
+  sakina_alarms:
+    dependency: "direct main"
+    description:
+      path: "packages/sakina_alarms"
+      relative: true
+    source: path
+    version: "1.0.0"
   shared_preferences:
     dependency: "direct main"
     description:

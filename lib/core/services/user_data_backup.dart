@@ -73,6 +73,7 @@ class UserDataBackup {
     'baqarah_alarm_enabled', 'baqarah_alarm_hour', 'baqarah_alarm_minute',
     'daily_verse_alarm_enabled', 'verse_alarm_hour', 'verse_alarm_minute',
     'morning_alarm_anchor_minutes', 'evening_alarm_anchor_minutes',
+    'adhan_quiet_minutes', 'fajr_wake_enabled', 'fajr_wake_snooze_minutes',
   };
 
   /// Families of keys with a variable suffix.

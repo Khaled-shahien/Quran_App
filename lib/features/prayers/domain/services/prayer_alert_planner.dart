@@ -36,11 +36,14 @@ int prayerBaseId(DailyPrayer prayer) => 2001 + prayer.index;
 /// Silent prayers get nothing; reminders are only for prayers that alert
 /// and only when the reminder time is still ahead of [now]. IDs are stable
 /// per prayer and weekday, so rescheduling replaces instead of duplicating.
+/// [skipFajrAlert] leaves out the Fajr alert (not its reminder) when the
+/// Fajr wake alarm rings instead.
 List<PlannedAlert> planPrayerAlerts({
   required Map<DailyPrayer, DateTime> times,
   required Map<DailyPrayer, String> names,
   required AdhanSettings settings,
   required DateTime now,
+  bool skipFajrAlert = false,
 }) {
   final plan = <PlannedAlert>[];
   for (final prayer in DailyPrayer.values) {
@@ -49,7 +52,7 @@ List<PlannedAlert> planPrayerAlerts({
     final mode = settings.modeFor(prayer);
     if (mode == PrayerAlertMode.silent) continue;
     final name = names[prayer] ?? prayer.name;
-    if (at.isAfter(now)) {
+    if (at.isAfter(now) && !(skipFajrAlert && prayer == DailyPrayer.fajr)) {
       plan.add(
         PlannedAlert(
           id: prayerNotificationId(prayerBaseId(prayer), at),

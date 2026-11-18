@@ -317,7 +317,9 @@ void main() {
       await pump(tester, prefs: {'adhan_mode_isha': 'adhan'});
       expect(find.textContaining('لم تُضف بعد'), findsNothing);
       expect(
-        find.text('لإيقاف الأذان اسحب الإشعار أو اضغط عليه.'),
+        find.text(
+          'لإيقاف الأذان اضغط «إيقاف الأذان» في الإشعار، أو اسحب الإشعار.',
+        ),
         findsOneWidget,
       );
     });

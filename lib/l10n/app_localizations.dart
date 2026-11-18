@@ -3641,7 +3641,7 @@ abstract class AppLocalizations {
   /// No description provided for @adhanStopHint.
   ///
   /// In ar, this message translates to:
-  /// **'لإيقاف الأذان اسحب الإشعار أو اضغط عليه.'**
+  /// **'لإيقاف الأذان اضغط «إيقاف الأذان» في الإشعار، أو اسحب الإشعار.'**
   String get adhanStopHint;
 
   /// No description provided for @adhanNotSupported.
@@ -5508,6 +5508,114 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الإمساك قبل الفجر بعشر دقائق احتياطًا، والصيام يبدأ من أذان الفجر.'**
   String get ramadanImsakNote;
+
+  /// Button on an adhan notification that stops the sound
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف الأذان'**
+  String get notificationActionStopAdhan;
+
+  /// No description provided for @afterAdhanQuietTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'صمت الهاتف بعد الأذان'**
+  String get afterAdhanQuietTitle;
+
+  /// No description provided for @afterAdhanQuietHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُشغَّل وضع «عدم الإزعاج» بعد وقت الصلاة بخمس دقائق، ثم يعود الهاتف كما كان. لا يغيّر شيئًا إن كان الوضع مشغّلًا من قبل.'**
+  String get afterAdhanQuietHelp;
+
+  /// No description provided for @afterAdhanQuietOff.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا'**
+  String get afterAdhanQuietOff;
+
+  /// No description provided for @afterAdhanQuietMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{minutes} دقيقة'**
+  String afterAdhanQuietMinutes(String minutes);
+
+  /// No description provided for @afterAdhanQuietNeedsAccess.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحتاج صمت الهاتف إلى إذن «عدم الإزعاج» من إعدادات النظام.'**
+  String get afterAdhanQuietNeedsAccess;
+
+  /// No description provided for @afterAdhanGrant.
+  ///
+  /// In ar, this message translates to:
+  /// **'السماح'**
+  String get afterAdhanGrant;
+
+  /// No description provided for @fajrWakeSettingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'منبّه الفجر'**
+  String get fajrWakeSettingTitle;
+
+  /// No description provided for @fajrWakeSettingHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرنّ على الشاشة كلها بصوت يبدأ خافتًا ثم يرتفع، ويحلّ محلّ إشعار الفجر. التأجيل متاح ما دام الشروق بعيدًا.'**
+  String get fajrWakeSettingHelp;
+
+  /// No description provided for @fajrWakeNeedsFullScreen.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسمح لسكينة بعرض المنبّه على الشاشة كاملة حتى يظهر فوق شاشة القفل.'**
+  String get fajrWakeNeedsFullScreen;
+
+  /// No description provided for @fajrWakeSnoozeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة التأجيل'**
+  String get fajrWakeSnoozeTitle;
+
+  /// No description provided for @fajrWakeSnooze.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأجيل {minutes} دقائق'**
+  String fajrWakeSnooze(String minutes);
+
+  /// No description provided for @fajrWakeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حان وقت صلاة الفجر'**
+  String get fajrWakeTitle;
+
+  /// No description provided for @fajrWakeBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'قم للصلاة قبل شروق الشمس'**
+  String get fajrWakeBody;
+
+  /// No description provided for @fajrWakeStop.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوقف المنبّه'**
+  String get fajrWakeStop;
+
+  /// %s is replaced natively with the minutes left; keep it
+  ///
+  /// In ar, this message translates to:
+  /// **'باقٍ على الشروق %s دقيقة'**
+  String get fajrWakeUntilSunrise;
+
+  /// No description provided for @fajrWakeSunriseReached.
+  ///
+  /// In ar, this message translates to:
+  /// **'أشرقت الشمس'**
+  String get fajrWakeSunriseReached;
+
+  /// No description provided for @fajrWakeChannel.
+  ///
+  /// In ar, this message translates to:
+  /// **'منبّه الفجر'**
+  String get fajrWakeChannel;
 }
 
 class _AppLocalizationsDelegate

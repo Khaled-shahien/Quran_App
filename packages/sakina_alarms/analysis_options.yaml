@@ -1,0 +1,4 @@
+# The app's lint set needs flutter_lints, which this package does not depend on.
+analyzer:
+  language:
+    strict-casts: true

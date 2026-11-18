@@ -1,3 +1,6 @@
+import 'package:sakina_alarms/sakina_alarms.dart';
+import 'package:sakina_app/features/prayers/domain/after_adhan.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sakina_app/features/quran/presentation/providers/verse_library_controller.dart';
 import 'package:sakina_app/features/quran/data/repositories/verse_library_repository.dart';
 import 'package:sakina_app/core/database/app_database.dart';
@@ -421,7 +424,15 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
         ChangeNotifierProvider<AdhanSettingsController>(
           create: (_) => AdhanSettingsController(
             store: AdhanSettingsStore(_prefs),
+            afterStore:
+                !kIsWeb && defaultTargetPlatform == TargetPlatform.android
+                ? AfterAdhanSettingsStore(_prefs)
+                : null,
             platform: AdhanPlatform(
+              quietAccess: SakinaAlarms.hasDndAccess,
+              openQuietAccess: SakinaAlarms.openDndAccessSettings,
+              fullScreenAllowed: SakinaAlarms.canUseFullScreenIntent,
+              openFullScreen: SakinaAlarms.openFullScreenIntentSettings,
               reschedule: _prayerTimesProvider.refresh,
               canScheduleExact:
                   NotificationService.instance.canScheduleExactAlarms,

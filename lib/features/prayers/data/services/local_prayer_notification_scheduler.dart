@@ -14,6 +14,7 @@ abstract class PrayerNotificationGateway {
   Future<void> scheduleAllPrayersForDate({
     required Map<DailyPrayer, DateTime> prayerTimes,
     required AdhanSettings settings,
+    DateTime? sunrise,
   });
 
   Future<void> cancelAllPrayerNotifications();
@@ -37,10 +38,12 @@ class NotificationServicePrayerNotificationGateway
   Future<void> scheduleAllPrayersForDate({
     required Map<DailyPrayer, DateTime> prayerTimes,
     required AdhanSettings settings,
+    DateTime? sunrise,
   }) {
     return _notificationService.prayers.scheduleAllPrayersForDate(
       prayerTimes: prayerTimes,
       settings: settings,
+      sunrise: sunrise,
     );
   }
 }
@@ -117,6 +120,11 @@ class LocalPrayerNotificationScheduler implements PrayerNotificationScheduler {
     await _notificationGateway.scheduleAllPrayersForDate(
       prayerTimes: schedule,
       settings: AdhanSettingsStore(_prefs).read(),
+      sunrise: _parsePrayerTime(
+        prayerTimes.sunrise,
+        date,
+        prayerTimes.timezone,
+      ),
     );
     await _onScheduled?.call();
   }

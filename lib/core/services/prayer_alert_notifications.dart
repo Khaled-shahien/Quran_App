@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sakina_app/l10n/localization.dart';
+import 'package:sakina_alarms/sakina_alarms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -12,7 +13,9 @@ import 'anchored_reminders.dart';
 import 'notification_content.dart';
 import 'notification_service.dart';
 import 'notification_style.dart';
+import '../accessibility/digit_style.dart';
 import '../../features/prayers/domain/adhan_voices.dart';
+import '../../features/prayers/domain/after_adhan.dart';
 import '../../features/prayers/domain/entities/adhan_settings.dart';
 import '../../features/prayers/domain/prayer_notification_ids.dart';
 import '../../features/prayers/domain/services/prayer_alert_planner.dart';
@@ -124,9 +127,12 @@ class PrayerAlertNotifications {
   /// Replace only the supplied calendar day's slot, preserving other days.
   /// Prayers are keyed by [DailyPrayer]; display names are derived here and
   /// only shown.
+  ///
+  /// [sunrise] lets the Fajr wake alarm (Android) offer snooze until then.
   Future<void> scheduleAllPrayersForDate({
     required Map<DailyPrayer, DateTime> prayerTimes,
     AdhanSettings settings = const AdhanSettings(),
+    DateTime? sunrise,
   }) async {
     if (prayerTimes.isEmpty) return;
     final date = prayerTimes.values.first;
@@ -144,12 +150,28 @@ class PrayerAlertNotifications {
     final names = <DailyPrayer, String>{
       for (final prayer in prayerTimes.keys) prayer: appL10n.prayerName(prayer),
     };
+    final DigitStyle digits = await _core.digitStyle();
+
+    final DateTime now = DateTime.now();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final AfterAdhanSettings after = AfterAdhanSettingsStore(prefs).read();
+    final bool android =
+        !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+    final bool wake =
+        android &&
+        wakesForFajr(
+          after: after,
+          fajr: prayerTimes[DailyPrayer.fajr],
+          sunrise: sunrise,
+          now: now,
+        );
 
     for (final alert in planPrayerAlerts(
       times: prayerTimes,
       names: names,
       settings: settings,
-      now: DateTime.now(),
+      now: now,
+      skipFajrAlert: wake,
     )) {
       await schedulePrayerNotification(
         id: alert.id,
@@ -162,6 +184,42 @@ class PrayerAlertNotifications {
       );
     }
     await _scheduleAnchoredReminders(prayerTimes);
+    if (!android) return;
+    final DateTime day = date.toLocal();
+    await SakinaAlarms.setQuietWindows(
+      day,
+      planQuietWindows(
+        times: prayerTimes,
+        alerts: settings,
+        after: after,
+        now: now,
+      ),
+    );
+    await SakinaAlarms.setFajrWake(
+      day,
+      wake
+          ? FajrWakeAlarm(
+              at: prayerTimes[DailyPrayer.fajr]!,
+              sunrise: sunrise!,
+              snoozeMinutes: after.snoozeMinutes,
+              sound: settings.modeFor(DailyPrayer.fajr) == PrayerAlertMode.adhan
+                  ? settings.voiceFor(DailyPrayer.fajr).resource
+                  : null,
+              texts: FajrWakeTexts(
+                title: appL10n.fajrWakeTitle,
+                body: appL10n.fajrWakeBody,
+                stop: appL10n.fajrWakeStop,
+                snooze: appL10n.fajrWakeSnooze(
+                  applyDigitStyle('${after.snoozeMinutes}', digits),
+                ),
+                untilSunrise: appL10n.fajrWakeUntilSunrise,
+                sunriseReached: appL10n.fajrWakeSunriseReached,
+                channelName: appL10n.fajrWakeChannel,
+                arabicDigits: digits == DigitStyle.arabic,
+              ),
+            )
+          : null,
+    );
   }
 
   /// Morning/evening adhkar reminders set to follow Fajr/Asr (see
@@ -220,6 +278,7 @@ class PrayerAlertNotifications {
     await _core.flutterLocalNotificationsPlugin.cancel(
       id: prayerWindowEndingNotificationId,
     );
+    await SakinaAlarms.clearAll();
 
     developer.log(
       'Cancelled all prayer notifications',

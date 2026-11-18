@@ -28,6 +28,7 @@ class _Gateway implements PrayerNotificationGateway {
   Future<void> scheduleAllPrayersForDate({
     required Map<DailyPrayer, DateTime> prayerTimes,
     required AdhanSettings settings,
+    DateTime? sunrise,
   }) async {
     final first = prayerTimes.values.first;
     days.add(DateTime(first.year, first.month, first.day));
