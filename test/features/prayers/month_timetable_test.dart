@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:sakina_app/core/result/result.dart';
-import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
 import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
