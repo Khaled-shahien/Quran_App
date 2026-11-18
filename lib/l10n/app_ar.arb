@@ -4278,5 +4278,97 @@
   "monthTableSharePdf": "مشاركة كملف PDF",
   "monthTableShareFailed": "تعذّرت المشاركة. حاول مرة أخرى.",
   "monthTableNoPlace": "اختر موقعك أولًا من شاشة المواقيت.",
-  "monthTableFootnote": "حُسبت على الهاتف بطريقة الحساب والتعديلات المختارة في سكينة. قد تختلف قليلًا عن تقويم مسجدك."
+  "monthTableFootnote": "حُسبت على الهاتف بطريقة الحساب والتعديلات المختارة في سكينة. قد تختلف قليلًا عن تقويم مسجدك.",
+  "groupTitle": "ختمة جماعية",
+  "groupIntro": "اقسموا ختمة واحدة بينكم: يُنشئها أحدكم ويرسل رمزها في أي تطبيق مراسلة، ويلصقه كل واحد هنا ويختار جزأه، ثم يرسل رمز الإتمام عند الانتهاء. لا حساب ولا خادم، ولا يخرج شيء من هاتفك إلا ما ترسله أنت.",
+  "groupCreate": "إنشاء ختمة",
+  "groupJoin": "الانضمام برمز",
+  "groupName": "اسم الختمة",
+  "groupMembers": "عدد المشاركين",
+  "groupMemberNames": "أسماء المشاركين (اختياري)",
+  "groupMemberNamesHelp": "اسم في كل سطر، بترتيب الأجزاء.",
+  "groupCreateAndShare": "إنشاء وإرسال الرمز",
+  "groupInviteMessage": "انضم إلى ختمة «{name}» في تطبيق سكينة: افتح «ختمة جماعية» ثم «الانضمام برمز» والصق هذه الرسالة.\n{code}",
+  "@groupInviteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "groupDoneMessage": "أتممت جزئي من ختمة «{name}». ألصق هذه الرسالة في «إضافة رموز الإتمام».\n{code}",
+  "@groupDoneMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "groupJoinTitle": "الانضمام إلى ختمة",
+  "groupJoinHint": "الصق رسالة الدعوة هنا",
+  "groupInvalidCode": "لم يُعثر على رمز صالح في هذا النص.",
+  "groupAlreadyHere": "هذه الختمة موجودة على هاتفك.",
+  "groupAddDoneTitle": "إضافة رموز الإتمام",
+  "groupAddDoneHint": "الصق رسالة أو أكثر من رسائل الإتمام",
+  "groupDoneAdded": "سُجّل إتمام {count} من الأجزاء",
+  "@groupDoneAdded": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "groupProgress": "اكتمل {done} من {total}",
+  "@groupProgress": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "groupComplete": "تمّت الختمة. تقبّل الله منكم.",
+  "groupChooseMine": "اضغط على جزئك لتعرفه هذه الشاشة.",
+  "groupJuzOne": "الجزء {juz}",
+  "@groupJuzOne": {
+    "placeholders": {
+      "juz": {
+        "type": "String"
+      }
+    }
+  },
+  "groupJuzRange": "الأجزاء {from}–{to}",
+  "@groupJuzRange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "groupPartDone": "أُتمّ",
+  "groupMine": "جزئي",
+  "groupFinishMine": "أتممت جزئي",
+  "groupShareInvite": "إرسال رمز الدعوة",
+  "groupAddDone": "إضافة رموز الإتمام",
+  "groupDelete": "حذف",
+  "groupDeleteTitle": "حذف «{name}» من هاتفك؟",
+  "@groupDeleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "groupDeleteBody": "تبقى الختمة عند غيرك كما هي."
 }

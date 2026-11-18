@@ -3678,4 +3678,112 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get monthTableFootnote =>
       'حُسبت على الهاتف بطريقة الحساب والتعديلات المختارة في سكينة. قد تختلف قليلًا عن تقويم مسجدك.';
+
+  @override
+  String get groupTitle => 'ختمة جماعية';
+
+  @override
+  String get groupIntro =>
+      'اقسموا ختمة واحدة بينكم: يُنشئها أحدكم ويرسل رمزها في أي تطبيق مراسلة، ويلصقه كل واحد هنا ويختار جزأه، ثم يرسل رمز الإتمام عند الانتهاء. لا حساب ولا خادم، ولا يخرج شيء من هاتفك إلا ما ترسله أنت.';
+
+  @override
+  String get groupCreate => 'إنشاء ختمة';
+
+  @override
+  String get groupJoin => 'الانضمام برمز';
+
+  @override
+  String get groupName => 'اسم الختمة';
+
+  @override
+  String get groupMembers => 'عدد المشاركين';
+
+  @override
+  String get groupMemberNames => 'أسماء المشاركين (اختياري)';
+
+  @override
+  String get groupMemberNamesHelp => 'اسم في كل سطر، بترتيب الأجزاء.';
+
+  @override
+  String get groupCreateAndShare => 'إنشاء وإرسال الرمز';
+
+  @override
+  String groupInviteMessage(String name, String code) {
+    return 'انضم إلى ختمة «$name» في تطبيق سكينة: افتح «ختمة جماعية» ثم «الانضمام برمز» والصق هذه الرسالة.\n$code';
+  }
+
+  @override
+  String groupDoneMessage(String name, String code) {
+    return 'أتممت جزئي من ختمة «$name». ألصق هذه الرسالة في «إضافة رموز الإتمام».\n$code';
+  }
+
+  @override
+  String get groupJoinTitle => 'الانضمام إلى ختمة';
+
+  @override
+  String get groupJoinHint => 'الصق رسالة الدعوة هنا';
+
+  @override
+  String get groupInvalidCode => 'لم يُعثر على رمز صالح في هذا النص.';
+
+  @override
+  String get groupAlreadyHere => 'هذه الختمة موجودة على هاتفك.';
+
+  @override
+  String get groupAddDoneTitle => 'إضافة رموز الإتمام';
+
+  @override
+  String get groupAddDoneHint => 'الصق رسالة أو أكثر من رسائل الإتمام';
+
+  @override
+  String groupDoneAdded(String count) {
+    return 'سُجّل إتمام $count من الأجزاء';
+  }
+
+  @override
+  String groupProgress(String done, String total) {
+    return 'اكتمل $done من $total';
+  }
+
+  @override
+  String get groupComplete => 'تمّت الختمة. تقبّل الله منكم.';
+
+  @override
+  String get groupChooseMine => 'اضغط على جزئك لتعرفه هذه الشاشة.';
+
+  @override
+  String groupJuzOne(String juz) {
+    return 'الجزء $juz';
+  }
+
+  @override
+  String groupJuzRange(String from, String to) {
+    return 'الأجزاء $from–$to';
+  }
+
+  @override
+  String get groupPartDone => 'أُتمّ';
+
+  @override
+  String get groupMine => 'جزئي';
+
+  @override
+  String get groupFinishMine => 'أتممت جزئي';
+
+  @override
+  String get groupShareInvite => 'إرسال رمز الدعوة';
+
+  @override
+  String get groupAddDone => 'إضافة رموز الإتمام';
+
+  @override
+  String get groupDelete => 'حذف';
+
+  @override
+  String groupDeleteTitle(String name) {
+    return 'حذف «$name» من هاتفك؟';
+  }
+
+  @override
+  String get groupDeleteBody => 'تبقى الختمة عند غيرك كما هي.';
 }

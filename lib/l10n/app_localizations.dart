@@ -6545,6 +6545,192 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حُسبت على الهاتف بطريقة الحساب والتعديلات المختارة في سكينة. قد تختلف قليلًا عن تقويم مسجدك.'**
   String get monthTableFootnote;
+
+  /// No description provided for @groupTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ختمة جماعية'**
+  String get groupTitle;
+
+  /// No description provided for @groupIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقسموا ختمة واحدة بينكم: يُنشئها أحدكم ويرسل رمزها في أي تطبيق مراسلة، ويلصقه كل واحد هنا ويختار جزأه، ثم يرسل رمز الإتمام عند الانتهاء. لا حساب ولا خادم، ولا يخرج شيء من هاتفك إلا ما ترسله أنت.'**
+  String get groupIntro;
+
+  /// No description provided for @groupCreate.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء ختمة'**
+  String get groupCreate;
+
+  /// No description provided for @groupJoin.
+  ///
+  /// In ar, this message translates to:
+  /// **'الانضمام برمز'**
+  String get groupJoin;
+
+  /// No description provided for @groupName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الختمة'**
+  String get groupName;
+
+  /// No description provided for @groupMembers.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد المشاركين'**
+  String get groupMembers;
+
+  /// No description provided for @groupMemberNames.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسماء المشاركين (اختياري)'**
+  String get groupMemberNames;
+
+  /// No description provided for @groupMemberNamesHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم في كل سطر، بترتيب الأجزاء.'**
+  String get groupMemberNamesHelp;
+
+  /// No description provided for @groupCreateAndShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء وإرسال الرمز'**
+  String get groupCreateAndShare;
+
+  /// No description provided for @groupInviteMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'انضم إلى ختمة «{name}» في تطبيق سكينة: افتح «ختمة جماعية» ثم «الانضمام برمز» والصق هذه الرسالة.\n{code}'**
+  String groupInviteMessage(String name, String code);
+
+  /// No description provided for @groupDoneMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أتممت جزئي من ختمة «{name}». ألصق هذه الرسالة في «إضافة رموز الإتمام».\n{code}'**
+  String groupDoneMessage(String name, String code);
+
+  /// No description provided for @groupJoinTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الانضمام إلى ختمة'**
+  String get groupJoinTitle;
+
+  /// No description provided for @groupJoinHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصق رسالة الدعوة هنا'**
+  String get groupJoinHint;
+
+  /// No description provided for @groupInvalidCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُعثر على رمز صالح في هذا النص.'**
+  String get groupInvalidCode;
+
+  /// No description provided for @groupAlreadyHere.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الختمة موجودة على هاتفك.'**
+  String get groupAlreadyHere;
+
+  /// No description provided for @groupAddDoneTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة رموز الإتمام'**
+  String get groupAddDoneTitle;
+
+  /// No description provided for @groupAddDoneHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصق رسالة أو أكثر من رسائل الإتمام'**
+  String get groupAddDoneHint;
+
+  /// No description provided for @groupDoneAdded.
+  ///
+  /// In ar, this message translates to:
+  /// **'سُجّل إتمام {count} من الأجزاء'**
+  String groupDoneAdded(String count);
+
+  /// No description provided for @groupProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتمل {done} من {total}'**
+  String groupProgress(String done, String total);
+
+  /// No description provided for @groupComplete.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمّت الختمة. تقبّل الله منكم.'**
+  String get groupComplete;
+
+  /// No description provided for @groupChooseMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط على جزئك لتعرفه هذه الشاشة.'**
+  String get groupChooseMine;
+
+  /// No description provided for @groupJuzOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجزء {juz}'**
+  String groupJuzOne(String juz);
+
+  /// No description provided for @groupJuzRange.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأجزاء {from}–{to}'**
+  String groupJuzRange(String from, String to);
+
+  /// No description provided for @groupPartDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُتمّ'**
+  String get groupPartDone;
+
+  /// No description provided for @groupMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'جزئي'**
+  String get groupMine;
+
+  /// No description provided for @groupFinishMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'أتممت جزئي'**
+  String get groupFinishMine;
+
+  /// No description provided for @groupShareInvite.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال رمز الدعوة'**
+  String get groupShareInvite;
+
+  /// No description provided for @groupAddDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة رموز الإتمام'**
+  String get groupAddDone;
+
+  /// No description provided for @groupDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get groupDelete;
+
+  /// No description provided for @groupDeleteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف «{name}» من هاتفك؟'**
+  String groupDeleteTitle(String name);
+
+  /// No description provided for @groupDeleteBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تبقى الختمة عند غيرك كما هي.'**
+  String get groupDeleteBody;
 }
 
 class _AppLocalizationsDelegate

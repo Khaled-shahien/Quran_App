@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/khatma/presentation/screens/group_khatma_screen.dart';
 import 'package:sakina_app/features/prayers/presentation/screens/month_timetable_screen.dart';
 import 'package:sakina_app/features/search/unified_search_screen.dart';
 import 'package:sakina_app/features/recitation/presentation/screens/recitation_listen_screen.dart';
@@ -176,6 +177,11 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) => _fadePage(state, const HifzScreen()),
     ),
     GoRoute(
+      path: '/khatma/group',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const GroupKhatmaScreen()),
+    ),
+    GoRoute(
       path: '/prayers/month',
       pageBuilder: (context, state) =>
           _fadePage(state, const MonthTimetableScreen()),
@@ -200,7 +206,16 @@ final GoRouter appRouter = GoRouter(
       pageBuilder: (context, state) => _fadePage(
         state,
         Scaffold(
-          appBar: AppBar(title: Text(l10nOf(context).appRouterMessage1)),
+          appBar: AppBar(
+            title: Text(l10nOf(context).appRouterMessage1),
+            actions: [
+              IconButton(
+                tooltip: l10nOf(context).groupTitle,
+                icon: const Icon(Icons.groups_outlined),
+                onPressed: () => context.push('/khatma/group'),
+              ),
+            ],
+          ),
           body: const SingleChildScrollView(child: CurrentWirdWidget()),
         ),
       ),
