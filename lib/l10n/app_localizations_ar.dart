@@ -3650,4 +3650,32 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get weeklySettingHelp =>
       'بطاقة هادئة في الرئيسية يومي الجمعة والسبت بما قرأت وأتممت في سبعة أيام. تُحسب على هاتفك، بلا مقارنة ولا أرقام متتالية.';
+
+  @override
+  String get monthTableTitle => 'مواقيت الشهر';
+
+  @override
+  String get monthTableDay => 'اليوم / هجري';
+
+  @override
+  String get monthTablePrevious => 'الشهر السابق';
+
+  @override
+  String get monthTableNext => 'الشهر التالي';
+
+  @override
+  String get monthTableShareImage => 'مشاركة كصورة';
+
+  @override
+  String get monthTableSharePdf => 'مشاركة كملف PDF';
+
+  @override
+  String get monthTableShareFailed => 'تعذّرت المشاركة. حاول مرة أخرى.';
+
+  @override
+  String get monthTableNoPlace => 'اختر موقعك أولًا من شاشة المواقيت.';
+
+  @override
+  String get monthTableFootnote =>
+      'حُسبت على الهاتف بطريقة الحساب والتعديلات المختارة في سكينة. قد تختلف قليلًا عن تقويم مسجدك.';
 }

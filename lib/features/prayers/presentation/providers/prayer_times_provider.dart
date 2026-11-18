@@ -277,6 +277,35 @@ class PrayerTimesProvider extends ChangeNotifier {
 
   /// Shifts calculated times by whole minutes, then recalculates and
   /// reschedules.
+  /// Every day of [year]-[month] for the active place, with the same
+  /// method, Asr rule, time zone and minute adjustments as today. Empty
+  /// without a place; a day that cannot be computed is left out.
+  Future<List<({DateTime date, PrayerTimesEntity times})>> monthTimes(
+    int year,
+    int month,
+  ) async {
+    final Coordinates? place = _selectedCoordinates;
+    if (place == null) return const [];
+    final int days = DateTime(year, month + 1, 0).day;
+    final out = <({DateTime date, PrayerTimesEntity times})>[];
+    for (var day = 1; day <= days; day++) {
+      final date = DateTime(year, month, day);
+      final result = await _repository.getPrayerTimes(
+        date,
+        place.latitude,
+        place.longitude,
+        calculationMethod: selectedMethod,
+        madhab: asrMadhab,
+        timeZone: selectedTimeZone,
+        adjustments: adjustments,
+      );
+      if (result.valueOrNull case final times?) {
+        out.add((date: date, times: times));
+      }
+    }
+    return out;
+  }
+
   /// Moves of at least this far count as travel.
   static const double travelThresholdKm = 50;
 

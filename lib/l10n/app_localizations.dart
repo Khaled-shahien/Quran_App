@@ -6491,6 +6491,60 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'بطاقة هادئة في الرئيسية يومي الجمعة والسبت بما قرأت وأتممت في سبعة أيام. تُحسب على هاتفك، بلا مقارنة ولا أرقام متتالية.'**
   String get weeklySettingHelp;
+
+  /// No description provided for @monthTableTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواقيت الشهر'**
+  String get monthTableTitle;
+
+  /// No description provided for @monthTableDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم / هجري'**
+  String get monthTableDay;
+
+  /// No description provided for @monthTablePrevious.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهر السابق'**
+  String get monthTablePrevious;
+
+  /// No description provided for @monthTableNext.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهر التالي'**
+  String get monthTableNext;
+
+  /// No description provided for @monthTableShareImage.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة كصورة'**
+  String get monthTableShareImage;
+
+  /// No description provided for @monthTableSharePdf.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة كملف PDF'**
+  String get monthTableSharePdf;
+
+  /// No description provided for @monthTableShareFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّرت المشاركة. حاول مرة أخرى.'**
+  String get monthTableShareFailed;
+
+  /// No description provided for @monthTableNoPlace.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر موقعك أولًا من شاشة المواقيت.'**
+  String get monthTableNoPlace;
+
+  /// No description provided for @monthTableFootnote.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُسبت على الهاتف بطريقة الحساب والتعديلات المختارة في سكينة. قد تختلف قليلًا عن تقويم مسجدك.'**
+  String get monthTableFootnote;
 }
 
 class _AppLocalizationsDelegate

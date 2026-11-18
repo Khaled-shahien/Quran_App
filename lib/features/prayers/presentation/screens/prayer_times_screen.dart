@@ -102,6 +102,11 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
       title: l10n.prayerTitle,
       actions: [
         IconButton(
+          tooltip: l10nOf(context).monthTableTitle,
+          icon: const Icon(Icons.calendar_month_outlined),
+          onPressed: () => context.push('/prayers/month'),
+        ),
+        IconButton(
           tooltip: l10nOf(context).practiceLogOpen,
           icon: const Icon(Icons.fact_check_outlined),
           onPressed: () => context.push('/prayers/log'),

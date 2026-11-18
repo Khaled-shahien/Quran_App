@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/presentation/screens/month_timetable_screen.dart';
 import 'package:sakina_app/features/search/unified_search_screen.dart';
 import 'package:sakina_app/features/recitation/presentation/screens/recitation_listen_screen.dart';
 import 'package:sakina_app/features/quran/presentation/screens/hifz_screens.dart';
@@ -173,6 +174,11 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/quran/hifz',
       pageBuilder: (context, state) => _fadePage(state, const HifzScreen()),
+    ),
+    GoRoute(
+      path: '/prayers/month',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const MonthTimetableScreen()),
     ),
     GoRoute(
       path: '/prayers/log',
