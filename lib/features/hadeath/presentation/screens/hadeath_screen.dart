@@ -32,6 +32,13 @@ class _HadeathScreenState extends State<HadeathScreen> {
   Widget build(BuildContext context) {
     return SakinaHeroScaffold(
       title: l10nOf(context).hadeathScreenMessage1,
+      actions: [
+        IconButton(
+          tooltip: l10nOf(context).hadithLibraryTitle,
+          icon: const Icon(Icons.local_library_outlined),
+          onPressed: () => context.push('/hadeath/library'),
+        ),
+      ],
       slivers: [
         Consumer<HadeathProvider>(
           builder: (context, provider, child) {

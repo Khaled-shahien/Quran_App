@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/hadeath/presentation/screens/hadith_library_screen.dart';
 import 'package:sakina_app/features/khatma/presentation/screens/group_khatma_screen.dart';
 import 'package:sakina_app/features/prayers/presentation/screens/month_timetable_screen.dart';
 import 'package:sakina_app/features/search/unified_search_screen.dart';
@@ -175,6 +176,11 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/quran/hifz',
       pageBuilder: (context, state) => _fadePage(state, const HifzScreen()),
+    ),
+    GoRoute(
+      path: '/hadeath/library',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const HadithLibraryScreen()),
     ),
     GoRoute(
       path: '/khatma/group',

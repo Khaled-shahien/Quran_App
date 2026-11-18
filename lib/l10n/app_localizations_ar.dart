@@ -3786,4 +3786,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get groupDeleteBody => 'تبقى الختمة عند غيرك كما هي.';
+
+  @override
+  String get hadithLibraryTitle => 'موسوعة الأحاديث';
+
+  @override
+  String get hadithLibrarySearch => 'ابحث في نصوص الأحاديث';
+
+  @override
+  String hadithLibraryIntro(String count) {
+    return '$count حديثًا مع درجتها وشرحها ومراجعها، من «موسوعة الأحاديث النبوية» (hadeethenc.com)، مقسّمة حسب الموضوع.';
+  }
+
+  @override
+  String get hadithLibraryLoading => 'جارٍ فتح الموسوعة…';
+
+  @override
+  String get hadithLibraryFailed => 'تعذّر فتح موسوعة الأحاديث.';
+
+  @override
+  String hadithLibraryAllIn(String count) {
+    return 'كل أحاديث هذا الباب ($count)';
+  }
 }

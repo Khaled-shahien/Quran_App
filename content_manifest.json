@@ -141,6 +141,20 @@
       "proposedEdition": "API answers downloaded 2026-11-18 for the 50 hadith of the app (ids in tool/hadith_hadeethenc_ids.json); built by tool/build_hadith_hadeethenc.py without editing the text",
       "proposedLicense": "Pending: confirm HadeethEnc terms of reuse (attribution and offline redistribution) before release.",
       "proposalNotes": "Each hadith was matched to its HadeethEnc entry by text similarity; check the pairing (e.g. 2 = Jibril, 25 = \"ذهب أهل الدثور\") and that grades, explanations and references are wanted as published."
+    },
+    {
+      "path": "assets/hadeath/hadeethenc_library.json",
+      "sha256": "f272afdeee37f7854cf17a7cb5d29cf3e8b1eb02c0c949337e6d77bfc1d06bda",
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null,
+      "proposedSource": "HadeethEnc.com - Encyclopedia of Translated Prophetic Hadiths, Arabic (https://hadeethenc.com), via its public API",
+      "proposedEdition": "All 3,574 Arabic hadith listed under the seven root topics and the 493 topics, downloaded 2026-11-18 (one request per hadith); built by tool/build_hadith_library.py without editing the text",
+      "proposedLicense": "Pending: confirm HadeethEnc terms of reuse (attribution and offline redistribution of the whole collection) before release.",
+      "proposalNotes": "Grades are as published (3,205 sahih, 275 hasan, the rest with named graders or qualifiers such as hasan li-ghayrihi). One hadith (65929) has no reference."
     }
   ],
   "proposalStatus": "sources_proposed_2026-11-09_awaiting_owner_review"

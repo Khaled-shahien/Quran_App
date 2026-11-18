@@ -4370,5 +4370,25 @@
       }
     }
   },
-  "groupDeleteBody": "تبقى الختمة عند غيرك كما هي."
+  "groupDeleteBody": "تبقى الختمة عند غيرك كما هي.",
+  "hadithLibraryTitle": "موسوعة الأحاديث",
+  "hadithLibrarySearch": "ابحث في نصوص الأحاديث",
+  "hadithLibraryIntro": "{count} حديثًا مع درجتها وشرحها ومراجعها، من «موسوعة الأحاديث النبوية» (hadeethenc.com)، مقسّمة حسب الموضوع.",
+  "@hadithLibraryIntro": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "hadithLibraryLoading": "جارٍ فتح الموسوعة…",
+  "hadithLibraryFailed": "تعذّر فتح موسوعة الأحاديث.",
+  "hadithLibraryAllIn": "كل أحاديث هذا الباب ({count})",
+  "@hadithLibraryAllIn": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  }
 }

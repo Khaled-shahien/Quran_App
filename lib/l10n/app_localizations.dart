@@ -6731,6 +6731,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تبقى الختمة عند غيرك كما هي.'**
   String get groupDeleteBody;
+
+  /// No description provided for @hadithLibraryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'موسوعة الأحاديث'**
+  String get hadithLibraryTitle;
+
+  /// No description provided for @hadithLibrarySearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث في نصوص الأحاديث'**
+  String get hadithLibrarySearch;
+
+  /// No description provided for @hadithLibraryIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} حديثًا مع درجتها وشرحها ومراجعها، من «موسوعة الأحاديث النبوية» (hadeethenc.com)، مقسّمة حسب الموضوع.'**
+  String hadithLibraryIntro(String count);
+
+  /// No description provided for @hadithLibraryLoading.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ فتح الموسوعة…'**
+  String get hadithLibraryLoading;
+
+  /// No description provided for @hadithLibraryFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر فتح موسوعة الأحاديث.'**
+  String get hadithLibraryFailed;
+
+  /// No description provided for @hadithLibraryAllIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل أحاديث هذا الباب ({count})'**
+  String hadithLibraryAllIn(String count);
 }
 
 class _AppLocalizationsDelegate
