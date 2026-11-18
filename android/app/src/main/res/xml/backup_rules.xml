@@ -10,4 +10,8 @@
     <!-- Downloaded recitations: large, re-downloadable, and over the 25 MB
          auto-backup limit they would make the whole backup fail. -->
     <exclude domain="file" path="recitation/" />
+    <!-- The prayer and fasting log: sensitive, never uploaded (PV-3).
+         It moves only in an export file the user makes. -->
+    <exclude domain="database" path="sakina_private.db" />
+    <exclude domain="database" path="sakina_private.db-journal" />
 </full-backup-content>

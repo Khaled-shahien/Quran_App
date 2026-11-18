@@ -1,9 +1,12 @@
+import 'dart:async';
+
+import 'package:sakina_app/core/services/backup_encryption.dart';
 import 'package:sakina_app/features/quran/data/repositories/hifz_repository.dart';
 import 'package:sakina_app/features/practice_log/data/practice_log_repository.dart';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
@@ -51,11 +54,15 @@ class MyDataPreferences extends StatelessWidget {
     this.files = const PlatformBackupFiles(),
     this.backup,
     this.restart = restartAfterDataChange,
+    this.cipherCost = BackupCipher.defaultCost,
   });
 
   final BackupFiles files;
   final UserDataBackup? backup;
   final Future<void> Function() restart;
+
+  /// Key-derivation cost for new encrypted files; lowered in tests.
+  final Argon2Cost cipherCost;
 
   UserDataBackup _backup() =>
       backup ??
@@ -63,19 +70,62 @@ class MyDataPreferences extends StatelessWidget {
         prefs: GetIt.instance<SharedPreferences>(),
         library: VerseLibraryRepository(GetIt.instance.getAsync<AppDatabase>),
         otherTables: [
-          PracticeLogRepository(GetIt.instance.getAsync<AppDatabase>),
+          PracticeLogRepository(GetIt.instance.getAsync<PrivateDatabase>),
           HifzRepository(GetIt.instance.getAsync<AppDatabase>),
         ],
       );
 
-  void _snack(BuildContext context, String text) => ScaffoldMessenger.maybeOf(
-    context,
-  )?.showSnackBar(SnackBar(content: Text(text)));
+  /// Replaces any message still showing, so the latest outcome is seen.
+  void _snack(BuildContext context, String text) =>
+      ScaffoldMessenger.maybeOf(context)
+        ?..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(text)));
+
+  /// Runs [work] in another isolate behind a "one moment" dialog, so key
+  /// derivation never freezes the screen.
+  Future<T> _busy<T>(BuildContext context, Future<T> work) async {
+    final navigator = Navigator.of(context);
+    final String working = l10nOf(context).myDataWorking;
+    unawaited(
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => AlertDialog(
+          content: Row(
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(width: 16),
+              Expanded(child: Text(working)),
+            ],
+          ),
+        ),
+      ),
+    );
+    try {
+      return await work;
+    } finally {
+      navigator.pop();
+    }
+  }
 
   Future<void> _export(BuildContext context) async {
     final l10n = l10nOf(context);
+    final String? passphrase = await showDialog<String>(
+      context: context,
+      builder: (_) => const _PassphraseDialog(forExport: true),
+    );
+    if (passphrase == null || !context.mounted) return;
     try {
-      final String json = await _backup().export();
+      String json = await _backup().export();
+      if (passphrase.isNotEmpty) {
+        if (!context.mounted) return;
+        final cost = cipherCost;
+        final plain = json;
+        json = await _busy(
+          context,
+          compute(_encryptJob, (plain, passphrase, cost)),
+        );
+      }
       final DateTime now = DateTime.now();
       final String name =
           'sakina-backup-${now.year}-${now.month.toString().padLeft(2, '0')}'
@@ -92,7 +142,7 @@ class MyDataPreferences extends StatelessWidget {
 
   Future<void> _import(BuildContext context) async {
     final l10n = l10nOf(context);
-    final String? raw;
+    String? raw;
     try {
       raw = await files.pick();
     } catch (_) {
@@ -100,10 +150,29 @@ class MyDataPreferences extends StatelessWidget {
       return;
     }
     if (raw == null || !context.mounted) return;
+    if (BackupCipher.isEncrypted(raw)) {
+      final String? passphrase = await showDialog<String>(
+        context: context,
+        builder: (_) => const _PassphraseDialog(forExport: false),
+      );
+      if (passphrase == null || !context.mounted) return;
+      final String locked = raw;
+      try {
+        raw = await _busy(context, compute(_decryptJob, (locked, passphrase)));
+      } on BackupPassphraseException {
+        if (context.mounted) _snack(context, l10n.myDataWrongPassphrase);
+        return;
+      } on FormatException {
+        if (context.mounted) _snack(context, l10n.myDataInvalidFile);
+        return;
+      }
+      if (!context.mounted) return;
+    }
+    final String file = raw;
     final UserDataBackup backup = _backup();
     final BackupSummary summary;
     try {
-      summary = backup.inspect(raw);
+      summary = backup.inspect(file);
     } on BackupFormatException {
       _snack(context, l10n.myDataInvalidFile);
       return;
@@ -137,7 +206,7 @@ class MyDataPreferences extends StatelessWidget {
     );
     if (confirmed != true) return;
     try {
-      await backup.restore(raw);
+      await backup.restore(file);
     } catch (_) {
       if (context.mounted) _snack(context, l10n.myDataFailed);
       return;
@@ -208,3 +277,112 @@ class MyDataPreferences extends StatelessWidget {
     );
   }
 }
+
+/// Asks for a passphrase: on export optional (with a repeat field), on
+/// import to open a protected file. Pops the passphrase, "" for no
+/// passphrase, or null when cancelled.
+class _PassphraseDialog extends StatefulWidget {
+  const _PassphraseDialog({required this.forExport});
+
+  final bool forExport;
+
+  @override
+  State<_PassphraseDialog> createState() => _PassphraseDialogState();
+}
+
+class _PassphraseDialogState extends State<_PassphraseDialog> {
+  final _first = TextEditingController();
+  final _second = TextEditingController();
+  String? _error;
+
+  @override
+  void dispose() {
+    _first.dispose();
+    _second.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final l10n = l10nOf(context);
+    final String value = _first.text;
+    if (widget.forExport) {
+      if (value.length < BackupCipher.minPassphraseLength) {
+        setState(() => _error = l10n.myDataPassphraseTooShort);
+        return;
+      }
+      if (value != _second.text) {
+        setState(() => _error = l10n.myDataPassphraseMismatch);
+        return;
+      }
+    } else if (value.isEmpty) {
+      return;
+    }
+    Navigator.pop(context, value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = l10nOf(context);
+    return AlertDialog(
+      title: Text(
+        widget.forExport ? l10n.myDataPassphraseTitle : l10n.myDataUnlockTitle,
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (widget.forExport) Text(l10n.myDataPassphraseHelp),
+            TextField(
+              key: const Key('passphrase'),
+              controller: _first,
+              obscureText: true,
+              autocorrect: false,
+              enableSuggestions: false,
+              decoration: InputDecoration(labelText: l10n.myDataPassphrase),
+              onSubmitted: widget.forExport ? null : (_) => _submit(),
+            ),
+            if (widget.forExport)
+              TextField(
+                key: const Key('passphrase-repeat'),
+                controller: _second,
+                obscureText: true,
+                autocorrect: false,
+                enableSuggestions: false,
+                decoration: InputDecoration(
+                  labelText: l10n.myDataPassphraseRepeat,
+                  errorText: _error,
+                ),
+                onSubmitted: (_) => _submit(),
+              ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          key: const Key('passphrase-skip'),
+          onPressed: () => Navigator.pop(context, widget.forExport ? '' : null),
+          child: Text(
+            widget.forExport
+                ? l10n.myDataWithoutPassphrase
+                : MaterialLocalizations.of(context).cancelButtonLabel,
+          ),
+        ),
+        FilledButton(
+          key: const Key('passphrase-ok'),
+          onPressed: _submit,
+          child: Text(
+            widget.forExport ? l10n.myDataEncryptAndSave : l10n.myDataUnlock,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// Run in another isolate (top-level, so nothing from the screen is sent).
+Future<String> _encryptJob((String, String, Argon2Cost) job) =>
+    BackupCipher.encrypt(job.$1, job.$2, cost: job.$3);
+
+Future<String> _decryptJob((String, String) job) =>
+    BackupCipher.decrypt(job.$1, job.$2);

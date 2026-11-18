@@ -4205,5 +4205,17 @@
   "simpleHomeQuran": "القرآن",
   "simpleHomePrayers": "مواقيت الصلاة",
   "simpleHomeAdhkar": "الأذكار",
-  "simpleHomeQibla": "القبلة"
+  "simpleHomeQibla": "القبلة",
+  "myDataPassphraseTitle": "حماية النسخة بكلمة مرور",
+  "myDataPassphraseHelp": "تحوي النسخة سجلّ عبادتك وملاحظاتك. بكلمة مرور تُشفَّر فلا يقرؤها غيرك ولو حفظتها في خدمة سحابية. إن نسيت كلمة المرور فلا سبيل لفتح الملف.",
+  "myDataPassphrase": "كلمة المرور",
+  "myDataPassphraseRepeat": "أعد كتابة كلمة المرور",
+  "myDataPassphraseTooShort": "ثمانية أحرف على الأقل",
+  "myDataPassphraseMismatch": "الكلمتان غير متطابقتين",
+  "myDataWithoutPassphrase": "بدون كلمة مرور",
+  "myDataEncryptAndSave": "تشفير وحفظ",
+  "myDataUnlockTitle": "هذه النسخة محمية بكلمة مرور",
+  "myDataUnlock": "فتح",
+  "myDataWrongPassphrase": "كلمة المرور غير صحيحة، أو أن الملف تغيّر.",
+  "myDataWorking": "لحظة…"
 }

@@ -6311,6 +6311,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'القبلة'**
   String get simpleHomeQibla;
+
+  /// No description provided for @myDataPassphraseTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حماية النسخة بكلمة مرور'**
+  String get myDataPassphraseTitle;
+
+  /// No description provided for @myDataPassphraseHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحوي النسخة سجلّ عبادتك وملاحظاتك. بكلمة مرور تُشفَّر فلا يقرؤها غيرك ولو حفظتها في خدمة سحابية. إن نسيت كلمة المرور فلا سبيل لفتح الملف.'**
+  String get myDataPassphraseHelp;
+
+  /// No description provided for @myDataPassphrase.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور'**
+  String get myDataPassphrase;
+
+  /// No description provided for @myDataPassphraseRepeat.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعد كتابة كلمة المرور'**
+  String get myDataPassphraseRepeat;
+
+  /// No description provided for @myDataPassphraseTooShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثمانية أحرف على الأقل'**
+  String get myDataPassphraseTooShort;
+
+  /// No description provided for @myDataPassphraseMismatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكلمتان غير متطابقتين'**
+  String get myDataPassphraseMismatch;
+
+  /// No description provided for @myDataWithoutPassphrase.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون كلمة مرور'**
+  String get myDataWithoutPassphrase;
+
+  /// No description provided for @myDataEncryptAndSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشفير وحفظ'**
+  String get myDataEncryptAndSave;
+
+  /// No description provided for @myDataUnlockTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه النسخة محمية بكلمة مرور'**
+  String get myDataUnlockTitle;
+
+  /// No description provided for @myDataUnlock.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح'**
+  String get myDataUnlock;
+
+  /// No description provided for @myDataWrongPassphrase.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور غير صحيحة، أو أن الملف تغيّر.'**
+  String get myDataWrongPassphrase;
+
+  /// No description provided for @myDataWorking.
+  ///
+  /// In ar, this message translates to:
+  /// **'لحظة…'**
+  String get myDataWorking;
 }
 
 class _AppLocalizationsDelegate

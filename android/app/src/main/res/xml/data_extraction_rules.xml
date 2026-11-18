@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android 12+ backup and device transfer. User settings, bookmarks, khatma
      and tasbih progress (FlutterSharedPreferences) and the user database
-     (databases/sakina.db: saved verses, notes) are kept. -->
+     (databases/sakina.db: saved verses, notes, hifz) are kept. The prayer
+     and fasting log (sakina_private.db) is left out of cloud backup. -->
 <data-extraction-rules>
     <cloud-backup>
         <!-- Rebuilt from settings on first launch; a stale copy would restore
@@ -13,6 +14,10 @@
         <!-- Downloaded recitations: large, re-downloadable, and over the 25 MB
              auto-backup limit they would make the whole backup fail. -->
         <exclude domain="file" path="recitation/" />
+        <!-- The prayer and fasting log: sensitive, never uploaded (PV-3).
+             It moves only in an export file the user makes. -->
+        <exclude domain="database" path="sakina_private.db" />
+        <exclude domain="database" path="sakina_private.db-journal" />
     </cloud-backup>
     <device-transfer>
         <!-- Rebuilt from settings on first launch; a stale copy would restore

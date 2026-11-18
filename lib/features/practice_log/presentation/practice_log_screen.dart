@@ -52,7 +52,7 @@ class PracticeLogScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PracticeLogController>(
       create: (context) => PracticeLogController(
-        repository ?? PracticeLogRepository(getIt.getAsync<AppDatabase>),
+        repository ?? PracticeLogRepository(getIt.getAsync<PrivateDatabase>),
         context.read<SharedPreferences>(),
       )..load(),
       child: const _PracticeLogView(),

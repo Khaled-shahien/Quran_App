@@ -3548,4 +3548,42 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get simpleHomeQibla => 'القبلة';
+
+  @override
+  String get myDataPassphraseTitle => 'حماية النسخة بكلمة مرور';
+
+  @override
+  String get myDataPassphraseHelp =>
+      'تحوي النسخة سجلّ عبادتك وملاحظاتك. بكلمة مرور تُشفَّر فلا يقرؤها غيرك ولو حفظتها في خدمة سحابية. إن نسيت كلمة المرور فلا سبيل لفتح الملف.';
+
+  @override
+  String get myDataPassphrase => 'كلمة المرور';
+
+  @override
+  String get myDataPassphraseRepeat => 'أعد كتابة كلمة المرور';
+
+  @override
+  String get myDataPassphraseTooShort => 'ثمانية أحرف على الأقل';
+
+  @override
+  String get myDataPassphraseMismatch => 'الكلمتان غير متطابقتين';
+
+  @override
+  String get myDataWithoutPassphrase => 'بدون كلمة مرور';
+
+  @override
+  String get myDataEncryptAndSave => 'تشفير وحفظ';
+
+  @override
+  String get myDataUnlockTitle => 'هذه النسخة محمية بكلمة مرور';
+
+  @override
+  String get myDataUnlock => 'فتح';
+
+  @override
+  String get myDataWrongPassphrase =>
+      'كلمة المرور غير صحيحة، أو أن الملف تغيّر.';
+
+  @override
+  String get myDataWorking => 'لحظة…';
 }

@@ -90,6 +90,20 @@ Future<void> setupServiceLocator() async {
       AppDatabase.open,
       dispose: (database) => database.close(),
     );
+    // The log, apart so cloud backup can leave it out (PV-3).
+    getIt.registerLazySingletonAsync<PrivateDatabase>(() async {
+      final PrivateDatabase private = await PrivateDatabase.open();
+      try {
+        await private.adoptLegacyLog(await getIt.getAsync<AppDatabase>());
+      } catch (error) {
+        developer.log(
+          'Legacy log not moved yet',
+          name: 'sakina_app.database',
+          error: error,
+        );
+      }
+      return private;
+    }, dispose: (database) => database.close());
     getIt.registerLazySingleton<http.Client>(() => http.Client());
     getIt.registerLazySingleton<CachedApiService>(
       () => CachedApiService(getIt<SharedPreferences>()),
