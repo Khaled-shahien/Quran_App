@@ -2951,4 +2951,33 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get myDataFailed => 'تعذّرت العملية، ولم يتغير شيء.';
+
+  @override
+  String get hisnTitle => 'حصن المسلم';
+
+  @override
+  String get hisnEntrySubtitle => 'الكتاب كاملًا: كل الأبواب والأذكار';
+
+  @override
+  String get hisnSearch => 'ابحث في الأبواب';
+
+  @override
+  String hisnEntryCount(String count) {
+    return '$count ذكر';
+  }
+
+  @override
+  String hisnProgress(String done, String total) {
+    return '$done من $total';
+  }
+
+  @override
+  String get hisnDone => 'تم';
+
+  @override
+  String get hisnLoadFailed => 'تعذّر فتح حصن المسلم.';
+
+  @override
+  String get hisnSource =>
+      'المصدر: حصن المسلم لسعيد بن علي بن وهف القحطاني، النص العربي من hisnmuslim.com دون تعديل. النص بانتظار مراجعة المالك قبل النشر.';
 }

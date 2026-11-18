@@ -1,3 +1,5 @@
+import 'package:sakina_app/features/duas/presentation/screens/hisn_screens.dart';
+import 'package:sakina_app/features/duas/data/hisn_almuslim.dart';
 import 'package:sakina_app/features/quran/presentation/screens/saved_verses_screen.dart';
 import 'package:sakina_app/features/settings/presentation/screens/alert_health_screen.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
@@ -127,6 +129,31 @@ final GoRouter appRouter = GoRouter(
       path: '/quran/saved',
       pageBuilder: (context, state) =>
           _fadePage(state, const SavedVersesScreen()),
+    ),
+    GoRoute(
+      path: '/duas/hisn',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const HisnChaptersScreen()),
+    ),
+    GoRoute(
+      path: '/duas/hisn/:id',
+      pageBuilder: (context, state) {
+        final int? id = int.tryParse(state.pathParameters['id'] ?? '');
+        if (id == null) {
+          return _fadePage(
+            state,
+            _RouteDataErrorScreen(message: l10nOf(context).hisnLoadFailed),
+          );
+        }
+        final Object? source = state.extra;
+        return _fadePage(
+          state,
+          HisnChapterScreen(
+            chapterId: id,
+            source: source is HisnAlMuslim ? source : null,
+          ),
+        );
+      },
     ),
     GoRoute(
       path: '/quran/search',

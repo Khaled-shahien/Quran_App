@@ -5304,6 +5304,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّرت العملية، ولم يتغير شيء.'**
   String get myDataFailed;
+
+  /// Title of the complete Hisn al-Muslim collection.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصن المسلم'**
+  String get hisnTitle;
+
+  /// Subtitle of the Hisn al-Muslim entry on the adhkar screen.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكتاب كاملًا: كل الأبواب والأذكار'**
+  String get hisnEntrySubtitle;
+
+  /// Search field over chapter titles.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث في الأبواب'**
+  String get hisnSearch;
+
+  /// Number of entries in a chapter.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} ذكر'**
+  String hisnEntryCount(String count);
+
+  /// Times said so far of the times to say.
+  ///
+  /// In ar, this message translates to:
+  /// **'{done} من {total}'**
+  String hisnProgress(String done, String total);
+
+  /// All repetitions done.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get hisnDone;
+
+  /// The bundled collection could not be read.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر فتح حصن المسلم.'**
+  String get hisnLoadFailed;
+
+  /// Source line of Hisn al-Muslim.
+  ///
+  /// In ar, this message translates to:
+  /// **'المصدر: حصن المسلم لسعيد بن علي بن وهف القحطاني، النص العربي من hisnmuslim.com دون تعديل. النص بانتظار مراجعة المالك قبل النشر.'**
+  String get hisnSource;
 }
 
 class _AppLocalizationsDelegate

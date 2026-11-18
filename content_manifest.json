@@ -99,6 +99,20 @@
       "proposedEdition": "Tanzil ar.muyassar, last update January 7, 2011; downloaded 2026-11-18 from https://tanzil.net/trans/?transID=ar.muyassar&type=txt-2",
       "proposedLicense": "Tanzil translation terms: free for non-commercial use with attribution to Tanzil.net and the translator; the text must not be modified. Confirm with the King Fahd Complex before release.",
       "proposalNotes": "Bundled byte-for-byte as downloaded, including Tanzil's header comment. 6,236 entries, one per ayah, checked against quran_master.json counts."
+    },
+    {
+      "path": "assets/hisn_almuslim.json",
+      "sha256": "6ed64d52836aab5e30cdae7e630141f0616446dbe30697a6d52b42ed2a9a8aad",
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null,
+      "proposedSource": "Hisn al-Muslim (حصن المسلم) by Sa‘id ibn Ali ibn Wahf al-Qahtani, Arabic text from the hisnmuslim.com API (https://www.hisnmuslim.com/api/ar/husn_ar.json)",
+      "proposedEdition": "hisnmuslim.com API, 132 chapters, 267 entries, downloaded 2026-11-18; built by tool/build_hisn_almuslim.py without editing the text",
+      "proposedLicense": "Pending: hisnmuslim.com publishes no terms; written permission needed before release (owner decision 2026-11-05).",
+      "proposalNotes": "The API carries no hadith references (takhrij) and some entries include bracketed instructions; check wording and repeat counts against a printed edition."
     }
   ],
   "proposalStatus": "sources_proposed_2026-11-09_awaiting_owner_review"

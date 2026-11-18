@@ -56,6 +56,16 @@ class AzkarScreen extends StatelessWidget {
                       icon: Icons.nightlight_outlined,
                       night: true,
                     ),
+                    const SizedBox(height: AppSpacing.ms),
+                    Card(
+                      child: ListTile(
+                        leading: const Icon(Icons.shield_moon_outlined),
+                        title: Text(l10n.hisnTitle),
+                        subtitle: Text(l10n.hisnEntrySubtitle),
+                        trailing: const Icon(Icons.chevron_left_rounded),
+                        onTap: () => context.push('/duas/hisn'),
+                      ),
+                    ),
                   ],
                 ),
               ),

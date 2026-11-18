@@ -3643,5 +3643,50 @@
   "myDataFailed": "تعذّرت العملية، ولم يتغير شيء.",
   "@myDataFailed": {
     "description": "Export, import or erase failed."
+  },
+  "hisnTitle": "حصن المسلم",
+  "@hisnTitle": {
+    "description": "Title of the complete Hisn al-Muslim collection."
+  },
+  "hisnEntrySubtitle": "الكتاب كاملًا: كل الأبواب والأذكار",
+  "@hisnEntrySubtitle": {
+    "description": "Subtitle of the Hisn al-Muslim entry on the adhkar screen."
+  },
+  "hisnSearch": "ابحث في الأبواب",
+  "@hisnSearch": {
+    "description": "Search field over chapter titles."
+  },
+  "hisnEntryCount": "{count} ذكر",
+  "@hisnEntryCount": {
+    "description": "Number of entries in a chapter.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "hisnProgress": "{done} من {total}",
+  "@hisnProgress": {
+    "description": "Times said so far of the times to say.",
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "hisnDone": "تم",
+  "@hisnDone": {
+    "description": "All repetitions done."
+  },
+  "hisnLoadFailed": "تعذّر فتح حصن المسلم.",
+  "@hisnLoadFailed": {
+    "description": "The bundled collection could not be read."
+  },
+  "hisnSource": "المصدر: حصن المسلم لسعيد بن علي بن وهف القحطاني، النص العربي من hisnmuslim.com دون تعديل. النص بانتظار مراجعة المالك قبل النشر.",
+  "@hisnSource": {
+    "description": "Source line of Hisn al-Muslim."
   }
 }
