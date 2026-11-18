@@ -91,14 +91,12 @@ class PrayerAlertNotifications {
     final AndroidScheduleMode scheduleMode = await _core.androidScheduleMode();
     Future<void> schedule(NotificationDetails d) =>
         _core.flutterLocalNotificationsPlugin.zonedSchedule(
-          id,
-          content.title,
-          content.body,
-          scheduledDate,
-          d,
+          id: id,
+          title: content.title,
+          body: content.body,
+          scheduledDate: scheduledDate,
+          notificationDetails: d,
           androidScheduleMode: scheduleMode,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
           payload: serializedPayload,
         );
 
@@ -214,13 +212,13 @@ class PrayerAlertNotifications {
     if (!_core.isPluginAvailable) return;
 
     for (final int id in allPrayerNotificationIds()) {
-      await _core.flutterLocalNotificationsPlugin.cancel(id);
+      await _core.flutterLocalNotificationsPlugin.cancel(id: id);
     }
     for (final int id in AnchoredReminders.allIds()) {
-      await _core.flutterLocalNotificationsPlugin.cancel(id);
+      await _core.flutterLocalNotificationsPlugin.cancel(id: id);
     }
     await _core.flutterLocalNotificationsPlugin.cancel(
-      prayerWindowEndingNotificationId,
+      id: prayerWindowEndingNotificationId,
     );
 
     developer.log(

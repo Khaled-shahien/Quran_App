@@ -2,7 +2,7 @@ import 'package:adhan_dart/adhan_dart.dart' as adhan;
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:sakina_app/core/result/result.dart';
-import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../../domain/entities/prayer_times_entity.dart';

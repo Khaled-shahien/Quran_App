@@ -219,19 +219,17 @@ class DailyReminderNotifications {
         digits,
       );
       await _core.flutterLocalNotificationsPlugin.zonedSchedule(
-        dailyVerseNotificationId(at),
-        content.title,
-        content.body,
-        at,
-        buildNotificationDetails(
+        id: dailyVerseNotificationId(at),
+        title: content.title,
+        body: content.body,
+        scheduledDate: at,
+        notificationDetails: buildNotificationDetails(
           SakinaNotificationKind.dailyVerse,
           title: content.title,
           body: content.body,
           summary: content.summary,
         ),
         androidScheduleMode: mode,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
         payload: jsonEncode({
           'type': 'daily_verse',
           'data': <String, dynamic>{

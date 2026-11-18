@@ -4,7 +4,7 @@ import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 int _minutes(String? hhmm) {

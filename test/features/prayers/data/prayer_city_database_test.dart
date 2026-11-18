@@ -11,7 +11,7 @@ import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart'
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
 import 'package:sakina_app/features/prayers/presentation/providers/prayer_times_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 class _Repository implements PrayerTimesRepository {

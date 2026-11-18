@@ -79,7 +79,7 @@ flutter {
 
 dependencies {
     // Core library desugaring for Java 8+ features (required by flutter_local_notifications)
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     
     // AndroidX WorkManager for background task scheduling
     implementation("androidx.work:work-runtime-ktx:2.9.0")

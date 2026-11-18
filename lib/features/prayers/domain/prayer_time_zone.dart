@@ -1,4 +1,4 @@
-import 'package:timezone/data/latest.dart' as data;
+import 'package:timezone/data/latest_all.dart' as data;
 import 'package:timezone/timezone.dart' as tz;
 
 tz.Location? prayerLocation(String? name) {

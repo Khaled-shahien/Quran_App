@@ -3,7 +3,7 @@ import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/features/prayers/data/repositories/prayer_times_repository_impl.dart';
 import 'package:sakina_app/features/prayers/domain/entities/prayer_times_entity.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
-import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 /// Reference times from api.aladhan.com (retrieved 2026-11-05) with the same
@@ -146,8 +146,7 @@ int _minutes(String hhmm) {
 /// Methods where this engine (adhan) and AlAdhan's "experimental"
 /// implementation differ by design: adhan applies the official bodies'
 /// minute adjustments (Diyanet temkin, Dubai and Moonsighting Committee
-/// offsets) and AlAdhan does not. AlAdhan's Morocco times are one hour off
-/// (it ignores Morocco's UTC+1), so they are compared one hour later.
+/// offsets) and AlAdhan does not.
 /// [maxMinutes] is the accepted difference per time; anything larger is a
 /// regression. These methods still need checking against the official
 /// timetables (docs/audit/EXTERNAL_BLOCKERS.md, B-10).
@@ -180,14 +179,15 @@ final List<(_Reference, List<int> maxMinutes)> _knownDifferences = [
   ),
   (
     _Reference(
-      'Casablanca (Morocco), AlAdhan + 1 h',
+      // Morocco moved to permanent UTC+0 on 2026-09-20 (tzdata 2026c).
+      'Casablanca (Morocco)',
       DateTime(2026, 11, 18),
       33.5731,
       -7.5898,
       'Africa/Casablanca',
       PrayerCalculationPolicy.morocco,
       AsrMadhab.standard,
-      ['06:33', '08:05', '13:21', '16:07', '18:31', '19:47'],
+      ['05:33', '07:05', '12:21', '15:07', '17:31', '18:47'],
     ),
     [1, 3, 1, 1, 1, 1],
   ),

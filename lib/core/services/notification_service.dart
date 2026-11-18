@@ -99,7 +99,7 @@ class NotificationService {
           InitializationSettings(android: androidInit, iOS: iosInit);
 
       await flutterLocalNotificationsPlugin.initialize(
-        initializationSettings,
+        settings: initializationSettings,
         onDidReceiveNotificationResponse: _onNotificationTapped,
       );
 
@@ -155,7 +155,7 @@ class NotificationService {
     // Channels of removed recordings would point at a sound that no longer
     // exists. Deleting a channel that was never created is a no-op.
     for (final id in AdhanVoices.retiredChannelIds) {
-      await androidImplementation.deleteNotificationChannel(id);
+      await androidImplementation.deleteNotificationChannel(channelId: id);
     }
 
     developer.log(
@@ -334,10 +334,10 @@ class NotificationService {
     });
 
     await flutterLocalNotificationsPlugin.show(
-      id,
-      title,
-      body,
-      notificationDetails,
+      id: id,
+      title: title,
+      body: body,
+      notificationDetails: notificationDetails,
       payload: serializedPayload,
     );
   }
@@ -405,14 +405,12 @@ class NotificationService {
     });
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      localizedContent.title,
-      localizedContent.body,
-      scheduledDate,
-      notificationDetails,
+      id: id,
+      title: localizedContent.title,
+      body: localizedContent.body,
+      scheduledDate: scheduledDate,
+      notificationDetails: notificationDetails,
       androidScheduleMode: await androidScheduleMode(),
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
       payload: serializedPayload,
       matchDateTimeComponents: DateTimeComponents.time,
     );
@@ -458,14 +456,12 @@ class NotificationService {
     });
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduleAtLocal,
-      notificationDetails,
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: scheduleAtLocal,
+      notificationDetails: notificationDetails,
       androidScheduleMode: await androidScheduleMode(),
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
       payload: serializedPayload,
     );
 
@@ -490,7 +486,7 @@ class NotificationService {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
 
-    await flutterLocalNotificationsPlugin.cancel(id);
+    await flutterLocalNotificationsPlugin.cancel(id: id);
     developer.log(
       'Cancelled notification $id',
       name: 'sakina_app.notifications',
@@ -531,10 +527,10 @@ class NotificationService {
     );
 
     await flutterLocalNotificationsPlugin.show(
-      id,
-      title,
-      body,
-      notificationDetails,
+      id: id,
+      title: title,
+      body: body,
+      notificationDetails: notificationDetails,
       payload: 'test',
     );
 
