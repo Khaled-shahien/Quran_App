@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android 12+ backup and device transfer. User settings, bookmarks, khatma
-     and tasbih progress (FlutterSharedPreferences) are kept. -->
+     and tasbih progress (FlutterSharedPreferences) and the user database
+     (databases/sakina.db: saved verses, notes) are kept. -->
 <data-extraction-rules>
     <cloud-backup>
         <!-- Rebuilt from settings on first launch; a stale copy would restore

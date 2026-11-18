@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/database/app_database.dart';
 import 'package:sakina_app/core/feedback/feedback_service.dart';
 import '../../features/islamic_guide/data/islamic_guide_repository_impl.dart';
 import '../../features/islamic_guide/domain/repositories/islamic_guide_repository.dart';
@@ -82,6 +83,12 @@ Future<void> setupServiceLocator() async {
         localDataSource: LocalQuranDataSource(),
         sharedPreferences: prefs,
       ),
+    );
+    // Opened on first use, so a database problem only affects the features
+    // that store data in it, never app start-up.
+    getIt.registerLazySingletonAsync<AppDatabase>(
+      AppDatabase.open,
+      dispose: (database) => database.close(),
     );
     getIt.registerLazySingleton<http.Client>(() => http.Client());
     getIt.registerLazySingleton<CachedApiService>(
