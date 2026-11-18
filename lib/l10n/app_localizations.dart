@@ -6443,6 +6443,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّر تحميل النصوص للبحث. أعد فتح الشاشة.'**
   String get unifiedSearchFailed;
+
+  /// No description provided for @weeklyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوعك'**
+  String get weeklyTitle;
+
+  /// No description provided for @weeklyKhatma.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرأت من ختمتك {amount} {unit}'**
+  String weeklyKhatma(String amount, String unit);
+
+  /// No description provided for @weeklyAdhkar.
+  ///
+  /// In ar, this message translates to:
+  /// **'أتممت الأذكار {count} مرة'**
+  String weeklyAdhkar(String count);
+
+  /// No description provided for @weeklyPrayers.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّلت {count} صلاة في وقتها'**
+  String weeklyPrayers(String count);
+
+  /// No description provided for @weeklyClosing.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل خطوة ثابتة لها أثر. أسبوعًا طيبًا.'**
+  String get weeklyClosing;
+
+  /// No description provided for @weeklyFreshStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوع جديد يبدأ، وكل يوم فرصة.'**
+  String get weeklyFreshStart;
+
+  /// No description provided for @weeklySettingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوعك يوم الجمعة'**
+  String get weeklySettingTitle;
+
+  /// No description provided for @weeklySettingHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'بطاقة هادئة في الرئيسية يومي الجمعة والسبت بما قرأت وأتممت في سبعة أيام. تُحسب على هاتفك، بلا مقارنة ولا أرقام متتالية.'**
+  String get weeklySettingHelp;
 }
 
 class _AppLocalizationsDelegate

@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/practice_log/presentation/weekly_reflection_card.dart';
 import 'package:sakina_app/features/settings/presentation/providers/simple_mode_controller.dart';
 import 'package:sakina_app/features/onboarding/presentation/widgets/simple_home.dart';
 import 'package:sakina_app/features/onboarding/presentation/widgets/ramadan_card.dart';
@@ -103,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SliverToBoxAdapter(child: SimpleHomeTiles())
             else ...[
               const SliverToBoxAdapter(child: RamadanCard()),
+              const SliverToBoxAdapter(child: WeeklyReflectionCard()),
               const SliverToBoxAdapter(child: NowCard()),
               const SliverToBoxAdapter(
                 child: AnimatedEntrance(

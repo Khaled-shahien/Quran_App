@@ -3619,4 +3619,35 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get unifiedSearchFailed => 'تعذّر تحميل النصوص للبحث. أعد فتح الشاشة.';
+
+  @override
+  String get weeklyTitle => 'أسبوعك';
+
+  @override
+  String weeklyKhatma(String amount, String unit) {
+    return 'قرأت من ختمتك $amount $unit';
+  }
+
+  @override
+  String weeklyAdhkar(String count) {
+    return 'أتممت الأذكار $count مرة';
+  }
+
+  @override
+  String weeklyPrayers(String count) {
+    return 'سجّلت $count صلاة في وقتها';
+  }
+
+  @override
+  String get weeklyClosing => 'كل خطوة ثابتة لها أثر. أسبوعًا طيبًا.';
+
+  @override
+  String get weeklyFreshStart => 'أسبوع جديد يبدأ، وكل يوم فرصة.';
+
+  @override
+  String get weeklySettingTitle => 'أسبوعك يوم الجمعة';
+
+  @override
+  String get weeklySettingHelp =>
+      'بطاقة هادئة في الرئيسية يومي الجمعة والسبت بما قرأت وأتممت في سبعة أيام. تُحسب على هاتفك، بلا مقارنة ولا أرقام متتالية.';
 }

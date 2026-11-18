@@ -80,6 +80,7 @@ class UserDataBackup {
     'practice_excused_mode', 'fasting_qada_base',
     'wird_after_prayers', 'iqama_alert_minutes',
     'recitation_auto_next', 'recitation_ayah_repeat', 'simple_mode',
+    'weekly_reflection_enabled', 'adhkar_completed_days_v1',
   };
 
   /// Families of keys with a variable suffix.

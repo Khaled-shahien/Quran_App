@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/practice_log/domain/weekly_reflection.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -72,6 +73,9 @@ class AdhkarProgressController extends ChangeNotifier {
     if (isComplete(item)) return false;
     _counts[item.id] = countOf(item) + 1;
     _save();
+    if (allComplete) {
+      unawaited(AdhkarHistory.record(_prefs, category, _clock()));
+    }
     _notify();
     return isComplete(item);
   }

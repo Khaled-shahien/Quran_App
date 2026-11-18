@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/practice_log/domain/weekly_reflection.dart';
 import 'package:sakina_app/features/settings/presentation/providers/simple_mode_controller.dart';
 import 'package:sakina_app/features/prayers/presentation/widgets/iqama_sheet.dart';
 import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
@@ -362,6 +363,38 @@ class SimpleModePreference extends StatelessWidget {
         if (on && text != null && text.size == AppTextSize.normal) {
           await text.setSize(AppTextSize.large);
         }
+      },
+    );
+  }
+}
+
+/// The Friday "your week" card on Home; off until the user turns it on.
+class WeeklyReflectionPreference extends StatefulWidget {
+  const WeeklyReflectionPreference({super.key});
+
+  @override
+  State<WeeklyReflectionPreference> createState() =>
+      _WeeklyReflectionPreferenceState();
+}
+
+class _WeeklyReflectionPreferenceState
+    extends State<WeeklyReflectionPreference> {
+  @override
+  Widget build(BuildContext context) {
+    final prefs = context.read<SharedPreferences?>();
+    if (prefs == null) return const SizedBox.shrink();
+    final l10n = l10nOf(context);
+    return SwitchListTile(
+      key: const Key('weekly-reflection-setting'),
+      secondary: const Icon(Icons.auto_awesome_outlined),
+      title: Text(l10n.weeklySettingTitle),
+      subtitle: Text(l10n.weeklySettingHelp),
+      isThreeLine: true,
+      value: prefs.getBool(WeeklyReflection.enabledKey) ?? false,
+      onChanged: (on) async {
+        playFeedback(context, FeedbackEvent.toggle);
+        await prefs.setBool(WeeklyReflection.enabledKey, on);
+        if (mounted) setState(() {});
       },
     );
   }

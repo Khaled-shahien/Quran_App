@@ -4237,5 +4237,37 @@
     }
   },
   "unifiedSearchShowAll": "عرض كل النتائج",
-  "unifiedSearchFailed": "تعذّر تحميل النصوص للبحث. أعد فتح الشاشة."
+  "unifiedSearchFailed": "تعذّر تحميل النصوص للبحث. أعد فتح الشاشة.",
+  "weeklyTitle": "أسبوعك",
+  "weeklyKhatma": "قرأت من ختمتك {amount} {unit}",
+  "@weeklyKhatma": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "weeklyAdhkar": "أتممت الأذكار {count} مرة",
+  "@weeklyAdhkar": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "weeklyPrayers": "سجّلت {count} صلاة في وقتها",
+  "@weeklyPrayers": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "weeklyClosing": "كل خطوة ثابتة لها أثر. أسبوعًا طيبًا.",
+  "weeklyFreshStart": "أسبوع جديد يبدأ، وكل يوم فرصة.",
+  "weeklySettingTitle": "أسبوعك يوم الجمعة",
+  "weeklySettingHelp": "بطاقة هادئة في الرئيسية يومي الجمعة والسبت بما قرأت وأتممت في سبعة أيام. تُحسب على هاتفك، بلا مقارنة ولا أرقام متتالية."
 }
