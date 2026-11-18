@@ -3433,5 +3433,29 @@
   "alertHealthFootnote": "يُجرى هذا الفحص على جهازك فقط، ولا يُرسَل شيء منه إلى أي جهة.",
   "@alertHealthFootnote": {
     "description": "Privacy note for the health check."
+  },
+  "readerVerseTafsir": "التفسير الميسر",
+  "@readerVerseTafsir": {
+    "description": "Verse action: open al-Tafsir al-Muyassar."
+  },
+  "tafsirTitle": "{surah}، الآية {ayah}",
+  "@tafsirTitle": {
+    "description": "Tafsir sheet title: surah name and ayah number.",
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "String"
+      }
+    }
+  },
+  "tafsirUnavailable": "تعذّر فتح التفسير.",
+  "@tafsirUnavailable": {
+    "description": "The bundled tafsir could not be read."
+  },
+  "tafsirSource": "المصدر: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف، عن موقع تنزيل (tanzil.net). النص كما هو دون أي تعديل.",
+  "@tafsirSource": {
+    "description": "Attribution required by Tanzil and the translator."
   }
 }

@@ -2797,4 +2797,19 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get alertHealthFootnote =>
       'يُجرى هذا الفحص على جهازك فقط، ولا يُرسَل شيء منه إلى أي جهة.';
+
+  @override
+  String get readerVerseTafsir => 'التفسير الميسر';
+
+  @override
+  String tafsirTitle(String surah, String ayah) {
+    return '$surah، الآية $ayah';
+  }
+
+  @override
+  String get tafsirUnavailable => 'تعذّر فتح التفسير.';
+
+  @override
+  String get tafsirSource =>
+      'المصدر: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف، عن موقع تنزيل (tanzil.net). النص كما هو دون أي تعديل.';
 }

@@ -85,6 +85,20 @@
       "proposedEdition": "Hisn al-Muslim item numbers as cited in each entry",
       "proposedLicense": "Pending: same terms as prayers_data.json",
       "proposalNotes": "Check wording against the cited Hisn al-Muslim items."
+    },
+    {
+      "path": "assets/tafsir/ar.muyassar.txt",
+      "sha256": "184e62046805a824f414b89fe91033729e6e9fbf09e8839224a3ce196dd39c67",
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null,
+      "proposedSource": "Al-Tafsir al-Muyassar, King Fahd Glorious Quran Printing Complex, as distributed by Tanzil.net (translation id ar.muyassar)",
+      "proposedEdition": "Tanzil ar.muyassar, last update January 7, 2011; downloaded 2026-11-18 from https://tanzil.net/trans/?transID=ar.muyassar&type=txt-2",
+      "proposedLicense": "Tanzil translation terms: free for non-commercial use with attribution to Tanzil.net and the translator; the text must not be modified. Confirm with the King Fahd Complex before release.",
+      "proposalNotes": "Bundled byte-for-byte as downloaded, including Tanzil's header comment. 6,236 entries, one per ayah, checked against quran_master.json counts."
     }
   ],
   "proposalStatus": "sources_proposed_2026-11-09_awaiting_owner_review"

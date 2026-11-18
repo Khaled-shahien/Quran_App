@@ -5029,6 +5029,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يُجرى هذا الفحص على جهازك فقط، ولا يُرسَل شيء منه إلى أي جهة.'**
   String get alertHealthFootnote;
+
+  /// Verse action: open al-Tafsir al-Muyassar.
+  ///
+  /// In ar, this message translates to:
+  /// **'التفسير الميسر'**
+  String get readerVerseTafsir;
+
+  /// Tafsir sheet title: surah name and ayah number.
+  ///
+  /// In ar, this message translates to:
+  /// **'{surah}، الآية {ayah}'**
+  String tafsirTitle(String surah, String ayah);
+
+  /// The bundled tafsir could not be read.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر فتح التفسير.'**
+  String get tafsirUnavailable;
+
+  /// Attribution required by Tanzil and the translator.
+  ///
+  /// In ar, this message translates to:
+  /// **'المصدر: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف، عن موقع تنزيل (tanzil.net). النص كما هو دون أي تعديل.'**
+  String get tafsirSource;
 }
 
 class _AppLocalizationsDelegate

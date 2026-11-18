@@ -33,6 +33,7 @@ import '../../../../core/widgets/pulse_loader.dart';
 import '../providers/bookmark_provider.dart';
 import '../widgets/quran_page_layout.dart';
 import '../widgets/quran_settings_dialog.dart';
+import '../widgets/tafsir_sheet.dart';
 
 part 'surah_reader/surah_reader_models.dart';
 part 'surah_reader/surah_reader_chrome.dart';

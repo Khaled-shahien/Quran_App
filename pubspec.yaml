@@ -131,6 +131,7 @@ flutter:
     - assets/islamic_guide.json
     - assets/recitation_reciters.json
     - assets/adhan_adhkar.json
+    - assets/tafsir/ar.muyassar.txt
     - content_manifest.json
     - fonts/Cairo-OFL.txt
     - fonts/Amiri-OFL.txt

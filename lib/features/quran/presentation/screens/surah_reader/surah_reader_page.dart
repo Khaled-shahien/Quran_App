@@ -369,6 +369,22 @@ extension _SurahReaderPage on _SurahDetailsScreenState {
                   },
                 ),
               ListTile(
+                leading: const Icon(Icons.menu_book_rounded),
+                title: Text(l10n.readerVerseTafsir),
+                onTap: () {
+                  Navigator.pop(sheetContext);
+                  unawaited(
+                    showTafsirSheet(
+                      context,
+                      surah: verse.surahNumber,
+                      ayah: verse.verseNumber,
+                      surahName: verse.surahName,
+                      verseText: verse.text,
+                    ),
+                  );
+                },
+              ),
+              ListTile(
                 leading: const Icon(Icons.bookmark_add_outlined),
                 title: Text(l10n.readerVerseBookmark),
                 onTap: () {
