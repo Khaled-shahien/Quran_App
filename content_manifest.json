@@ -145,16 +145,17 @@
     {
       "path": "assets/hadeath/hadeethenc_library.json",
       "sha256": "f272afdeee37f7854cf17a7cb5d29cf3e8b1eb02c0c949337e6d77bfc1d06bda",
-      "source": "pending_owner_review",
-      "edition": null,
+      "source": "HadeethEnc.com - Encyclopedia of Translated Prophetic Hadiths, Arabic (https://hadeethenc.com), via its public API",
+      "edition": "All 3,574 Arabic hadith listed under the seven root topics and the 493 topics, downloaded 2026-11-18 (one request per hadith); built by tool/build_hadith_library.py without editing the text",
       "license": null,
-      "reviewer": null,
-      "approvalDate": null,
+      "reviewer": "App owner (approved without item-by-item review)",
+      "approvalDate": "2026-11-18",
       "evidenceUrl": null,
       "proposedSource": "HadeethEnc.com - Encyclopedia of Translated Prophetic Hadiths, Arabic (https://hadeethenc.com), via its public API",
       "proposedEdition": "All 3,574 Arabic hadith listed under the seven root topics and the 493 topics, downloaded 2026-11-18 (one request per hadith); built by tool/build_hadith_library.py without editing the text",
       "proposedLicense": "Pending: confirm HadeethEnc terms of reuse (attribution and offline redistribution of the whole collection) before release.",
-      "proposalNotes": "Grades are as published (3,205 sahih, 275 hasan, the rest with named graders or qualifiers such as hasan li-ghayrihi). One hadith (65929) has no reference."
+      "proposalNotes": "Grades are as published (3,205 sahih, 275 hasan, the rest with named graders or qualifiers such as hasan li-ghayrihi). One hadith (65929) has no reference.",
+      "approvalNotes": "Owner approved the collection without review on 2026-11-18. The HadeethEnc licence is still unconfirmed; license and evidenceUrl stay empty until its terms are confirmed."
     }
   ],
   "proposalStatus": "sources_proposed_2026-11-09_awaiting_owner_review"
