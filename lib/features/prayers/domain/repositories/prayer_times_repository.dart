@@ -1,6 +1,7 @@
 import 'package:sakina_app/core/result/result.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import '../entities/prayer_times_entity.dart';
+import '../prayer_time_adjustments.dart';
 
 /// Prayer times for one calendar day at one place.
 ///
@@ -9,6 +10,7 @@ abstract class PrayerTimesRepository {
   /// [date] is the calendar day at the location (only y/m/d are used).
   /// [timeZone] is the location's IANA zone; when null the device zone is
   /// used. Returned times are wall-clock "HH:mm" strings in that zone.
+  /// [adjustments] shifts each time by the user's whole minutes.
   Future<Result<PrayerTimesEntity>> getPrayerTimes(
     DateTime date,
     double latitude,
@@ -16,5 +18,6 @@ abstract class PrayerTimesRepository {
     int calculationMethod = PrayerCalculationPolicy.defaultMethod,
     AsrMadhab madhab = AsrMadhab.standard,
     String? timeZone,
+    PrayerTimeAdjustments adjustments = PrayerTimeAdjustments.none,
   });
 }

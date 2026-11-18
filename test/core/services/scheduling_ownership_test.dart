@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -46,6 +47,7 @@ class _Repository implements PrayerTimesRepository {
     int calculationMethod = PrayerCalculationPolicy.defaultMethod,
     AsrMadhab madhab = AsrMadhab.standard,
     String? timeZone,
+    PrayerTimeAdjustments adjustments = PrayerTimeAdjustments.none,
   }) async {
     dates.add(date);
     if (error != null) return Err(UnexpectedFailure(cause: error!));

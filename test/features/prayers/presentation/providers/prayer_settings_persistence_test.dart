@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
 import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sakina_app/core/result/result.dart';
@@ -10,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class _CapturingRepository implements PrayerTimesRepository {
   final zones = <String?>[];
   final madhabs = <AsrMadhab>[];
+  final methods = <int>[];
+  final adjustments = <PrayerTimeAdjustments>[];
 
   @override
   Future<Result<PrayerTimesEntity>> getPrayerTimes(
@@ -19,9 +22,12 @@ class _CapturingRepository implements PrayerTimesRepository {
     int calculationMethod = PrayerCalculationPolicy.defaultMethod,
     AsrMadhab madhab = AsrMadhab.standard,
     String? timeZone,
+    PrayerTimeAdjustments adjustments = PrayerTimeAdjustments.none,
   }) async {
     zones.add(timeZone);
     madhabs.add(madhab);
+    methods.add(calculationMethod);
+    this.adjustments.add(adjustments);
     return Success(
       PrayerTimesEntity(
         fajr: '05:00',
@@ -74,6 +80,31 @@ void main() {
     expect(p.selectedTimeZone, isNull);
     expect(prefs.containsKey(prayerTimeZonePreferenceKey), isFalse);
     expect(repository.zones.last, isNull, reason: 'device zone is used');
+  });
+
+  test('minute adjustments persist, recalculate and survive restart', () async {
+    final p = provider();
+    await p.selectLocation(30.0444, 31.2357, 'القاهرة', 5);
+    const next = PrayerTimeAdjustments({PrayerTimeKind.maghrib: 2});
+
+    await p.setAdjustments(next);
+
+    expect(repository.adjustments.last, next);
+    expect(PrayerTimeAdjustments.read(prefs), next);
+    expect(provider().adjustments, next);
+  });
+
+  test('changing only the method persists it and recalculates', () async {
+    final p = provider();
+    await p.selectLocation(30.0444, 31.2357, 'القاهرة', 5);
+
+    await p.setCalculationMethod(PrayerCalculationPolicy.jordan);
+
+    expect(repository.methods.last, PrayerCalculationPolicy.jordan);
+    expect(prefs.getInt('prayer_method'), PrayerCalculationPolicy.jordan);
+    final calls = repository.methods.length;
+    await p.setCalculationMethod(999);
+    expect(repository.methods.length, calls, reason: 'unknown id ignored');
   });
 
   test('Asr madhab defaults to the majority view', () {

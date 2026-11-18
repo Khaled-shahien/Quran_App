@@ -125,12 +125,86 @@ final List<_Reference> _references = [
     AsrMadhab.standard,
     ['03:24', '05:32', '13:06', '17:07', '20:40', '22:38'],
   ),
+  // Methods added later; AlAdhan retrieved 2026-11-18.
+  _Reference(
+    'Amman (Jordan)',
+    DateTime(2026, 11, 18),
+    31.9539,
+    35.9106,
+    'Asia/Amman',
+    PrayerCalculationPolicy.jordan,
+    AsrMadhab.standard,
+    ['05:43', '07:07', '12:21', '15:16', '17:40', '19:00'],
+  ),
 ];
 
 int _minutes(String hhmm) {
   final parts = hhmm.split(':');
   return int.parse(parts[0]) * 60 + int.parse(parts[1]);
 }
+
+/// Methods where this engine (adhan) and AlAdhan's "experimental"
+/// implementation differ by design: adhan applies the official bodies'
+/// minute adjustments (Diyanet temkin, Dubai and Moonsighting Committee
+/// offsets) and AlAdhan does not. AlAdhan's Morocco times are one hour off
+/// (it ignores Morocco's UTC+1), so they are compared one hour later.
+/// [maxMinutes] is the accepted difference per time; anything larger is a
+/// regression. These methods still need checking against the official
+/// timetables (docs/audit/EXTERNAL_BLOCKERS.md, B-10).
+final List<(_Reference, List<int> maxMinutes)> _knownDifferences = [
+  (
+    _Reference(
+      'Dubai (Dubai method)',
+      DateTime(2026, 11, 18),
+      25.2048,
+      55.2708,
+      'Asia/Dubai',
+      PrayerCalculationPolicy.dubai,
+      AsrMadhab.standard,
+      ['05:17', '06:38', '12:07', '15:10', '17:33', '18:50'],
+    ),
+    [1, 3, 1, 2, 1, 1],
+  ),
+  (
+    _Reference(
+      'Istanbul (Diyanet)',
+      DateTime(2026, 11, 18),
+      41.0082,
+      28.9784,
+      'Europe/Istanbul',
+      PrayerCalculationPolicy.turkiye,
+      AsrMadhab.standard,
+      ['06:19', '07:48', '12:54', '15:28', '17:50', '19:14'],
+    ),
+    [1, 1, 1, 2, 1, 1],
+  ),
+  (
+    _Reference(
+      'Casablanca (Morocco), AlAdhan + 1 h',
+      DateTime(2026, 11, 18),
+      33.5731,
+      -7.5898,
+      'Africa/Casablanca',
+      PrayerCalculationPolicy.morocco,
+      AsrMadhab.standard,
+      ['06:33', '08:05', '13:21', '16:07', '18:31', '19:47'],
+    ),
+    [1, 3, 1, 1, 1, 1],
+  ),
+  (
+    _Reference(
+      'London (Moonsighting Committee)',
+      DateTime(2026, 11, 18),
+      51.5074,
+      -0.1278,
+      'Europe/London',
+      PrayerCalculationPolicy.moonsightingCommittee,
+      AsrMadhab.standard,
+      ['05:44', '07:23', '11:46', '13:48', '16:07', '17:38'],
+    ),
+    [1, 1, 5, 3, 3, 1],
+  ),
+];
 
 List<String?> _times(PrayerTimesEntity e) => [
   e.fajr,
@@ -167,6 +241,28 @@ void main() {
         );
       }
       expect(entity.timezone, ref.zone);
+    });
+  }
+
+  for (final (ref, maxMinutes) in _knownDifferences) {
+    test('${ref.place} stays within the known engine difference', () {
+      final entity = PrayerTimesRepositoryImpl.calculate(
+        date: ref.date,
+        latitude: ref.latitude,
+        longitude: ref.longitude,
+        calculationMethod: ref.method,
+        madhab: ref.madhab,
+        location: tz.getLocation(ref.zone),
+      );
+      final actual = _times(entity);
+      for (var i = 0; i < names.length; i++) {
+        final diff = (_minutes(actual[i]!) - _minutes(ref.times[i])).abs();
+        expect(
+          diff,
+          lessThanOrEqualTo(maxMinutes[i]),
+          reason: '${names[i]}: got ${actual[i]}, reference ${ref.times[i]}',
+        );
+      }
     });
   }
 

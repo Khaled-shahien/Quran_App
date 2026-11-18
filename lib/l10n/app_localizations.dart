@@ -4597,6 +4597,264 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّر تحميل فهرس الأجزاء والأحزاب.'**
   String get quranIndexLoadFailed;
+
+  /// Calculation method: Gulf region (Fajr 19.5°, Isha 90 min).
+  ///
+  /// In ar, this message translates to:
+  /// **'منطقة الخليج'**
+  String get prayerMethodGulf;
+
+  /// Calculation method: Kuwait.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكويت'**
+  String get prayerMethodKuwait;
+
+  /// Calculation method: Qatar.
+  ///
+  /// In ar, this message translates to:
+  /// **'قطر'**
+  String get prayerMethodQatar;
+
+  /// Calculation method: Dubai / UAE.
+  ///
+  /// In ar, this message translates to:
+  /// **'دبي (الإمارات)'**
+  String get prayerMethodDubai;
+
+  /// Calculation method: Jordan (Ministry of Awqaf).
+  ///
+  /// In ar, this message translates to:
+  /// **'الأردن'**
+  String get prayerMethodJordan;
+
+  /// Calculation method: Algeria.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجزائر'**
+  String get prayerMethodAlgeria;
+
+  /// Calculation method: Tunisia.
+  ///
+  /// In ar, this message translates to:
+  /// **'تونس'**
+  String get prayerMethodTunisia;
+
+  /// Calculation method: Morocco.
+  ///
+  /// In ar, this message translates to:
+  /// **'المغرب'**
+  String get prayerMethodMorocco;
+
+  /// Calculation method: Türkiye, Diyanet.
+  ///
+  /// In ar, this message translates to:
+  /// **'تركيا (رئاسة الشؤون الدينية)'**
+  String get prayerMethodTurkiye;
+
+  /// Calculation method: University of Islamic Sciences, Karachi.
+  ///
+  /// In ar, this message translates to:
+  /// **'جامعة العلوم الإسلامية بكراتشي'**
+  String get prayerMethodKarachi;
+
+  /// Calculation method: ISNA (North America).
+  ///
+  /// In ar, this message translates to:
+  /// **'الجمعية الإسلامية لأمريكا الشمالية'**
+  String get prayerMethodNorthAmerica;
+
+  /// Calculation method: Moonsighting Committee Worldwide.
+  ///
+  /// In ar, this message translates to:
+  /// **'لجنة رؤية الهلال'**
+  String get prayerMethodMoonsighting;
+
+  /// Calculation method: France, UOIF 12°.
+  ///
+  /// In ar, this message translates to:
+  /// **'فرنسا (اتحاد المنظمات الإسلامية)'**
+  String get prayerMethodFrance;
+
+  /// Calculation method: Spiritual Administration of Muslims of Russia.
+  ///
+  /// In ar, this message translates to:
+  /// **'روسيا'**
+  String get prayerMethodRussia;
+
+  /// Calculation method: Portugal.
+  ///
+  /// In ar, this message translates to:
+  /// **'البرتغال'**
+  String get prayerMethodPortugal;
+
+  /// Calculation method: Singapore (MUIS), also used in Malaysia and Brunei.
+  ///
+  /// In ar, this message translates to:
+  /// **'سنغافورة وماليزيا'**
+  String get prayerMethodSingapore;
+
+  /// Calculation method: Indonesia (Kemenag).
+  ///
+  /// In ar, this message translates to:
+  /// **'إندونيسيا'**
+  String get prayerMethodIndonesia;
+
+  /// Settings entry and sheet title: shift each prayer time by minutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل المواقيت بالدقائق'**
+  String get prayerAdjustmentsTitle;
+
+  /// Why a user would adjust prayer times.
+  ///
+  /// In ar, this message translates to:
+  /// **'لمطابقة مواقيت مسجدك أو التقويم الرسمي'**
+  String get prayerAdjustmentsSubtitle;
+
+  /// No minute adjustment is applied.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا تعديل'**
+  String get prayerAdjustmentsNone;
+
+  /// A shift of a prayer time in minutes, e.g. +2 د.
+  ///
+  /// In ar, this message translates to:
+  /// **'{sign}{minutes} د'**
+  String prayerAdjustmentMinutes(String sign, String minutes);
+
+  /// Screen-reader label: make this prayer one minute earlier.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبل {name} بدقيقة'**
+  String prayerAdjustmentEarlier(String name);
+
+  /// Screen-reader label: make this prayer one minute later.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد {name} بدقيقة'**
+  String prayerAdjustmentLater(String name);
+
+  /// Resets all minute adjustments to zero.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء كل التعديلات'**
+  String get prayerAdjustmentsReset;
+
+  /// Explains that the shift applies every day and to alerts.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُضاف التعديل إلى الوقت المحسوب لكل يوم، ويُطبَّق على التنبيهات أيضًا.'**
+  String get prayerAdjustmentsNote;
+
+  /// Opens the explanation of the calculation.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف حُسبت هذه المواقيت؟'**
+  String get prayerExplainButton;
+
+  /// Title of the calculation explanation sheet.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة حساب المواقيت'**
+  String get prayerExplainTitle;
+
+  /// Row label: calculation method.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطريقة'**
+  String get prayerExplainMethod;
+
+  /// Row label: how Fajr is found.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفجر'**
+  String get prayerExplainFajr;
+
+  /// Row label: how Isha is found.
+  ///
+  /// In ar, this message translates to:
+  /// **'العشاء'**
+  String get prayerExplainIsha;
+
+  /// Twilight angle rule.
+  ///
+  /// In ar, this message translates to:
+  /// **'عندما تكون الشمس {degrees}° تحت الأفق'**
+  String prayerExplainAngle(String degrees);
+
+  /// Isha a fixed time after Maghrib.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد المغرب بـ {minutes} دقيقة'**
+  String prayerExplainInterval(String minutes);
+
+  /// Umm al-Qura Ramadan rule.
+  ///
+  /// In ar, this message translates to:
+  /// **'في رمضان يكون العشاء بعد المغرب بـ ١٢٠ دقيقة بدل ٩٠، كما في تقويم أم القرى.'**
+  String get prayerExplainRamadan;
+
+  /// Row label: Asr rule.
+  ///
+  /// In ar, this message translates to:
+  /// **'العصر'**
+  String get prayerExplainAsr;
+
+  /// Row label: high-latitude rule.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطوط العرض العليا'**
+  String get prayerExplainHighLatitude;
+
+  /// Seventh-of-the-night rule, used above 48° latitude.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يتقدم الفجر ولا يتأخر العشاء عن سُبع الليل'**
+  String get prayerExplainSeventh;
+
+  /// Middle-of-the-night rule.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يتجاوز الفجر والعشاء منتصف الليل'**
+  String get prayerExplainMiddle;
+
+  /// Row label: time zone used.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة الزمنية'**
+  String get prayerExplainTimeZone;
+
+  /// Row label: minutes the method itself adds (e.g. Dhuhr +1).
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديلات الطريقة'**
+  String get prayerExplainMethodAdjustments;
+
+  /// Row label: the user's own minute adjustments.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديلاتك'**
+  String get prayerExplainYourAdjustments;
+
+  /// Explains offline astronomical calculation and where to change it.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب فلكي ويتم على جهازك دون إنترنت. إن اختلفت المواقيت عن مسجدك فغيّر الطريقة من «تعديل الموقع»، أو عدّل الدقائق من الإعدادات.'**
+  String get prayerExplainFootnote;
+
+  /// Name of sunrise in the adjustments list.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشروق'**
+  String get prayerSunriseName;
+
+  /// Separator between items of an inline list.
+  ///
+  /// In ar, this message translates to:
+  /// **'، '**
+  String get listSeparator;
 }
 
 class _AppLocalizationsDelegate

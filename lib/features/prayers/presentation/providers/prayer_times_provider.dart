@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import '../../domain/entities/adhan_settings.dart';
 import '../../domain/prayer_time_zone.dart';
@@ -137,6 +138,9 @@ class PrayerTimesProvider extends ChangeNotifier {
   int selectedMethod = PrayerCalculationPolicy.defaultMethod;
   AsrMadhab asrMadhab = AsrMadhab.standard;
 
+  /// The user's per-time minute shifts (see [setAdjustments]).
+  PrayerTimeAdjustments adjustments = PrayerTimeAdjustments.none;
+
   /// Which kind of location is active; see [PrayerLocationSource].
   PrayerLocationSource locationSource = PrayerLocationSource.manual;
 
@@ -248,6 +252,9 @@ class PrayerTimesProvider extends ChangeNotifier {
     asrMadhab = AsrMadhab.fromStorage(
       preferences?.get(AsrMadhab.preferenceKey),
     );
+    if (preferences != null) {
+      adjustments = PrayerTimeAdjustments.read(preferences);
+    }
   }
 
   static const String timeZonePreferenceKey = prayerTimeZonePreferenceKey;
@@ -257,6 +264,31 @@ class PrayerTimesProvider extends ChangeNotifier {
     if (_disposed || madhab == asrMadhab) return;
     asrMadhab = madhab;
     await _preferences?.setString(AsrMadhab.preferenceKey, madhab.name);
+    notifyListeners();
+    if (_selectedCoordinates != null) await refresh();
+  }
+
+  /// Shifts calculated times by whole minutes, then recalculates and
+  /// reschedules.
+  Future<void> setAdjustments(PrayerTimeAdjustments next) async {
+    if (_disposed || next == adjustments) return;
+    adjustments = next;
+    final SharedPreferences? prefs = _preferences;
+    if (prefs != null) await next.write(prefs);
+    notifyListeners();
+    if (_selectedCoordinates != null) await refresh();
+  }
+
+  /// Changes the calculation method for the current place, then
+  /// recalculates and reschedules.
+  Future<void> setCalculationMethod(int method) async {
+    if (_disposed ||
+        method == selectedMethod ||
+        !PrayerCalculationPolicy.methods.containsKey(method)) {
+      return;
+    }
+    selectedMethod = method;
+    await _preferences?.setInt('prayer_method', method);
     notifyListeners();
     if (_selectedCoordinates != null) await refresh();
   }
@@ -617,6 +649,7 @@ class PrayerTimesProvider extends ChangeNotifier {
       calculationMethod: calculationMethod,
       madhab: asrMadhab,
       timeZone: selectedTimeZone,
+      adjustments: adjustments,
     );
     if (_disposed || requestId != _requestId) return;
     _tomorrowPrayerTimes = null;
@@ -628,6 +661,7 @@ class PrayerTimesProvider extends ChangeNotifier {
         calculationMethod: calculationMethod,
         madhab: asrMadhab,
         timeZone: selectedTimeZone,
+        adjustments: adjustments,
       );
       if (_disposed || requestId != _requestId) return;
       _tomorrowPrayerTimes = tomorrowResult.valueOrNull;

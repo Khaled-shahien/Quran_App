@@ -3089,5 +3089,205 @@
   "quranIndexLoadFailed": "تعذّر تحميل فهرس الأجزاء والأحزاب.",
   "@quranIndexLoadFailed": {
     "description": "The juz/hizb index could not be built from the bundled Quran."
+  },
+  "prayerMethodGulf": "منطقة الخليج",
+  "@prayerMethodGulf": {
+    "description": "Calculation method: Gulf region (Fajr 19.5°, Isha 90 min)."
+  },
+  "prayerMethodKuwait": "الكويت",
+  "@prayerMethodKuwait": {
+    "description": "Calculation method: Kuwait."
+  },
+  "prayerMethodQatar": "قطر",
+  "@prayerMethodQatar": {
+    "description": "Calculation method: Qatar."
+  },
+  "prayerMethodDubai": "دبي (الإمارات)",
+  "@prayerMethodDubai": {
+    "description": "Calculation method: Dubai / UAE."
+  },
+  "prayerMethodJordan": "الأردن",
+  "@prayerMethodJordan": {
+    "description": "Calculation method: Jordan (Ministry of Awqaf)."
+  },
+  "prayerMethodAlgeria": "الجزائر",
+  "@prayerMethodAlgeria": {
+    "description": "Calculation method: Algeria."
+  },
+  "prayerMethodTunisia": "تونس",
+  "@prayerMethodTunisia": {
+    "description": "Calculation method: Tunisia."
+  },
+  "prayerMethodMorocco": "المغرب",
+  "@prayerMethodMorocco": {
+    "description": "Calculation method: Morocco."
+  },
+  "prayerMethodTurkiye": "تركيا (رئاسة الشؤون الدينية)",
+  "@prayerMethodTurkiye": {
+    "description": "Calculation method: Türkiye, Diyanet."
+  },
+  "prayerMethodKarachi": "جامعة العلوم الإسلامية بكراتشي",
+  "@prayerMethodKarachi": {
+    "description": "Calculation method: University of Islamic Sciences, Karachi."
+  },
+  "prayerMethodNorthAmerica": "الجمعية الإسلامية لأمريكا الشمالية",
+  "@prayerMethodNorthAmerica": {
+    "description": "Calculation method: ISNA (North America)."
+  },
+  "prayerMethodMoonsighting": "لجنة رؤية الهلال",
+  "@prayerMethodMoonsighting": {
+    "description": "Calculation method: Moonsighting Committee Worldwide."
+  },
+  "prayerMethodFrance": "فرنسا (اتحاد المنظمات الإسلامية)",
+  "@prayerMethodFrance": {
+    "description": "Calculation method: France, UOIF 12°."
+  },
+  "prayerMethodRussia": "روسيا",
+  "@prayerMethodRussia": {
+    "description": "Calculation method: Spiritual Administration of Muslims of Russia."
+  },
+  "prayerMethodPortugal": "البرتغال",
+  "@prayerMethodPortugal": {
+    "description": "Calculation method: Portugal."
+  },
+  "prayerMethodSingapore": "سنغافورة وماليزيا",
+  "@prayerMethodSingapore": {
+    "description": "Calculation method: Singapore (MUIS), also used in Malaysia and Brunei."
+  },
+  "prayerMethodIndonesia": "إندونيسيا",
+  "@prayerMethodIndonesia": {
+    "description": "Calculation method: Indonesia (Kemenag)."
+  },
+  "prayerAdjustmentsTitle": "تعديل المواقيت بالدقائق",
+  "@prayerAdjustmentsTitle": {
+    "description": "Settings entry and sheet title: shift each prayer time by minutes."
+  },
+  "prayerAdjustmentsSubtitle": "لمطابقة مواقيت مسجدك أو التقويم الرسمي",
+  "@prayerAdjustmentsSubtitle": {
+    "description": "Why a user would adjust prayer times."
+  },
+  "prayerAdjustmentsNone": "بلا تعديل",
+  "@prayerAdjustmentsNone": {
+    "description": "No minute adjustment is applied."
+  },
+  "prayerAdjustmentMinutes": "{sign}{minutes} د",
+  "@prayerAdjustmentMinutes": {
+    "description": "A shift of a prayer time in minutes, e.g. +2 د.",
+    "placeholders": {
+      "sign": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerAdjustmentEarlier": "قبل {name} بدقيقة",
+  "@prayerAdjustmentEarlier": {
+    "description": "Screen-reader label: make this prayer one minute earlier.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerAdjustmentLater": "بعد {name} بدقيقة",
+  "@prayerAdjustmentLater": {
+    "description": "Screen-reader label: make this prayer one minute later.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerAdjustmentsReset": "إلغاء كل التعديلات",
+  "@prayerAdjustmentsReset": {
+    "description": "Resets all minute adjustments to zero."
+  },
+  "prayerAdjustmentsNote": "يُضاف التعديل إلى الوقت المحسوب لكل يوم، ويُطبَّق على التنبيهات أيضًا.",
+  "@prayerAdjustmentsNote": {
+    "description": "Explains that the shift applies every day and to alerts."
+  },
+  "prayerExplainButton": "كيف حُسبت هذه المواقيت؟",
+  "@prayerExplainButton": {
+    "description": "Opens the explanation of the calculation."
+  },
+  "prayerExplainTitle": "طريقة حساب المواقيت",
+  "@prayerExplainTitle": {
+    "description": "Title of the calculation explanation sheet."
+  },
+  "prayerExplainMethod": "الطريقة",
+  "@prayerExplainMethod": {
+    "description": "Row label: calculation method."
+  },
+  "prayerExplainFajr": "الفجر",
+  "@prayerExplainFajr": {
+    "description": "Row label: how Fajr is found."
+  },
+  "prayerExplainIsha": "العشاء",
+  "@prayerExplainIsha": {
+    "description": "Row label: how Isha is found."
+  },
+  "prayerExplainAngle": "عندما تكون الشمس {degrees}° تحت الأفق",
+  "@prayerExplainAngle": {
+    "description": "Twilight angle rule.",
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerExplainInterval": "بعد المغرب بـ {minutes} دقيقة",
+  "@prayerExplainInterval": {
+    "description": "Isha a fixed time after Maghrib.",
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "prayerExplainRamadan": "في رمضان يكون العشاء بعد المغرب بـ ١٢٠ دقيقة بدل ٩٠، كما في تقويم أم القرى.",
+  "@prayerExplainRamadan": {
+    "description": "Umm al-Qura Ramadan rule."
+  },
+  "prayerExplainAsr": "العصر",
+  "@prayerExplainAsr": {
+    "description": "Row label: Asr rule."
+  },
+  "prayerExplainHighLatitude": "خطوط العرض العليا",
+  "@prayerExplainHighLatitude": {
+    "description": "Row label: high-latitude rule."
+  },
+  "prayerExplainSeventh": "لا يتقدم الفجر ولا يتأخر العشاء عن سُبع الليل",
+  "@prayerExplainSeventh": {
+    "description": "Seventh-of-the-night rule, used above 48° latitude."
+  },
+  "prayerExplainMiddle": "لا يتجاوز الفجر والعشاء منتصف الليل",
+  "@prayerExplainMiddle": {
+    "description": "Middle-of-the-night rule."
+  },
+  "prayerExplainTimeZone": "المنطقة الزمنية",
+  "@prayerExplainTimeZone": {
+    "description": "Row label: time zone used."
+  },
+  "prayerExplainMethodAdjustments": "تعديلات الطريقة",
+  "@prayerExplainMethodAdjustments": {
+    "description": "Row label: minutes the method itself adds (e.g. Dhuhr +1)."
+  },
+  "prayerExplainYourAdjustments": "تعديلاتك",
+  "@prayerExplainYourAdjustments": {
+    "description": "Row label: the user's own minute adjustments."
+  },
+  "prayerExplainFootnote": "الحساب فلكي ويتم على جهازك دون إنترنت. إن اختلفت المواقيت عن مسجدك فغيّر الطريقة من «تعديل الموقع»، أو عدّل الدقائق من الإعدادات.",
+  "@prayerExplainFootnote": {
+    "description": "Explains offline astronomical calculation and where to change it."
+  },
+  "prayerSunriseName": "الشروق",
+  "@prayerSunriseName": {
+    "description": "Name of sunrise in the adjustments list."
+  },
+  "listSeparator": "، ",
+  "@listSeparator": {
+    "description": "Separator between items of an inline list."
   }
 }

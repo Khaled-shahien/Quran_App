@@ -1,3 +1,5 @@
+import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
+import 'package:sakina_app/features/prayers/presentation/widgets/prayer_calculation_sheets.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/core/theme/app_radius.dart';
 import 'package:sakina_app/core/feedback/feedback_service.dart';
@@ -169,6 +171,22 @@ class _PrayerPreferencesState extends State<PrayerPreferences> {
           subtitle: Text(prayer.locationLabel),
           trailing: const Icon(Icons.chevron_right_rounded),
           onTap: () => showPrayerLocationDialog(context, prayer),
+        ),
+        ListTile(
+          leading: const Icon(Icons.tune_rounded),
+          title: Text(l10nOf(context).prayerAdjustmentsTitle),
+          subtitle: Text(
+            prayer.adjustments.isEmpty
+                ? l10nOf(context).prayerAdjustmentsSubtitle
+                : [
+                    for (final kind in PrayerTimeKind.values)
+                      if (prayer.adjustments.of(kind) != 0)
+                        '${prayerTimeKindName(l10nOf(context), kind)} '
+                            '${formatAdjustment(context, prayer.adjustments.of(kind))}',
+                  ].join(l10nOf(context).listSeparator),
+          ),
+          trailing: const Icon(Icons.chevron_right_rounded),
+          onTap: () => showPrayerAdjustmentsSheet(context, prayer),
         ),
         SwitchListTile(
           title: Text(l10nOf(context).settingsScreenMessage7),

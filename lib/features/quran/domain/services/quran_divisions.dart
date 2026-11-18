@@ -118,8 +118,9 @@ String westernDigits(String input) => String.fromCharCodes(
 /// rejects verses that do not exist. Returns null for anything else.
 QuranGoTo? parseQuranGoTo(String input, int Function(int surah) ayahCount) {
   final String text = westernDigits(input).trim();
-  final Match? verse = RegExp(r'^(\d{1,3})\s*[:：/\s]\s*(\d{1,3})$')
-      .firstMatch(text);
+  final Match? verse = RegExp(
+    r'^(\d{1,3})\s*[:：/\s]\s*(\d{1,3})$',
+  ).firstMatch(text);
   if (verse != null) {
     final int surah = int.parse(verse[1]!);
     final int ayah = int.parse(verse[2]!);

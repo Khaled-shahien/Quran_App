@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/presentation/widgets/prayer_calculation_sheets.dart';
 import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/core/theme/app_motion.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
@@ -215,12 +216,21 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
               style: text.bodySmall,
             ),
           ),
-        Center(
-          child: TextButton.icon(
-            onPressed: provider.refresh,
-            icon: const Icon(Icons.refresh_rounded, size: 18),
-            label: Text(appL10n.prayerTimesScreenMessage7),
-          ),
+        Wrap(
+          alignment: WrapAlignment.center,
+          children: [
+            TextButton.icon(
+              onPressed: provider.refresh,
+              icon: const Icon(Icons.refresh_rounded, size: 18),
+              label: Text(appL10n.prayerTimesScreenMessage7),
+            ),
+            TextButton.icon(
+              onPressed: () =>
+                  showPrayerCalculationExplanation(context, provider),
+              icon: const Icon(Icons.help_outline_rounded, size: 18),
+              label: Text(l10nOf(context).prayerExplainButton),
+            ),
+          ],
         ),
         // Next Prayer Card
         _buildNextPrayerCard(prayerTimes),

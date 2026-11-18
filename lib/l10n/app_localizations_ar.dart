@@ -2546,4 +2546,148 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get quranIndexLoadFailed => 'تعذّر تحميل فهرس الأجزاء والأحزاب.';
+
+  @override
+  String get prayerMethodGulf => 'منطقة الخليج';
+
+  @override
+  String get prayerMethodKuwait => 'الكويت';
+
+  @override
+  String get prayerMethodQatar => 'قطر';
+
+  @override
+  String get prayerMethodDubai => 'دبي (الإمارات)';
+
+  @override
+  String get prayerMethodJordan => 'الأردن';
+
+  @override
+  String get prayerMethodAlgeria => 'الجزائر';
+
+  @override
+  String get prayerMethodTunisia => 'تونس';
+
+  @override
+  String get prayerMethodMorocco => 'المغرب';
+
+  @override
+  String get prayerMethodTurkiye => 'تركيا (رئاسة الشؤون الدينية)';
+
+  @override
+  String get prayerMethodKarachi => 'جامعة العلوم الإسلامية بكراتشي';
+
+  @override
+  String get prayerMethodNorthAmerica => 'الجمعية الإسلامية لأمريكا الشمالية';
+
+  @override
+  String get prayerMethodMoonsighting => 'لجنة رؤية الهلال';
+
+  @override
+  String get prayerMethodFrance => 'فرنسا (اتحاد المنظمات الإسلامية)';
+
+  @override
+  String get prayerMethodRussia => 'روسيا';
+
+  @override
+  String get prayerMethodPortugal => 'البرتغال';
+
+  @override
+  String get prayerMethodSingapore => 'سنغافورة وماليزيا';
+
+  @override
+  String get prayerMethodIndonesia => 'إندونيسيا';
+
+  @override
+  String get prayerAdjustmentsTitle => 'تعديل المواقيت بالدقائق';
+
+  @override
+  String get prayerAdjustmentsSubtitle =>
+      'لمطابقة مواقيت مسجدك أو التقويم الرسمي';
+
+  @override
+  String get prayerAdjustmentsNone => 'بلا تعديل';
+
+  @override
+  String prayerAdjustmentMinutes(String sign, String minutes) {
+    return '$sign$minutes د';
+  }
+
+  @override
+  String prayerAdjustmentEarlier(String name) {
+    return 'قبل $name بدقيقة';
+  }
+
+  @override
+  String prayerAdjustmentLater(String name) {
+    return 'بعد $name بدقيقة';
+  }
+
+  @override
+  String get prayerAdjustmentsReset => 'إلغاء كل التعديلات';
+
+  @override
+  String get prayerAdjustmentsNote =>
+      'يُضاف التعديل إلى الوقت المحسوب لكل يوم، ويُطبَّق على التنبيهات أيضًا.';
+
+  @override
+  String get prayerExplainButton => 'كيف حُسبت هذه المواقيت؟';
+
+  @override
+  String get prayerExplainTitle => 'طريقة حساب المواقيت';
+
+  @override
+  String get prayerExplainMethod => 'الطريقة';
+
+  @override
+  String get prayerExplainFajr => 'الفجر';
+
+  @override
+  String get prayerExplainIsha => 'العشاء';
+
+  @override
+  String prayerExplainAngle(String degrees) {
+    return 'عندما تكون الشمس $degrees° تحت الأفق';
+  }
+
+  @override
+  String prayerExplainInterval(String minutes) {
+    return 'بعد المغرب بـ $minutes دقيقة';
+  }
+
+  @override
+  String get prayerExplainRamadan =>
+      'في رمضان يكون العشاء بعد المغرب بـ ١٢٠ دقيقة بدل ٩٠، كما في تقويم أم القرى.';
+
+  @override
+  String get prayerExplainAsr => 'العصر';
+
+  @override
+  String get prayerExplainHighLatitude => 'خطوط العرض العليا';
+
+  @override
+  String get prayerExplainSeventh =>
+      'لا يتقدم الفجر ولا يتأخر العشاء عن سُبع الليل';
+
+  @override
+  String get prayerExplainMiddle => 'لا يتجاوز الفجر والعشاء منتصف الليل';
+
+  @override
+  String get prayerExplainTimeZone => 'المنطقة الزمنية';
+
+  @override
+  String get prayerExplainMethodAdjustments => 'تعديلات الطريقة';
+
+  @override
+  String get prayerExplainYourAdjustments => 'تعديلاتك';
+
+  @override
+  String get prayerExplainFootnote =>
+      'الحساب فلكي ويتم على جهازك دون إنترنت. إن اختلفت المواقيت عن مسجدك فغيّر الطريقة من «تعديل الموقع»، أو عدّل الدقائق من الإعدادات.';
+
+  @override
+  String get prayerSunriseName => 'الشروق';
+
+  @override
+  String get listSeparator => '، ';
 }

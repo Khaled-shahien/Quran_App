@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
@@ -114,6 +115,7 @@ class PrayerReplenishmentService {
     final madhab = AsrMadhab.fromStorage(
       preferences.get(AsrMadhab.preferenceKey),
     );
+    final adjustments = PrayerTimeAdjustments.read(preferences);
     if (latitude == null ||
         longitude == null ||
         !latitude.isFinite ||
@@ -140,6 +142,7 @@ class PrayerReplenishmentService {
         calculationMethod: method,
         madhab: madhab,
         timeZone: storedZone,
+        adjustments: adjustments,
       );
       final timings = switch (result) {
         Success(:final value) => value,
@@ -164,7 +167,8 @@ class PrayerReplenishmentService {
               method ||
           preferences.getString(prayerTimeZonePreferenceKey) != storedZone ||
           AsrMadhab.fromStorage(preferences.get(AsrMadhab.preferenceKey)) !=
-              madhab) {
+              madhab ||
+          PrayerTimeAdjustments.read(preferences) != adjustments) {
         // The foreground selection owns cancellation/replacement of old alarms.
         return null;
       }

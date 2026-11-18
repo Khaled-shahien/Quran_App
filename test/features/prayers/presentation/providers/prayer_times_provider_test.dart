@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import 'package:sakina_app/core/result/result.dart';
 import 'dart:async';
@@ -26,6 +27,7 @@ class FakePrayerTimesRepository implements PrayerTimesRepository {
     int calculationMethod = 3,
     AsrMadhab madhab = AsrMadhab.standard,
     String? timeZone,
+    PrayerTimeAdjustments adjustments = PrayerTimeAdjustments.none,
   }) => Result.guard(
     () => _legacyGetPrayerTimes(
       date,

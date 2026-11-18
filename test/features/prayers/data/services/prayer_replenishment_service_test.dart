@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_calculation_policy.dart';
 import 'package:sakina_app/core/result/result.dart';
 import 'dart:async';
@@ -14,6 +15,7 @@ import 'package:sakina_app/features/prayers/domain/services/prayer_notification_
 class Repository implements PrayerTimesRepository {
   final dates = <DateTime>[];
   final methods = <int>[];
+  final adjustmentsSeen = <PrayerTimeAdjustments>[];
   String? zone = 'Asia/Riyadh';
   bool incomplete = false;
   Future<void> Function()? beforeResponse;
@@ -26,15 +28,19 @@ class Repository implements PrayerTimesRepository {
     int calculationMethod = 5,
     AsrMadhab madhab = AsrMadhab.standard,
     String? timeZone,
-  }) => Result.guard(
-    () => _legacyGetPrayerTimes(
-      date,
-      latitude,
-      longitude,
-      calculationMethod: calculationMethod,
-    ),
-    onError: (error, _) => UnexpectedFailure(cause: error),
-  );
+    PrayerTimeAdjustments adjustments = PrayerTimeAdjustments.none,
+  }) {
+    adjustmentsSeen.add(adjustments);
+    return Result.guard(
+      () => _legacyGetPrayerTimes(
+        date,
+        latitude,
+        longitude,
+        calculationMethod: calculationMethod,
+      ),
+      onError: (error, _) => UnexpectedFailure(cause: error),
+    );
+  }
 
   Future<PrayerTimesEntity> _legacyGetPrayerTimes(
     DateTime date,
@@ -110,6 +116,24 @@ void main() {
       expect(scheduler.cancels, 0);
     },
   );
+
+  test('applies the saved minute adjustments to every day', () async {
+    const saved = PrayerTimeAdjustments({
+      PrayerTimeKind.fajr: 2,
+      PrayerTimeKind.isha: -3,
+    });
+    await saved.write(prefs);
+    await service.replenish();
+    expect(repository.adjustmentsSeen, hasLength(3));
+    expect(repository.adjustmentsSeen, everyElement(saved));
+  });
+
+  test('adjustments changed during a run stop it before scheduling', () async {
+    repository.beforeResponse = () =>
+        const PrayerTimeAdjustments({PrayerTimeKind.dhuhr: 1}).write(prefs);
+    await service.replenish();
+    expect(scheduler.dates, isEmpty);
+  });
 
   test('disabled reminders cancel without any network request', () async {
     await prefs.setBool('prayer_notifications_enabled', false);
