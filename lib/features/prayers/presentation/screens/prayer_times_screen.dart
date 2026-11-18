@@ -1,3 +1,6 @@
+import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
+import 'package:sakina_app/features/prayers/domain/iqama.dart';
+import 'package:sakina_app/features/prayers/presentation/widgets/iqama_sheet.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sakina_app/features/prayers/presentation/widgets/prayer_calculation_sheets.dart';
 import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
@@ -377,6 +380,14 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
 
     final nextPrayerInfo = _getNextPrayer(prayerTimes);
     final currentPrayerName = nextPrayerInfo['name'] as String;
+    final IqamaSettings iqama = context.read<PrayerTimesProvider>().iqama;
+    const prayers = {
+      'Fajr': DailyPrayer.fajr,
+      'Dhuhr': DailyPrayer.dhuhr,
+      'Asr': DailyPrayer.asr,
+      'Maghrib': DailyPrayer.maghrib,
+      'Isha': DailyPrayer.isha,
+    };
 
     return ListView.builder(
       shrinkWrap: true,
@@ -387,10 +398,17 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
         final arabicName = arabicNames[entry.key] ?? entry.key;
         final isCurrentPrayer = arabicName == currentPrayerName;
 
+        final DailyPrayer? prayer = prayers[entry.key];
+        final String? iqamaTime = prayer == null || iqama.of(prayer) == 0
+            ? null
+            : addMinutesToClock(entry.value, iqama.of(prayer));
         return _prayerTimeTile(
           prayerName: arabicName,
           prayerTime: context.digits(entry.value),
           isNext: isCurrentPrayer,
+          iqama: iqamaTime == null
+              ? null
+              : context.digits(l10nOf(context).iqamaLine(iqamaTime)),
         );
       },
     );
@@ -400,6 +418,7 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
     required String prayerName,
     required String prayerTime,
     required bool isNext,
+    String? iqama,
   }) {
     final scheme = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
@@ -450,13 +469,28 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen>
                 ),
               ],
             ),
-            Text(
-              prayerTime,
-              style: text.titleMedium?.copyWith(
-                color: isNext ? scheme.primary : scheme.onSurfaceVariant,
-                fontWeight: FontWeight.w700,
-                fontFeatures: const [FontFeature.tabularFigures()],
-              ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  prayerTime,
+                  style: text.titleMedium?.copyWith(
+                    color: isNext ? scheme.primary : scheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w700,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+                if (iqama != null)
+                  Text(
+                    iqama,
+                    style: text.bodySmall?.copyWith(
+                      color: isNext
+                          ? scheme.onSecondary
+                          : scheme.onSurfaceVariant,
+                    ),
+                  ),
+              ],
             ),
           ],
         ),

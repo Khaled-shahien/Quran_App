@@ -1,3 +1,6 @@
+import 'package:sakina_app/features/prayers/presentation/widgets/iqama_sheet.dart';
+import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
+import 'package:sakina_app/features/prayers/presentation/prayer_labels.dart';
 import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
 import 'package:sakina_app/features/prayers/presentation/widgets/prayer_calculation_sheets.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
@@ -187,6 +190,22 @@ class _PrayerPreferencesState extends State<PrayerPreferences> {
           ),
           trailing: const Icon(Icons.chevron_right_rounded),
           onTap: () => showPrayerAdjustmentsSheet(context, prayer),
+        ),
+        ListTile(
+          leading: const Icon(Icons.mosque_outlined),
+          title: Text(l10nOf(context).iqamaTitle),
+          subtitle: Text(
+            prayer.iqama.isEmpty
+                ? l10nOf(context).iqamaSubtitle
+                : [
+                    for (final p in DailyPrayer.values)
+                      if (prayer.iqama.of(p) != 0)
+                        '${l10nOf(context).prayerName(p)} '
+                            '${context.digits('+${prayer.iqama.of(p)}')}',
+                  ].join(l10nOf(context).listSeparator),
+          ),
+          trailing: const Icon(Icons.chevron_right_rounded),
+          onTap: () => showIqamaSheet(context, prayer),
         ),
         SwitchListTile(
           title: Text(l10nOf(context).settingsScreenMessage7),

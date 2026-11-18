@@ -78,13 +78,14 @@ class UserDataBackup {
     'adhan_quiet_minutes', 'fajr_wake_enabled', 'fajr_wake_snooze_minutes',
     // Prayer and fasting log
     'practice_excused_mode', 'fasting_qada_base',
-    'wird_after_prayers',
+    'wird_after_prayers', 'iqama_alert_minutes',
   };
 
   /// Families of keys with a variable suffix.
   static const List<String> prefixes = [
     'adhan_mode_', // per prayer
     'adhan_voice_', // per prayer
+    'iqama_minutes_', // per prayer
     'adhkar_progress_v1_', // per category
     'reading_last_ayah_', // per surah
   ];

@@ -5831,6 +5831,72 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{pages} من المصحف'**
   String wirdPortionNotificationBody(String pages);
+
+  /// No description provided for @iqamaTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوقات الإقامة في مسجدي'**
+  String get iqamaTitle;
+
+  /// No description provided for @iqamaSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كم دقيقة بعد الأذان تُقام كل صلاة؟ تظهر الإقامة تحت وقت الصلاة.'**
+  String get iqamaSubtitle;
+
+  /// No description provided for @iqamaPrivacy.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُحفظ هذه الأوقات على هاتفك فقط، ولا يُرسَل موقعك ولا مسجدك إلى أي مكان.'**
+  String get iqamaPrivacy;
+
+  /// No description provided for @iqamaNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُحدَّد'**
+  String get iqamaNone;
+
+  /// No description provided for @iqamaAfterMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد الأذان بـ{minutes} دقيقة'**
+  String iqamaAfterMinutes(String minutes);
+
+  /// No description provided for @iqamaAlertTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه قبل الإقامة'**
+  String get iqamaAlertTitle;
+
+  /// No description provided for @iqamaAlertOff.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا تنبيه'**
+  String get iqamaAlertOff;
+
+  /// No description provided for @iqamaAlertMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبلها بـ{minutes} دقائق'**
+  String iqamaAlertMinutes(String minutes);
+
+  /// No description provided for @iqamaLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإقامة {time}'**
+  String iqamaLine(String time);
+
+  /// No description provided for @iqamaNotificationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإقامة بعد {minutes} دقائق'**
+  String iqamaNotificationTitle(String minutes);
+
+  /// No description provided for @iqamaNotificationBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'صلاة {prayer} في مسجدك الساعة {time}'**
+  String iqamaNotificationBody(String prayer, String time);
 }
 
 class _AppLocalizationsDelegate

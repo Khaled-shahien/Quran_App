@@ -3267,4 +3267,49 @@ class AppLocalizationsAr extends AppLocalizations {
   String wirdPortionNotificationBody(String pages) {
     return '$pages من المصحف';
   }
+
+  @override
+  String get iqamaTitle => 'أوقات الإقامة في مسجدي';
+
+  @override
+  String get iqamaSubtitle =>
+      'كم دقيقة بعد الأذان تُقام كل صلاة؟ تظهر الإقامة تحت وقت الصلاة.';
+
+  @override
+  String get iqamaPrivacy =>
+      'تُحفظ هذه الأوقات على هاتفك فقط، ولا يُرسَل موقعك ولا مسجدك إلى أي مكان.';
+
+  @override
+  String get iqamaNone => 'لم تُحدَّد';
+
+  @override
+  String iqamaAfterMinutes(String minutes) {
+    return 'بعد الأذان بـ$minutes دقيقة';
+  }
+
+  @override
+  String get iqamaAlertTitle => 'تنبيه قبل الإقامة';
+
+  @override
+  String get iqamaAlertOff => 'بلا تنبيه';
+
+  @override
+  String iqamaAlertMinutes(String minutes) {
+    return 'قبلها بـ$minutes دقائق';
+  }
+
+  @override
+  String iqamaLine(String time) {
+    return 'الإقامة $time';
+  }
+
+  @override
+  String iqamaNotificationTitle(String minutes) {
+    return 'الإقامة بعد $minutes دقائق';
+  }
+
+  @override
+  String iqamaNotificationBody(String prayer, String time) {
+    return 'صلاة $prayer في مسجدك الساعة $time';
+  }
 }

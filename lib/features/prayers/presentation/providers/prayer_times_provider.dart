@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/iqama.dart';
 import 'package:sakina_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
 import 'package:sakina_app/features/prayers/data/services/prayer_widget_data.dart';
 import 'package:sakina_app/core/utils/dual_date.dart';
@@ -275,6 +276,20 @@ class PrayerTimesProvider extends ChangeNotifier {
 
   /// Shifts calculated times by whole minutes, then recalculates and
   /// reschedules.
+  /// Iqama minutes at the user's mosque (see [IqamaSettings]).
+  IqamaSettings get iqama {
+    final SharedPreferences? prefs = _preferences;
+    return prefs == null ? const IqamaSettings() : IqamaStore(prefs).read();
+  }
+
+  Future<void> setIqama(IqamaSettings next) async {
+    final SharedPreferences? prefs = _preferences;
+    if (_disposed || prefs == null) return;
+    await IqamaStore(prefs).write(next);
+    notifyListeners();
+    if (_selectedCoordinates != null) await refresh();
+  }
+
   Future<void> setAdjustments(PrayerTimeAdjustments next) async {
     if (_disposed || next == adjustments) return;
     adjustments = next;

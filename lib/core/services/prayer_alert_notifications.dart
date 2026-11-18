@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/prayers/domain/iqama.dart';
 import 'package:sakina_app/features/khatma/data/repositories/khatma_repository.dart';
 import 'package:sakina_app/features/khatma/domain/models/khatma_model.dart';
 import 'package:sakina_app/features/khatma/domain/services/wird_portions.dart';
@@ -191,6 +192,7 @@ class PrayerAlertNotifications {
     }
     await _scheduleAnchoredReminders(prayerTimes);
     await _scheduleWirdPortions(prayerTimes, prefs, now);
+    await _scheduleIqamaAlerts(prayerTimes, settings, prefs, now, digits);
     if (!android) return;
     final DateTime day = date.toLocal();
     await SakinaAlarms.setQuietWindows(
@@ -227,6 +229,47 @@ class PrayerAlertNotifications {
             )
           : null,
     );
+  }
+
+  /// "Iqama in N minutes" for prayers with an iqama set, when the user
+  /// wants the alert and the prayer is not silenced.
+  Future<void> _scheduleIqamaAlerts(
+    Map<DailyPrayer, DateTime> prayerTimes,
+    AdhanSettings settings,
+    SharedPreferences prefs,
+    DateTime now,
+    DigitStyle digits,
+  ) async {
+    final DateTime day = prayerTimes.values.first.toLocal();
+    for (final p in DailyPrayer.values) {
+      await _core.cancelNotification(iqamaNotificationId(day, p));
+    }
+    final IqamaSettings iqama = IqamaStore(prefs).read();
+    if (iqama.alertMinutes == 0) return;
+    for (final MapEntry(key: prayer, value: adhan) in prayerTimes.entries) {
+      final DateTime? at = iqama.iqamaAt(prayer, adhan);
+      if (at == null || settings.modeFor(prayer) == PrayerAlertMode.silent) {
+        continue;
+      }
+      final DateTime alertAt = at.subtract(
+        Duration(minutes: iqama.alertMinutes),
+      );
+      if (!alertAt.isAfter(now) || !alertAt.isAfter(adhan)) continue;
+      await _core.scheduleOneTimeNotification(
+        id: iqamaNotificationId(day, prayer),
+        title: appL10n.iqamaNotificationTitle(
+          applyDigitStyle('${iqama.alertMinutes}', digits),
+        ),
+        body: appL10n.iqamaNotificationBody(
+          appL10n.prayerName(prayer),
+          formatNotificationTime(at, digits),
+        ),
+        scheduledAt: alertAt,
+        payload: 'prayer_time',
+        payloadData: const {'reminder': true},
+        kind: SakinaNotificationKind.prayerReminder,
+      );
+    }
   }
 
   /// Today's wird split over the prayers (see [splitAcrossPrayers]), each
@@ -349,6 +392,9 @@ class PrayerAlertNotifications {
       await _core.flutterLocalNotificationsPlugin.cancel(id: id);
     }
     for (final int id in allWirdPortionNotificationIds()) {
+      await _core.flutterLocalNotificationsPlugin.cancel(id: id);
+    }
+    for (final int id in allIqamaNotificationIds()) {
       await _core.flutterLocalNotificationsPlugin.cancel(id: id);
     }
     await _core.flutterLocalNotificationsPlugin.cancel(

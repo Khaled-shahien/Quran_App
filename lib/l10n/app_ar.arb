@@ -3988,5 +3988,54 @@
         "type": "String"
       }
     }
+  },
+  "iqamaTitle": "أوقات الإقامة في مسجدي",
+  "iqamaSubtitle": "كم دقيقة بعد الأذان تُقام كل صلاة؟ تظهر الإقامة تحت وقت الصلاة.",
+  "iqamaPrivacy": "تُحفظ هذه الأوقات على هاتفك فقط، ولا يُرسَل موقعك ولا مسجدك إلى أي مكان.",
+  "iqamaNone": "لم تُحدَّد",
+  "iqamaAfterMinutes": "بعد الأذان بـ{minutes} دقيقة",
+  "@iqamaAfterMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "iqamaAlertTitle": "تنبيه قبل الإقامة",
+  "iqamaAlertOff": "بلا تنبيه",
+  "iqamaAlertMinutes": "قبلها بـ{minutes} دقائق",
+  "@iqamaAlertMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "iqamaLine": "الإقامة {time}",
+  "@iqamaLine": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "iqamaNotificationTitle": "الإقامة بعد {minutes} دقائق",
+  "@iqamaNotificationTitle": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "iqamaNotificationBody": "صلاة {prayer} في مسجدك الساعة {time}",
+  "@iqamaNotificationBody": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
   }
 }
