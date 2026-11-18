@@ -120,11 +120,25 @@ Play هيطلب ده بعد رفع الـ AAB، لأن التطبيق فيه `FO
 - Type: **Media playback**
 - الوصف:
   > Sakina plays Quran recitation chosen by the user. Playback continues when the app is in the background or the screen is locked, with play/pause controls in the media notification and on the lock screen. The service runs only while the user is listening and stops when playback stops.
+  >
+  > If the user turns on the optional Fajr alarm, the same media-playback service plays the alarm sound at the Fajr time the user's prayer settings give, over the lock screen, until the user stops or snoozes it, at sunrise, or after 15 minutes at most.
 - فيديو: سجّل فيديو قصير (30–60 ثانية) على الموبايل: افتح سورة ← شغّل التلاوة ← اقفل الشاشة ← التلاوة مستمرة ← استخدم أزرار التحكم من شاشة القفل. ارفعه على YouTube كـ **Unlisted** وحط الرابط.
 
 ### Exact alarms
 التطبيق بيستخدم `SCHEDULE_EXACT_ALARM` لتنبيهات الصلاة، وبيشتغل حتى لو المستخدم ما منحوش (وبيشرح للمستخدم من الإعدادات).
 لو Play Console طلب تصريح، الاستخدام الأساسي هو: **Alarm/timer — prayer time alarms scheduled by the user**.
+
+### Full-screen intent (`USE_FULL_SCREEN_INTENT`)
+منذ أندرويد 14 لازم تعلن ده في **App content → Full-screen intent**:
+- الاختيار: **Alarm** (التطبيق بيعرض منبّه يضبطه المستخدم).
+- الوصف:
+  > The optional Fajr alarm, turned on by the user in the prayer alert settings, shows a full-screen alarm over the lock screen at the Fajr prayer time, with Stop and Snooze. It is off by default and is not used for any other notification.
+
+### Do Not Disturb (`ACCESS_NOTIFICATION_POLICY`)
+مش محتاج إعلان في Play Console؛ المستخدم بيمنحه بنفسه من إعدادات النظام لما يفعّل «صمت الهاتف بعد الأذان».
+
+### Data safety بعد المرحلة الرابعة
+الإجابات أعلاه بدون تغيير: السجل والحفظ والملاحظات والختمات الجماعية بتتحفظ على الجهاز بس، والتصدير ملف بيحفظه المستخدم بنفسه، والمشاركة بتحصل بضغطة المستخدم لتطبيق بيختاره (وده مش «مشاركة» في تعريف Google).
 
 ### Advertising ID
 **No** — التطبيق ما بيستخدمش معرّف الإعلانات. لو Play نبّهك إن الـ manifest فيه `AD_ID`، ابعتلي التنبيه.
