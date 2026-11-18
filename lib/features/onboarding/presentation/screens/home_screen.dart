@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
       leading: IconButton(
         tooltip: appL10n.appStringsMessage15,
         icon: const Icon(Icons.search_rounded, size: 26),
-        onPressed: () => context.push('/quran/search'),
+        onPressed: () => context.push('/search'),
       ),
       flexibleSpace: FlexibleSpaceBar(
         stretchModes: const [StretchMode.zoomBackground, StretchMode.fadeTitle],

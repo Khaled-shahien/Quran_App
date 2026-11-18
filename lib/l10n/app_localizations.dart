@@ -6383,6 +6383,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لحظة…'**
   String get myDataWorking;
+
+  /// No description provided for @unifiedSearchTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'البحث في سكينة'**
+  String get unifiedSearchTitle;
+
+  /// No description provided for @unifiedSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث في القرآن والأذكار والأحاديث والدليل'**
+  String get unifiedSearchHint;
+
+  /// No description provided for @unifiedSearchIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب كلمة أو أكثر. يجري البحث في النصوص المضمّنة في التطبيق فقط، دون إنترنت.'**
+  String get unifiedSearchIntro;
+
+  /// No description provided for @unifiedSearchQuran.
+  ///
+  /// In ar, this message translates to:
+  /// **'القرآن الكريم'**
+  String get unifiedSearchQuran;
+
+  /// No description provided for @unifiedSearchHisn.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصن المسلم'**
+  String get unifiedSearchHisn;
+
+  /// No description provided for @unifiedSearchHadith.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحاديث'**
+  String get unifiedSearchHadith;
+
+  /// No description provided for @unifiedSearchGuide.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدليل'**
+  String get unifiedSearchGuide;
+
+  /// No description provided for @unifiedSearchGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'{source} ({count})'**
+  String unifiedSearchGroup(String source, String count);
+
+  /// No description provided for @unifiedSearchShowAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض كل النتائج'**
+  String get unifiedSearchShowAll;
+
+  /// No description provided for @unifiedSearchFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تحميل النصوص للبحث. أعد فتح الشاشة.'**
+  String get unifiedSearchFailed;
 }
 
 class _AppLocalizationsDelegate

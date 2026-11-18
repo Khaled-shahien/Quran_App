@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/search/unified_search_screen.dart';
 import 'package:sakina_app/features/recitation/presentation/screens/recitation_listen_screen.dart';
 import 'package:sakina_app/features/quran/presentation/screens/hifz_screens.dart';
 import 'package:sakina_app/features/practice_log/presentation/practice_log_screen.dart';
@@ -158,6 +159,11 @@ final GoRouter appRouter = GoRouter(
           ),
         );
       },
+    ),
+    GoRoute(
+      path: '/search',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const UnifiedSearchScreen()),
     ),
     GoRoute(
       path: '/recitation/listen',

@@ -94,30 +94,35 @@ int? _normalizeUnit(int c) {
   return c;
 }
 
-class _IndexedAyah {
-  _IndexedAyah(this.surah, this.ayah, this.normalized, this.offsets);
+/// A text normalised for search, keeping where each normalised character
+/// came from so a match can be shown in the original text.
+class NormalizedText {
+  NormalizedText._(this.original, this.normalized, this.offsets);
 
-  factory _IndexedAyah.of(int surah, AyahEntity ayah) {
+  factory NormalizedText(String text) {
     final buffer = StringBuffer();
     final offsets = <int>[];
-    final text = ayah.text;
     for (var i = 0; i < text.length; i++) {
       final mapped = _normalizeUnit(text.codeUnitAt(i));
       if (mapped == null) continue;
       buffer.writeCharCode(mapped);
       offsets.add(i);
     }
-    return _IndexedAyah(surah, ayah, buffer.toString(), offsets);
+    return NormalizedText._(text, buffer.toString(), offsets);
   }
 
-  final int surah;
-  final AyahEntity ayah;
+  final String original;
   final String normalized;
   final List<int> offsets;
 
   static bool _isSpace(String text, int i) =>
-      i < 0 || i >= text.length || text.codeUnitAt(i) == 0x20;
+      i < 0 ||
+      i >= text.length ||
+      text.codeUnitAt(i) == 0x20 ||
+      text.codeUnitAt(i) == 0x0A;
 
+  /// The best occurrence of an already normalised [needle]: a whole word
+  /// if there is one, else a word start, else the first.
   (QuranMatchRank, int)? bestMatch(String needle) {
     (QuranMatchRank, int)? best;
     var from = 0;
@@ -136,4 +141,35 @@ class _IndexedAyah {
       from = at + 1;
     }
   }
+
+  /// The match of [query] in [original] and its rank, or null.
+  ({int start, int end, QuranMatchRank rank})? find(String query) {
+    final needle = normalizeArabicSearch(query).trim();
+    if (needle.isEmpty) return null;
+    final match = bestMatch(needle);
+    if (match == null) return null;
+    final (rank, at) = match;
+    final end = at + needle.length;
+    return (
+      start: offsets[at],
+      end: end < offsets.length ? offsets[end] : original.length,
+      rank: rank,
+    );
+  }
+}
+
+class _IndexedAyah {
+  _IndexedAyah(this.surah, this.ayah) : text = NormalizedText(ayah.text);
+
+  factory _IndexedAyah.of(int surah, AyahEntity ayah) =>
+      _IndexedAyah(surah, ayah);
+
+  final int surah;
+  final AyahEntity ayah;
+  final NormalizedText text;
+
+  String get normalized => text.normalized;
+  List<int> get offsets => text.offsets;
+
+  (QuranMatchRank, int)? bestMatch(String needle) => text.bestMatch(needle);
 }

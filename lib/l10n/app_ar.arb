@@ -4217,5 +4217,25 @@
   "myDataUnlockTitle": "هذه النسخة محمية بكلمة مرور",
   "myDataUnlock": "فتح",
   "myDataWrongPassphrase": "كلمة المرور غير صحيحة، أو أن الملف تغيّر.",
-  "myDataWorking": "لحظة…"
+  "myDataWorking": "لحظة…",
+  "unifiedSearchTitle": "البحث في سكينة",
+  "unifiedSearchHint": "ابحث في القرآن والأذكار والأحاديث والدليل",
+  "unifiedSearchIntro": "اكتب كلمة أو أكثر. يجري البحث في النصوص المضمّنة في التطبيق فقط، دون إنترنت.",
+  "unifiedSearchQuran": "القرآن الكريم",
+  "unifiedSearchHisn": "حصن المسلم",
+  "unifiedSearchHadith": "الأحاديث",
+  "unifiedSearchGuide": "الدليل",
+  "unifiedSearchGroup": "{source} ({count})",
+  "@unifiedSearchGroup": {
+    "placeholders": {
+      "source": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "unifiedSearchShowAll": "عرض كل النتائج",
+  "unifiedSearchFailed": "تعذّر تحميل النصوص للبحث. أعد فتح الشاشة."
 }

@@ -3586,4 +3586,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get myDataWorking => 'لحظة…';
+
+  @override
+  String get unifiedSearchTitle => 'البحث في سكينة';
+
+  @override
+  String get unifiedSearchHint => 'ابحث في القرآن والأذكار والأحاديث والدليل';
+
+  @override
+  String get unifiedSearchIntro =>
+      'اكتب كلمة أو أكثر. يجري البحث في النصوص المضمّنة في التطبيق فقط، دون إنترنت.';
+
+  @override
+  String get unifiedSearchQuran => 'القرآن الكريم';
+
+  @override
+  String get unifiedSearchHisn => 'حصن المسلم';
+
+  @override
+  String get unifiedSearchHadith => 'الأحاديث';
+
+  @override
+  String get unifiedSearchGuide => 'الدليل';
+
+  @override
+  String unifiedSearchGroup(String source, String count) {
+    return '$source ($count)';
+  }
+
+  @override
+  String get unifiedSearchShowAll => 'عرض كل النتائج';
+
+  @override
+  String get unifiedSearchFailed => 'تعذّر تحميل النصوص للبحث. أعد فتح الشاشة.';
 }
