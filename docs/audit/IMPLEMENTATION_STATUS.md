@@ -112,3 +112,14 @@ Status: **Done** (code + tests in the tree), **Partial** (part done; rest noted)
 
 Size after Phase 4: release APK 92.3 MB (was 83.4 MB), App Bundle 89.5 MB, over the old CI budget of 85 MB; the owner raised `AAB_BUDGET_MB` (`.github/workflows/flutter-quality.yml`) to 95 MB on 2026-11-18. The hadith encyclopedia is 2.9 MB compressed; the rest is new code in each of the three ABIs. Play delivers per-ABI splits, so downloads are smaller than the bundle.
 
+## Top 20 / Top 10 follow-up (2026-11-18)
+
+Of Part 10's Top 20 and Part 11's Top 10, everything buildable was done in Phases 2–4, except R-16 (Quran Foundation registration), R-72 (macOS) and the owner's release blockers (P0-01/02/03). This pass covered the rest:
+
+| Item | Status | Commit | Notes |
+|---|---|---|---|
+| HadeethEnc encyclopedia approval | Recorded | `3a3f6bd` | owner approved without item review; licence and evidence stay empty until HadeethEnc's terms are confirmed, so the release gate still holds it |
+| T-03 integration tests | Done | `bac4c47` | all five flows pass on the Android 16 emulator (prayer, Quran, production, duas, smoke) |
+| T-02 device QA | Partial (emulator) | — | on the Android 16 emulator: the quiet window turned Do Not Disturb on and off on time; the Fajr wake alarm showed as a heads-up with Stop/Snooze while the screen was on, and full screen over the lock screen with the minutes to sunrise when it was off. Still needed on physical phones: alarm sound and its rise, Stop/Snooze, adhan audio, reboot and Doze, qibla, OEM battery behaviour |
+| PV-1 privacy policy | Updated, not published | `0a5dc99` | `site/privacy.html` covers the Phase 2–4 data and permissions; it goes live when main is pushed (pages workflow). Play Console guide adds the Fajr alarm to the foreground-service declaration and the full-screen intent declaration |
+
