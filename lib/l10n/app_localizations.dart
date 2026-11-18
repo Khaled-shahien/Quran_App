@@ -5352,6 +5352,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'المصدر: حصن المسلم لسعيد بن علي بن وهف القحطاني، النص العربي من hisnmuslim.com دون تعديل. النص بانتظار مراجعة المالك قبل النشر.'**
   String get hisnSource;
+
+  /// Label of the morning/evening reminder timing choice.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت التذكير'**
+  String get anchoredReminderLabel;
+
+  /// Reminder rings at the chosen clock time.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعة ثابتة (كما اخترتها أعلاه)'**
+  String get anchoredClockTime;
+
+  /// Reminder at the prayer time.
+  ///
+  /// In ar, this message translates to:
+  /// **'عند أذان {prayer}'**
+  String anchoredAtPrayer(String prayer);
+
+  /// Reminder some minutes after the prayer.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد {prayer} بـ {minutes} دقيقة'**
+  String anchoredAfterPrayer(String minutes, String prayer);
+
+  /// Title of the home card that follows the time of day.
+  ///
+  /// In ar, this message translates to:
+  /// **'في هذا الوقت'**
+  String get nowCardTitle;
+
+  /// Suggestion: morning adhkar.
+  ///
+  /// In ar, this message translates to:
+  /// **'أذكار الصباح'**
+  String get nowMorningAdhkar;
+
+  /// Suggestion: evening adhkar.
+  ///
+  /// In ar, this message translates to:
+  /// **'أذكار المساء'**
+  String get nowEveningAdhkar;
+
+  /// Suggestion: adhkar before sleep.
+  ///
+  /// In ar, this message translates to:
+  /// **'أذكار النوم'**
+  String get nowSleepAdhkar;
+
+  /// Suggestion: Surat al-Mulk at night.
+  ///
+  /// In ar, this message translates to:
+  /// **'سورة الملك'**
+  String get nowSurahMulk;
+
+  /// Suggestion: Surat al-Kahf on Friday.
+  ///
+  /// In ar, this message translates to:
+  /// **'سورة الكهف يوم الجمعة'**
+  String get nowSurahKahf;
 }
 
 class _AppLocalizationsDelegate

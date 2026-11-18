@@ -2980,4 +2980,38 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get hisnSource =>
       'المصدر: حصن المسلم لسعيد بن علي بن وهف القحطاني، النص العربي من hisnmuslim.com دون تعديل. النص بانتظار مراجعة المالك قبل النشر.';
+
+  @override
+  String get anchoredReminderLabel => 'وقت التذكير';
+
+  @override
+  String get anchoredClockTime => 'ساعة ثابتة (كما اخترتها أعلاه)';
+
+  @override
+  String anchoredAtPrayer(String prayer) {
+    return 'عند أذان $prayer';
+  }
+
+  @override
+  String anchoredAfterPrayer(String minutes, String prayer) {
+    return 'بعد $prayer بـ $minutes دقيقة';
+  }
+
+  @override
+  String get nowCardTitle => 'في هذا الوقت';
+
+  @override
+  String get nowMorningAdhkar => 'أذكار الصباح';
+
+  @override
+  String get nowEveningAdhkar => 'أذكار المساء';
+
+  @override
+  String get nowSleepAdhkar => 'أذكار النوم';
+
+  @override
+  String get nowSurahMulk => 'سورة الملك';
+
+  @override
+  String get nowSurahKahf => 'سورة الكهف يوم الجمعة';
 }

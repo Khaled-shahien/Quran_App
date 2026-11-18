@@ -72,6 +72,7 @@ class UserDataBackup {
     'mulk_alarm_enabled', 'mulk_alarm_hour', 'mulk_alarm_minute',
     'baqarah_alarm_enabled', 'baqarah_alarm_hour', 'baqarah_alarm_minute',
     'daily_verse_alarm_enabled', 'verse_alarm_hour', 'verse_alarm_minute',
+    'morning_alarm_anchor_minutes', 'evening_alarm_anchor_minutes',
   };
 
   /// Families of keys with a variable suffix.

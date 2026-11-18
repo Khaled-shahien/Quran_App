@@ -3688,5 +3688,58 @@
   "hisnSource": "المصدر: حصن المسلم لسعيد بن علي بن وهف القحطاني، النص العربي من hisnmuslim.com دون تعديل. النص بانتظار مراجعة المالك قبل النشر.",
   "@hisnSource": {
     "description": "Source line of Hisn al-Muslim."
+  },
+  "anchoredReminderLabel": "وقت التذكير",
+  "@anchoredReminderLabel": {
+    "description": "Label of the morning/evening reminder timing choice."
+  },
+  "anchoredClockTime": "ساعة ثابتة (كما اخترتها أعلاه)",
+  "@anchoredClockTime": {
+    "description": "Reminder rings at the chosen clock time."
+  },
+  "anchoredAtPrayer": "عند أذان {prayer}",
+  "@anchoredAtPrayer": {
+    "description": "Reminder at the prayer time.",
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "anchoredAfterPrayer": "بعد {prayer} بـ {minutes} دقيقة",
+  "@anchoredAfterPrayer": {
+    "description": "Reminder some minutes after the prayer.",
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      },
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "nowCardTitle": "في هذا الوقت",
+  "@nowCardTitle": {
+    "description": "Title of the home card that follows the time of day."
+  },
+  "nowMorningAdhkar": "أذكار الصباح",
+  "@nowMorningAdhkar": {
+    "description": "Suggestion: morning adhkar."
+  },
+  "nowEveningAdhkar": "أذكار المساء",
+  "@nowEveningAdhkar": {
+    "description": "Suggestion: evening adhkar."
+  },
+  "nowSleepAdhkar": "أذكار النوم",
+  "@nowSleepAdhkar": {
+    "description": "Suggestion: adhkar before sleep."
+  },
+  "nowSurahMulk": "سورة الملك",
+  "@nowSurahMulk": {
+    "description": "Suggestion: Surat al-Mulk at night."
+  },
+  "nowSurahKahf": "سورة الكهف يوم الجمعة",
+  "@nowSurahKahf": {
+    "description": "Suggestion: Surat al-Kahf on Friday."
   }
 }

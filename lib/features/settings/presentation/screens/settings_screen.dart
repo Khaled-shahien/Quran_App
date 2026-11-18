@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/settings/presentation/widgets/anchored_reminder_tile.dart';
 import 'package:sakina_app/features/settings/presentation/widgets/my_data_preferences.dart';
 import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/features/prayers/presentation/widgets/adhan_preferences.dart';
@@ -131,6 +132,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         await alarm.toggle(enabled);
                       },
                     ),
+                    if (alarm.enabled &&
+                        (alarm.type == 'morning' || alarm.type == 'evening'))
+                      AnchoredReminderTile(morning: alarm.type == 'morning'),
                   ],
                 ],
               ),

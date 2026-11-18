@@ -1,3 +1,4 @@
+import 'anchored_reminders.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
@@ -643,6 +644,7 @@ class NotificationService {
     required DateTime scheduledAt,
     String? payload,
     Map<String, dynamic>? payloadData,
+    SakinaNotificationKind kind = SakinaNotificationKind.test,
   }) async {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
@@ -655,7 +657,7 @@ class NotificationService {
     }
 
     final NotificationDetails notificationDetails = buildNotificationDetails(
-      SakinaNotificationKind.test,
+      kind,
       title: title,
       body: body,
     );
@@ -853,6 +855,8 @@ class NotificationService {
       await cancelNotification(prayerNotificationId(legacyId, date));
       await cancelNotification(prayerReminderNotificationId(legacyId, date));
     }
+    await cancelNotification(AnchoredReminders.morningId(date));
+    await cancelNotification(AnchoredReminders.eveningId(date));
 
     final names = <DailyPrayer, String>{
       for (final prayer in prayerTimes.keys) prayer: appL10n.prayerName(prayer),
@@ -872,6 +876,34 @@ class NotificationService {
         isReminder: alert.kind == PlannedAlertKind.reminder,
         reminderMinutes: settings.reminderMinutes,
         adhanVoice: alert.voice,
+      );
+    }
+    await _scheduleAnchoredReminders(prayerTimes);
+  }
+
+  /// Morning/evening adhkar reminders set to follow Fajr/Asr (see
+  /// [AnchoredReminders]); only reminders still ahead are scheduled.
+  Future<void> _scheduleAnchoredReminders(
+    Map<DailyPrayer, DateTime> prayerTimes,
+  ) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    for (final AnchoredReminder r in AnchoredReminders.plan(
+      prayerTimes: prayerTimes,
+      prefs: prefs,
+      now: DateTime.now(),
+    )) {
+      final bool morning = r.kind == AnchoredReminderKind.morning;
+      await scheduleOneTimeNotification(
+        id: r.id,
+        title: morning
+            ? appL10n.notificationServiceMessage19
+            : appL10n.notificationServiceMessage21,
+        body: morning
+            ? appL10n.notificationServiceMessage20
+            : appL10n.notificationServiceMessage22,
+        scheduledAt: r.at,
+        payload: morning ? 'morning_adhkar' : 'evening_adhkar',
+        kind: SakinaNotificationKind.adhkar,
       );
     }
   }
@@ -927,6 +959,9 @@ class NotificationService {
     if (!_isPluginAvailable) return;
 
     for (final int id in allPrayerNotificationIds()) {
+      await flutterLocalNotificationsPlugin.cancel(id);
+    }
+    for (final int id in AnchoredReminders.allIds()) {
       await flutterLocalNotificationsPlugin.cancel(id);
     }
     await flutterLocalNotificationsPlugin.cancel(
@@ -1180,9 +1215,12 @@ class NotificationService {
 
     // The verse window is a week of separate days, so a new day is a change.
     final DateTime today = DateTime.now();
+    final SharedPreferences anchorPrefs = await SharedPreferences.getInstance();
+    final int? morningAnchor = AnchoredReminders.morning(anchorPrefs);
+    final int? eveningAnchor = AnchoredReminders.evening(anchorPrefs);
     final String newSignature =
-        '${isMorningEnabled ? 1 : 0}-'
-        '${isEveningEnabled ? 1 : 0}-'
+        '${isMorningEnabled ? 1 : 0}${morningAnchor ?? '-'}-'
+        '${isEveningEnabled ? 1 : 0}${eveningAnchor ?? '-'}-'
         '${isMulkEnabled ? 1 : 0}-'
         '${isBaqarahEnabled ? 1 : 0}-'
         '${isDailyVerseEnabled ? '${today.year}${today.month}${today.day}' : 0}';
@@ -1197,10 +1235,11 @@ class NotificationService {
 
     await _cancelManagedReminderNotifications();
 
-    if (isMorningEnabled) {
+    // An anchored reminder is scheduled with the prayer alerts instead.
+    if (isMorningEnabled && morningAnchor == null) {
       await scheduleMorningAdhkarAlarm();
     }
-    if (isEveningEnabled) {
+    if (isEveningEnabled && eveningAnchor == null) {
       await scheduleEveningAdhkarAlarm();
     }
     if (isMulkEnabled) {
