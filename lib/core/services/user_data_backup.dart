@@ -78,6 +78,7 @@ class UserDataBackup {
     'adhan_quiet_minutes', 'fajr_wake_enabled', 'fajr_wake_snooze_minutes',
     // Prayer and fasting log
     'practice_excused_mode', 'fasting_qada_base',
+    'wird_after_prayers',
   };
 
   /// Families of keys with a variable suffix.

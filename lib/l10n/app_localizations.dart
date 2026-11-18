@@ -5789,6 +5789,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إنقاص يوم'**
   String get qadaBaseDecrease;
+
+  /// No description provided for @wirdPortionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وزّع وردي على الصلوات'**
+  String get wirdPortionsTitle;
+
+  /// No description provided for @wirdPortionsHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُقسَم ورد اليوم على الصلوات الخمس، مع تذكير هادئ بعد كل صلاة بعشرين دقيقة.'**
+  String get wirdPortionsHelp;
+
+  /// No description provided for @wirdPortionLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد {prayer}: {range}'**
+  String wirdPortionLine(String prayer, String range);
+
+  /// No description provided for @wirdPortionPages.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصفحات {from}–{to}'**
+  String wirdPortionPages(String from, String to);
+
+  /// No description provided for @wirdPortionPage.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصفحة {page}'**
+  String wirdPortionPage(String page);
+
+  /// No description provided for @wirdPortionNotificationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وردك بعد صلاة {prayer}'**
+  String wirdPortionNotificationTitle(String prayer);
+
+  /// No description provided for @wirdPortionNotificationBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'{pages} من المصحف'**
+  String wirdPortionNotificationBody(String pages);
 }
 
 class _AppLocalizationsDelegate

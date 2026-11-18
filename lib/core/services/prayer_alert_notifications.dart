@@ -1,3 +1,9 @@
+import 'package:sakina_app/features/khatma/data/repositories/khatma_repository.dart';
+import 'package:sakina_app/features/khatma/domain/models/khatma_model.dart';
+import 'package:sakina_app/features/khatma/domain/services/wird_portions.dart';
+import 'package:sakina_app/features/khatma/presentation/widgets/wird_portions_card.dart';
+import 'package:sakina_app/features/quran/data/data_sources/quran_master_asset.dart';
+import 'package:sakina_app/features/quran/domain/services/quran_divisions.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
 
@@ -184,6 +190,7 @@ class PrayerAlertNotifications {
       );
     }
     await _scheduleAnchoredReminders(prayerTimes);
+    await _scheduleWirdPortions(prayerTimes, prefs, now);
     if (!android) return;
     final DateTime day = date.toLocal();
     await SakinaAlarms.setQuietWindows(
@@ -220,6 +227,72 @@ class PrayerAlertNotifications {
             )
           : null,
     );
+  }
+
+  /// Today's wird split over the prayers (see [splitAcrossPrayers]), each
+  /// part suggested [wirdPortionDelay] after its prayer. Only today: the
+  /// next portion is known once today's reading is marked.
+  Future<void> _scheduleWirdPortions(
+    Map<DailyPrayer, DateTime> prayerTimes,
+    SharedPreferences prefs,
+    DateTime now,
+  ) async {
+    final DateTime day = prayerTimes.values.first.toLocal();
+    for (final p in DailyPrayer.values) {
+      await _core.cancelNotification(wirdPortionNotificationId(day, p));
+    }
+    if (prefs.getBool(wirdAfterPrayersKey) != true) return;
+    if (day.year != now.year || day.month != now.month || day.day != now.day) {
+      return;
+    }
+    final KhatmaModel? khatma = KhatmaRepositoryImpl(
+      prefs: prefs,
+    ).getActiveKhatma().valueOrNull;
+    if (khatma == null) return;
+    // Today's reading already marked: nothing left to suggest today.
+    if (khatma.dailyLogs.any(
+      (log) =>
+          log.date.year == now.year &&
+          log.date.month == now.month &&
+          log.date.day == now.day,
+    )) {
+      return;
+    }
+    final QuranDivisions divisions;
+    try {
+      divisions = QuranDivisions.fromSurahs(await QuranMasterAsset.load());
+    } catch (error) {
+      developer.log(
+        'Wird portions skipped: mushaf index unavailable',
+        name: 'sakina_app.notifications',
+        level: 900,
+        error: error,
+      );
+      return;
+    }
+    final range = todayPageRange(khatma, divisions);
+    if (range == null) return;
+    final DigitStyle digits = await _core.digitStyle();
+    for (final portion in splitAcrossPrayers(range.fromPage, range.toPage)) {
+      final DateTime? at = prayerTimes[portion.prayer]?.add(wirdPortionDelay);
+      if (at == null || !at.isAfter(now)) continue;
+      await _core.scheduleOneTimeNotification(
+        id: wirdPortionNotificationId(day, portion.prayer),
+        title: appL10n.wirdPortionNotificationTitle(
+          appL10n.prayerName(portion.prayer),
+        ),
+        body: applyDigitStyle(
+          appL10n.wirdPortionNotificationBody(
+            wirdPagesLabel(portion.fromPage, portion.toPage),
+          ),
+          digits,
+        ),
+        scheduledAt: at,
+        payload: 'khatma',
+        payloadData: const {'feature': 'khatma'},
+        kind: SakinaNotificationKind.quranReading,
+      );
+    }
   }
 
   /// Morning/evening adhkar reminders set to follow Fajr/Asr (see
@@ -273,6 +346,9 @@ class PrayerAlertNotifications {
       await _core.flutterLocalNotificationsPlugin.cancel(id: id);
     }
     for (final int id in AnchoredReminders.allIds()) {
+      await _core.flutterLocalNotificationsPlugin.cancel(id: id);
+    }
+    for (final int id in allWirdPortionNotificationIds()) {
       await _core.flutterLocalNotificationsPlugin.cancel(id: id);
     }
     await _core.flutterLocalNotificationsPlugin.cancel(

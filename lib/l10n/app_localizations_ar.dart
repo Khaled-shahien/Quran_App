@@ -3235,4 +3235,36 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get qadaBaseDecrease => 'إنقاص يوم';
+
+  @override
+  String get wirdPortionsTitle => 'وزّع وردي على الصلوات';
+
+  @override
+  String get wirdPortionsHelp =>
+      'يُقسَم ورد اليوم على الصلوات الخمس، مع تذكير هادئ بعد كل صلاة بعشرين دقيقة.';
+
+  @override
+  String wirdPortionLine(String prayer, String range) {
+    return 'بعد $prayer: $range';
+  }
+
+  @override
+  String wirdPortionPages(String from, String to) {
+    return 'الصفحات $from–$to';
+  }
+
+  @override
+  String wirdPortionPage(String page) {
+    return 'الصفحة $page';
+  }
+
+  @override
+  String wirdPortionNotificationTitle(String prayer) {
+    return 'وردك بعد صلاة $prayer';
+  }
+
+  @override
+  String wirdPortionNotificationBody(String pages) {
+    return '$pages من المصحف';
+  }
 }

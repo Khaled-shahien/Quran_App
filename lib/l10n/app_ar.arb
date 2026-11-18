@@ -3940,5 +3940,53 @@
     }
   },
   "qadaBaseIncrease": "زيادة يوم",
-  "qadaBaseDecrease": "إنقاص يوم"
+  "qadaBaseDecrease": "إنقاص يوم",
+  "wirdPortionsTitle": "وزّع وردي على الصلوات",
+  "wirdPortionsHelp": "يُقسَم ورد اليوم على الصلوات الخمس، مع تذكير هادئ بعد كل صلاة بعشرين دقيقة.",
+  "wirdPortionLine": "بعد {prayer}: {range}",
+  "@wirdPortionLine": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "wirdPortionPages": "الصفحات {from}–{to}",
+  "@wirdPortionPages": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "wirdPortionPage": "الصفحة {page}",
+  "@wirdPortionPage": {
+    "placeholders": {
+      "page": {
+        "type": "String"
+      }
+    }
+  },
+  "wirdPortionNotificationTitle": "وردك بعد صلاة {prayer}",
+  "@wirdPortionNotificationTitle": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "wirdPortionNotificationBody": "{pages} من المصحف",
+  "@wirdPortionNotificationBody": {
+    "placeholders": {
+      "pages": {
+        "type": "String"
+      }
+    }
+  }
 }

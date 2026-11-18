@@ -1,3 +1,6 @@
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sakina_app/features/khatma/domain/services/wird_portions.dart';
+import 'package:sakina_app/features/prayers/domain/entities/adhan_settings.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
@@ -134,6 +137,19 @@ class KhatmaProvider extends ChangeNotifier {
   Future<void> markCurrentWirdAsFinished() async {
     final KhatmaModel? current = _activeKhatma;
     if (current == null) return;
+    final DateTime markedOn = DateTime.now();
+    final bool portions =
+        (await SharedPreferences.getInstance()).getBool(wirdAfterPrayersKey) ??
+        false;
+    for (final p in portions ? DailyPrayer.values : const <DailyPrayer>[]) {
+      try {
+        await _reminderService.cancelReminder(
+          wirdPortionNotificationId(markedOn, p),
+        );
+      } catch (_) {
+        // A reminder that cannot be cancelled does not block the progress.
+      }
+    }
 
     final double readUnits = math.max(
       1,

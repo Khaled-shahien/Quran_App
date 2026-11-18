@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/khatma/presentation/widgets/wird_portions_card.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'dart:async';
 import 'package:sakina_app/l10n/localization.dart';
@@ -337,6 +338,8 @@ class CurrentWirdWidget extends StatelessWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: AppSpacing.md),
+                WirdPortionsCard(khatma: activeKhatma),
               ] else ...[
                 // Empty State (No Active Khatma)
                 SakinaCard(
