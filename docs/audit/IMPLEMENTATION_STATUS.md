@@ -93,3 +93,22 @@ Status: **Done** (code + tests in the tree), **Partial** (part done; rest noted)
 | Simple mode (R-51) | Done | `8c44e3d` | four large tiles; text one step larger |
 | iOS release (R-72) | Blocked | — | needs a macOS host and Xcode (P7-01, B-02) |
 
+## Phase 4 – Advanced (roadmap of 2026-11-18)
+
+| Item | Status | Commit | Notes |
+|---|---|---|---|
+| Log out of cloud backup (PV-3) | Done | `612eb3c` | the log now lives in `sakina_private.db`, excluded from Android cloud backup; rows from Phase 3 builds are moved once |
+| Encrypted backup (R-53) | Done | `612eb3c` | optional passphrase; Argon2id (19 MiB, 2 passes) + AES-256-GCM; cryptography 2.9.0 |
+| One offline search box (R-54) | Done | `2c052f7` | Quran, Hisn al-Muslim, the forty hadith, guide; from Home's search button |
+| Private weekly reflection (R-52) | Done | `4c708f8` | off by default; Friday and Saturday card |
+| Monthly timetable export (R-35) | Done | `062670e`, `0191080` | image and A4 PDF (pdf 3.13.1, Amiri) |
+| Offline group khatma (R-45) | Done (text codes) | `51ac0ba` | codes travel by any messenger; no QR (packages not approved) |
+| Hadith phase 2 (graded collections) | Done (pending review) | `d2cd689` | all 3,574 Arabic HadeethEnc hadith under 493 topics, grades as published; 12.5 MB asset; confirm HadeethEnc terms (B-05) |
+| Additional UI languages (G7) | Done: English | `8a4b493` | 1,112 strings; religious texts stay Arabic; needs a native English review and a look on device |
+| Word-by-word / iʿrab / fixed pages (G5, G6) | Research only | — | `docs/research/PHASE4_RESEARCH_NOTES.md`; waits for KFGQPC permission and a decision on the GPL Quranic Arabic Corpus |
+| Semantic search / voice (6.4) | Research only | — | voice not approved; semantic search needs a quality and size spike |
+| Account-free sync | Research only | — | recommendation: scheduled encrypted export to a folder the user picks |
+| Wear OS tile (G21) | Not started | — | not approved this phase |
+
+Size after Phase 4: release APK 92.3 MB (was 83.4 MB), App Bundle 89.5 MB, over the CI budget of 85 MB (`AAB_BUDGET_MB` in `.github/workflows/flutter-quality.yml`). The hadith encyclopedia is 2.9 MB compressed; the rest is new code in each of the three ABIs. Raising the budget or trimming content is an owner decision; Play delivers per-ABI splits, so downloads are smaller than the bundle.
+
