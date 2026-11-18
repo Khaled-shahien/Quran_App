@@ -17,6 +17,7 @@ class MainActivity : AudioServiceActivity() {
     private var qiblaCompass: QiblaCompass? = null
     private var qiblaChannel: EventChannel? = null
     private var permissionsChannel: MethodChannel? = null
+    private var widgetChannel: MethodChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -40,6 +41,15 @@ class MainActivity : AudioServiceActivity() {
                 )
                 "openBatteryOptimizationSettings" -> result.success(openBatteryOptimizationSettings())
                 else -> result.notImplemented()
+            }
+        }
+        widgetChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "sakina/widget")
+        widgetChannel?.setMethodCallHandler { call, result ->
+            if (call.method == "update") {
+                PrayerTimesWidget.updateAll(applicationContext)
+                result.success(null)
+            } else {
+                result.notImplemented()
             }
         }
     }
@@ -86,6 +96,8 @@ class MainActivity : AudioServiceActivity() {
         qiblaCompass = null
         permissionsChannel?.setMethodCallHandler(null)
         permissionsChannel = null
+        widgetChannel?.setMethodCallHandler(null)
+        widgetChannel = null
         super.cleanUpFlutterEngine(flutterEngine)
     }
 }

@@ -1,3 +1,7 @@
+import 'package:sakina_app/features/prayers/data/services/local_prayer_notification_scheduler.dart';
+import 'package:sakina_app/features/prayers/data/services/prayer_widget_data.dart';
+import 'package:sakina_app/core/utils/dual_date.dart';
+import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'dart:async';
 import 'package:sakina_app/features/prayers/domain/prayer_time_adjustments.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -319,6 +323,62 @@ class PrayerTimesProvider extends ChangeNotifier {
       '$locationCountryCode:$method',
     );
     notifyListeners();
+  }
+
+  /// Saves today's and tomorrow's times for the home-screen widget.
+  Future<void> _writeWidgetData() async {
+    final SharedPreferences? prefs = _preferences;
+    final PrayerTimesEntity? today = _prayerTimes;
+    final DateTime? date = loadedDate;
+    if (prefs == null || today == null || date == null) return;
+    try {
+      final DigitStyle digits = digitStyleFromName(
+        prefs.get(digitStylePreferenceKey),
+      );
+      final prayers =
+          <({DailyPrayer prayer, String name, DateTime at, String label})>[];
+      for (final (PrayerTimesEntity? entity, DateTime day) in [
+        (today, date),
+        (_tomorrowPrayerTimes, DateTime(date.year, date.month, date.day + 1)),
+      ]) {
+        if (entity == null) continue;
+        final schedule = LocalPrayerNotificationScheduler.buildPrayerSchedule(
+          prayerTimes: entity,
+          date: day,
+        );
+        if (schedule.length != 5) continue;
+        final Map<DailyPrayer, String?> labels = {
+          DailyPrayer.fajr: entity.fajr,
+          DailyPrayer.dhuhr: entity.dhuhr,
+          DailyPrayer.asr: entity.asr,
+          DailyPrayer.maghrib: entity.maghrib,
+          DailyPrayer.isha: entity.isha,
+        };
+        for (final DailyPrayer p in DailyPrayer.values) {
+          prayers.add((
+            prayer: p,
+            name: appL10n.prayerName(p),
+            at: schedule[p]!,
+            label: applyDigitStyle(labels[p] ?? '', digits),
+          ));
+        }
+      }
+      final int offset = prefs.getInt('hijri_offset_days') ?? 0;
+      final String? hijri = DualDate.of(
+        locationNow,
+        hijriOffsetDays: offset,
+      ).hijri;
+      await PrayerWidgetData.write(
+        prefs,
+        PrayerWidgetData.encode(
+          place: locationLabel,
+          hijri: hijri == null ? null : applyDigitStyle(hijri, digits),
+          prayers: prayers,
+        ),
+      );
+    } catch (error) {
+      debugPrint('Prayer widget data not written: $error');
+    }
   }
 
   /// Looks up the country of the active place offline (also started
@@ -795,6 +855,7 @@ class PrayerTimesProvider extends ChangeNotifier {
           calculationMethod: selectedMethod,
         );
       }
+      unawaited(_writeWidgetData());
       // The country (for the method suggestion) once the place is known.
       // Not awaited: the times are ready without it, and the city list
       // must not hold up the first screen.

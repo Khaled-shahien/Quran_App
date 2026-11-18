@@ -93,6 +93,19 @@
         </receiver>
 
         <!-- Boot receiver for rescheduling alarms -->
+        <!-- Home-screen widget with the day's prayer times. -->
+        <receiver
+            android:name=".PrayerTimesWidget"
+            android:exported="false"
+            android:label="@string/prayer_widget_description">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/prayer_widget_info" />
+        </receiver>
+
         <receiver
             android:name=".BootReceiver"
             android:enabled="true"
