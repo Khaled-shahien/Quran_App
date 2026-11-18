@@ -2812,4 +2812,143 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get tafsirSource =>
       'المصدر: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف، عن موقع تنزيل (tanzil.net). النص كما هو دون أي تعديل.';
+
+  @override
+  String get savedColorGreen => 'أخضر';
+
+  @override
+  String get savedColorGold => 'ذهبي';
+
+  @override
+  String get savedColorBlue => 'أزرق';
+
+  @override
+  String get savedColorRose => 'وردي';
+
+  @override
+  String get savedColorViolet => 'بنفسجي';
+
+  @override
+  String get readerVerseSave => 'حفظ الآية بلون';
+
+  @override
+  String get readerVerseNote => 'ملاحظة على الآية';
+
+  @override
+  String get savedVerseLabel => 'اسم قصير (اختياري)';
+
+  @override
+  String get savedVerseSave => 'حفظ';
+
+  @override
+  String get savedVerseRemove => 'إزالة الحفظ';
+
+  @override
+  String get savedVerseSaved => 'حُفظت الآية';
+
+  @override
+  String get savedVerseRemoved => 'أُزيلت الآية من المحفوظات';
+
+  @override
+  String get savedVerseFailed => 'تعذّر الحفظ. حاول مرة أخرى.';
+
+  @override
+  String get savedVerseEdit => 'تعديل';
+
+  @override
+  String savedVerseReference(String surah, String ayah) {
+    return '$surah، الآية $ayah';
+  }
+
+  @override
+  String get verseNoteHint => 'اكتب ما يخطر لك عند هذه الآية…';
+
+  @override
+  String get verseNotePrivacy =>
+      'الملاحظات والمحفوظات على جهازك فقط، ولا تُرسَل إلى أي جهة.';
+
+  @override
+  String get verseNoteSave => 'حفظ الملاحظة';
+
+  @override
+  String get verseNoteSaved => 'حُفظت الملاحظة';
+
+  @override
+  String get verseNoteDeleted => 'حُذفت الملاحظة';
+
+  @override
+  String get savedVersesTitle => 'الآيات المحفوظة والملاحظات';
+
+  @override
+  String get savedVersesTab => 'المحفوظة';
+
+  @override
+  String get verseNotesTab => 'الملاحظات';
+
+  @override
+  String get savedVersesEmpty =>
+      'لم تحفظ أي آية بعد. اضغط مطولًا على آية في المصحف واختر «حفظ الآية بلون».';
+
+  @override
+  String get verseNotesEmpty =>
+      'لا توجد ملاحظات بعد. اضغط مطولًا على آية واختر «ملاحظة على الآية».';
+
+  @override
+  String get myDataSection => 'بياناتي';
+
+  @override
+  String get myDataExport => 'حفظ نسخة من بياناتي';
+
+  @override
+  String get myDataExportSubtitle =>
+      'الإعدادات، والختمة، والعلامة، والمحفوظات، والملاحظات في ملف تحفظه أنت';
+
+  @override
+  String get myDataExported => 'حُفظ الملف';
+
+  @override
+  String get myDataImport => 'استعادة بياناتي من ملف';
+
+  @override
+  String get myDataImportSubtitle => 'تحل بيانات الملف محل بياناتك الحالية';
+
+  @override
+  String get myDataImportTitle => 'استعادة هذه النسخة؟';
+
+  @override
+  String myDataImportSummary(
+    String date,
+    String verses,
+    String notes,
+    String settings,
+  ) {
+    return 'نسخة بتاريخ $date: $verses آية محفوظة، و$notes ملاحظة، و$settings إعدادًا. ستحل محل بياناتك الحالية، ثم يُعاد فتح التطبيق.';
+  }
+
+  @override
+  String get myDataImportConfirm => 'استعادة';
+
+  @override
+  String get myDataInvalidFile =>
+      'هذا الملف ليس نسخة من بيانات سكينة، أو أنه من إصدار أحدث.';
+
+  @override
+  String get myDataReset => 'مسح كل بياناتي';
+
+  @override
+  String get myDataResetSubtitle =>
+      'يعيد الإعدادات والختمة والمحفوظات والملاحظات إلى البداية';
+
+  @override
+  String get myDataResetTitle => 'مسح كل بياناتك؟';
+
+  @override
+  String get myDataResetBody =>
+      'ستُحذف إعداداتك وموقع الصلاة والختمة والعلامة والمحفوظات والملاحظات من هذا الجهاز، ولا يمكن التراجع إلا من نسخة محفوظة. احفظ نسخة أولًا إن أردت.';
+
+  @override
+  String get myDataResetConfirm => 'مسح البيانات';
+
+  @override
+  String get myDataFailed => 'تعذّرت العملية، ولم يتغير شيء.';
 }

@@ -168,6 +168,11 @@ class _QuranScreenState extends State<_QuranScreenContent> {
               title: l10nOf(context).continueReadingCardMessage2,
               backTooltip: l10nOf(context).appStringsMessage13,
               actions: [
+                IconButton(
+                  tooltip: l10nOf(context).savedVersesTitle,
+                  icon: const Icon(Icons.bookmarks_outlined),
+                  onPressed: () => context.push('/quran/saved'),
+                ),
                 if (!_isLoading && _error == null)
                   IconButton(
                     tooltip: l10nOf(context).quranGoTo,

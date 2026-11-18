@@ -332,6 +332,12 @@ extension _SurahReaderPage on _SurahDetailsScreenState {
     _selectVerse((surah: verse.surahNumber, ayah: verse.verseNumber));
     final l10n = l10nOf(context);
     final RecitationController? recitation = _recitation;
+    final VerseLibraryController? library = context
+        .read<VerseLibraryController?>();
+    final String reference = l10n.savedVerseReference(
+      verse.surahName,
+      context.digits(verse.verseNumber),
+    );
 
     await showModalBottomSheet<void>(
       context: context,
@@ -393,6 +399,40 @@ extension _SurahReaderPage on _SurahDetailsScreenState {
                   unawaited(_saveBookmark(verse: verse));
                 },
               ),
+              if (library != null) ...[
+                ListTile(
+                  leading: const Icon(Icons.bookmarks_outlined),
+                  title: Text(l10n.readerVerseSave),
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    unawaited(
+                      showSaveVerseSheet(
+                        context,
+                        library: library,
+                        surah: verse.surahNumber,
+                        ayah: verse.verseNumber,
+                        title: reference,
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.edit_note_rounded),
+                  title: Text(l10n.readerVerseNote),
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    unawaited(
+                      showVerseNoteEditor(
+                        context,
+                        library: library,
+                        surah: verse.surahNumber,
+                        ayah: verse.verseNumber,
+                        title: reference,
+                      ),
+                    );
+                  },
+                ),
+              ],
               ListTile(
                 leading: const Icon(Icons.copy_rounded),
                 title: Text(l10n.readerVerseCopy),

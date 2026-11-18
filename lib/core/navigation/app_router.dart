@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/quran/presentation/screens/saved_verses_screen.dart';
 import 'package:sakina_app/features/settings/presentation/screens/alert_health_screen.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -121,6 +122,11 @@ final GoRouter appRouter = GoRouter(
       path: '/settings/data-sources',
       pageBuilder: (context, state) =>
           _fadePage(state, const DataSourcesScreen()),
+    ),
+    GoRoute(
+      path: '/quran/saved',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const SavedVersesScreen()),
     ),
     GoRoute(
       path: '/quran/search',

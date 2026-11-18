@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/settings/presentation/widgets/my_data_preferences.dart';
 import 'package:sakina_app/core/widgets/sakina_hero_app_bar.dart';
 import 'package:sakina_app/features/prayers/presentation/widgets/adhan_preferences.dart';
 import 'package:sakina_app/l10n/localization.dart';
@@ -133,6 +134,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ],
               ),
+              _SectionTitle(l10nOf(context).myDataSection),
+              const _Group(children: [MyDataPreferences()]),
               _SectionTitle(l10nOf(context).feedbackSection),
               const _Group(children: [FeedbackPreferences()]),
               _SectionTitle(l10nOf(context).settingsScreenMessage12),

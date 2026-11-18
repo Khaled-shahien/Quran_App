@@ -1,3 +1,6 @@
+import 'package:sakina_app/features/quran/presentation/providers/verse_library_controller.dart';
+import 'package:sakina_app/features/quran/data/repositories/verse_library_repository.dart';
+import 'package:sakina_app/core/database/app_database.dart';
 import 'package:sakina_app/core/app/app_frame.dart';
 import 'package:sakina_app/core/feedback/feedback_service.dart';
 import 'dart:async';
@@ -399,6 +402,12 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
         ),
         ChangeNotifierProvider<ReadingModeController>(
           create: (_) => ReadingModeController(_prefs),
+        ),
+        // Loaded on first use, so the database opens only when needed.
+        ChangeNotifierProvider<VerseLibraryController>(
+          create: (_) => VerseLibraryController(
+            VerseLibraryRepository(getIt.getAsync<AppDatabase>),
+          ),
         ),
         ChangeNotifierProvider<TextSizeController>(
           create: (_) => TextSizeController(_prefs),

@@ -34,6 +34,8 @@ import '../providers/bookmark_provider.dart';
 import '../widgets/quran_page_layout.dart';
 import '../widgets/quran_settings_dialog.dart';
 import '../widgets/tafsir_sheet.dart';
+import '../widgets/verse_library_sheets.dart';
+import '../providers/verse_library_controller.dart';
 
 part 'surah_reader/surah_reader_models.dart';
 part 'surah_reader/surah_reader_chrome.dart';

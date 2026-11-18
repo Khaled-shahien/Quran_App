@@ -5053,6 +5053,257 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'المصدر: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف، عن موقع تنزيل (tanzil.net). النص كما هو دون أي تعديل.'**
   String get tafsirSource;
+
+  /// Saved verse colour.
+  ///
+  /// In ar, this message translates to:
+  /// **'أخضر'**
+  String get savedColorGreen;
+
+  /// Saved verse colour.
+  ///
+  /// In ar, this message translates to:
+  /// **'ذهبي'**
+  String get savedColorGold;
+
+  /// Saved verse colour.
+  ///
+  /// In ar, this message translates to:
+  /// **'أزرق'**
+  String get savedColorBlue;
+
+  /// Saved verse colour.
+  ///
+  /// In ar, this message translates to:
+  /// **'وردي'**
+  String get savedColorRose;
+
+  /// Saved verse colour.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنفسجي'**
+  String get savedColorViolet;
+
+  /// Verse action: save the verse with a colour.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الآية بلون'**
+  String get readerVerseSave;
+
+  /// Verse action: write a private note.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة على الآية'**
+  String get readerVerseNote;
+
+  /// Optional label of a saved verse.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم قصير (اختياري)'**
+  String get savedVerseLabel;
+
+  /// Saves the verse.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get savedVerseSave;
+
+  /// Removes a saved verse.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة الحفظ'**
+  String get savedVerseRemove;
+
+  /// Confirmation: verse saved.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُفظت الآية'**
+  String get savedVerseSaved;
+
+  /// Confirmation: verse removed.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُزيلت الآية من المحفوظات'**
+  String get savedVerseRemoved;
+
+  /// Saving to the local database failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر الحفظ. حاول مرة أخرى.'**
+  String get savedVerseFailed;
+
+  /// Edit a saved verse or note.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get savedVerseEdit;
+
+  /// Reference of a saved verse.
+  ///
+  /// In ar, this message translates to:
+  /// **'{surah}، الآية {ayah}'**
+  String savedVerseReference(String surah, String ayah);
+
+  /// Hint of the note editor.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب ما يخطر لك عند هذه الآية…'**
+  String get verseNoteHint;
+
+  /// Privacy note for saved verses and notes.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملاحظات والمحفوظات على جهازك فقط، ولا تُرسَل إلى أي جهة.'**
+  String get verseNotePrivacy;
+
+  /// Saves the note.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الملاحظة'**
+  String get verseNoteSave;
+
+  /// Confirmation: note saved.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُفظت الملاحظة'**
+  String get verseNoteSaved;
+
+  /// Confirmation: empty note deleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُذفت الملاحظة'**
+  String get verseNoteDeleted;
+
+  /// Screen title and Quran index action.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآيات المحفوظة والملاحظات'**
+  String get savedVersesTitle;
+
+  /// Tab: saved verses.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحفوظة'**
+  String get savedVersesTab;
+
+  /// Tab: notes.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملاحظات'**
+  String get verseNotesTab;
+
+  /// Empty state of saved verses.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تحفظ أي آية بعد. اضغط مطولًا على آية في المصحف واختر «حفظ الآية بلون».'**
+  String get savedVersesEmpty;
+
+  /// Empty state of notes.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد ملاحظات بعد. اضغط مطولًا على آية واختر «ملاحظة على الآية».'**
+  String get verseNotesEmpty;
+
+  /// Settings section: export, import, erase user data.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتي'**
+  String get myDataSection;
+
+  /// Exports user data to a file.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ نسخة من بياناتي'**
+  String get myDataExport;
+
+  /// What the export contains.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات، والختمة، والعلامة، والمحفوظات، والملاحظات في ملف تحفظه أنت'**
+  String get myDataExportSubtitle;
+
+  /// Export done.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُفظ الملف'**
+  String get myDataExported;
+
+  /// Imports user data from a backup file.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعادة بياناتي من ملف'**
+  String get myDataImport;
+
+  /// Import replaces current data.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحل بيانات الملف محل بياناتك الحالية'**
+  String get myDataImportSubtitle;
+
+  /// Import confirmation title.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعادة هذه النسخة؟'**
+  String get myDataImportTitle;
+
+  /// What the backup holds.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخة بتاريخ {date}: {verses} آية محفوظة، و{notes} ملاحظة، و{settings} إعدادًا. ستحل محل بياناتك الحالية، ثم يُعاد فتح التطبيق.'**
+  String myDataImportSummary(
+    String date,
+    String verses,
+    String notes,
+    String settings,
+  );
+
+  /// Confirms import.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعادة'**
+  String get myDataImportConfirm;
+
+  /// The picked file is not a usable backup.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الملف ليس نسخة من بيانات سكينة، أو أنه من إصدار أحدث.'**
+  String get myDataInvalidFile;
+
+  /// Erases user data.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح كل بياناتي'**
+  String get myDataReset;
+
+  /// What erase does.
+  ///
+  /// In ar, this message translates to:
+  /// **'يعيد الإعدادات والختمة والمحفوظات والملاحظات إلى البداية'**
+  String get myDataResetSubtitle;
+
+  /// Erase confirmation title.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح كل بياناتك؟'**
+  String get myDataResetTitle;
+
+  /// Explains erase is permanent.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستُحذف إعداداتك وموقع الصلاة والختمة والعلامة والمحفوظات والملاحظات من هذا الجهاز، ولا يمكن التراجع إلا من نسخة محفوظة. احفظ نسخة أولًا إن أردت.'**
+  String get myDataResetBody;
+
+  /// Confirms erase.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح البيانات'**
+  String get myDataResetConfirm;
+
+  /// Export, import or erase failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّرت العملية، ولم يتغير شيء.'**
+  String get myDataFailed;
 }
 
 class _AppLocalizationsDelegate

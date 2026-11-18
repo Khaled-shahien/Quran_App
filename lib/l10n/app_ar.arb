@@ -3457,5 +3457,191 @@
   "tafsirSource": "المصدر: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف، عن موقع تنزيل (tanzil.net). النص كما هو دون أي تعديل.",
   "@tafsirSource": {
     "description": "Attribution required by Tanzil and the translator."
+  },
+  "savedColorGreen": "أخضر",
+  "@savedColorGreen": {
+    "description": "Saved verse colour."
+  },
+  "savedColorGold": "ذهبي",
+  "@savedColorGold": {
+    "description": "Saved verse colour."
+  },
+  "savedColorBlue": "أزرق",
+  "@savedColorBlue": {
+    "description": "Saved verse colour."
+  },
+  "savedColorRose": "وردي",
+  "@savedColorRose": {
+    "description": "Saved verse colour."
+  },
+  "savedColorViolet": "بنفسجي",
+  "@savedColorViolet": {
+    "description": "Saved verse colour."
+  },
+  "readerVerseSave": "حفظ الآية بلون",
+  "@readerVerseSave": {
+    "description": "Verse action: save the verse with a colour."
+  },
+  "readerVerseNote": "ملاحظة على الآية",
+  "@readerVerseNote": {
+    "description": "Verse action: write a private note."
+  },
+  "savedVerseLabel": "اسم قصير (اختياري)",
+  "@savedVerseLabel": {
+    "description": "Optional label of a saved verse."
+  },
+  "savedVerseSave": "حفظ",
+  "@savedVerseSave": {
+    "description": "Saves the verse."
+  },
+  "savedVerseRemove": "إزالة الحفظ",
+  "@savedVerseRemove": {
+    "description": "Removes a saved verse."
+  },
+  "savedVerseSaved": "حُفظت الآية",
+  "@savedVerseSaved": {
+    "description": "Confirmation: verse saved."
+  },
+  "savedVerseRemoved": "أُزيلت الآية من المحفوظات",
+  "@savedVerseRemoved": {
+    "description": "Confirmation: verse removed."
+  },
+  "savedVerseFailed": "تعذّر الحفظ. حاول مرة أخرى.",
+  "@savedVerseFailed": {
+    "description": "Saving to the local database failed."
+  },
+  "savedVerseEdit": "تعديل",
+  "@savedVerseEdit": {
+    "description": "Edit a saved verse or note."
+  },
+  "savedVerseReference": "{surah}، الآية {ayah}",
+  "@savedVerseReference": {
+    "description": "Reference of a saved verse.",
+    "placeholders": {
+      "surah": {
+        "type": "String"
+      },
+      "ayah": {
+        "type": "String"
+      }
+    }
+  },
+  "verseNoteHint": "اكتب ما يخطر لك عند هذه الآية…",
+  "@verseNoteHint": {
+    "description": "Hint of the note editor."
+  },
+  "verseNotePrivacy": "الملاحظات والمحفوظات على جهازك فقط، ولا تُرسَل إلى أي جهة.",
+  "@verseNotePrivacy": {
+    "description": "Privacy note for saved verses and notes."
+  },
+  "verseNoteSave": "حفظ الملاحظة",
+  "@verseNoteSave": {
+    "description": "Saves the note."
+  },
+  "verseNoteSaved": "حُفظت الملاحظة",
+  "@verseNoteSaved": {
+    "description": "Confirmation: note saved."
+  },
+  "verseNoteDeleted": "حُذفت الملاحظة",
+  "@verseNoteDeleted": {
+    "description": "Confirmation: empty note deleted."
+  },
+  "savedVersesTitle": "الآيات المحفوظة والملاحظات",
+  "@savedVersesTitle": {
+    "description": "Screen title and Quran index action."
+  },
+  "savedVersesTab": "المحفوظة",
+  "@savedVersesTab": {
+    "description": "Tab: saved verses."
+  },
+  "verseNotesTab": "الملاحظات",
+  "@verseNotesTab": {
+    "description": "Tab: notes."
+  },
+  "savedVersesEmpty": "لم تحفظ أي آية بعد. اضغط مطولًا على آية في المصحف واختر «حفظ الآية بلون».",
+  "@savedVersesEmpty": {
+    "description": "Empty state of saved verses."
+  },
+  "verseNotesEmpty": "لا توجد ملاحظات بعد. اضغط مطولًا على آية واختر «ملاحظة على الآية».",
+  "@verseNotesEmpty": {
+    "description": "Empty state of notes."
+  },
+  "myDataSection": "بياناتي",
+  "@myDataSection": {
+    "description": "Settings section: export, import, erase user data."
+  },
+  "myDataExport": "حفظ نسخة من بياناتي",
+  "@myDataExport": {
+    "description": "Exports user data to a file."
+  },
+  "myDataExportSubtitle": "الإعدادات، والختمة، والعلامة، والمحفوظات، والملاحظات في ملف تحفظه أنت",
+  "@myDataExportSubtitle": {
+    "description": "What the export contains."
+  },
+  "myDataExported": "حُفظ الملف",
+  "@myDataExported": {
+    "description": "Export done."
+  },
+  "myDataImport": "استعادة بياناتي من ملف",
+  "@myDataImport": {
+    "description": "Imports user data from a backup file."
+  },
+  "myDataImportSubtitle": "تحل بيانات الملف محل بياناتك الحالية",
+  "@myDataImportSubtitle": {
+    "description": "Import replaces current data."
+  },
+  "myDataImportTitle": "استعادة هذه النسخة؟",
+  "@myDataImportTitle": {
+    "description": "Import confirmation title."
+  },
+  "myDataImportSummary": "نسخة بتاريخ {date}: {verses} آية محفوظة، و{notes} ملاحظة، و{settings} إعدادًا. ستحل محل بياناتك الحالية، ثم يُعاد فتح التطبيق.",
+  "@myDataImportSummary": {
+    "description": "What the backup holds.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "verses": {
+        "type": "String"
+      },
+      "notes": {
+        "type": "String"
+      },
+      "settings": {
+        "type": "String"
+      }
+    }
+  },
+  "myDataImportConfirm": "استعادة",
+  "@myDataImportConfirm": {
+    "description": "Confirms import."
+  },
+  "myDataInvalidFile": "هذا الملف ليس نسخة من بيانات سكينة، أو أنه من إصدار أحدث.",
+  "@myDataInvalidFile": {
+    "description": "The picked file is not a usable backup."
+  },
+  "myDataReset": "مسح كل بياناتي",
+  "@myDataReset": {
+    "description": "Erases user data."
+  },
+  "myDataResetSubtitle": "يعيد الإعدادات والختمة والمحفوظات والملاحظات إلى البداية",
+  "@myDataResetSubtitle": {
+    "description": "What erase does."
+  },
+  "myDataResetTitle": "مسح كل بياناتك؟",
+  "@myDataResetTitle": {
+    "description": "Erase confirmation title."
+  },
+  "myDataResetBody": "ستُحذف إعداداتك وموقع الصلاة والختمة والعلامة والمحفوظات والملاحظات من هذا الجهاز، ولا يمكن التراجع إلا من نسخة محفوظة. احفظ نسخة أولًا إن أردت.",
+  "@myDataResetBody": {
+    "description": "Explains erase is permanent."
+  },
+  "myDataResetConfirm": "مسح البيانات",
+  "@myDataResetConfirm": {
+    "description": "Confirms erase."
+  },
+  "myDataFailed": "تعذّرت العملية، ولم يتغير شيء.",
+  "@myDataFailed": {
+    "description": "Export, import or erase failed."
   }
 }
