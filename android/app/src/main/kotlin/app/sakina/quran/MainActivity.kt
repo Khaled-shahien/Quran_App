@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
 import com.ryanheise.audioservice.AudioServiceActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -32,6 +33,12 @@ class MainActivity : AudioServiceActivity() {
                         shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
                 )
                 "openNotificationSettings" -> result.success(openNotificationSettings())
+                // Read-only; the app never asks to be exempted directly.
+                "isIgnoringBatteryOptimizations" -> result.success(
+                    (getSystemService(POWER_SERVICE) as PowerManager)
+                        .isIgnoringBatteryOptimizations(packageName)
+                )
+                "openBatteryOptimizationSettings" -> result.success(openBatteryOptimizationSettings())
                 else -> result.notImplemented()
             }
         }
@@ -50,6 +57,16 @@ class MainActivity : AudioServiceActivity() {
         } catch (_: Exception) {
             false
         }
+    }
+
+    private fun openBatteryOptimizationSettings(): Boolean = try {
+        startActivity(
+            Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
+        true
+    } catch (_: Exception) {
+        openNotificationSettings()
     }
 
     override fun onPause() {

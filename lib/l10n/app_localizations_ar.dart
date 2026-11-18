@@ -2715,4 +2715,86 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get dataSourcesCities =>
       'قائمة المدن ومناطقها الزمنية من GeoNames ‏(www.geonames.org)، بترخيص المشاع الإبداعي CC BY 4.0. أُخذت الأسماء العربية من الأسماء البديلة الموسومة بالعربية في GeoNames، وتظهر المدن التي لا اسم عربيًّا لها باسمها اللاتيني.';
+
+  @override
+  String get alertHealthTitle => 'هل ستصلني تنبيهات الصلاة؟';
+
+  @override
+  String get alertHealthEntrySubtitle =>
+      'فحص سريع لكل ما يمنع وصول الأذان في وقته';
+
+  @override
+  String get alertHealthAllGood => 'كل شيء جاهز لوصول التنبيهات في وقتها';
+
+  @override
+  String alertHealthProblems(String count) {
+    return 'وُجد ما قد يمنع وصول التنبيهات ($count)';
+  }
+
+  @override
+  String alertHealthScheduledCount(String count) {
+    return 'تنبيهات صلاة جاهزة في النظام الآن: $count';
+  }
+
+  @override
+  String get alertHealthNotificationsOff => 'الإشعارات غير مسموح بها';
+
+  @override
+  String get alertHealthNotificationsOffDetail =>
+      'لن يظهر أي تنبيه حتى تسمح لسكينة بإرسال الإشعارات.';
+
+  @override
+  String get alertHealthOpenSettings => 'السماح بالإشعارات';
+
+  @override
+  String get alertHealthAlertsDisabled => 'تنبيهات الصلاة متوقفة';
+
+  @override
+  String get alertHealthAlertsDisabledDetail =>
+      'فعّل «تنبيهات الصلاة» في قسم الصلاة من الإعدادات.';
+
+  @override
+  String get alertHealthNoLocation => 'لم يُحدَّد موقع للصلاة';
+
+  @override
+  String get alertHealthNoLocationDetail =>
+      'اختر مدينتك أو موقع جهازك من «الموقع وطريقة الحساب» لتُحسب المواقيت.';
+
+  @override
+  String get alertHealthNothingScheduled => 'لا توجد تنبيهات مجدولة';
+
+  @override
+  String get alertHealthNothingScheduledDetail =>
+      'التنبيهات مفعّلة لكن لا يوجد أي تنبيه منتظر في النظام. أعد الجدولة الآن.';
+
+  @override
+  String get alertHealthReschedule => 'إعادة جدولة التنبيهات';
+
+  @override
+  String get alertHealthExactOff => 'قد تتأخر التنبيهات';
+
+  @override
+  String get alertHealthExactOffDetail =>
+      'لم يُسمح بالمنبهات الدقيقة، فقد يؤخر أندرويد الأذان بضع دقائق أو حتى فتح الشاشة.';
+
+  @override
+  String get alertHealthBattery => 'توفير البطارية يقيّد سكينة';
+
+  @override
+  String get alertHealthBatteryDetail =>
+      'قد يمنع ذلك تجديد التنبيهات في الخلفية، خاصة على هواتف شاومي وهواوي وسامسونج. اختر «غير مقيّد» لسكينة.';
+
+  @override
+  String get alertHealthBackgroundFailing => 'فشلت آخر محاولة لتجديد التنبيهات';
+
+  @override
+  String get alertHealthBackgroundFailingDetail =>
+      'تجدد سكينة التنبيهات في الخلفية كل بضع ساعات، وآخر محاولة لم تنجح. أعد الجدولة الآن، وراجع «سجل التشخيص» إن تكرر ذلك.';
+
+  @override
+  String get alertHealthLastBackground => 'آخر تجديد ناجح في الخلفية';
+
+  @override
+  String get alertHealthFootnote =>
+      'يُجرى هذا الفحص على جهازك فقط، ولا يُرسَل شيء منه إلى أي جهة.';
 }

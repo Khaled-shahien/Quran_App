@@ -3331,5 +3331,107 @@
   "dataSourcesCities": "قائمة المدن ومناطقها الزمنية من GeoNames ‏(www.geonames.org)، بترخيص المشاع الإبداعي CC BY 4.0. أُخذت الأسماء العربية من الأسماء البديلة الموسومة بالعربية في GeoNames، وتظهر المدن التي لا اسم عربيًّا لها باسمها اللاتيني.",
   "@dataSourcesCities": {
     "description": "Attribution for the bundled GeoNames city list."
+  },
+  "alertHealthTitle": "هل ستصلني تنبيهات الصلاة؟",
+  "@alertHealthTitle": {
+    "description": "Alert health check screen title and Settings entry."
+  },
+  "alertHealthEntrySubtitle": "فحص سريع لكل ما يمنع وصول الأذان في وقته",
+  "@alertHealthEntrySubtitle": {
+    "description": "Settings subtitle of the alert health check."
+  },
+  "alertHealthAllGood": "كل شيء جاهز لوصول التنبيهات في وقتها",
+  "@alertHealthAllGood": {
+    "description": "No problem found."
+  },
+  "alertHealthProblems": "وُجد ما قد يمنع وصول التنبيهات ({count})",
+  "@alertHealthProblems": {
+    "description": "Number of problems found.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "alertHealthScheduledCount": "تنبيهات صلاة جاهزة في النظام الآن: {count}",
+  "@alertHealthScheduledCount": {
+    "description": "Prayer alerts waiting in the system.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "alertHealthNotificationsOff": "الإشعارات غير مسموح بها",
+  "@alertHealthNotificationsOff": {
+    "description": "Problem: notifications not allowed."
+  },
+  "alertHealthNotificationsOffDetail": "لن يظهر أي تنبيه حتى تسمح لسكينة بإرسال الإشعارات.",
+  "@alertHealthNotificationsOffDetail": {
+    "description": "Why notifications matter."
+  },
+  "alertHealthOpenSettings": "السماح بالإشعارات",
+  "@alertHealthOpenSettings": {
+    "description": "Asks for or opens notification permission."
+  },
+  "alertHealthAlertsDisabled": "تنبيهات الصلاة متوقفة",
+  "@alertHealthAlertsDisabled": {
+    "description": "Problem: prayer alerts switched off in Settings."
+  },
+  "alertHealthAlertsDisabledDetail": "فعّل «تنبيهات الصلاة» في قسم الصلاة من الإعدادات.",
+  "@alertHealthAlertsDisabledDetail": {
+    "description": "Where to switch prayer alerts on."
+  },
+  "alertHealthNoLocation": "لم يُحدَّد موقع للصلاة",
+  "@alertHealthNoLocation": {
+    "description": "Problem: no prayer location."
+  },
+  "alertHealthNoLocationDetail": "اختر مدينتك أو موقع جهازك من «الموقع وطريقة الحساب» لتُحسب المواقيت.",
+  "@alertHealthNoLocationDetail": {
+    "description": "How to set a location."
+  },
+  "alertHealthNothingScheduled": "لا توجد تنبيهات مجدولة",
+  "@alertHealthNothingScheduled": {
+    "description": "Problem: alerts on but none scheduled."
+  },
+  "alertHealthNothingScheduledDetail": "التنبيهات مفعّلة لكن لا يوجد أي تنبيه منتظر في النظام. أعد الجدولة الآن.",
+  "@alertHealthNothingScheduledDetail": {
+    "description": "Explains and offers rescheduling."
+  },
+  "alertHealthReschedule": "إعادة جدولة التنبيهات",
+  "@alertHealthReschedule": {
+    "description": "Reschedules prayer alerts now."
+  },
+  "alertHealthExactOff": "قد تتأخر التنبيهات",
+  "@alertHealthExactOff": {
+    "description": "Problem: exact alarms not allowed."
+  },
+  "alertHealthExactOffDetail": "لم يُسمح بالمنبهات الدقيقة، فقد يؤخر أندرويد الأذان بضع دقائق أو حتى فتح الشاشة.",
+  "@alertHealthExactOffDetail": {
+    "description": "Why exact alarms matter."
+  },
+  "alertHealthBattery": "توفير البطارية يقيّد سكينة",
+  "@alertHealthBattery": {
+    "description": "Problem: battery optimisation restricts the app."
+  },
+  "alertHealthBatteryDetail": "قد يمنع ذلك تجديد التنبيهات في الخلفية، خاصة على هواتف شاومي وهواوي وسامسونج. اختر «غير مقيّد» لسكينة.",
+  "@alertHealthBatteryDetail": {
+    "description": "Why battery optimisation matters."
+  },
+  "alertHealthBackgroundFailing": "فشلت آخر محاولة لتجديد التنبيهات",
+  "@alertHealthBackgroundFailing": {
+    "description": "Problem: last background reschedule failed."
+  },
+  "alertHealthBackgroundFailingDetail": "تجدد سكينة التنبيهات في الخلفية كل بضع ساعات، وآخر محاولة لم تنجح. أعد الجدولة الآن، وراجع «سجل التشخيص» إن تكرر ذلك.",
+  "@alertHealthBackgroundFailingDetail": {
+    "description": "Explains background failure."
+  },
+  "alertHealthLastBackground": "آخر تجديد ناجح في الخلفية",
+  "@alertHealthLastBackground": {
+    "description": "Label: last successful background reschedule."
+  },
+  "alertHealthFootnote": "يُجرى هذا الفحص على جهازك فقط، ولا يُرسَل شيء منه إلى أي جهة.",
+  "@alertHealthFootnote": {
+    "description": "Privacy note for the health check."
   }
 }

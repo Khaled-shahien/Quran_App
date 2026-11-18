@@ -43,7 +43,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ],
               ),
               _SectionTitle(l10nOf(context).mainNavigationShellMessage1),
-              const _Group(children: [PrayerPreferences(), AdhanPreferences()]),
+              _Group(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.health_and_safety_outlined),
+                    title: Text(l10nOf(context).alertHealthTitle),
+                    subtitle: Text(l10nOf(context).alertHealthEntrySubtitle),
+                    trailing: const Icon(Icons.chevron_right_rounded),
+                    onTap: () => context.push('/settings/alert-health'),
+                  ),
+                  const PrayerPreferences(),
+                  const AdhanPreferences(),
+                ],
+              ),
               _SectionTitle(l10nOf(context).recitationSettings),
               _Group(
                 children: [

@@ -4891,6 +4891,144 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'قائمة المدن ومناطقها الزمنية من GeoNames ‏(www.geonames.org)، بترخيص المشاع الإبداعي CC BY 4.0. أُخذت الأسماء العربية من الأسماء البديلة الموسومة بالعربية في GeoNames، وتظهر المدن التي لا اسم عربيًّا لها باسمها اللاتيني.'**
   String get dataSourcesCities;
+
+  /// Alert health check screen title and Settings entry.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل ستصلني تنبيهات الصلاة؟'**
+  String get alertHealthTitle;
+
+  /// Settings subtitle of the alert health check.
+  ///
+  /// In ar, this message translates to:
+  /// **'فحص سريع لكل ما يمنع وصول الأذان في وقته'**
+  String get alertHealthEntrySubtitle;
+
+  /// No problem found.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل شيء جاهز لوصول التنبيهات في وقتها'**
+  String get alertHealthAllGood;
+
+  /// Number of problems found.
+  ///
+  /// In ar, this message translates to:
+  /// **'وُجد ما قد يمنع وصول التنبيهات ({count})'**
+  String alertHealthProblems(String count);
+
+  /// Prayer alerts waiting in the system.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات صلاة جاهزة في النظام الآن: {count}'**
+  String alertHealthScheduledCount(String count);
+
+  /// Problem: notifications not allowed.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات غير مسموح بها'**
+  String get alertHealthNotificationsOff;
+
+  /// Why notifications matter.
+  ///
+  /// In ar, this message translates to:
+  /// **'لن يظهر أي تنبيه حتى تسمح لسكينة بإرسال الإشعارات.'**
+  String get alertHealthNotificationsOffDetail;
+
+  /// Asks for or opens notification permission.
+  ///
+  /// In ar, this message translates to:
+  /// **'السماح بالإشعارات'**
+  String get alertHealthOpenSettings;
+
+  /// Problem: prayer alerts switched off in Settings.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات الصلاة متوقفة'**
+  String get alertHealthAlertsDisabled;
+
+  /// Where to switch prayer alerts on.
+  ///
+  /// In ar, this message translates to:
+  /// **'فعّل «تنبيهات الصلاة» في قسم الصلاة من الإعدادات.'**
+  String get alertHealthAlertsDisabledDetail;
+
+  /// Problem: no prayer location.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُحدَّد موقع للصلاة'**
+  String get alertHealthNoLocation;
+
+  /// How to set a location.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر مدينتك أو موقع جهازك من «الموقع وطريقة الحساب» لتُحسب المواقيت.'**
+  String get alertHealthNoLocationDetail;
+
+  /// Problem: alerts on but none scheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تنبيهات مجدولة'**
+  String get alertHealthNothingScheduled;
+
+  /// Explains and offers rescheduling.
+  ///
+  /// In ar, this message translates to:
+  /// **'التنبيهات مفعّلة لكن لا يوجد أي تنبيه منتظر في النظام. أعد الجدولة الآن.'**
+  String get alertHealthNothingScheduledDetail;
+
+  /// Reschedules prayer alerts now.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة جدولة التنبيهات'**
+  String get alertHealthReschedule;
+
+  /// Problem: exact alarms not allowed.
+  ///
+  /// In ar, this message translates to:
+  /// **'قد تتأخر التنبيهات'**
+  String get alertHealthExactOff;
+
+  /// Why exact alarms matter.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُسمح بالمنبهات الدقيقة، فقد يؤخر أندرويد الأذان بضع دقائق أو حتى فتح الشاشة.'**
+  String get alertHealthExactOffDetail;
+
+  /// Problem: battery optimisation restricts the app.
+  ///
+  /// In ar, this message translates to:
+  /// **'توفير البطارية يقيّد سكينة'**
+  String get alertHealthBattery;
+
+  /// Why battery optimisation matters.
+  ///
+  /// In ar, this message translates to:
+  /// **'قد يمنع ذلك تجديد التنبيهات في الخلفية، خاصة على هواتف شاومي وهواوي وسامسونج. اختر «غير مقيّد» لسكينة.'**
+  String get alertHealthBatteryDetail;
+
+  /// Problem: last background reschedule failed.
+  ///
+  /// In ar, this message translates to:
+  /// **'فشلت آخر محاولة لتجديد التنبيهات'**
+  String get alertHealthBackgroundFailing;
+
+  /// Explains background failure.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجدد سكينة التنبيهات في الخلفية كل بضع ساعات، وآخر محاولة لم تنجح. أعد الجدولة الآن، وراجع «سجل التشخيص» إن تكرر ذلك.'**
+  String get alertHealthBackgroundFailingDetail;
+
+  /// Label: last successful background reschedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر تجديد ناجح في الخلفية'**
+  String get alertHealthLastBackground;
+
+  /// Privacy note for the health check.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُجرى هذا الفحص على جهازك فقط، ولا يُرسَل شيء منه إلى أي جهة.'**
+  String get alertHealthFootnote;
 }
 
 class _AppLocalizationsDelegate

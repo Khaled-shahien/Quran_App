@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/settings/presentation/screens/alert_health_screen.dart';
 import 'package:sakina_app/core/theme/app_spacing.dart';
 import 'package:sakina_app/l10n/localization.dart';
 import 'package:flutter/foundation.dart';
@@ -110,6 +111,11 @@ final GoRouter appRouter = GoRouter(
               _fadePage(state, const SettingsScreen()),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/settings/alert-health',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const AlertHealthScreen()),
     ),
     GoRoute(
       path: '/settings/data-sources',
