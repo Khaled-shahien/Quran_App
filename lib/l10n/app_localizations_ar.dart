@@ -3014,4 +3014,62 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get nowSurahKahf => 'سورة الكهف يوم الجمعة';
+
+  @override
+  String get calendarTitle => 'التقويم الهجري';
+
+  @override
+  String calendarMonthTitle(String month, String year) {
+    return '$month $yearهـ';
+  }
+
+  @override
+  String get calendarPrevious => 'الشهر السابق';
+
+  @override
+  String get calendarNext => 'الشهر التالي';
+
+  @override
+  String get calendarToday => 'العودة إلى الشهر الحالي';
+
+  @override
+  String get calendarUpcoming => 'المناسبات القادمة';
+
+  @override
+  String get calendarNow => 'الآن';
+
+  @override
+  String calendarInDays(String days) {
+    return 'بعد $days يوم';
+  }
+
+  @override
+  String get calendarUnavailable => 'التاريخ الهجري غير متاح لهذا اليوم.';
+
+  @override
+  String get calendarNote =>
+      'التقويم بحساب أم القرى مع تعديلك للتاريخ الهجري من الإعدادات، وقد تختلف بداية الأشهر في بلدك بحسب رؤية الهلال.';
+
+  @override
+  String get calendarOpen => 'فتح التقويم الهجري';
+
+  @override
+  String ramadanDay(String day) {
+    return 'رمضان: اليوم $day';
+  }
+
+  @override
+  String get ramadanImsak => 'الإمساك';
+
+  @override
+  String get ramadanIftar => 'الإفطار';
+
+  @override
+  String ramadanCountdown(String event, String hours, String minutes) {
+    return 'يبقى على $event $hours س $minutes د';
+  }
+
+  @override
+  String get ramadanImsakNote =>
+      'الإمساك قبل الفجر بعشر دقائق احتياطًا، والصيام يبدأ من أذان الفجر.';
 }

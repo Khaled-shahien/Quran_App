@@ -68,6 +68,20 @@ const List<String> _gregorianMonths = <String>[
   'ديسمبر',
 ];
 
+/// Umm al-Qura month names, Muharram first.
+const List<String> hijriMonthNames = _hijriMonths;
+
+/// One-letter weekday names, Saturday first (as on Arab calendars).
+const List<String> weekdayInitials = <String>[
+  'س',
+  'ح',
+  'ن',
+  'ث',
+  'ر',
+  'خ',
+  'ج',
+];
+
 const List<String> _hijriMonths = <String>[
   'محرم',
   'صفر',

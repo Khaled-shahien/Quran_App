@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/onboarding/presentation/widgets/ramadan_card.dart';
 import 'package:sakina_app/features/onboarding/presentation/widgets/now_card.dart';
 import 'package:sakina_app/core/widgets/empty_state.dart';
 import 'package:sakina_app/core/theme/app_design.dart';
@@ -94,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: DateCardWidget(),
               ),
             ),
+            const SliverToBoxAdapter(child: RamadanCard()),
             const SliverToBoxAdapter(child: NowCard()),
             const SliverToBoxAdapter(
               child: AnimatedEntrance(

@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:sakina_app/core/accessibility/digit_style.dart';
 import 'dart:async';
 
@@ -83,6 +84,8 @@ class _DateCardWidgetState extends State<DateCardWidget>
 
     return Semantics(
       container: true,
+      button: true,
+      hint: l10nOf(context).calendarOpen,
       label: l10nOf(context).dateCardSemantics(
         _date.weekday,
         context.digits(hijri ?? ''),
@@ -90,6 +93,7 @@ class _DateCardWidgetState extends State<DateCardWidget>
       ),
       excludeSemantics: true,
       child: SakinaCard(
+        onTap: () => context.push('/calendar'),
         margin: const EdgeInsets.fromLTRB(
           AppSpacing.page,
           AppSpacing.md,

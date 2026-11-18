@@ -113,6 +113,20 @@
       "proposedEdition": "hisnmuslim.com API, 132 chapters, 267 entries, downloaded 2026-11-18; built by tool/build_hisn_almuslim.py without editing the text",
       "proposedLicense": "Pending: hisnmuslim.com publishes no terms; written permission needed before release (owner decision 2026-11-05).",
       "proposalNotes": "The API carries no hadith references (takhrij) and some entries include bracketed instructions; check wording and repeat counts against a printed edition."
+    },
+    {
+      "path": "assets/islamic_occasions.json",
+      "sha256": "3ab773326c548b990242d43ef8ac7b7f36671558c4987bc7af1e0db3a432da2a",
+      "source": "pending_owner_review",
+      "edition": null,
+      "license": null,
+      "reviewer": null,
+      "approvalDate": null,
+      "evidenceUrl": null,
+      "proposedSource": "Authored for Sakina: fixed Hijri dates of widely observed occasions",
+      "proposedEdition": "schemaVersion 1, 10 yearly occasions and the white days",
+      "proposedLicense": "Original app content",
+      "proposalNotes": "Contested occasions (Mawlid, 27 Rajab, 15 Sha‘ban) are deliberately absent; the fasting notes for Ashura, Arafah and the white days need a scholar’s review."
     }
   ],
   "proposalStatus": "sources_proposed_2026-11-09_awaiting_owner_review"

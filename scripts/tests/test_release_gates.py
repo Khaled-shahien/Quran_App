@@ -15,7 +15,8 @@ COLLECTIONS = ('assets/quran_master.json', 'assets/quran_duas.json',
                'assets/prayers_data.json', 'assets/hadeath/ahadeth.txt',
                'assets/islamic_guide.json', 'assets/adhan_adhkar.json',
                'assets/tafsir/ar.muyassar.txt',
-               'assets/hisn_almuslim.json')
+               'assets/hisn_almuslim.json',
+               'assets/islamic_occasions.json')
 
 
 class ReleaseGatesTest(unittest.TestCase):

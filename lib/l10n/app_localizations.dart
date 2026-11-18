@@ -5412,6 +5412,102 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'سورة الكهف يوم الجمعة'**
   String get nowSurahKahf;
+
+  /// Hijri calendar screen title.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقويم الهجري'**
+  String get calendarTitle;
+
+  /// Hijri month and year heading.
+  ///
+  /// In ar, this message translates to:
+  /// **'{month} {year}هـ'**
+  String calendarMonthTitle(String month, String year);
+
+  /// Previous Hijri month.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهر السابق'**
+  String get calendarPrevious;
+
+  /// Next Hijri month.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهر التالي'**
+  String get calendarNext;
+
+  /// Back to the current Hijri month.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة إلى الشهر الحالي'**
+  String get calendarToday;
+
+  /// Heading of upcoming occasions.
+  ///
+  /// In ar, this message translates to:
+  /// **'المناسبات القادمة'**
+  String get calendarUpcoming;
+
+  /// The occasion is happening now.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآن'**
+  String get calendarNow;
+
+  /// Days until an occasion.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد {days} يوم'**
+  String calendarInDays(String days);
+
+  /// Date outside the Umm al-Qura table.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ الهجري غير متاح لهذا اليوم.'**
+  String get calendarUnavailable;
+
+  /// How the calendar is computed and why it may differ.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقويم بحساب أم القرى مع تعديلك للتاريخ الهجري من الإعدادات، وقد تختلف بداية الأشهر في بلدك بحسب رؤية الهلال.'**
+  String get calendarNote;
+
+  /// Screen-reader hint: tapping the date opens the calendar.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح التقويم الهجري'**
+  String get calendarOpen;
+
+  /// Day of Ramadan.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمضان: اليوم {day}'**
+  String ramadanDay(String day);
+
+  /// Imsak time label.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإمساك'**
+  String get ramadanImsak;
+
+  /// Iftar (Maghrib) time label.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإفطار'**
+  String get ramadanIftar;
+
+  /// Countdown to Imsak or Iftar.
+  ///
+  /// In ar, this message translates to:
+  /// **'يبقى على {event} {hours} س {minutes} د'**
+  String ramadanCountdown(String event, String hours, String minutes);
+
+  /// Explains Imsak is a precaution before Fajr.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإمساك قبل الفجر بعشر دقائق احتياطًا، والصيام يبدأ من أذان الفجر.'**
+  String get ramadanImsakNote;
 }
 
 class _AppLocalizationsDelegate

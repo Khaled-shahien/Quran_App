@@ -3741,5 +3741,98 @@
   "nowSurahKahf": "سورة الكهف يوم الجمعة",
   "@nowSurahKahf": {
     "description": "Suggestion: Surat al-Kahf on Friday."
+  },
+  "calendarTitle": "التقويم الهجري",
+  "@calendarTitle": {
+    "description": "Hijri calendar screen title."
+  },
+  "calendarMonthTitle": "{month} {year}هـ",
+  "@calendarMonthTitle": {
+    "description": "Hijri month and year heading.",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "year": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarPrevious": "الشهر السابق",
+  "@calendarPrevious": {
+    "description": "Previous Hijri month."
+  },
+  "calendarNext": "الشهر التالي",
+  "@calendarNext": {
+    "description": "Next Hijri month."
+  },
+  "calendarToday": "العودة إلى الشهر الحالي",
+  "@calendarToday": {
+    "description": "Back to the current Hijri month."
+  },
+  "calendarUpcoming": "المناسبات القادمة",
+  "@calendarUpcoming": {
+    "description": "Heading of upcoming occasions."
+  },
+  "calendarNow": "الآن",
+  "@calendarNow": {
+    "description": "The occasion is happening now."
+  },
+  "calendarInDays": "بعد {days} يوم",
+  "@calendarInDays": {
+    "description": "Days until an occasion.",
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarUnavailable": "التاريخ الهجري غير متاح لهذا اليوم.",
+  "@calendarUnavailable": {
+    "description": "Date outside the Umm al-Qura table."
+  },
+  "calendarNote": "التقويم بحساب أم القرى مع تعديلك للتاريخ الهجري من الإعدادات، وقد تختلف بداية الأشهر في بلدك بحسب رؤية الهلال.",
+  "@calendarNote": {
+    "description": "How the calendar is computed and why it may differ."
+  },
+  "calendarOpen": "فتح التقويم الهجري",
+  "@calendarOpen": {
+    "description": "Screen-reader hint: tapping the date opens the calendar."
+  },
+  "ramadanDay": "رمضان: اليوم {day}",
+  "@ramadanDay": {
+    "description": "Day of Ramadan.",
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "ramadanImsak": "الإمساك",
+  "@ramadanImsak": {
+    "description": "Imsak time label."
+  },
+  "ramadanIftar": "الإفطار",
+  "@ramadanIftar": {
+    "description": "Iftar (Maghrib) time label."
+  },
+  "ramadanCountdown": "يبقى على {event} {hours} س {minutes} د",
+  "@ramadanCountdown": {
+    "description": "Countdown to Imsak or Iftar.",
+    "placeholders": {
+      "event": {
+        "type": "String"
+      },
+      "hours": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "ramadanImsakNote": "الإمساك قبل الفجر بعشر دقائق احتياطًا، والصيام يبدأ من أذان الفجر.",
+  "@ramadanImsakNote": {
+    "description": "Explains Imsak is a precaution before Fajr."
   }
 }

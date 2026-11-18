@@ -1,3 +1,4 @@
+import 'package:sakina_app/features/calendar/presentation/hijri_calendar_screen.dart';
 import 'package:sakina_app/features/duas/presentation/screens/hisn_screens.dart';
 import 'package:sakina_app/features/duas/data/hisn_almuslim.dart';
 import 'package:sakina_app/features/quran/presentation/screens/saved_verses_screen.dart';
@@ -154,6 +155,11 @@ final GoRouter appRouter = GoRouter(
           ),
         );
       },
+    ),
+    GoRoute(
+      path: '/calendar',
+      pageBuilder: (context, state) =>
+          _fadePage(state, const HijriCalendarScreen()),
     ),
     GoRoute(
       path: '/quran/search',

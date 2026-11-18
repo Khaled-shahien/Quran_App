@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "source": "Sakina: fixed Hijri dates of widely observed occasions (Umm al-Qura calendar). Owner review pending.",
+  "occasions": [
+    {"id": "hijri_new_year", "month": 1, "from": 1, "to": 1, "name": "رأس السنة الهجرية"},
+    {"id": "tasua_ashura", "month": 1, "from": 9, "to": 10, "name": "تاسوعاء وعاشوراء", "note": "يُستحب صيام التاسع والعاشر من المحرم"},
+    {"id": "ramadan", "month": 9, "from": 1, "to": 30, "name": "شهر رمضان"},
+    {"id": "last_ten_nights", "month": 9, "from": 21, "to": 30, "name": "العشر الأواخر من رمضان"},
+    {"id": "eid_al_fitr", "month": 10, "from": 1, "to": 1, "name": "عيد الفطر"},
+    {"id": "first_ten_dhul_hijjah", "month": 12, "from": 1, "to": 10, "name": "العشر الأوائل من ذي الحجة"},
+    {"id": "tarwiyah", "month": 12, "from": 8, "to": 8, "name": "يوم التروية"},
+    {"id": "arafah", "month": 12, "from": 9, "to": 9, "name": "يوم عرفة", "note": "يُستحب صيامه لغير الحاج"},
+    {"id": "eid_al_adha", "month": 12, "from": 10, "to": 10, "name": "عيد الأضحى"},
+    {"id": "tashreeq", "month": 12, "from": 11, "to": 13, "name": "أيام التشريق"}
+  ],
+  "monthly": [
+    {"id": "white_days", "from": 13, "to": 15, "name": "الأيام البيض", "note": "يُستحب صيام الثالث عشر والرابع عشر والخامس عشر"}
+  ]
+}
