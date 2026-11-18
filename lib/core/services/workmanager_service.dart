@@ -80,7 +80,7 @@ Future<void> _updateRemindersFromSettings(SharedPreferences prefs) async {
   final NotificationService notificationService = NotificationService();
   await notificationService.initialize(requestPermissions: false);
   // Reschedule only the alarms enabled in persisted settings.
-  await notificationService.updateAllAlarms(
+  await notificationService.reminders.updateAllAlarms(
     isMorningEnabled: prefs.getBool('morning_alarm_enabled') ?? false,
     isEveningEnabled: prefs.getBool('evening_alarm_enabled') ?? false,
     isMulkEnabled: prefs.getBool('mulk_alarm_enabled') ?? false,

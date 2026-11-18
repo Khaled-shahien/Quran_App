@@ -1,36 +1,29 @@
-import 'anchored_reminders.dart';
-import 'package:sakina_app/l10n/localization.dart';
 import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../accessibility/digit_style.dart';
-import '../navigation/notification_router.dart';
-import 'local_timezone_fallback.dart';
+import 'daily_reminder_notifications.dart';
 import 'notification_channels.dart';
+import 'notification_content.dart';
 import 'notification_style.dart';
-import '../../features/quran/data/daily_verse_source.dart';
+import 'notification_tap_routing.dart';
+import 'notification_timing.dart';
+import 'prayer_alert_notifications.dart';
 import '../../features/prayers/domain/adhan_voices.dart';
-import '../../features/prayers/domain/entities/adhan_settings.dart';
-import '../../features/prayers/domain/prayer_notification_ids.dart';
-import '../../features/prayers/domain/services/prayer_alert_planner.dart';
-import '../../features/prayers/presentation/prayer_labels.dart';
 
 /// Notification Service for managing alarms and notifications.
 ///
-/// This service handles:
-/// - Morning Adhkar alarm (7:00 AM)
-/// - Evening Adhkar alarm (5:30 PM)
-/// - Surah Al-Mulk alarm (9:00 PM)
-/// - Surah Al-Baqarah alarm (8:30 PM)
-/// - The daily verse (9:00 AM, off until the user turns it on)
+/// The core owns the plugin: initialization, channels, permissions and the
+/// scheduling primitives. What is scheduled lives beside it:
+/// [DailyReminderNotifications] ([reminders]) and [PrayerAlertNotifications]
+/// ([prayers]); wording in [NotificationContent], tap handling in
+/// [NotificationTapRouting], clock rules in [NotificationTiming].
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
   static NotificationService get instance => _instance;
@@ -41,24 +34,13 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  // Notification IDs
-  static const int _morningAdhkarNotificationId = 1001;
-  static const int _eveningAdhkarNotificationId = 1002;
-  static const int _mulkNotificationId = 1003;
-  static const int _baqarahNotificationId = 1004;
-  static const List<int> _managedNotificationIds = <int>[
-    _morningAdhkarNotificationId,
-    _eveningAdhkarNotificationId,
-    _mulkNotificationId,
-    _baqarahNotificationId,
-  ];
+  /// Daily clock-time reminders.
+  late final DailyReminderNotifications reminders = DailyReminderNotifications(
+    this,
+  );
 
-  /// The daily verse: one notification per day, a week ahead. A day uses
-  /// slot 4000 + weekday, so seven consecutive days never share an id.
-  @visibleForTesting
-  static int dailyVerseNotificationId(DateTime date) => 4000 + date.weekday;
-
-  static const int _dailyVerseDaysAhead = 7;
+  /// Prayer alerts and the reminders tied to them.
+  late final PrayerAlertNotifications prayers = PrayerAlertNotifications(this);
 
   /// An id for a notification sent from the debug test screen. Kept in
   /// 90000–99999, above every id the app schedules (1001–4007), so a test
@@ -66,42 +48,17 @@ class NotificationService {
   static int debugNotificationId(DateTime now) =>
       90000 + now.millisecondsSinceEpoch.remainder(10000);
 
-  // Alarm time keys
-  static const String _morningAlarmHourKey = 'morning_alarm_hour';
-  static const String _morningAlarmMinuteKey = 'morning_alarm_minute';
-  static const String _eveningAlarmHourKey = 'evening_alarm_hour';
-  static const String _eveningAlarmMinuteKey = 'evening_alarm_minute';
-  static const String _mulkAlarmHourKey = 'mulk_alarm_hour';
-  static const String _mulkAlarmMinuteKey = 'mulk_alarm_minute';
-  static const String _baqarahAlarmHourKey = 'baqarah_alarm_hour';
-  static const String _baqarahAlarmMinuteKey = 'baqarah_alarm_minute';
-  static const String _verseAlarmHourKey = 'verse_alarm_hour';
-  static const String _verseAlarmMinuteKey = 'verse_alarm_minute';
-
-  // Default times
-  static const int _defaultMorningHour = 7;
-  static const int _defaultMorningMinute = 0;
-  static const int _defaultEveningHour = 17; // 5 PM
-  static const int _defaultEveningMinute = 30;
-  static const int _defaultMulkHour = 21; // 9 PM
-  static const int _defaultMulkMinute = 0;
-  static const int _defaultBaqarahHour = 20; // 8 PM
-  static const int _defaultBaqarahMinute = 30;
-  static const int _defaultVerseHour = 9;
-  static const int _defaultVerseMinute = 0;
-
   /// Same key as NotificationPermissionService.requestedKey.
   static const String _permissionRequestedKey =
       'notification_permission_requested';
 
   bool _isInitialized = false;
   bool _isPluginAvailable = true;
-  String? _lastAppliedAlarmStateSignature;
+
   Future<void>? _initFuture;
   bool _launchNotificationHandled = false;
-  static ({int? id, String? actionId, String? payload, DateTime at})?
-  _lastRouted;
-  Future<void> _alarmUpdates = Future<void>.value();
+
+  bool get isPluginAvailable => _isPluginAvailable;
 
   /// Initialize the notification service.
   Future<void> initialize({bool requestPermissions = false}) async {
@@ -167,37 +124,8 @@ class NotificationService {
     }
   }
 
-  Future<void> _configureLocalTimezone() => applyDeviceTimezone();
-
-  /// Sets `tz.local` to the device's timezone ([lookup] defaults to the
-  /// platform) and returns whether it changed. Falls back to a fixed zone
-  /// for the current UTC offset when the name cannot be resolved.
-  @visibleForTesting
-  static Future<bool> applyDeviceTimezone({
-    Future<String> Function()? lookup,
-  }) async {
-    final String before = tz.local.name;
-    try {
-      final String timezoneName =
-          await (lookup ?? FlutterTimezone.getLocalTimezone)();
-      tz.setLocalLocation(tz.getLocation(timezoneName));
-    } catch (e) {
-      tz.setLocalLocation(
-        fallbackLocationForOffset(DateTime.now().timeZoneOffset),
-      );
-      developer.log(
-        'Failed to resolve local timezone, using current UTC offset',
-        name: 'sakina_app.notifications',
-        level: 900,
-        error: e,
-      );
-    }
-    developer.log(
-      'Notification timezone configured. Final selected timezone: ${tz.local.name}',
-      name: 'sakina_app.notifications',
-    );
-    return tz.local.name != before;
-  }
+  Future<void> _configureLocalTimezone() =>
+      NotificationTiming.applyDeviceTimezone();
 
   /// Called on resume: after travel or a manual change in system settings
   /// the device zone can differ from the one this process started with.
@@ -205,8 +133,8 @@ class NotificationService {
   /// in full, so daily reminders move to the new local wall time.
   Future<bool> refreshTimezoneIfChanged() async {
     await initialize(requestPermissions: false);
-    final bool changed = await applyDeviceTimezone();
-    if (changed) _lastAppliedAlarmStateSignature = null;
+    final bool changed = await NotificationTiming.applyDeviceTimezone();
+    if (changed) reminders.invalidate();
     return changed;
   }
 
@@ -332,26 +260,19 @@ class NotificationService {
     }
   }
 
-  /// Exact access can be denied or revoked. Scheduling exactly would then
-  /// throw, so a slightly late reminder is the fallback to no reminder at all.
-  @visibleForTesting
-  static AndroidScheduleMode scheduleModeFor({
-    required bool? canScheduleExact,
-  }) => canScheduleExact == false
-      ? AndroidScheduleMode.inexactAllowWhileIdle
-      : AndroidScheduleMode.exactAllowWhileIdle;
-
-  Future<AndroidScheduleMode> _androidScheduleMode() async {
+  /// Exact when allowed, otherwise inexact (see
+  /// [NotificationTiming.scheduleModeFor]).
+  Future<AndroidScheduleMode> androidScheduleMode() async {
     final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
         flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin
             >();
     if (androidImplementation == null) {
-      return scheduleModeFor(canScheduleExact: null);
+      return NotificationTiming.scheduleModeFor(canScheduleExact: null);
     }
     try {
-      return scheduleModeFor(
+      return NotificationTiming.scheduleModeFor(
         canScheduleExact: await androidImplementation
             .canScheduleExactNotifications(),
       );
@@ -362,75 +283,18 @@ class NotificationService {
         level: 900,
         error: e,
       );
-      return scheduleModeFor(canScheduleExact: false);
+      return NotificationTiming.scheduleModeFor(canScheduleExact: false);
     }
-  }
-
-  /// The next wall-clock [hour]:[minute] at least two minutes after [now].
-  /// Calendar arithmetic keeps the time correct across a daylight-saving
-  /// change, which adding 24 hours would shift by an hour.
-  @visibleForTesting
-  static tz.TZDateTime nextDailyOccurrence(
-    tz.TZDateTime now,
-    int hour,
-    int minute,
-  ) {
-    final tz.TZDateTime today = tz.TZDateTime(
-      now.location,
-      now.year,
-      now.month,
-      now.day,
-      hour,
-      minute,
-    );
-    if (!today.isBefore(now.add(const Duration(minutes: 2)))) return today;
-    return tz.TZDateTime(
-      now.location,
-      now.year,
-      now.month,
-      now.day + 1,
-      hour,
-      minute,
-    );
   }
 
   /// Handle notification tap.
   void _onNotificationTapped(NotificationResponse response) {
-    routeNotificationResponse(
+    NotificationTapRouting.routeNotificationResponse(
       id: response.id,
       actionId: response.actionId,
       payload: response.payload,
     );
   }
-
-  /// Routes a tap on a notification or one of its buttons. The same tap
-  /// reported twice within two seconds (as a launch and as a response, or a
-  /// double tap) opens its screen only once.
-  @visibleForTesting
-  static void routeNotificationResponse({
-    int? id,
-    String? actionId,
-    String? payload,
-    DateTime? now,
-  }) {
-    final DateTime at = now ?? DateTime.now();
-    final last = _lastRouted;
-    // Every real notification has an id; without one there is nothing to
-    // tell two taps apart by, so each is routed.
-    if (id != null &&
-        last != null &&
-        last.id == id &&
-        last.actionId == actionId &&
-        last.payload == payload &&
-        at.difference(last.at).abs() < const Duration(seconds: 2)) {
-      return;
-    }
-    _lastRouted = (id: id, actionId: actionId, payload: payload, at: at);
-    routeNotificationPayload(payload, actionId: actionId);
-  }
-
-  @visibleForTesting
-  static void resetRoutingHistory() => _lastRouted = null;
 
   /// Routes the notification that launched a terminated app, once per process.
   /// `onDidReceiveNotificationResponse` does not report this tap.
@@ -439,50 +303,9 @@ class NotificationService {
     await initialize(requestPermissions: false);
     if (!_isPluginAvailable) return;
     _launchNotificationHandled = true;
-    routeLaunchDetails(
+    NotificationTapRouting.routeLaunchDetails(
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails(),
     );
-  }
-
-  @visibleForTesting
-  static void routeLaunchDetails(NotificationAppLaunchDetails? details) {
-    if (details == null || !details.didNotificationLaunchApp) return;
-    final NotificationResponse? response = details.notificationResponse;
-    routeNotificationResponse(
-      id: response?.id,
-      actionId: response?.actionId,
-      payload: response?.payload,
-    );
-  }
-
-  @visibleForTesting
-  static void routeNotificationPayload(String? rawPayload, {String? actionId}) {
-    final String payload = rawPayload ?? '';
-    if (payload.isEmpty) {
-      NotificationRouter.handleNotification(type: 'general');
-      return;
-    }
-
-    try {
-      final dynamic decoded = jsonDecode(payload);
-      if (decoded is Map<String, dynamic>) {
-        final String type = decoded['type']?.toString() ?? 'general';
-        final dynamic rawData = decoded['data'];
-        final Map<String, dynamic> data = rawData is Map
-            ? Map<String, dynamic>.from(rawData)
-            : <String, dynamic>{};
-        NotificationRouter.handleNotification(
-          type: type,
-          data: data,
-          actionId: actionId,
-        );
-        return;
-      }
-    } catch (_) {
-      // Plain string payloads are treated as a notification type.
-    }
-
-    NotificationRouter.handleNotification(type: payload);
   }
 
   /// Show a simple notification.
@@ -533,18 +356,22 @@ class NotificationService {
     if (!_isPluginAvailable) return;
 
     final ({String title, String body}) localizedContent =
-        _resolveDailyNotificationContent(
+        NotificationContent.dailyReminderContent(
           title: title,
           body: body,
           payload: payload,
         );
 
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    final tz.TZDateTime scheduledDate = nextDailyOccurrence(now, hour, minute);
+    final tz.TZDateTime scheduledDate = NotificationTiming.nextDailyOccurrence(
+      now,
+      hour,
+      minute,
+    );
     final tz.TZDateTime twoMinutesFromNow = now.add(const Duration(minutes: 2));
 
-    final String formattedTime = _formatTimeHHmm(hour, minute);
-    final String triggerTime = _formatTimeHHmm(
+    final String formattedTime = NotificationTiming.formatHHmm(hour, minute);
+    final String triggerTime = NotificationTiming.formatHHmm(
       scheduledDate.hour,
       scheduledDate.minute,
     );
@@ -564,7 +391,7 @@ class NotificationService {
     );
 
     final NotificationDetails notificationDetails = buildNotificationDetails(
-      dailyReminderKind(payload),
+      NotificationContent.dailyReminderKind(payload),
       title: localizedContent.title,
       body: localizedContent.body,
     );
@@ -583,7 +410,7 @@ class NotificationService {
       localizedContent.body,
       scheduledDate,
       notificationDetails,
-      androidScheduleMode: await _androidScheduleMode(),
+      androidScheduleMode: await androidScheduleMode(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: serializedPayload,
@@ -594,46 +421,6 @@ class NotificationService {
       'Daily notification $id scheduled for $formattedTime',
       name: 'sakina_app.notifications',
     );
-  }
-
-  /// The look of a daily reminder: adhkar or Quran reading. Every daily
-  /// reminder has always used the reminders channel, and still does.
-  @visibleForTesting
-  static SakinaNotificationKind dailyReminderKind(String? payload) =>
-      switch (payload) {
-        'morning_adhkar' || 'evening_adhkar' => SakinaNotificationKind.adhkar,
-        _ => SakinaNotificationKind.quranReading,
-      };
-
-  ({String title, String body}) _resolveDailyNotificationContent({
-    required String title,
-    required String body,
-    String? payload,
-  }) {
-    switch (payload) {
-      case 'morning_adhkar':
-        return (
-          title: appL10n.notificationServiceMessage9,
-          body: appL10n.notificationServiceMessage10,
-        );
-      case 'evening_adhkar':
-        return (
-          title: appL10n.notificationServiceMessage11,
-          body: appL10n.notificationServiceMessage12,
-        );
-      case 'mulk_surah':
-        return (
-          title: appL10n.notificationServiceMessage13,
-          body: appL10n.notificationServiceMessage14,
-        );
-      case 'baqarah_surah':
-        return (
-          title: appL10n.notificationServiceMessage15,
-          body: appL10n.notificationServiceMessage16,
-        );
-      default:
-        return (title: title, body: body);
-    }
   }
 
   /// Schedule a one-time notification at a fixed DateTime.
@@ -676,7 +463,7 @@ class NotificationService {
       body,
       scheduleAtLocal,
       notificationDetails,
-      androidScheduleMode: await _androidScheduleMode(),
+      androidScheduleMode: await androidScheduleMode(),
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: serializedPayload,
@@ -688,245 +475,14 @@ class NotificationService {
     );
   }
 
-  /// Schedule a one-time notification for a prayer time.
-  ///
-  /// [mode] picks the channel: the alert sound, a silent notification, or
-  /// in adhan mode the channel of [adhanVoice], whose sound is the recording.
-  Future<void> schedulePrayerNotification({
-    required int id,
-    required String prayerName,
-    required DateTime prayerTime,
-    PrayerAlertMode mode = PrayerAlertMode.sound,
-    bool isReminder = false,
-    int reminderMinutes = 0,
-    AdhanVoice? adhanVoice,
-  }) async {
-    await initialize(requestPermissions: false);
-    if (!_isPluginAvailable) return;
-
-    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    final tz.TZDateTime scheduledDate = tz.TZDateTime.from(
-      prayerTime,
-      tz.local,
-    );
-
-    if (!scheduledDate.isAfter(now.add(const Duration(seconds: 5)))) {
-      developer.log(
-        'Skipping past prayer notification $id for $prayerName at $prayerTime',
-        name: 'sakina_app.notifications',
-      );
-      return;
-    }
-
-    final content = prayerNotificationContent(
-      prayerName: prayerName,
-      prayerTime: prayerTime,
-      mode: mode,
-      isReminder: isReminder,
-      reminderMinutes: reminderMinutes,
-      digits: await _digitStyle(),
-    );
-    final Duration lead = Duration(minutes: isReminder ? reminderMinutes : 0);
-    NotificationDetails details({AdhanVoice? voice}) =>
-        buildNotificationDetails(
-          content.kind,
-          title: content.title,
-          body: content.body,
-          summary: content.summary,
-          when: prayerTime.add(lead),
-          // The reminder leaves the tray when the prayer alert itself is due.
-          timeoutAfter: lead > Duration.zero ? lead : null,
-          adhanVoice: voice,
-        );
-    final AdhanVoice? voice = mode == PrayerAlertMode.adhan && !isReminder
-        ? adhanVoice
-        : null;
-
-    final String serializedPayload = jsonEncode({
-      'type': 'prayer_time',
-      'data': <String, dynamic>{
-        'prayerName': prayerName,
-        'scheduledAt': prayerTime.toIso8601String(),
-        if (isReminder) 'reminder': true,
-      },
-    });
-
-    final AndroidScheduleMode scheduleMode = await _androidScheduleMode();
-    Future<void> schedule(NotificationDetails d) =>
-        flutterLocalNotificationsPlugin.zonedSchedule(
-          id,
-          content.title,
-          content.body,
-          scheduledDate,
-          d,
-          androidScheduleMode: scheduleMode,
-          uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,
-          payload: serializedPayload,
-        );
-
-    try {
-      await schedule(details(voice: voice));
-    } on PlatformException catch (error) {
-      // A missing recording must not cost the user the prayer alert: fall
-      // back to the alert sound and record why.
-      if (voice == null || error.code != 'invalid_sound') rethrow;
-      developer.log(
-        'Adhan recording ${voice.resource} unavailable; using alert sound',
-        name: 'sakina_app.notifications',
-        level: 900,
-        error: error,
-      );
-      await schedule(details());
-    }
-
-    developer.log(
-      'Prayer notification $id scheduled for $prayerName at $scheduledDate',
-      name: 'sakina_app.notifications',
-    );
-  }
-
-  /// What a prayer alert or "prayer is near" reminder says. The alert keeps
-  /// its title and body and adds the prayer time; the reminder, which had
-  /// only a title, now says when the prayer is. [prayerTime] is when the
-  /// notification fires: for a reminder, [reminderMinutes] before the prayer.
-  @visibleForTesting
-  static ({
-    SakinaNotificationKind kind,
-    String title,
-    String body,
-    String? summary,
-  })
-  prayerNotificationContent({
-    required String prayerName,
-    required DateTime prayerTime,
-    PrayerAlertMode mode = PrayerAlertMode.sound,
-    bool isReminder = false,
-    int reminderMinutes = 0,
-    DigitStyle digits = DigitStyle.western,
-  }) {
-    if (isReminder) {
-      final String time = formatNotificationTime(
-        prayerTime.add(Duration(minutes: reminderMinutes)),
-        digits,
-      );
-      return (
-        kind: SakinaNotificationKind.prayerReminder,
-        title: appL10n.prayerReminderBody(
-          applyDigitStyle('$reminderMinutes', digits),
-          prayerName,
-        ),
-        body: appL10n.prayerReminderTimeLine(time),
-        summary: null,
-      );
-    }
-    final String time = formatNotificationTime(prayerTime, digits);
-    return (
-      kind: mode == PrayerAlertMode.notificationOnly
-          ? SakinaNotificationKind.prayerSilent
-          : SakinaNotificationKind.prayer,
-      title: appL10n.notificationServiceMessage17(prayerName),
-      body: appL10n.prayerNotificationBody,
-      summary: appL10n.prayerNotificationTimeLine(time),
-    );
-  }
-
-  Future<DigitStyle> _digitStyle() async {
+  /// The user's digit style for times shown in notifications.
+  Future<DigitStyle> digitStyle() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       return digitStyleFromName(prefs.get(digitStylePreferenceKey));
     } catch (_) {
       return DigitStyle.western;
     }
-  }
-
-  /// Replace only the supplied calendar day's slot, preserving other days.
-  /// Prayers are keyed by [DailyPrayer]; display names are derived here and
-  /// only shown.
-  Future<void> scheduleAllPrayersForDate({
-    required Map<DailyPrayer, DateTime> prayerTimes,
-    AdhanSettings settings = const AdhanSettings(),
-  }) async {
-    if (prayerTimes.isEmpty) return;
-    final date = prayerTimes.values.first;
-    for (final prayer in DailyPrayer.values) {
-      final legacyId = prayerBaseId(prayer);
-      await cancelNotification(legacyId);
-      await cancelNotification(prayerNotificationId(legacyId, date));
-      await cancelNotification(prayerReminderNotificationId(legacyId, date));
-    }
-    await cancelNotification(AnchoredReminders.morningId(date));
-    await cancelNotification(AnchoredReminders.eveningId(date));
-
-    final names = <DailyPrayer, String>{
-      for (final prayer in prayerTimes.keys) prayer: appL10n.prayerName(prayer),
-    };
-
-    for (final alert in planPrayerAlerts(
-      times: prayerTimes,
-      names: names,
-      settings: settings,
-      now: DateTime.now(),
-    )) {
-      await schedulePrayerNotification(
-        id: alert.id,
-        prayerName: alert.prayerName,
-        prayerTime: alert.at,
-        mode: alert.mode,
-        isReminder: alert.kind == PlannedAlertKind.reminder,
-        reminderMinutes: settings.reminderMinutes,
-        adhanVoice: alert.voice,
-      );
-    }
-    await _scheduleAnchoredReminders(prayerTimes);
-  }
-
-  /// Morning/evening adhkar reminders set to follow Fajr/Asr (see
-  /// [AnchoredReminders]); only reminders still ahead are scheduled.
-  Future<void> _scheduleAnchoredReminders(
-    Map<DailyPrayer, DateTime> prayerTimes,
-  ) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    for (final AnchoredReminder r in AnchoredReminders.plan(
-      prayerTimes: prayerTimes,
-      prefs: prefs,
-      now: DateTime.now(),
-    )) {
-      final bool morning = r.kind == AnchoredReminderKind.morning;
-      await scheduleOneTimeNotification(
-        id: r.id,
-        title: morning
-            ? appL10n.notificationServiceMessage19
-            : appL10n.notificationServiceMessage21,
-        body: morning
-            ? appL10n.notificationServiceMessage20
-            : appL10n.notificationServiceMessage22,
-        scheduledAt: r.at,
-        payload: morning ? 'morning_adhkar' : 'evening_adhkar',
-        kind: SakinaNotificationKind.adhkar,
-      );
-    }
-  }
-
-  /// Shows a prayer alert in 10 seconds so the user can check it works on
-  /// this device, using the alert type chosen for Fajr.
-  Future<void> scheduleTestPrayerAlert(AdhanSettings settings) async {
-    final mode = settings.modeFor(DailyPrayer.fajr);
-    await schedulePrayerNotification(
-      id: _testPrayerAlertId,
-      prayerName: appL10n.prayerName(DailyPrayer.fajr),
-      prayerTime: DateTime.now().add(const Duration(seconds: 10)),
-      mode: mode == PrayerAlertMode.silent ? PrayerAlertMode.sound : mode,
-      adhanVoice: settings.voiceFor(DailyPrayer.fajr),
-    );
-  }
-
-  static const int _testPrayerAlertId = 2999;
-
-  String _formatTimeHHmm(int hour, int minute) {
-    final String h = hour.toString().padLeft(2, '0');
-    final String m = minute.toString().padLeft(2, '0');
-    return '$h:$m';
   }
 
   /// Cancel a scheduled notification.
@@ -951,450 +507,6 @@ class NotificationService {
       'Cancelled all notifications',
       name: 'sakina_app.notifications',
     );
-  }
-
-  /// Cancel all prayer time notifications.
-  Future<void> cancelAllPrayerNotifications() async {
-    await initialize(requestPermissions: false);
-    if (!_isPluginAvailable) return;
-
-    for (final int id in allPrayerNotificationIds()) {
-      await flutterLocalNotificationsPlugin.cancel(id);
-    }
-    for (final int id in AnchoredReminders.allIds()) {
-      await flutterLocalNotificationsPlugin.cancel(id);
-    }
-    await flutterLocalNotificationsPlugin.cancel(
-      prayerWindowEndingNotificationId,
-    );
-
-    developer.log(
-      'Cancelled all prayer notifications',
-      name: 'sakina_app.notifications',
-    );
-  }
-
-  /// iOS: the notice on the last scheduled day that prayer alerts need the
-  /// app opened to continue. Each schedule moves it to the new last day.
-  static const int prayerWindowEndingNotificationId = 1206;
-
-  /// When the window-ending notice for [lastDay] is shown: noon that day,
-  /// before the day's later prayers and well before alerts run out.
-  @visibleForTesting
-  static DateTime prayerWindowEndingAt(DateTime lastDay) =>
-      DateTime(lastDay.year, lastDay.month, lastDay.day, 12);
-
-  Future<void> schedulePrayerWindowEndingNotice(DateTime lastDay) =>
-      scheduleOneTimeNotification(
-        id: prayerWindowEndingNotificationId,
-        title: appL10n.prayerWindowEndingTitle,
-        body: appL10n.prayerWindowEndingBody,
-        scheduledAt: prayerWindowEndingAt(lastDay),
-        payload: 'prayer_time',
-        payloadData: const {'reminder': true},
-      );
-
-  /// Cancel and reschedule only app-managed reminder notifications.
-  Future<void> _cancelManagedReminderNotifications() async {
-    for (final int id in _managedNotificationIds) {
-      await cancelNotification(id);
-    }
-  }
-
-  // ==================== MORNING ADHKAR ALARM ====================
-
-  /// Schedule morning adhkar alarm.
-  Future<void> scheduleMorningAdhkarAlarm({int? hour, int? minute}) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int h =
-        hour ?? prefs.getInt(_morningAlarmHourKey) ?? _defaultMorningHour;
-    final int m =
-        minute ?? prefs.getInt(_morningAlarmMinuteKey) ?? _defaultMorningMinute;
-
-    await scheduleDailyNotification(
-      id: _morningAdhkarNotificationId,
-      title: appL10n.notificationServiceMessage19,
-      body: appL10n.notificationServiceMessage20,
-      hour: h,
-      minute: m,
-      payload: 'morning_adhkar',
-    );
-  }
-
-  /// Cancel morning adhkar alarm.
-  Future<void> cancelMorningAdhkarAlarm() async {
-    await cancelNotification(_morningAdhkarNotificationId);
-  }
-
-  // ==================== EVENING ADHKAR ALARM ====================
-
-  /// Schedule evening adhkar alarm.
-  Future<void> scheduleEveningAdhkarAlarm({int? hour, int? minute}) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int h =
-        hour ?? prefs.getInt(_eveningAlarmHourKey) ?? _defaultEveningHour;
-    final int m =
-        minute ?? prefs.getInt(_eveningAlarmMinuteKey) ?? _defaultEveningMinute;
-
-    await scheduleDailyNotification(
-      id: _eveningAdhkarNotificationId,
-      title: appL10n.notificationServiceMessage21,
-      body: appL10n.notificationServiceMessage22,
-      hour: h,
-      minute: m,
-      payload: 'evening_adhkar',
-    );
-  }
-
-  /// Cancel evening adhkar alarm.
-  Future<void> cancelEveningAdhkarAlarm() async {
-    await cancelNotification(_eveningAdhkarNotificationId);
-  }
-
-  // ==================== SURAH AL-MULK ALARM ====================
-
-  /// Schedule Surah Al-Mulk alarm.
-  Future<void> scheduleMulkAlarm({int? hour, int? minute}) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int h = hour ?? prefs.getInt(_mulkAlarmHourKey) ?? _defaultMulkHour;
-    final int m =
-        minute ?? prefs.getInt(_mulkAlarmMinuteKey) ?? _defaultMulkMinute;
-
-    await scheduleDailyNotification(
-      id: _mulkNotificationId,
-      title: appL10n.notificationServiceMessage23,
-      body: appL10n.notificationServiceMessage24,
-      hour: h,
-      minute: m,
-      payload: 'mulk_surah',
-    );
-  }
-
-  /// Cancel Surah Al-Mulk alarm.
-  Future<void> cancelMulkAlarm() async {
-    await cancelNotification(_mulkNotificationId);
-  }
-
-  // ==================== SURAH AL-BAQARAH ALARM ====================
-
-  /// Schedule Surah Al-Baqarah alarm.
-  Future<void> scheduleBaqarahAlarm({int? hour, int? minute}) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int h =
-        hour ?? prefs.getInt(_baqarahAlarmHourKey) ?? _defaultBaqarahHour;
-    final int m =
-        minute ?? prefs.getInt(_baqarahAlarmMinuteKey) ?? _defaultBaqarahMinute;
-
-    await scheduleDailyNotification(
-      id: _baqarahNotificationId,
-      title: appL10n.notificationServiceMessage25,
-      body: appL10n.notificationServiceMessage26,
-      hour: h,
-      minute: m,
-      payload: 'baqarah_surah',
-    );
-  }
-
-  /// Cancel Surah Al-Baqarah alarm.
-  Future<void> cancelBaqarahAlarm() async {
-    await cancelNotification(_baqarahNotificationId);
-  }
-
-  // ==================== DAILY VERSE ====================
-
-  /// Schedules the verse of each of the next seven days at the saved time.
-  /// Rebuilt with the other reminders, so the week keeps rolling forward.
-  Future<void> scheduleDailyVerseNotifications({
-    int? hour,
-    int? minute,
-    DailyVerseSource? source,
-  }) async {
-    await initialize(requestPermissions: false);
-    if (!_isPluginAvailable) return;
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int h = hour ?? prefs.getInt(_verseAlarmHourKey) ?? _defaultVerseHour;
-    final int m =
-        minute ?? prefs.getInt(_verseAlarmMinuteKey) ?? _defaultVerseMinute;
-    await cancelDailyVerseNotifications();
-
-    final DailyVerseSource verses = source ?? DailyVerseSource();
-    final DigitStyle digits = await _digitStyle();
-    final AndroidScheduleMode mode = await _androidScheduleMode();
-    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    final tz.TZDateTime first = nextDailyOccurrence(now, h, m);
-    for (var day = 0; day < _dailyVerseDaysAhead; day++) {
-      final tz.TZDateTime at = tz.TZDateTime(
-        first.location,
-        first.year,
-        first.month,
-        first.day + day,
-        h,
-        m,
-      );
-      final verse = await verses.verseFor(at);
-      final content = dailyVerseNotificationContent(verse, digits);
-      await flutterLocalNotificationsPlugin.zonedSchedule(
-        dailyVerseNotificationId(at),
-        content.title,
-        content.body,
-        at,
-        buildNotificationDetails(
-          SakinaNotificationKind.dailyVerse,
-          title: content.title,
-          body: content.body,
-          summary: content.summary,
-        ),
-        androidScheduleMode: mode,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        payload: jsonEncode({
-          'type': 'daily_verse',
-          'data': <String, dynamic>{
-            'surahNumber': verse.surah,
-            'ayahNumber': verse.ayah,
-          },
-        }),
-      );
-    }
-    developer.log(
-      'Daily verse scheduled for $_dailyVerseDaysAhead days from $first',
-      name: 'sakina_app.notifications',
-    );
-  }
-
-  /// Title, the whole ayah as the body, and where it is in the Quran.
-  @visibleForTesting
-  static ({String title, String body, String summary})
-  dailyVerseNotificationContent(DailyVerse verse, DigitStyle digits) => (
-    title: appL10n.notificationCategoryVerse,
-    body: verse.text,
-    summary: appL10n.dailyVerseNotificationReference(
-      verse.surahName,
-      applyDigitStyle('${verse.ayah}', digits),
-    ),
-  );
-
-  Future<void> cancelDailyVerseNotifications() async {
-    for (var weekday = 1; weekday <= 7; weekday++) {
-      await cancelNotification(4000 + weekday);
-    }
-  }
-
-  // ==================== UPDATE ALL ALARMS ====================
-
-  /// Update all active alarms based on settings. Updates run one at a time so
-  /// a quick second toggle cannot have its cancellation overtaken by the first.
-  Future<void> updateAllAlarms({
-    required bool isMorningEnabled,
-    required bool isEveningEnabled,
-    required bool isMulkEnabled,
-    required bool isBaqarahEnabled,
-    required bool isDailyVerseEnabled,
-  }) {
-    final Future<void> update = _alarmUpdates.then(
-      (_) => _applyAlarmState(
-        isMorningEnabled: isMorningEnabled,
-        isEveningEnabled: isEveningEnabled,
-        isMulkEnabled: isMulkEnabled,
-        isBaqarahEnabled: isBaqarahEnabled,
-        isDailyVerseEnabled: isDailyVerseEnabled,
-      ),
-    );
-    _alarmUpdates = update.catchError((Object _) {});
-    return update;
-  }
-
-  Future<void> _applyAlarmState({
-    required bool isMorningEnabled,
-    required bool isEveningEnabled,
-    required bool isMulkEnabled,
-    required bool isBaqarahEnabled,
-    required bool isDailyVerseEnabled,
-  }) async {
-    await initialize(requestPermissions: false);
-
-    // The verse window is a week of separate days, so a new day is a change.
-    final DateTime today = DateTime.now();
-    final SharedPreferences anchorPrefs = await SharedPreferences.getInstance();
-    final int? morningAnchor = AnchoredReminders.morning(anchorPrefs);
-    final int? eveningAnchor = AnchoredReminders.evening(anchorPrefs);
-    final String newSignature =
-        '${isMorningEnabled ? 1 : 0}${morningAnchor ?? '-'}-'
-        '${isEveningEnabled ? 1 : 0}${eveningAnchor ?? '-'}-'
-        '${isMulkEnabled ? 1 : 0}-'
-        '${isBaqarahEnabled ? 1 : 0}-'
-        '${isDailyVerseEnabled ? '${today.year}${today.month}${today.day}' : 0}';
-
-    if (_lastAppliedAlarmStateSignature == newSignature) {
-      developer.log(
-        'Skipping alarm update: state unchanged',
-        name: 'sakina_app.notifications',
-      );
-      return;
-    }
-
-    await _cancelManagedReminderNotifications();
-
-    // An anchored reminder is scheduled with the prayer alerts instead.
-    if (isMorningEnabled && morningAnchor == null) {
-      await scheduleMorningAdhkarAlarm();
-    }
-    if (isEveningEnabled && eveningAnchor == null) {
-      await scheduleEveningAdhkarAlarm();
-    }
-    if (isMulkEnabled) {
-      await scheduleMulkAlarm();
-    }
-    if (isBaqarahEnabled) {
-      await scheduleBaqarahAlarm();
-    }
-    if (isDailyVerseEnabled) {
-      await _scheduleDailyVerseSafely();
-    } else {
-      await cancelDailyVerseNotifications();
-    }
-
-    _lastAppliedAlarmStateSignature = newSignature;
-
-    developer.log(
-      'Updated all alarms. Morning: $isMorningEnabled, '
-      'Evening: $isEveningEnabled, '
-      'Mulk: $isMulkEnabled, Baqarah: $isBaqarahEnabled, '
-      'Verse: $isDailyVerseEnabled',
-      name: 'sakina_app.notifications',
-    );
-  }
-
-  /// A verse that cannot be read must not stop the other reminders.
-  Future<void> _scheduleDailyVerseSafely({int? hour, int? minute}) async {
-    try {
-      await scheduleDailyVerseNotifications(hour: hour, minute: minute);
-    } catch (error) {
-      developer.log(
-        'Daily verse scheduling failed',
-        name: 'sakina_app.notifications',
-        level: 1000,
-        error: error,
-      );
-    }
-  }
-
-  /// Reschedule one alarm type without touching other notifications.
-  Future<void> rescheduleSingleAlarm({
-    required String type,
-    required bool enabled,
-    int? hour,
-    int? minute,
-  }) async {
-    await initialize(requestPermissions: false);
-    switch (type) {
-      case 'morning':
-        await cancelNotification(_morningAdhkarNotificationId);
-        if (enabled) {
-          await scheduleMorningAdhkarAlarm(hour: hour, minute: minute);
-        }
-        break;
-      case 'evening':
-        await cancelNotification(_eveningAdhkarNotificationId);
-        if (enabled) {
-          await scheduleEveningAdhkarAlarm(hour: hour, minute: minute);
-        }
-        break;
-      case 'mulk':
-        await cancelNotification(_mulkNotificationId);
-        if (enabled) {
-          await scheduleMulkAlarm(hour: hour, minute: minute);
-        }
-        break;
-      case 'baqarah':
-        await cancelNotification(_baqarahNotificationId);
-        if (enabled) {
-          await scheduleBaqarahAlarm(hour: hour, minute: minute);
-        }
-        break;
-      case 'verse':
-        if (enabled) {
-          await _scheduleDailyVerseSafely(hour: hour, minute: minute);
-        } else {
-          await cancelDailyVerseNotifications();
-        }
-        break;
-      default:
-        developer.log(
-          'Unknown alarm type for reschedule: $type',
-          name: 'sakina_app.notifications',
-          level: 900,
-        );
-    }
-  }
-
-  /// Save alarm time to preferences.
-  Future<void> saveAlarmTime({
-    required String type,
-    required int hour,
-    required int minute,
-  }) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    switch (type) {
-      case 'morning':
-        await prefs.setInt(_morningAlarmHourKey, hour);
-        await prefs.setInt(_morningAlarmMinuteKey, minute);
-        break;
-      case 'evening':
-        await prefs.setInt(_eveningAlarmHourKey, hour);
-        await prefs.setInt(_eveningAlarmMinuteKey, minute);
-        break;
-      case 'mulk':
-        await prefs.setInt(_mulkAlarmHourKey, hour);
-        await prefs.setInt(_mulkAlarmMinuteKey, minute);
-        break;
-      case 'baqarah':
-        await prefs.setInt(_baqarahAlarmHourKey, hour);
-        await prefs.setInt(_baqarahAlarmMinuteKey, minute);
-        break;
-      case 'verse':
-        await prefs.setInt(_verseAlarmHourKey, hour);
-        await prefs.setInt(_verseAlarmMinuteKey, minute);
-        break;
-    }
-
-    developer.log(
-      'Saved $type alarm time: ${_formatTimeHHmm(hour, minute)}',
-      name: 'sakina_app.notifications',
-    );
-  }
-
-  /// Get saved alarm time.
-  Future<Map<String, int>> getAlarmTime(String type) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    int hour = 0;
-    int minute = 0;
-
-    switch (type) {
-      case 'morning':
-        hour = prefs.getInt(_morningAlarmHourKey) ?? _defaultMorningHour;
-        minute = prefs.getInt(_morningAlarmMinuteKey) ?? _defaultMorningMinute;
-        break;
-      case 'evening':
-        hour = prefs.getInt(_eveningAlarmHourKey) ?? _defaultEveningHour;
-        minute = prefs.getInt(_eveningAlarmMinuteKey) ?? _defaultEveningMinute;
-        break;
-      case 'mulk':
-        hour = prefs.getInt(_mulkAlarmHourKey) ?? _defaultMulkHour;
-        minute = prefs.getInt(_mulkAlarmMinuteKey) ?? _defaultMulkMinute;
-        break;
-      case 'baqarah':
-        hour = prefs.getInt(_baqarahAlarmHourKey) ?? _defaultBaqarahHour;
-        minute = prefs.getInt(_baqarahAlarmMinuteKey) ?? _defaultBaqarahMinute;
-        break;
-      case 'verse':
-        hour = prefs.getInt(_verseAlarmHourKey) ?? _defaultVerseHour;
-        minute = prefs.getInt(_verseAlarmMinuteKey) ?? _defaultVerseMinute;
-        break;
-    }
-
-    return <String, int>{'hour': hour, 'minute': minute};
   }
 
   /// Test notification - shows immediate notification to verify system works.

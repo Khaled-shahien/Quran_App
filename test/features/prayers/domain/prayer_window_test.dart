@@ -1,6 +1,6 @@
+import 'package:sakina_app/core/services/prayer_alert_notifications.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sakina_app/core/services/notification_service.dart';
 import 'package:sakina_app/features/prayers/data/services/prayer_replenishment_service.dart';
 import 'package:sakina_app/features/prayers/domain/repositories/prayer_times_repository.dart';
 import 'package:sakina_app/features/prayers/domain/services/prayer_notification_scheduler.dart';
@@ -74,7 +74,7 @@ void main() {
 
   test('the window-ending notice comes at noon on the last day', () {
     expect(
-      NotificationService.prayerWindowEndingAt(DateTime(2026, 1, 14, 23)),
+      PrayerAlertNotifications.prayerWindowEndingAt(DateTime(2026, 1, 14, 23)),
       DateTime(2026, 1, 14, 12),
     );
   });

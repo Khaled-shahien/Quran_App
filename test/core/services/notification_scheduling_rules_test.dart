@@ -1,3 +1,4 @@
+import 'package:sakina_app/core/services/notification_timing.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sakina_app/core/services/notification_service.dart';
@@ -9,12 +10,12 @@ void main() {
 
   test('falls back to inexact alarms only when exact access is denied', () {
     expect(
-      NotificationService.scheduleModeFor(canScheduleExact: false),
+      NotificationTiming.scheduleModeFor(canScheduleExact: false),
       AndroidScheduleMode.inexactAllowWhileIdle,
     );
     for (final allowed in [true, null]) {
       expect(
-        NotificationService.scheduleModeFor(canScheduleExact: allowed),
+        NotificationTiming.scheduleModeFor(canScheduleExact: allowed),
         AndroidScheduleMode.exactAllowWhileIdle,
       );
     }
@@ -29,7 +30,7 @@ void main() {
 
     test('keeps the wall-clock time across a daylight-saving change', () {
       // Clocks move forward on 8 March 2026 in New York.
-      final next = NotificationService.nextDailyOccurrence(
+      final next = NotificationTiming.nextDailyOccurrence(
         tz.TZDateTime(newYork, 2026, 3, 7, 8),
         7,
         0,
@@ -38,7 +39,7 @@ void main() {
     });
 
     test('uses today while the time is more than two minutes away', () {
-      final next = NotificationService.nextDailyOccurrence(
+      final next = NotificationTiming.nextDailyOccurrence(
         tz.TZDateTime(newYork, 2026, 6, 1, 6, 57),
         7,
         0,
@@ -47,7 +48,7 @@ void main() {
     });
 
     test('moves to tomorrow inside the two-minute margin', () {
-      final next = NotificationService.nextDailyOccurrence(
+      final next = NotificationTiming.nextDailyOccurrence(
         tz.TZDateTime(newYork, 2026, 6, 30, 6, 59),
         7,
         0,

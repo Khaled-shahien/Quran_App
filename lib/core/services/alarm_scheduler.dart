@@ -36,7 +36,7 @@ class NotificationAlarmScheduler implements AlarmScheduler {
 
   @override
   Future<Map<String, int>> getAlarmTime(String type) {
-    return _notificationService.getAlarmTime(type);
+    return _notificationService.reminders.getAlarmTime(type);
   }
 
   @override
@@ -53,7 +53,7 @@ class NotificationAlarmScheduler implements AlarmScheduler {
     required int hour,
     required int minute,
   }) {
-    return _notificationService.rescheduleSingleAlarm(
+    return _notificationService.reminders.rescheduleSingleAlarm(
       type: type,
       enabled: enabled,
       hour: hour,
@@ -67,7 +67,7 @@ class NotificationAlarmScheduler implements AlarmScheduler {
     required int hour,
     required int minute,
   }) {
-    return _notificationService.saveAlarmTime(
+    return _notificationService.reminders.saveAlarmTime(
       type: type,
       hour: hour,
       minute: minute,
@@ -82,7 +82,7 @@ class NotificationAlarmScheduler implements AlarmScheduler {
     required bool isBaqarahEnabled,
     required bool isDailyVerseEnabled,
   }) {
-    return _notificationService.updateAllAlarms(
+    return _notificationService.reminders.updateAllAlarms(
       isMorningEnabled: isMorningEnabled,
       isEveningEnabled: isEveningEnabled,
       isMulkEnabled: isMulkEnabled,

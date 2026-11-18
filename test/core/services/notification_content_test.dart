@@ -1,3 +1,6 @@
+import 'package:sakina_app/core/services/daily_reminder_notifications.dart';
+import 'package:sakina_app/core/services/notification_content.dart';
+import 'package:sakina_app/core/services/notification_tap_routing.dart';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -12,7 +15,7 @@ void main() {
     final fajr = DateTime(2026, 3, 1, 4, 52);
 
     test('the alert keeps its words and adds the prayer time', () {
-      final c = NotificationService.prayerNotificationContent(
+      final c = NotificationContent.prayerNotificationContent(
         prayerName: 'الفجر',
         prayerTime: fajr,
       );
@@ -23,7 +26,7 @@ void main() {
     });
 
     test('notification-only prayers use the silent channel', () {
-      final c = NotificationService.prayerNotificationContent(
+      final c = NotificationContent.prayerNotificationContent(
         prayerName: 'الفجر',
         prayerTime: fajr,
         mode: PrayerAlertMode.notificationOnly,
@@ -32,7 +35,7 @@ void main() {
     });
 
     test('the reminder says when the prayer is, not when it fires', () {
-      final c = NotificationService.prayerNotificationContent(
+      final c = NotificationContent.prayerNotificationContent(
         prayerName: 'الفجر',
         // Fires ten minutes before the prayer.
         prayerTime: fajr.subtract(const Duration(minutes: 10)),
@@ -48,16 +51,16 @@ void main() {
 
   test('daily reminders keep the reminders channel and pick their look', () {
     expect(
-      NotificationService.dailyReminderKind('morning_adhkar'),
+      NotificationContent.dailyReminderKind('morning_adhkar'),
       SakinaNotificationKind.adhkar,
     );
     expect(
-      NotificationService.dailyReminderKind('evening_adhkar'),
+      NotificationContent.dailyReminderKind('evening_adhkar'),
       SakinaNotificationKind.adhkar,
     );
     for (final payload in ['mulk_surah', 'baqarah_surah', 'khatma']) {
       expect(
-        NotificationService.dailyReminderKind(payload),
+        NotificationContent.dailyReminderKind(payload),
         SakinaNotificationKind.quranReading,
       );
     }
@@ -78,7 +81,7 @@ void main() {
       final start = DateTime(2026, 11, 16);
       final ids = {
         for (var d = 0; d < 7; d++)
-          NotificationService.dailyVerseNotificationId(
+          DailyReminderNotifications.dailyVerseNotificationId(
             start.add(Duration(days: d)),
           ),
       };
@@ -87,7 +90,7 @@ void main() {
     });
 
     test('shows the whole ayah with where it is', () {
-      final c = NotificationService.dailyVerseNotificationContent((
+      final c = NotificationContent.dailyVerseNotificationContent((
         surah: 13,
         ayah: 28,
         text: 'نص الآية',
@@ -104,7 +107,7 @@ void main() {
 
     setUp(() {
       routes = [];
-      NotificationService.resetRoutingHistory();
+      NotificationTapRouting.resetRoutingHistory();
       NotificationRouter.setNavigationCallback(
         (route, data) => routes.add((route, data)),
       );
@@ -117,7 +120,7 @@ void main() {
     });
 
     test('the prayer alert opens the dua after the adhan', () {
-      NotificationService.routeNotificationResponse(
+      NotificationTapRouting.routeNotificationResponse(
         id: 2013,
         payload: prayerPayload(),
       );
@@ -126,7 +129,7 @@ void main() {
     });
 
     test('the prayer times button opens the times', () {
-      NotificationService.routeNotificationResponse(
+      NotificationTapRouting.routeNotificationResponse(
         id: 2013,
         actionId: NotificationActionIds.prayerTimes,
         payload: prayerPayload(),
@@ -135,7 +138,7 @@ void main() {
     });
 
     test('a reminder before the prayer opens the times', () {
-      NotificationService.routeNotificationResponse(
+      NotificationTapRouting.routeNotificationResponse(
         id: 3013,
         payload: prayerPayload(reminder: true),
       );
@@ -143,7 +146,7 @@ void main() {
     });
 
     test('the daily verse opens the reader at its ayah', () {
-      NotificationService.routeNotificationResponse(
+      NotificationTapRouting.routeNotificationResponse(
         id: 4001,
         actionId: NotificationActionIds.open,
         payload: jsonEncode({
@@ -157,7 +160,7 @@ void main() {
     });
 
     test('a daily verse without a surah falls back to home', () {
-      NotificationService.routeNotificationResponse(
+      NotificationTapRouting.routeNotificationResponse(
         id: 4002,
         payload: jsonEncode({'type': 'daily_verse', 'data': 'broken'}),
       );
@@ -167,7 +170,7 @@ void main() {
     test('the same tap reported twice opens one screen', () {
       final at = DateTime(2026, 1, 1, 12);
       for (final offset in [0, 500, 1500]) {
-        NotificationService.routeNotificationResponse(
+        NotificationTapRouting.routeNotificationResponse(
           id: 1001,
           payload: jsonEncode({'type': 'morning_adhkar'}),
           now: at.add(Duration(milliseconds: offset)),
@@ -176,12 +179,12 @@ void main() {
       expect(routes.length, 1);
 
       // A later tap, or another button, is a new request.
-      NotificationService.routeNotificationResponse(
+      NotificationTapRouting.routeNotificationResponse(
         id: 1001,
         payload: jsonEncode({'type': 'morning_adhkar'}),
         now: at.add(const Duration(seconds: 5)),
       );
-      NotificationService.routeNotificationResponse(
+      NotificationTapRouting.routeNotificationResponse(
         id: 1001,
         actionId: NotificationActionIds.open,
         payload: jsonEncode({'type': 'morning_adhkar'}),
@@ -192,7 +195,7 @@ void main() {
 
     test('a tap during startup waits and keeps its button', () {
       NotificationRouter.hold();
-      NotificationService.routeNotificationResponse(
+      NotificationTapRouting.routeNotificationResponse(
         id: 2013,
         actionId: NotificationActionIds.prayerTimes,
         payload: prayerPayload(),

@@ -30,7 +30,7 @@ class NotificationServicePrayerNotificationGateway
 
   @override
   Future<void> cancelAllPrayerNotifications() {
-    return _notificationService.cancelAllPrayerNotifications();
+    return _notificationService.prayers.cancelAllPrayerNotifications();
   }
 
   @override
@@ -38,7 +38,7 @@ class NotificationServicePrayerNotificationGateway
     required Map<DailyPrayer, DateTime> prayerTimes,
     required AdhanSettings settings,
   }) {
-    return _notificationService.scheduleAllPrayersForDate(
+    return _notificationService.prayers.scheduleAllPrayersForDate(
       prayerTimes: prayerTimes,
       settings: settings,
     );

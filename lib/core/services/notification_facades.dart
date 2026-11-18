@@ -117,7 +117,7 @@ class NotificationServiceGateway implements LocalNotificationGateway {
     required bool isBaqarahEnabled,
     required bool isDailyVerseEnabled,
   }) {
-    return _notificationService.updateAllAlarms(
+    return _notificationService.reminders.updateAllAlarms(
       isMorningEnabled: isMorningEnabled,
       isEveningEnabled: isEveningEnabled,
       isMulkEnabled: isMulkEnabled,

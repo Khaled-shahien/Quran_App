@@ -428,7 +428,7 @@ class _AppRootState extends State<AppRoot> with WidgetsBindingObserver {
               requestExact:
                   NotificationService.instance.requestExactAlarmPermission,
               scheduleTest:
-                  NotificationService.instance.scheduleTestPrayerAlert,
+                  NotificationService.instance.prayers.scheduleTestPrayerAlert,
               requestNotifications:
                   NotificationService.instance.requestPermissions,
             ),

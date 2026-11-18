@@ -205,7 +205,8 @@ class _PrayerPreferencesState extends State<PrayerPreferences> {
               }
               await prayer.refresh();
             } else {
-              await NotificationService.instance.cancelAllPrayerNotifications();
+              await NotificationService.instance.prayers
+                  .cancelAllPrayerNotifications();
             }
           },
         ),

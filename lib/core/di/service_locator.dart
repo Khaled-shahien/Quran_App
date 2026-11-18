@@ -224,7 +224,9 @@ Future<void> setupServiceLocator() async {
           // iOS cannot replenish reliably in the background: say before
           // the alerts run out that the app needs opening (audit NOTIF-03).
           onWindowScheduled: Platform.isIOS
-              ? getIt<NotificationService>().schedulePrayerWindowEndingNotice
+              ? getIt<NotificationService>()
+                    .prayers
+                    .schedulePrayerWindowEndingNotice
               : null,
         ),
       );
